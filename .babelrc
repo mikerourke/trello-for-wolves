@@ -1,0 +1,13 @@
+{
+  "presets": [
+    "es2015",
+    "flow"
+  ],
+  "env": {
+    "production": {
+      "ignore": [
+        "**/*.test.js"
+      ]
+    }
+  }
+}
