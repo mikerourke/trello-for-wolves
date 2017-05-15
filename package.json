@@ -1,0 +1,9 @@
+{
+  "name": "trello-for-wolves",
+  "version": "1.0.0",
+  "description": "Node.js wrapper for Trello API.",
+  "main": "index.js",
+  "repository": "https://github.com/mikerourke/trello-for-wolves",
+  "author": "Mike Rourke <mike.w.rourke@gmail.com>",
+  "license": "MIT"
+}
