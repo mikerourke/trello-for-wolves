@@ -1,5 +1,8 @@
-const Action = require('./action');
+/* Internal dependencies */
+import Action from './action';
+import Board from './board';
 
-module.exports = {
+export default {
   Action,
+  Board,
 };
