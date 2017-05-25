@@ -41,6 +41,7 @@ module.exports = {
   env: {
     es6: true,
     node: true,
+    mocha: true,
   },
   rules: {
     'max-len': ['error', 80, 2, {

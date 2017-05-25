@@ -3,9 +3,6 @@
 /* Internal dependencies */
 import request from '../lib/request';
 
-/* Types */
-import type { Auth } from '../types';
-
 export default class Action {
   auth: Auth;
 
@@ -13,7 +10,7 @@ export default class Action {
     this.auth = auth;
   }
 
-  getById(id: string, urlArguments: Object) {
+  getAction(id: string, urlArguments: Object) {
     return new Promise((resolve, reject) => {
       request(this.auth, 'GET', `actions/${id}`, urlArguments)
         .then(response => resolve(response))

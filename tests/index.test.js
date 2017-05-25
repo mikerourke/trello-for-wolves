@@ -1,18 +1,15 @@
-/* External dependencies */
-const test = require('tape');
-
 /* Internal dependencies */
-const Trello = require('../src/index').default;
-const { auth } = require('./helpers');
+import Trello from '../src/index';
+import { auth } from './helpers';
 
-test('Trello class', (testCase) => {
-  testCase.test('It does stuff', (assert) => {
+describe.skip('Trello class', () => {
+  it('does stuff', (done) => {
     const trelloApi = new Trello(auth);
-    trelloApi.board.getById('DfZNMM5L')
+    trelloApi.board.getBoard('DfZNMM5L')
       .then((result) => {
-        console.log(result);
-        assert.equal(4, 4);
+        expect(4).to.equal(4);
+        done();
       })
-      .catch(error => console.error(error));
+      .catch(error => done(error));
   });
 });

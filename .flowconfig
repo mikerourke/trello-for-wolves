@@ -5,7 +5,7 @@
 
 [libs]
   # These are custom global declarations:
-  internals/flow
+  src/declarations.js
 
 [options]
   suppress_comment=.*\\$FlowFixMe
