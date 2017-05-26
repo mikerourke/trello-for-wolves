@@ -3,10 +3,6 @@
   .*/tests/.*
   .*\.tests\.js
 
-[libs]
-  # These are custom global declarations:
-  src/declarations.js
-
 [options]
   suppress_comment=.*\\$FlowFixMe
   suppress_comment=.*\\$FlowInvalidInputTest

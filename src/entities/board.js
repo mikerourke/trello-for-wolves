@@ -1,23 +1,60 @@
 /* @flow */
 
+/* External dependencies */
+import Promise, { resolve } from 'bluebird';
+
 /* Internal dependencies */
+import { buildEndpointString } from '../lib/string-builder';
 import request from '../lib/request';
+import Action from './action';
+
+/* Types */
+import type {
+  ActionDate,
+  ActionFields,
+  Actions,
+  ActionsFormat,
+  AllOrNone,
+  AttachmentFields,
+  Auth,
+  BoardField,
+  BoardFields,
+  CardAging,
+  CardFields,
+  CardStatus,
+  ChecklistFields,
+  Entity,
+  GroupPermission,
+  Invitation,
+  LabelFields,
+  ListFields,
+  ListStatus,
+  MemberFields,
+  MemberLevel,
+  Memberships,
+  OrganizationFields,
+  PermissionLevel,
+} from '../types';
+
+type BoardStars = 'none' | 'mine';
 
 export default class Board {
   auth: Auth;
-  boardId: string;
+  endpoint: string;
+  entity: Entity;
 
-  constructor(auth: Auth, boardId?: string = '') {
+  constructor(auth: Auth, boardId?: string = '', parent?: ?Entity) {
     this.auth = auth;
-    this.boardId = boardId;
+    this.endpoint = buildEndpointString('boards', boardId, parent);
+    this.entity = { id: boardId, entityName: 'board' };
   }
 
   getBoard(options?: {
-    actions?: BoardActions,
+    actions?: Actions,
     actionsEntities?: boolean,
     actionsDisplay?: boolean,
     actionsFormat?: ActionsFormat,
-    actionsSince?: ActionsSince,
+    actionsSince?: ActionDate,
     actionsLimit?: number,
     actionFields?: ActionFields,
     actionMember?: boolean,
@@ -55,18 +92,65 @@ export default class Board {
     tags?: boolean,
     fields?: BoardFields,
   }): Promise<*> {
-    return new Promise((resolve, reject) => {
-      request(this.auth, 'GET', `boards/${this.boardId}`, options)
-        .then(response => resolve(response))
-        .catch(error => reject(error));
-    });
+    return resolve(request(this.auth, 'get', this.endpoint, options));
   }
 
-  getFieldValue(boardId: string, urlArguments: Object): Promise<*> {
-    return new Promise((resolve, reject) => {
-      request(this.auth, 'GET', `boards/${boardId}`, urlArguments)
-        .then(response => resolve(response))
-        .catch(error => reject(error));
-    });
+  getFieldValue(field: BoardField): Promise<*> {
+    return resolve(request(this.auth, 'get', `${this.endpoint}/${field}`));
+  }
+
+  getStars(filter?: BoardStars = 'mine'): Promise<*> {
+    return resolve(
+      request(this.auth, 'get', `${this.endpoint}/boardStars`, { filter }));
+  }
+
+  getDeltas(tags: string, ixLastUpdate: number): Promise<*> {
+    return resolve(request(this.auth, 'get', `${this.endpoint}/deltas`,
+      { tags, ixLastUpdate }));
+  }
+
+  getTags(): Promise<*> {
+    return resolve(request(this.auth, 'get', `${this.endpoint}/tags`));
+  }
+
+  getMyPrefs(): Promise<*> {
+    return resolve(request(this.auth, 'get', `${this.endpoint}/myPrefs`));
+  }
+
+  getPluginData(): Promise<*> {
+    return resolve(request(this.auth, 'get', `${this.endpoint}/pluginData`));
+  }
+
+  updateBoard(options?: {
+    name?: string,
+    desc?: string,
+    closed?: boolean,
+    subscribed?: boolean,
+    idOrganization?: string,
+    prefs?: {
+      permissionLevel?: PermissionLevel,
+      selfJoin?: boolean,
+      cardCovers?: boolean,
+      invitations?: Invitation,
+      voting?: GroupPermission,
+      comments?: GroupPermission,
+      background?: string,
+      cardAging?: CardAging,
+      calendarFeedEnabled?: boolean,
+    },
+    labelNames?: {
+      green?: string,
+      yellow?: string,
+      orange?: string,
+      red?: string,
+      purple?: string,
+      blue?: string,
+    },
+  }): Promise<*> {
+    return resolve(request(this.auth, 'put', `${this.endpoint}`, options));
+  }
+
+  actions() {
+    return new Action(this.auth, '', this.entity);
   }
 }

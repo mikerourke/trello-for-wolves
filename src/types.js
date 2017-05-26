@@ -1,111 +1,37 @@
 /* @flow */
 
-declare type Auth = {
+export type Auth = {
   key: string,
   token: string,
 };
 
-declare type AllOrNone = 'all' | 'none';
+export type AllOrNone = 'all' | 'none';
+
+export type EntityName =
+  'action'
+  | 'batch'
+  | 'board'
+  | 'card'
+  | 'checklist'
+  | 'label'
+  | 'list'
+  | 'member'
+  | 'notification'
+  | 'organization'
+  | 'search'
+  | 'token'
+  | 'type'
+  | 'webhook';
+
+export type Entity = {
+  id: string,
+  entityName: EntityName,
+};
 
 /**
  * Action Declarations
  */
-declare type Action =
-  'addAdminToBoard'
-  | 'addAdminToOrganization'
-  | 'addAttachmentToCard'
-  | 'addBoardsPinnedToMember'
-  | 'addChecklistToCard'
-  | 'addLabelToCard'
-  | 'addMemberToBoard'
-  | 'addMemberToCard'
-  | 'addMemberToOrganization'
-  | 'addToOrganizationBoard'
-  | 'commentCard'
-  | 'convertToCardFromCheckItem'
-  | 'copyBoard'
-  | 'copyCard'
-  | 'copyChecklist'
-  | 'createLabel'
-  | 'copyCommentCard'
-  | 'createBoard'
-  | 'createBoardInvitation'
-  | 'createBoardPreference'
-  | 'createCard'
-  | 'createChecklist'
-  | 'createList'
-  | 'createOrganization'
-  | 'createOrganizationInvitation'
-  | 'deleteAttachmentFromCard'
-  | 'deleteBoardInvitation'
-  | 'deleteCard'
-  | 'deleteCheckItem'
-  | 'deleteLabel'
-  | 'deleteOrganizationInvitation'
-  | 'disablePlugin'
-  | 'disablePowerUp'
-  | 'emailCard'
-  | 'enablePlugin'
-  | 'enablePowerUp'
-  | 'makeAdminOfBoard'
-  | 'makeAdminOfOrganization'
-  | 'makeNormalMemberOfBoard'
-  | 'makeNormalMemberOfOrganization'
-  | 'makeObserverOfBoard'
-  | 'memberJoinedTrello'
-  | 'moveCardFromBoard'
-  | 'moveCardToBoard'
-  | 'moveListFromBoard'
-  | 'moveListToBoard'
-  | 'removeAdminFromBoard'
-  | 'removeAdminFromOrganization'
-  | 'removeBoardsPinnedFromMember'
-  | 'removeChecklistFromCard'
-  | 'removeFromOrganizationBoard'
-  | 'removeLabelFromCard'
-  | 'removeMemberFromBoard'
-  | 'removeMemberFromCard'
-  | 'removeMemberFromOrganization'
-  | 'unconfirmedBoardInvitation'
-  | 'unconfirmedOrganizationInvitation'
-  | 'updateBoard'
-  | 'updateCard'
-  | 'updateCheckItem'
-  | 'updateCheckItemStateOnCard'
-  | 'updateChecklist'
-  | 'updateLabel'
-  | 'updateList'
-  | 'updateMember'
-  | 'updateOrganization'
-  | 'voteOnCard';
-declare type ActionField =
-  'data'
-  | 'date'
-  | 'idMemberCreator'
-  | 'value';
-declare type ActionFields = ActionField | Array<ActionField> | 'all';
-declare type ActionsFormat = 'count' | 'list' | 'minimal';
-declare type ActionsSince = string | 'null' | 'lastView';
-
-/**
- * Attachment Declarations
- */
-declare type AttachmentField =
-  'bytes'
-  | 'date'
-  | 'edgeColor'
-  | 'idMember'
-  | 'isUpload'
-  | 'mimeType'
-  | 'name'
-  | 'previews'
-  | 'url';
-declare type AttachmentFields = AttachmentField | Array<AttachmentField> | 'all';
-
-/**
- * Board Declarations
- */
-type BoardAction =
+export type Action =
   'addAttachmentToCard'
   | 'addChecklistToCard'
   | 'addMemberToBoard'
@@ -154,9 +80,61 @@ type BoardAction =
   | 'updateList:closed'
   | 'updateList:name'
   | 'updateMember'
+  | 'updateOrganization';
+export type Actions = Action | Array<Action> | 'all'
+
+export type ExtendedAction =
+  'addAdminToBoard'
+  | 'addAdminToOrganization'
+  | 'addBoardsPinnedToMember'
+  | 'addLabelToCard'
+  | 'copyChecklist'
+  | 'createLabel'
+  | 'createBoardInvitation'
+  | 'createBoardPreference'
+  | 'createChecklist'
+  | 'createOrganizationInvitation'
+  | 'disablePlugin'
+  | 'enablePlugin'
+  | 'makeAdminOfOrganization'
+  | 'removeAdminFromBoard'
+  | 'removeAdminFromOrganization'
+  | 'removeBoardsPinnedFromMember'
+  | 'removeFromOrganizationBoard'
+  | 'removeLabelFromCard'
+  | 'removeMemberFromBoard'
+  | 'removeMemberFromOrganization'
+  | 'updateCheckItem'
+  | 'updateLabel'
+  | 'voteOnCard';
+export type ActionField =
+  'data'
+  | 'date'
+  | 'idMemberCreator'
   | 'value';
-declare type BoardActions = BoardAction | Array<BoardAction> | 'all';
-type BoardField =
+export type ActionFields = ActionField | Array<ActionField> | 'all';
+export type ActionsFormat = 'count' | 'list' | 'minimal';
+export type ActionDate = string | 'null' | 'lastView';
+
+/**
+ * Attachment Declarations
+ */
+export type AttachmentField =
+  'bytes'
+  | 'date'
+  | 'edgeColor'
+  | 'idMember'
+  | 'isUpload'
+  | 'mimeType'
+  | 'name'
+  | 'previews'
+  | 'url';
+export type AttachmentFields = AttachmentField | Array<AttachmentField> | 'all';
+
+/**
+ * Board Declarations
+ */
+export type BoardField =
   'closed'
   | 'dateLastActivity'
   | 'dateLastView'
@@ -175,9 +153,8 @@ type BoardField =
   | 'shortUrl'
   | 'starred'
   | 'subscribed'
-  | 'value';
-declare type BoardFields = BoardField | Array<BoardField> | 'all';
-declare type BoardStars = 'none' | 'mine';
+  | 'url';
+export type BoardFields = BoardField | Array<BoardField> | 'all';
 
 /**
  * Card Declarations
@@ -206,22 +183,22 @@ type CardField =
   | 'shortLink'
   | 'shortUrl'
   | 'subscribed';
-declare type CardFields = CardField | Array<CardField> | 'all';
-declare type CardStatus = 'all' | 'closed' | 'none' | 'open' | 'visible';
-declare type CardAging = 'pirate' | 'regular';
+export type CardFields = CardField | Array<CardField> | 'all';
+export type CardStatus = 'all' | 'closed' | 'none' | 'open' | 'visible';
+export type CardAging = 'pirate' | 'regular';
 
 /**
  * Checklist Declarations
  */
 type ChecklistField = 'idBoard' | 'idCard' | 'name' | 'pos';
-declare type ChecklistFields = ChecklistField | Array<ChecklistField> | 'all';
-declare type CheckItemField =
+export type ChecklistFields = ChecklistField | Array<ChecklistField> | 'all';
+export type CheckItemField =
   'name'
   | 'nameData'
   | 'pos'
   | 'state'
   | 'value';
-declare type CheckItemStateField = 'all' | 'idCheckItem' | 'state';
+export type CheckItemStateField = 'all' | 'idCheckItem' | 'state';
 
 /**
  * Label Declarations
@@ -231,24 +208,24 @@ type LabelField =
   | 'idBoard'
   | 'name'
   | 'uses';
-declare type LabelFields = LabelField | Array<LabelField> | 'all';
+export type LabelFields = LabelField | Array<LabelField> | 'all';
 
 /**
  * List Declarations
  */
-declare type ListStatus = 'all' | 'closed' | 'none' | 'open';
-declare type ListField =
+export type ListStatus = 'all' | 'closed' | 'none' | 'open';
+export type ListField =
   'closed'
   | 'idBoard'
   | 'name'
   | 'pos'
   | 'subscribed';
-declare type ListFields = ListField | Array<ListField> | 'all';
+export type ListFields = ListField | Array<ListField> | 'all';
 
 /**
  * Member Declarations
  */
-declare type MemberLevel = 'admins' | 'all' | 'none' | 'normal' | 'owners';
+export type MemberLevel = 'admins' | 'all' | 'none' | 'normal' | 'owners';
 type MemberField =
   'avatarHash'
   | 'bio'
@@ -262,7 +239,7 @@ type MemberField =
   | 'status'
   | 'url'
   | 'username';
-declare type MemberFields = MemberField | Array<MemberField> | 'all';
+export type MemberFields = MemberField | Array<MemberField> | 'all';
 type Membership =
   'active'
   | 'admin'
@@ -270,7 +247,7 @@ type Membership =
   | 'me'
   | 'none'
   | 'normal';
-declare type Memberships = Membership | Array<Membership> | 'all';
+export type Memberships = Membership | Array<Membership> | 'all';
 
 /**
  * Notification Declarations
@@ -296,7 +273,7 @@ type OrganizationField =
   | 'products'
   | 'url'
   | 'website';
-declare type OrganizationFields = OrganizationField | Array<OrganizationField> | 'all';
+export type OrganizationFields = OrganizationField | Array<OrganizationField> | 'all';
 
 /**
  * Search Declarations
@@ -313,20 +290,6 @@ declare type OrganizationFields = OrganizationField | Array<OrganizationField> |
 /**
  * Webhook Declarations
  */
-
-
-declare type GroupPermission =
-  'disabled'
-  | 'members'
-  | 'observers'
-  | 'org'
-  | 'public';
-
-declare type CommentsPrefs = GroupPermission;
-declare type InvitationPrefs = 'admins' | 'members';
-declare type VotingPrefs = GroupPermission;
-declare type Background = string;
-declare type Email = string;
 
 export type Filter =
   'all'
@@ -393,15 +356,21 @@ export type Filter =
   | 'value'
   | 'visible';
 
-declare type Format = 'count' | 'list' | 'minimal';
+export type Format = 'count' | 'list' | 'minimal';
 
+export type PermissionLevel = 'org' | 'private' | 'public';
+export type Invitation = 'admins' | 'members';
+export type GroupPermission =
+  'disabled'
+  | 'members'
+  | 'observers'
+  | 'org'
+  | 'public';
 
-declare type PermissionLevel = 'org' | 'private' | 'public';
-
-declare type PowerUp =
+export type PowerUp =
     'calendar'
   | 'cardAging'
   | 'recap'
   | 'voting';
 
-declare type PowerUps = Array<PowerUp> | 'all';
+export type PowerUps = Array<PowerUp> | 'all';
