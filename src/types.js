@@ -5,6 +5,8 @@ export type Auth = {
   token: string,
 };
 
+export type HttpMethod = 'get' | 'put' | 'post' | 'delete';
+
 export type AllOrNone = 'all' | 'none';
 
 export type EntityName =
@@ -23,7 +25,7 @@ export type EntityName =
   | 'type'
   | 'webhook';
 
-export type Entity = {
+export type EntityInstance = {
   id: string,
   entityName: EntityName,
 };
@@ -155,6 +157,15 @@ export type BoardField =
   | 'subscribed'
   | 'url';
 export type BoardFields = BoardField | Array<BoardField> | 'all';
+export type BoardStars = 'none' | 'mine';
+export type MyPref =
+  'emailPosition'
+  | 'idEmailList'
+  | 'showListGuide'
+  | 'showSidebar'
+  | 'showSidebarActivity'
+  | 'showSidebarBoardActions'
+  | 'showSidebarMembers';
 
 /**
  * Card Declarations
@@ -366,6 +377,8 @@ export type GroupPermission =
   | 'observers'
   | 'org'
   | 'public';
+
+export type Position = 'bottom' | 'top';
 
 export type PowerUp =
     'calendar'

@@ -4,9 +4,13 @@
 import Promise, { resolve } from 'bluebird';
 
 /* Internal dependencies */
-import { buildEndpointString } from '../lib/string-builder';
+import {
+  InvalidBooleanError,
+  InvalidStringError,
+  StringLengthError,
+} from '../lib/errors';
 import request from '../lib/request';
-import Action from './action';
+import Entity from './entity';
 
 /* Types */
 import type {
@@ -19,11 +23,12 @@ import type {
   Auth,
   BoardField,
   BoardFields,
+  BoardStars,
   CardAging,
   CardFields,
   CardStatus,
   ChecklistFields,
-  Entity,
+  EntityInstance,
   GroupPermission,
   Invitation,
   LabelFields,
@@ -32,24 +37,26 @@ import type {
   MemberFields,
   MemberLevel,
   Memberships,
+  MyPref,
   OrganizationFields,
   PermissionLevel,
+  Position,
 } from '../types';
 
-type BoardStars = 'none' | 'mine';
-
-export default class Board {
-  auth: Auth;
-  endpoint: string;
-  entity: Entity;
-
-  constructor(auth: Auth, boardId?: string = '', parent?: ?Entity) {
-    this.auth = auth;
-    this.endpoint = buildEndpointString('boards', boardId, parent);
-    this.entity = { id: boardId, entityName: 'board' };
+/**
+ * Class representing a Board entity.
+ * @extends Entity
+ */
+export default class Board extends Entity {
+  constructor(
+    auth: Auth,
+    boardId?: string = '',
+    parent?: ?EntityInstance
+  ) {
+    super(auth, 'board', boardId, parent);
   }
 
-  getBoard(options?: {
+  getBoard(urlArgs?: {
     actions?: Actions,
     actionsEntities?: boolean,
     actionsDisplay?: boolean,
@@ -92,36 +99,48 @@ export default class Board {
     tags?: boolean,
     fields?: BoardFields,
   }): Promise<*> {
-    return resolve(request(this.auth, 'get', this.endpoint, options));
+    return this.performRequest('get', { urlArgs });
   }
 
   getFieldValue(field: BoardField): Promise<*> {
-    return resolve(request(this.auth, 'get', `${this.endpoint}/${field}`));
+    if (typeof field !== 'string') {
+      throw new InvalidStringError('field',
+        'board#get-1-boards-board-id-field');
+    }
+    return this.performRequest('get', { path: field });
   }
 
   getStars(filter?: BoardStars = 'mine'): Promise<*> {
-    return resolve(
-      request(this.auth, 'get', `${this.endpoint}/boardStars`, { filter }));
+    if (typeof filter !== 'string') {
+      throw new InvalidStringError('filter',
+        'board#get-1-boards-board-id-boardstars');
+    }
+    return this.performRequest('get', {
+      path: 'boardStars', urlArgs: { filter }});
   }
 
   getDeltas(tags: string, ixLastUpdate: number): Promise<*> {
-    return resolve(request(this.auth, 'get', `${this.endpoint}/deltas`,
-      { tags, ixLastUpdate }));
+    if (typeof tags !== 'string') {
+      throw new InvalidStringError('tags',
+        'board#get-1-boards-board-id-deltas');
+    }
+    return this.performRequest('get', {
+      path: 'deltas', urlArgs: { tags, ixLastUpdate } });
   }
 
   getTags(): Promise<*> {
-    return resolve(request(this.auth, 'get', `${this.endpoint}/tags`));
+    return this.performRequest('get', 'tags');
   }
 
   getMyPrefs(): Promise<*> {
-    return resolve(request(this.auth, 'get', `${this.endpoint}/myPrefs`));
+    return this.performRequest('get', 'myPrefs');
   }
 
   getPluginData(): Promise<*> {
-    return resolve(request(this.auth, 'get', `${this.endpoint}/pluginData`));
+    return this.performRequest('get', 'pluginData');
   }
 
-  updateBoard(options?: {
+  updateBoard(urlArgs?: {
     name?: string,
     desc?: string,
     closed?: boolean,
@@ -137,6 +156,7 @@ export default class Board {
       background?: string,
       cardAging?: CardAging,
       calendarFeedEnabled?: boolean,
+      separator?: string,
     },
     labelNames?: {
       green?: string,
@@ -145,12 +165,51 @@ export default class Board {
       red?: string,
       purple?: string,
       blue?: string,
+      separator?: string,
     },
   }): Promise<*> {
-    return resolve(request(this.auth, 'put', `${this.endpoint}`, options));
+    if (urlArgs) {
+      urlArgs.prefs.separator = '/';
+      urlArgs.labelNames.separator = '/';
+    }
+    return this.performRequest('put', { urlArgs });
   }
 
-  actions() {
-    return new Action(this.auth, '', this.entity);
+  updateClosedStatus(value: boolean): Promise<*> {
+    if (typeof value !== 'boolean') {
+      throw new InvalidBooleanError('value',
+        'board#put-1-boards-board-id-closed');
+    }
+    return this.performRequest('put', { path: 'closed', urlArgs: { value } });
+  }
+
+  updateDescription(value: string): Promise<*> {
+    if (typeof value !== 'string') {
+      throw new InvalidStringError('value',
+        'board#put-1-boards-board-id-desc');
+    }
+    if (value.length < 0 || value.length > 16384) {
+      throw new StringLengthError('value');
+    }
+    return this.performRequest('put', { path: 'desc', urlArgs: { value } });
+  }
+
+  updateMyPrefs(
+    myPrefName: MyPref,
+    value: boolean | string | Position
+  ): Promise<*> {
+    const lowerCasePref = myPrefName.toString().toLowerCase();
+    const helpUrl = `board#put-1-boards-board-id-myprefs-${lowerCasePref}`;
+
+    if ((myPrefName === 'emailPosition' || myPrefName === 'idEmailList')
+        && typeof value !== 'string') {
+      throw new InvalidStringError(myPrefName, helpUrl);
+    } else {
+      if (typeof value !== 'boolean') {
+        throw new InvalidBooleanError(myPrefName, helpUrl);
+      }
+    }
+    return this.performRequest('put', {
+      path: `myPrefs/${myPrefName}`, urlArgs: { value } });
   }
 }

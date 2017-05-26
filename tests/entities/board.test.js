@@ -2,7 +2,7 @@
 import Trello from '../../src/index';
 import { auth } from '../helpers';
 
-describe.only('Board class', () => {
+describe('Board class', () => {
   const boardId = 'bJDPVV1A';
   let trelloApi;
   before(() => {
@@ -32,7 +32,7 @@ describe.only('Board class', () => {
       .catch(error => done(error));
   });
 
-  it('gets the stars for a board', (done) => {
+  it.only('gets the stars for a board', (done) => {
     trelloApi.board(boardId).getStars()
       .then((result) => {
         const actualValue = result.data.length;
@@ -43,12 +43,23 @@ describe.only('Board class', () => {
       .catch(error => done(error));
   });
 
-  it.only('updates a board', (done) => {
+  it('updates a board', (done) => {
     trelloApi.board(boardId).updateBoard({
       prefs: {
         selfJoin: true,
       },
     })
+      .then((result) => {
+        const actualValue = result.data.length;
+        const expectedValue = 1;
+        expect(actualValue).to.equal(expectedValue);
+        done();
+      })
+      .catch(error => done(error));
+  });
+
+  it('updates myPrefs on a board', (done) => {
+    trelloApi.board(boardId).updateMyPrefs('idEmailList', true)
       .then((result) => {
         const actualValue = result.data.length;
         const expectedValue = 1;

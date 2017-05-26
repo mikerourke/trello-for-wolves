@@ -1,6 +1,6 @@
 /* Internal dependencies */
 import { auth } from '../helpers';
-import buildUrlString from '../../src/lib/string-builder';
+import { buildUrlString } from '../../src/lib/string-builder';
 
 describe('Url Builder', () => {
   it('builds a URL string with only an API key', () => {
@@ -61,6 +61,40 @@ describe('Url Builder', () => {
     const expectedValue =
       `boards/123?actions=copyBoard,copyCard&actions_entities=true&` +
       `actions_format=count&key=${key}&token=${token}`;
+    expect(actualValue).to.equal(expectedValue);
+  });
+
+  it('builds a URL string with child options', () => {
+    const { key, token } = auth;
+    const options = {
+      prefs: {
+        selfJoin: true,
+        voting: 'disabled',
+      },
+    };
+    const actualValue = buildUrlString(auth, 'boards/123', options);
+    const expectedValue =
+      `boards/123?prefs/selfJoin=true&prefs/voting=disabled&` +
+      `key=${key}&token=${token}`;
+    expect(actualValue).to.equal(expectedValue);
+  });
+
+  it('builds a URL string with multiple option types and child options', () => {
+    const { key, token } = auth;
+    const options = {
+      actions: ['copyBoard', 'copyCard'],
+      actionsEntities: true,
+      actionsFormat: 'count',
+      prefs: {
+        selfJoin: true,
+        voting: 'disabled',
+      },
+    };
+    const actualValue = buildUrlString(auth, 'boards/123', options);
+    const expectedValue =
+      `boards/123?actions=copyBoard,copyCard&actions_entities=true&` +
+      `actions_format=count&prefs/selfJoin=true&prefs/voting=disabled&` +
+      `key=${key}&token=${token}`;
     expect(actualValue).to.equal(expectedValue);
   });
 });

@@ -4,8 +4,8 @@
 import Promise, { resolve } from 'bluebird';
 
 /* Internal dependencies */
-import { buildEndpointString } from '../lib/string-builder';
 import request from '../lib/request';
+import Entity from './entity';
 
 /* Types */
 import type {
@@ -13,7 +13,7 @@ import type {
   ActionFields,
   Actions,
   Auth,
-  Entity,
+  EntityInstance,
   Format,
   MemberFields,
 } from '../types';
@@ -38,20 +38,16 @@ type FilterOptions = {
   idModels?: string,
 };
 
-export default class Action {
-  auth: Auth;
-  endpoint: string;
-
-  constructor(auth: Auth, actionId: string = '', parent?: ?Entity) {
-    this.auth = auth;
-    this.endpoint = buildEndpointString('actions', actionId, parent);
+export default class Action extends Entity {
+  constructor(auth: Auth, actionId: string = '', parent?: ?EntityInstance) {
+    super(auth, 'action', actionId, parent);
   }
 
-  getAction(options?: GetOptions): Promise<*> {
-    return resolve(request(this.auth, 'get', this.endpoint, options));
+  getAction(urlArgs?: GetOptions): Promise<*> {
+    return resolve(request(this.auth, 'get', this.endpoint, urlArgs));
   }
 
-  getAllInParent(options?: GetOptions & FilterOptions): Promise<*> {
-    return resolve(request(this.auth, 'get', this.endpoint, options));
+  getAllInParent(urlArgs?: GetOptions & FilterOptions): Promise<*> {
+    return resolve(request(this.auth, 'get', this.endpoint, urlArgs));
   }
 }

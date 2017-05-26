@@ -8,9 +8,7 @@ import Promise from 'bluebird';
 import { buildUrlString } from './string-builder';
 
 /* Types */
-import type { Auth } from '../types';
-
-type HttpMethod = 'get' | 'put' | 'post' | 'delete';
+import type { Auth, HttpMethod } from '../types';
 
 /**
  * Performs the HTTP request to the Trello API and returns a Promis that
@@ -18,25 +16,24 @@ type HttpMethod = 'get' | 'put' | 'post' | 'delete';
  * @param {Auth} auth Object containing API key and token.
  * @param {HttpMethod} method HTTP method to perform.
  * @param {string} endpoint Trello API endpoint.
- * @param {Object} [options={}] Options associated with the endpoint.
+ * @param {Object} [urlArgs={}] Options associated with the endpoint.
  * @param {Object} [data={}] Data to include in the body of the request.
  */
 const performRequest = (
   auth: Auth,
   method: HttpMethod,
   endpoint: string,
-  options?: Object = {},
+  urlArgs?: Object = {},
   data?: Object = {},
 ) =>
   new Promise((resolve, reject) => {
-    const url = buildUrlString(auth, endpoint, options);
+    const url = buildUrlString(auth, endpoint, urlArgs);
     const apiUrl = `https://api.trello.com/1/${url}`;
     const requestConfig = {
       data,
       method,
       url: apiUrl,
     };
-    resolve();
     axios(requestConfig)
       .then(response => resolve(response))
       .catch(error => reject('Error performing request', error));

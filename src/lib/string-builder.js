@@ -1,24 +1,53 @@
 /* @flow */
 
 /* External dependencies */
+import querystring from 'querystring';
 import snakeCase from 'lodash.snakecase';
 
 /* Types */
-import type { Auth, Entity } from '../types';
+import type { Auth, EntityInstance } from '../types';
 
 /**
- * Builds the string to append to the end of the URL with the API key and
- *    token values.
- * @param {Auth} auth Object containing API key and token.
- * @returns {string}
+ * Returns a string to append to the URL that accommodates for nested entities.
+ *    These need to be un-nested to successfully perform the API call.
+ * @example
+ *   Given:
+ *    urlArgs = {
+ *      prefs: {
+ *        invitations: 'admins'
+ *        selfJoin: true,
+ *        separator: '/',
+ *      }
+ *    }
+ *  Output: prefs/invitations=admins&prefs/selfJoin=true
+ *
+ * @param {string} childName Name of the key containing children.
+ * @param {Object} urlArgs Arguments to parse.
+ * @returns {string} URL string in correct format.
  */
-const getUrlSuffixForAuth = (auth: Auth): string => {
-  const { key, token = '' } = auth;
-  let urlSuffix = `key=${key}`;
-  if (token) {
-    urlSuffix = `${urlSuffix}&token=${token}`;
+const getChildArgsUrlString = (
+  childName: string,
+  urlArgs: Object
+): string => {
+  let childUrlString = '';
+  const childGroup = urlArgs[childName];
+
+  // The separator needs to be a key on each child group, if it's not present,
+  // throw an error.
+  const { separator = '' } = childGroup;
+  if (separator === '') {
+    throw new Error('Separator must be specified for child args');
   }
-  return urlSuffix;
+
+  Object.entries(childGroup).forEach(([childKey, childValue]) => {
+    // Ensure that the "separator" key isn't included in the URL string.
+    if (childKey !== 'separator') {
+      const childArgKey = `${childName}${separator}${childKey}`;
+      const childArgValue: string = (childValue: string);
+      childUrlString = `${childUrlString}${childArgKey}=${childArgValue}&`;
+    }
+  });
+  return childUrlString;
 };
 
 /**
@@ -30,9 +59,12 @@ const getUrlSuffixForAuth = (auth: Auth): string => {
  */
 const getKeyValueForUrl = (key: string): string => {
   let recasedKey: string = snakeCase(key);
+
+  // These are special exceptions.
   if (recasedKey.includes('member_creator')) {
     recasedKey = recasedKey.replace('_creator', 'Creator');
   }
+
   return recasedKey;
 };
 
@@ -41,52 +73,60 @@ const getKeyValueForUrl = (key: string): string => {
  *    the corresponding Trello API endpoint.
  * @param {Auth} auth Object containing API key and token.
  * @param {string} endpoint Trello API endpoint.
- * @param {Object} [options={}] Options associated with the endpoint.
- * @returns {string}
+ * @param {Object} [urlArgs={}] Argument(s) associated with the endpoint.
+ * @returns {string} URL string for the request.
  */
 export const buildUrlString = (
   auth: Auth,
   endpoint: string,
-  options?: Object = {},
+  urlArgs?: Object = {},
 ): string => {
   let urlString = `${endpoint}?`;
-  if (options) {
-    // FIXME: Add handlers for prefs/ and labelNames/ when there's a slash or underscore.
-    Object.entries(options).forEach(([key, value]) => {
-      const argKey: string = getKeyValueForUrl(key);
-      const argValue: string = (value: any);
-      if (key !== 'prefs' && key !== 'labelNames') {
-        urlString = `${urlString}${argKey}=${argValue}&`;
+  if (urlArgs) {
+    Object.entries(urlArgs).forEach(([key, value]) => {
+      // If the value of the entry is an object (rather than a value), the
+      // corresponding child properties need to be combined for the URL string.
+      if (typeof value === 'object') {
+        const childName: string = (key: string);
+        const childUrlArgsString = getChildArgsUrlString(childName, urlArgs);
+        urlString = `${urlString}${childUrlArgsString}&`;
+
+      // These are simple key/value pairs in which the value is a string or
+      // number.
       } else {
-        const childGroup = options[key];
-        Object.entries(childGroup).forEach(([childKey, childValue]) => {
-          const childArgKey = `${key}/${childKey}`;
-          const childArgValue: string = (childValue: any);
-          urlString = `${urlString}${childArgKey}=${childArgValue}&`;
-        });
+        const argKey = getKeyValueForUrl(key);
+        const argValue = value.toString();
+        urlString = `${urlString}${argKey}=${argValue}&`;
       }
     });
   }
-  const authSuffix = getUrlSuffixForAuth(auth);
+  const authSuffix = querystring.stringify(auth);
   return `${urlString}${authSuffix}`;
 };
 
 /**
  * Returns the endpoint for a specific entity.
  * @param {string} groupName Name of the entity group.
- * @param {string} [entityId=""] Id of the entity.
- * @param {Entity} [parent={}] Parent entity associated with the entity.
+ * @param {string} [entityId=''] Id of the entity.
+ * @param {EntityInstance} [parent={}] Parent entity associated with the
+ *    entity.
  * @returns {string} Endpoint for the entity.
  */
 export const buildEndpointString = (
   groupName: string,
   entityId?: string = '',
-  parent?: ?Entity,
+  parent?: ?EntityInstance,
 ): string => {
+  // Start with just the group name (e.g. "/boards").
   let endpoint = groupName;
+
+  // Add the ID if it's specified (e.g. "boards/bJDPVV1A").
   if (entityId) {
     endpoint = `${endpoint}/${entityId}`;
   }
+
+  // If a parent entity was specified, prepend it to the current
+  // endpoint (e.g. "actions/aCtIoN1/boards/bJDPVV1A").
   if (parent) {
     endpoint = `${parent.entityName}s/${parent.id}/${endpoint}`;
   }
