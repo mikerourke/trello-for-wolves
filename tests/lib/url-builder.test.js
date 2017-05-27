@@ -64,12 +64,25 @@ describe('Url Builder', () => {
     expect(actualValue).to.equal(expectedValue);
   });
 
-  it('builds a URL string with child options', () => {
+  it('fails to build a URL string without a separator specified for child options', () => {
+    const options = {
+      prefs: {
+        selfJoin: true,
+        voting: 'disabled',
+      },
+    };
+    expect(function() {
+      buildUrlString(auth, 'boards/123', options);
+    }).to.throw(Error);
+  });
+
+  it('builds a URL string with valid child options', () => {
     const { key, token } = auth;
     const options = {
       prefs: {
         selfJoin: true,
         voting: 'disabled',
+        separator: '/',
       },
     };
     const actualValue = buildUrlString(auth, 'boards/123', options);
@@ -88,6 +101,7 @@ describe('Url Builder', () => {
       prefs: {
         selfJoin: true,
         voting: 'disabled',
+        separator: '/',
       },
     };
     const actualValue = buildUrlString(auth, 'boards/123', options);

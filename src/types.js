@@ -26,8 +26,8 @@ export type EntityName =
   | 'webhook';
 
 export type EntityInstance = {
-  id: string,
   entityName: EntityName,
+  id: string,
 };
 
 /**
@@ -157,6 +157,16 @@ export type BoardField =
   | 'subscribed'
   | 'url';
 export type BoardFields = BoardField | Array<BoardField> | 'all';
+export type BoardPref =
+  'background'
+  | 'calendarFeedEnabled'
+  | 'cardAging'
+  | 'cardCovers'
+  | 'comments'
+  | 'invitations'
+  | 'permissionLevel'
+  | 'selfJoin'
+  | 'voting';
 export type BoardStars = 'none' | 'mine';
 export type MyPref =
   'emailPosition'

@@ -3,6 +3,9 @@
 /* Internal dependencies */
 import entities from './entities';
 
+/* Types */
+import type { Auth } from './types';
+
 export default class Trello {
   auth: Auth;
 
@@ -14,7 +17,7 @@ export default class Trello {
     return new entities.Action(this.auth);
   }
 
-  board(boardId: string): Object {
+  board(boardId?: string = ''): Object {
     return new entities.Board(this.auth, boardId);
   }
 }

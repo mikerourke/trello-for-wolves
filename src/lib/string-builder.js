@@ -27,7 +27,7 @@ import type { Auth, EntityInstance } from '../types';
  */
 const getChildArgsUrlString = (
   childName: string,
-  urlArgs: Object
+  urlArgs: Object,
 ): string => {
   let childUrlString = '';
   const childGroup = urlArgs[childName];
@@ -43,7 +43,7 @@ const getChildArgsUrlString = (
     // Ensure that the "separator" key isn't included in the URL string.
     if (childKey !== 'separator') {
       const childArgKey = `${childName}${separator}${childKey}`;
-      const childArgValue: string = (childValue: string);
+      const childArgValue: string = (childValue: any);
       childUrlString = `${childUrlString}${childArgKey}=${childArgValue}&`;
     }
   });
@@ -86,7 +86,7 @@ export const buildUrlString = (
     Object.entries(urlArgs).forEach(([key, value]) => {
       // If the value of the entry is an object (rather than a value), the
       // corresponding child properties need to be combined for the URL string.
-      if (typeof value === 'object') {
+      if (typeof value === 'object' && !Array.isArray(value)) {
         const childName: string = (key: string);
         const childUrlArgsString = getChildArgsUrlString(childName, urlArgs);
         urlString = `${urlString}${childUrlArgsString}&`;
@@ -95,13 +95,13 @@ export const buildUrlString = (
       // number.
       } else {
         const argKey = getKeyValueForUrl(key);
-        const argValue = value.toString();
+        const argValue = (value: any);
         urlString = `${urlString}${argKey}=${argValue}&`;
       }
     });
   }
   const authSuffix = querystring.stringify(auth);
-  return `${urlString}${authSuffix}`;
+  return `${urlString}${authSuffix}`.replace('&&', '&');
 };
 
 /**
