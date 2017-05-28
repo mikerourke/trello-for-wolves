@@ -1,10 +1,9 @@
 /* @flow */
 
 /* External dependencies */
-import Promise, { resolve } from 'bluebird';
+import Promise from 'bluebird';
 
 /* Internal dependencies */
-import request from '../lib/request';
 import Entity from './entity';
 
 /* Types */
@@ -44,10 +43,10 @@ export default class Action extends Entity {
   }
 
   getAction(urlArgs?: GetOptions): Promise<*> {
-    return resolve(request(this.auth, 'get', this.endpoint, urlArgs));
+    return this.performRequest('get', { urlArgs });
   }
 
-  getAllInParent(urlArgs?: GetOptions & FilterOptions): Promise<*> {
-    return resolve(request(this.auth, 'get', this.endpoint, urlArgs));
+  getActions(urlArgs?: GetOptions & FilterOptions): Promise<*> {
+    return this.performRequest('get', { urlArgs });
   }
 }

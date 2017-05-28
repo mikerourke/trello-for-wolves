@@ -80,7 +80,7 @@ export default class Entity {
   }
 
   cards() {
-    //return new entities.Card(this.auth, '', this.entity);
+    return new entities.Card(this.auth, '', this.entity);
   }
 
   checklists() {

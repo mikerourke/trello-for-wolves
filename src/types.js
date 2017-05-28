@@ -219,7 +219,11 @@ export type CheckItemField =
   | 'pos'
   | 'state'
   | 'value';
-export type CheckItemStateField = 'all' | 'idCheckItem' | 'state';
+export type CheckItemStateField = 'idCheckItem' | 'state';
+export type CheckItemStateFields =
+  CheckItemStateField
+  | Array<CheckItemStateField>
+  | 'all';
 
 /**
  * Label Declarations

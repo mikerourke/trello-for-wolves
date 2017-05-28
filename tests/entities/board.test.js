@@ -9,132 +9,186 @@ describe('Board class', () => {
     trelloApi = new Trello(auth);
   });
 
-  it('gets a board', (done) => {
-    trelloApi.board(boardId).getBoard()
-      .should.eventually.have.property('data')
-      .notify(done)
-  });
+  describe.only('Board GET requests', () => {
+    it('gets a board', (done) => {
+      trelloApi.board(boardId).getBoard()
+        .should.eventually.have.property('data')
+        .notify(done)
+    });
 
-  it('gets a board with options', (done) => {
-    trelloApi.board(boardId).getBoard({ actions: 'all' })
-      .should.eventually.have.property('data')
-      .notify(done)
-  });
+    it('gets a board with options', (done) => {
+      trelloApi.board(boardId).getBoard({ actions: 'all' })
+        .should.eventually.have.property('data')
+        .notify(done)
+    });
 
-  it('gets a board field value', (done) => {
-    trelloApi.board(boardId).getFieldValue('name')
-      .then((result) => {
-        const actualValue = result.data._value;
-        const expectedValue = 'Test Board';
-        expect(actualValue).to.equal(expectedValue);
-        done();
+    it('gets a board field value', (done) => {
+      trelloApi.board(boardId).getFieldValue('name')
+        .then((result) => {
+          const actualValue = result.data._value;
+          const expectedValue = 'Test Board';
+          expect(actualValue).to.equal(expectedValue);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    it('gets the actions for a board', (done) => {
+      trelloApi.board(boardId).actions().getActions()
+        .then((result) => {
+          const actualValue = result.data;
+          const expectedValue = 1;
+          expect(actualValue).to.have.length.above(expectedValue);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    it('gets the stars for a board', (done) => {
+      trelloApi.board(boardId).getStars()
+        .then((result) => {
+          const actualValue = result.data.length;
+          const expectedValue = 1;
+          expect(actualValue).to.equal(expectedValue);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    it('gets the cards for a board', (done) => {
+      trelloApi.board(boardId).cards().getCards()
+        .then((result) => {
+          const actualValue = result.data;
+          const expectedValue = 1;
+          expect(actualValue).to.have.length.above(expectedValue);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    it('gets the filtered cards for a board', (done) => {
+      trelloApi.board(boardId).cards().getCards({
+        filter: 'closed',
       })
-      .catch(error => done(error));
+        .then((result) => {
+          console.log(result);
+          const actualValue = result.data;
+          const expectedValue = 1;
+          expect(actualValue).to.have.length.of.at.least(expectedValue);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    it('gets a cards for a board by ID', (done) => {
+      trelloApi.board(boardId).cards().getCards()
+        .then((result) => {
+          console.log(result);
+          const actualValue = result.data;
+          const expectedValue = 1;
+          expect(actualValue).to.have.length.of.at.least(expectedValue);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    it('gets the tags for a board', (done) => {
+      trelloApi.board(boardId).getTags()
+        .then((result) => {
+          const actualValue = result.data.length;
+          const expectedValue = 1;
+          expect(actualValue).to.equal(expectedValue);
+          done();
+        })
+        .catch((error) => done());
+    });
+
+    it('gets myPrefs for a board', (done) => {
+      trelloApi.board(boardId).getMyPrefs()
+        .then((result) => {
+          const actualValue = result.data;
+          const expectedValue = [
+            'showSidebar',
+            'showSidebarMembers',
+            'showSidebarBoardActions',
+            'showSidebarActivity',
+            'showListGuide',
+            'idEmailList',
+            'emailPosition',
+          ];
+          expect(actualValue).to.have.all.keys(expectedValue);
+          done();
+        })
+        .catch((error) => done());
+    });
+
+    it('gets the plugin data for a board', (done) => {
+      trelloApi.board(boardId).getPluginData()
+        .then((result) => {
+          const actualValue = result.data.length;
+          const expectedValue = 1;
+          expect(actualValue).to.equal(expectedValue);
+          done();
+        })
+        .catch((error) => done());
+    });
   });
 
-  it('gets the stars for a board', (done) => {
-    trelloApi.board(boardId).getStars()
-      .then((result) => {
-        const actualValue = result.data.length;
-        const expectedValue = 1;
-        expect(actualValue).to.equal(expectedValue);
-        done();
+  describe('Board PUT requests', () => {
+    it('updates a board', (done) => {
+      trelloApi.board(boardId).updateBoard({
+        prefs: {
+          selfJoin: true,
+        },
       })
-      .catch(error => done(error));
+        .then((result) => {
+          const actualValue = result.data.length;
+          const expectedValue = 1;
+          expect(actualValue).to.equal(expectedValue);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    it('updates myPrefs on a board', (done) => {
+      trelloApi.board(boardId).updateMyPrefs('showSidebar', true)
+        .then((result) => {
+          const actualValue = result.data.length;
+          const expectedValue = 1;
+          expect(actualValue).to.equal(expectedValue);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    it('updates the closed status on a board', (done) => {
+      trelloApi.board(boardId).updateClosedStatus(false)
+        .should.be.fulfilled
+        .notify(done)
+    });
+
+    it('updates the description on a board', (done) => {
+      const description = `Test description - ${Date.now()}`;
+      trelloApi.board(boardId).updateDescription(description)
+        .then((result) => {
+          const actualValue = result.data.desc;
+          expect(actualValue).to.equal(description);
+          done();
+        })
+        .catch(error => done(error));
+    });
   });
 
-  it('gets the tags for a board', (done) => {
-    trelloApi.board(boardId).getTags()
-      .then((result) => {
-        const actualValue = result.data.length;
-        const expectedValue = 1;
-        expect(actualValue).to.equal(expectedValue);
-        done();
-      })
-      .catch((error) => done());
-  });
-
-  it('gets myPrefs for a board', (done) => {
-    trelloApi.board(boardId).getMyPrefs()
-      .then((result) => {
-        const actualValue = result.data;
-        const expectedValue = [
-          'showSidebar',
-          'showSidebarMembers',
-          'showSidebarBoardActions',
-          'showSidebarActivity',
-          'showListGuide',
-          'idEmailList',
-          'emailPosition',
-        ];
-        expect(actualValue).to.have.all.keys(expectedValue);
-        done();
-      })
-      .catch((error) => done());
-  });
-
-  it('gets the plugin data for a board', (done) => {
-    trelloApi.board(boardId).getPluginData()
-      .then((result) => {
-        const actualValue = result.data.length;
-        const expectedValue = 1;
-        expect(actualValue).to.equal(expectedValue);
-        done();
-      })
-      .catch((error) => done());
-  });
-
-  it('updates a board', (done) => {
-    trelloApi.board(boardId).updateBoard({
-      prefs: {
-        selfJoin: true,
-      },
-    })
-      .then((result) => {
-        const actualValue = result.data.length;
-        const expectedValue = 1;
-        expect(actualValue).to.equal(expectedValue);
-        done();
-      })
-      .catch(error => done(error));
-  });
-
-  it('updates myPrefs on a board', (done) => {
-    trelloApi.board(boardId).updateMyPrefs('showSidebar', true)
-      .then((result) => {
-        const actualValue = result.data.length;
-        const expectedValue = 1;
-        expect(actualValue).to.equal(expectedValue);
-        done();
-      })
-      .catch(error => done(error));
-  });
-
-  it('updates the closed status on a board', (done) => {
-    trelloApi.board(boardId).updateClosedStatus(false)
-      .should.be.fulfilled
-      .notify(done)
-  });
-
-  it('updates the description on a board', (done) => {
-    const description = `Test description - ${Date.now()}`;
-    trelloApi.board(boardId).updateDescription(description)
-      .then((result) => {
-        const actualValue = result.data.desc;
-        expect(actualValue).to.equal(description);
-        done();
-      })
-      .catch(error => done(error));
-  });
-
-  it.only('creates a new board', (done) => {
-    const boardName = 'Test Board 2';
-    trelloApi.board().createBoard(boardName)
-      .then((result) => {
-        const actualValue = result.data.name;
-        expect(actualValue).to.equal(boardName);
-        done();
-      })
-      .catch(error => done(error));
-  });
+  describe('Board POST requests', () => {
+    it('creates a new board', (done) => {
+      const boardName = 'Test Board 2';
+      trelloApi.board().createBoard(boardName)
+        .then((result) => {
+          const actualValue = result.data.name;
+          expect(actualValue).to.equal(boardName);
+          done();
+        })
+        .catch(error => done(error));
+    });
+  })
 });
