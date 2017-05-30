@@ -1,7 +1,19 @@
 /* @flow */
 
-/* Internal dependencies */
-import entities from './entities';
+//import Action from './action';
+//import Batch from './batch';
+import Board from './board';
+//import Card from './card';
+//import Checklist from './checklist';
+//import Label from './label';
+//import List from './list';
+//import Member from './member';
+//import Notification from './notification';
+//import Organization from './organization';
+//import Search from './search';
+//import Token from './token';
+//import Type from './type';
+//import Webhook from './webhook';
 
 /* Types */
 import type { Auth } from './types';
@@ -13,11 +25,7 @@ export default class Trello {
     this.auth = auth;
   }
 
-  action(): Object {
-    return new entities.Action(this.auth);
-  }
-
   board(boardId?: string = ''): Object {
-    return new entities.Board(this.auth, boardId);
+    return new Board(this.auth, boardId);
   }
 }

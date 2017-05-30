@@ -1,8 +1,5 @@
 /* @flow */
 
-/* Types */
-import type { Auth } from '../types';
-
 export type OrganizationField =
   'billableMemberCount'
   | 'desc'
@@ -20,11 +17,3 @@ export type OrganizationField =
   | 'products'
   | 'url'
   | 'website';
-
-export default class Organization {
-  auth: Auth;
-
-  constructor(auth: Auth) {
-    this.auth = auth;
-  }
-}

@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "doc": "apidoc -i internals/doc/ -o output/",
+    "flow": "flow check || exit 0",
     "setup": "rm -rf node_modules && yarn cache clean && yarn install",
     "test": "find ./tests -name '*.test.js' | xargs cross-env NODE_ENV=test mocha --opts ./mocha.opts || exit 0"
   },

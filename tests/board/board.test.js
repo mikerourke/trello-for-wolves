@@ -1,22 +1,21 @@
 /* Internal dependencies */
-import Trello from '../../src/index';
-import { auth } from '../helpers';
+import Trello from '../../src/index.new';
+import { auth, boardId } from '../helpers';
 
-describe('Board class', () => {
-  const boardId = 'bJDPVV1A';
+describe('Board Entity', () => {
   let trello;
   before(() => {
     trello = new Trello(auth);
   });
 
-  describe('Board GET requests', () => {
+  describe.only('Board GET requests', () => {
     it('gets a board', (done) => {
       trello.board(boardId).getBoard()
         .should.eventually.have.property('data')
         .notify(done)
     });
 
-    it('gets a board with options', (done) => {
+    it('gets a board with queryArgs', (done) => {
       trello.board(boardId).getBoard({ actions: 'all' })
         .should.eventually.have.property('data')
         .notify(done)
@@ -186,5 +185,5 @@ describe('Board class', () => {
         })
         .catch(error => done(error));
     });
-  })
+  });
 });

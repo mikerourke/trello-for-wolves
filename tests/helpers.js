@@ -1,9 +1,9 @@
 const key = process.env.TRELLO_API_KEY || '';
 const token = process.env.TRELLO_AUTH_TOKEN || '';
 
-const auth = {
+exports.auth = {
   key,
   token,
 };
-
-exports.auth = auth;
+exports.boardId = 'bJDPVV1A';
+exports.cardId = 'GATVPdJ6';

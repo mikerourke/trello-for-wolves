@@ -1,24 +1,21 @@
 /* @flow */
 
 /* External dependencies */
+import axios from 'axios';
 import Promise from 'bluebird';
 
 /* Internal dependencies */
-import request from '../lib/request';
+import BaseEntity from '../base-entity';
 
 /* Types */
 import type { Auth } from '../types';
 
-export default class Batch {
-  auth: Auth;
-
+export default class Batch extends BaseEntity {
   constructor(auth: Auth) {
-    this.auth = auth;
+    super(auth, 'batch');
   }
 
   makeRequests(urls: Array<string>): Promise<*> {
-    return Promise.resolve(request(this.auth, 'get', '/batch', { urls })
-      .then(result => result)
-      .catch(error => error));
+    return this.httpGet('/', { urls });
   }
 }
