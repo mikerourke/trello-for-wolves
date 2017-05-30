@@ -28,3 +28,6 @@ dictionaries
 
 # Mac
 *.DS_Store
+
+# Other
+output/

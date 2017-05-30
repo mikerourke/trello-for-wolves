@@ -4,26 +4,26 @@ import { auth } from '../helpers';
 
 describe('Board class', () => {
   const boardId = 'bJDPVV1A';
-  let trelloApi;
+  let trello;
   before(() => {
-    trelloApi = new Trello(auth);
+    trello = new Trello(auth);
   });
 
   describe.only('Board GET requests', () => {
     it('gets a board', (done) => {
-      trelloApi.board(boardId).getBoard()
+      trello.board(boardId).getBoard()
         .should.eventually.have.property('data')
         .notify(done)
     });
 
     it('gets a board with options', (done) => {
-      trelloApi.board(boardId).getBoard({ actions: 'all' })
+      trello.board(boardId).getBoard({ actions: 'all' })
         .should.eventually.have.property('data')
         .notify(done)
     });
 
     it('gets a board field value', (done) => {
-      trelloApi.board(boardId).getFieldValue('name')
+      trello.board(boardId).getFieldValue('name')
         .then((result) => {
           const actualValue = result.data._value;
           const expectedValue = 'Test Board';
@@ -34,7 +34,7 @@ describe('Board class', () => {
     });
 
     it('gets the actions for a board', (done) => {
-      trelloApi.board(boardId).actions().getActions()
+      trello.board(boardId).actions().getActions()
         .then((result) => {
           const actualValue = result.data;
           const expectedValue = 1;
@@ -45,7 +45,7 @@ describe('Board class', () => {
     });
 
     it('gets the stars for a board', (done) => {
-      trelloApi.board(boardId).getStars()
+      trello.board(boardId).getBoardStars()
         .then((result) => {
           const actualValue = result.data.length;
           const expectedValue = 1;
@@ -56,7 +56,7 @@ describe('Board class', () => {
     });
 
     it('gets the cards for a board', (done) => {
-      trelloApi.board(boardId).cards().getCards()
+      trello.board(boardId).cards().getCards()
         .then((result) => {
           const actualValue = result.data;
           const expectedValue = 1;
@@ -67,11 +67,10 @@ describe('Board class', () => {
     });
 
     it('gets the filtered cards for a board', (done) => {
-      trelloApi.board(boardId).cards().getCards({
+      trello.board(boardId).cards().getCards({
         filter: 'closed',
       })
         .then((result) => {
-          console.log(result);
           const actualValue = result.data;
           const expectedValue = 1;
           expect(actualValue).to.have.length.of.at.least(expectedValue);
@@ -81,9 +80,8 @@ describe('Board class', () => {
     });
 
     it('gets a cards for a board by ID', (done) => {
-      trelloApi.board(boardId).cards().getCards()
+      trello.board(boardId).cards().getCards()
         .then((result) => {
-          console.log(result);
           const actualValue = result.data;
           const expectedValue = 1;
           expect(actualValue).to.have.length.of.at.least(expectedValue);
@@ -93,7 +91,7 @@ describe('Board class', () => {
     });
 
     it('gets the tags for a board', (done) => {
-      trelloApi.board(boardId).getTags()
+      trello.board(boardId).getTags()
         .then((result) => {
           const actualValue = result.data.length;
           const expectedValue = 1;
@@ -104,7 +102,7 @@ describe('Board class', () => {
     });
 
     it('gets myPrefs for a board', (done) => {
-      trelloApi.board(boardId).getMyPrefs()
+      trello.board(boardId).getMyPrefs()
         .then((result) => {
           const actualValue = result.data;
           const expectedValue = [
@@ -123,7 +121,7 @@ describe('Board class', () => {
     });
 
     it('gets the plugin data for a board', (done) => {
-      trelloApi.board(boardId).getPluginData()
+      trello.board(boardId).getPluginData()
         .then((result) => {
           const actualValue = result.data.length;
           const expectedValue = 1;
@@ -136,10 +134,8 @@ describe('Board class', () => {
 
   describe('Board PUT requests', () => {
     it('updates a board', (done) => {
-      trelloApi.board(boardId).updateBoard({
-        prefs: {
-          selfJoin: true,
-        },
+      trello.board(boardId).updateBoard({
+        prefs_selfJoin: true,
       })
         .then((result) => {
           const actualValue = result.data.length;
@@ -151,7 +147,7 @@ describe('Board class', () => {
     });
 
     it('updates myPrefs on a board', (done) => {
-      trelloApi.board(boardId).updateMyPrefs('showSidebar', true)
+      trello.board(boardId).updateMyPref('showSidebar', true)
         .then((result) => {
           const actualValue = result.data.length;
           const expectedValue = 1;
@@ -162,14 +158,14 @@ describe('Board class', () => {
     });
 
     it('updates the closed status on a board', (done) => {
-      trelloApi.board(boardId).updateClosedStatus(false)
+      trello.board(boardId).updateClosedStatus(false)
         .should.be.fulfilled
         .notify(done)
     });
 
     it('updates the description on a board', (done) => {
       const description = `Test description - ${Date.now()}`;
-      trelloApi.board(boardId).updateDescription(description)
+      trello.board(boardId).updateDescription(description)
         .then((result) => {
           const actualValue = result.data.desc;
           expect(actualValue).to.equal(description);
@@ -182,7 +178,7 @@ describe('Board class', () => {
   describe('Board POST requests', () => {
     it('creates a new board', (done) => {
       const boardName = 'Test Board 2';
-      trelloApi.board().createBoard(boardName)
+      trello.board().createBoard(boardName)
         .then((result) => {
           const actualValue = result.data.name;
           expect(actualValue).to.equal(boardName);

@@ -1,3 +1,4 @@
 internals/
 *.test.js
 helpers.js
+apidoc.js

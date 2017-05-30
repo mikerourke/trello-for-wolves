@@ -13,49 +13,92 @@ import Entity from './entity';
 
 /* Types */
 import type {
+  ActionChildrenUrlArgs,
   ActionDate,
-  ActionFields,
-  Actions,
+  ActionType,
+  ActionField,
   ActionsFormat,
   AllOrNone,
-  AttachmentFields,
+  ArgumentGroup,
+  AttachmentField,
+  AttachmentUrlArgs,
   Auth,
-  BoardField,
-  BoardFields,
-  BoardPref,
-  BoardStars,
   CardAging,
-  CardFields,
+  CardField,
   CardStatus,
-  ChecklistFields,
+  ChecklistField,
   EntityInstance,
   GroupPermission,
   Invitation,
-  LabelFields,
-  ListFields,
+  LabelColor,
+  LabelField,
+  ListField,
   ListStatus,
-  MemberFields,
+  MemberField,
   MemberLevel,
-  Memberships,
-  MyPref,
-  OrganizationFields,
+  Membership,
+  OrganizationField,
   PermissionLevel,
   Position,
-  PowerUps,
+  PowerUp,
 } from '../types';
+
+export type BoardField =
+  'closed'
+  | 'dateLastActivity'
+  | 'dateLastView'
+  | 'desc'
+  | 'descData'
+  | 'idOrganization'
+  | 'invitations'
+  | 'invited'
+  | 'labelNames'
+  | 'memberships'
+  | 'name'
+  | 'pinned'
+  | 'powerUps'
+  | 'prefs'
+  | 'shortLink'
+  | 'shortUrl'
+  | 'starred'
+  | 'subscribed'
+  | 'url';
+export type BoardPref =
+  'background'
+  | 'calendarFeedEnabled'
+  | 'cardAging'
+  | 'cardCovers'
+  | 'comments'
+  | 'invitations'
+  | 'permissionLevel'
+  | 'selfJoin'
+  | 'voting';
+export type BoardStars = 'none' | 'mine';
+export type MyPref =
+  'emailPosition'
+  | 'idEmailList'
+  | 'showListGuide'
+  | 'showSidebar'
+  | 'showSidebarActivity'
+  | 'showSidebarBoardActions'
+  | 'showSidebarMembers';
+
+type PrefsUrlArgs = {
+  prefs_permissionLevel?: PermissionLevel,
+  prefs_voting?: GroupPermission,
+  prefs_comments?: GroupPermission,
+  prefs_invitations?: Invitation,
+  prefs_selfJoin?: boolean,
+  prefs_cardCovers?: boolean,
+  prefs_background?: string,
+  prefs_cardAging?: CardAging,
+};
 
 /**
  * Class representing a Board entity.
  * @extends Entity
  */
 export default class Board extends Entity {
-  /**
-   * Create a new board.
-   * @param {Auth} auth Auth object containing Trello API key and token.
-   * @param {string} boardId ID of the board.
-   * @param {EntityInstance} [parent] Parent entity associated with this
-   *    instance.
-   */
   constructor(
     auth: Auth,
     boardId?: string = '',
@@ -64,64 +107,49 @@ export default class Board extends Entity {
     super(auth, 'board', boardId, parent);
   }
 
-  /**
-   * Get details of a single board with ID.
-   * @param {Object} urlArgs Arguments to pass to API call.
-   * @returns {Promise}
-   * @see {@link https://developers.trello.com/advanced-reference/board#get-1-boards-board-id|GET /1/boards/:boardId}
-   */
-  getBoard(urlArgs?: {
-    actions?: Actions,
-    actionsEntities?: boolean,
-    actionsDisplay?: boolean,
-    actionsFormat?: ActionsFormat,
-    actionsSince?: ActionDate,
-    actionsLimit?: number,
-    actionFields?: ActionFields,
-    actionMember?: boolean,
-    actionMemberFields?: MemberFields,
-    actionMemberCreator?: boolean,
-    actionMemberCreatorFields?: MemberFields,
-    cards?: CardStatus,
-    cardFields?: CardFields,
-    cardAttachments?: boolean,
-    cardAttachmentFields?: AttachmentFields,
-    cardChecklists?: AllOrNone,
-    cardPluginData?: boolean,
-    cardStickers?: boolean,
-    boardStars?: BoardStars,
-    labels?: AllOrNone,
-    labelFields?: LabelFields,
-    labelsLimit?: number, // Valid values 0 to 1000
-    list?: ListStatus,
-    listFields?: ListFields,
-    memberships?: Memberships,
-    membershipsMember?: boolean,
-    membershipsMemberFields?: MemberFields,
-    members?: MemberLevel,
-    memberFields?: MemberFields,
-    membersInvited?: MemberLevel,
-    membersInvitedFields?: MemberFields,
-    pluginData?: boolean,
-    checklists?: AllOrNone,
-    checklistFields?: ChecklistFields,
-    organization?: boolean,
-    organizationFields?: OrganizationFields,
-    organizationMemberships?: Memberships,
-    organizationPluginData?: boolean,
-    myPrefs?: boolean,
-    tags?: boolean,
-    fields?: BoardFields,
-  } = {}): Promise<*> {
-    return this.performRequest('get', { urlArgs });
+  getBoard(
+    fields?: ArgumentGroup<BoardField>,
+    urlArgs?: ActionChildrenUrlArgs & {
+      actions_format?: ActionsFormat,
+      actions_limit?: number,
+      action_member?: boolean,
+      action_member_fields?: ArgumentGroup<MemberField>,
+      action_memberCreator?: boolean,
+      action_memberCreator_fields?: ArgumentGroup<MemberField>,
+      cards?: CardStatus,
+      card_fields?: ArgumentGroup<CardField>,
+      card_attachments?: boolean,
+      card_attachment_fields?: ArgumentGroup<AttachmentField>,
+      card_checklists?: AllOrNone,
+      card_pluginData?: boolean,
+      card_stickers?: boolean,
+      boardStars?: BoardStars,
+      labels?: AllOrNone,
+      label_fields?: ArgumentGroup<LabelField>,
+      labels_limit?: number, // Valid values 0 to 1000
+      lists?: ListStatus,
+      list_fields?: ArgumentGroup<ListField>,
+      memberships?: ArgumentGroup<Membership>,
+      memberships_member?: boolean,
+      memberships_member_fields?: ArgumentGroup<MemberField>,
+      members?: MemberLevel,
+      member_fields?: ArgumentGroup<MemberField>,
+      membersInvited?: MemberLevel,
+      membersInvited_fields?: ArgumentGroup<MemberField>,
+      pluginData?: boolean,
+      checklists?: AllOrNone,
+      checklist_fields?: ArgumentGroup<ChecklistField>,
+      organization?: boolean,
+      organization_fields?: ArgumentGroup<OrganizationField>,
+      organization_memberships?: ArgumentGroup<Membership>,
+      organization_pluginData?: boolean,
+      myPrefs?: boolean,
+      tags?: boolean,
+    } = {},
+  ): Promise<*> {
+    return this.performRequest('get', { urlArgs: { ...urlArgs, fields } });
   }
 
-  /**
-   * Gets the value of the specified field on a board.
-   * @param {BoardField} field Field to get value for.
-   * @returns {Promise}
-   * @see {@link https://developers.trello.com/advanced-reference/board#get-1-boards-board-id-field|GET /1/boards/:boardId/:field}
-   */
   getFieldValue(field: BoardField): Promise<*> {
     if (typeof field !== 'string') {
       throw new InvalidStringError('field',
@@ -130,113 +158,62 @@ export default class Board extends Entity {
     return this.performRequest('get', { path: field });
   }
 
-  /**
-   * Returns the stars associated with a board.
-   * @param {BoardStars} filter Filter to specify which stars to get.
-   * @returns {Promise}
-   * @see {@link https://developers.trello.com/advanced-reference/board#get-1-boards-board-boardstars|GET /1/boards/:boardId/boardStars}
-   */
-  getStars(filter?: BoardStars = 'mine'): Promise<*> {
+  getBoardStars(filter?: BoardStars = 'mine'): Promise<*> {
     if (typeof filter !== 'string') {
       throw new InvalidStringError('filter',
         'board#get-1-boards-board-id-boardstars');
     }
     return this.performRequest('get', {
-      path: 'boardStars', urlArgs: { filter } });
+      path: 'boardStars',
+      urlArgs: { filter },
+    });
   }
 
-  /**
-   * Returns the deltas associated with a board.
-   * @param {string} tags Tags to get deltas for.
-   * @param {number} ixLastUpdate Index of last update.
-   * @returns {Promise}
-   * @see {@link https://developers.trello.com/advanced-reference/board#get-1-boards-board-deltas|GET /1/boards/:boardId/deltas}
-   */
   getDeltas(tags: string, ixLastUpdate: number): Promise<*> {
     if (typeof tags !== 'string') {
       throw new InvalidStringError('tags',
         'board#get-1-boards-board-id-deltas');
     }
     return this.performRequest('get', {
-      path: 'deltas', urlArgs: { tags, ixLastUpdate } });
+      path: 'deltas',
+      urlArgs: { tags, ixLastUpdate },
+    });
   }
 
-  /**
-   * Returns the tags associated with a board.
-   * @returns {Promise}
-   * @see {@link https://developers.trello.com/advanced-reference/board#get-1-boards-board-idtags|GET /1/boards/:boardId/tags}
-   */
   getTags(): Promise<*> {
     return this.performRequest('get', { path: 'tags' });
   }
 
-  /**
-   * Returns myPrefs associated with a board.
-   * @returns {Promise}
-   * @see {@link https://developers.trello.com/advanced-reference/board#get-1-boards-board-myprefs|GET /1/boards/:boardId/myPrefs}
-   */
   getMyPrefs(): Promise<*> {
     return this.performRequest('get', { path: 'myPrefs' });
   }
 
-  /**
-   * Returns plugin data associated with a board.
-   * @returns {Promise}
-   * @see {@link https://developers.trello.com/advanced-reference/board#get-1-boards-board-plugindata|GET /1/boards/:boardId/pluginData}
-   */
   getPluginData(): Promise<*> {
     return this.performRequest('get', { path: 'pluginData' });
   }
 
-  /**
-   * Updates board with specified parameters.
-   * @param {Object} [urlArgs={}] Arguments to pass for updating.
-   * @returns {Promise}
-   * @see {@link https://developers.trello.com/advanced-reference/board#put-1-boards-board-id|PUT /1/boards/:boardId}
-   */
-  updateBoard(urlArgs?: {
+  updateBoard(urlArgs?: PrefsUrlArgs & {
     name?: string,
     desc?: string,
     closed?: boolean,
     subscribed?: boolean,
     idOrganization?: string,
-    prefs?: {
-      permissionLevel?: PermissionLevel,
-      selfJoin?: boolean,
-      cardCovers?: boolean,
-      invitations?: Invitation,
-      voting?: GroupPermission,
-      comments?: GroupPermission,
-      background?: string,
-      cardAging?: CardAging,
-      calendarFeedEnabled?: boolean,
-      separator?: string,
-    },
-    labelNames?: {
-      green?: string,
-      yellow?: string,
-      orange?: string,
-      red?: string,
-      purple?: string,
-      blue?: string,
-      separator?: string,
-    },
+    labelNames_green?: string,
+    labelNames_yellow?: string,
+    labelNames_orange?: string,
+    labelNames_red?: string,
+    labelNames_purple?: string,
+    labelNames_blue?: string,
   } = {}): Promise<*> {
-    if (urlArgs.prefs) {
-      urlArgs.prefs.separator = '/';
-    }
-    if (urlArgs.labelNames) {
-      urlArgs.labelNames.separator = '/';
-    }
-    return this.performRequest('put', { urlArgs });
+    // TODO: Test this to make sure it works.
+    const updatedArgs = {};
+    Object.keys(urlArgs).forEach((argKey) => {
+      const updatedKey = argKey.replace('_', '/');
+      updatedArgs[updatedKey] = urlArgs[argKey];
+    });
+    return this.performRequest('put', { urlArgs: updatedArgs });
   }
 
-  /**
-   * Updates the closed status of the board.
-   * @param {boolean} value New closed status of the board.
-   * @returns {Promise}
-   * @see {@link https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-closed|PUT /1/boards/:boardId/closed}
-   */
   updateClosedStatus(value: boolean): Promise<*> {
     if (typeof value !== 'boolean') {
       throw new InvalidBooleanError('value',
@@ -245,12 +222,6 @@ export default class Board extends Entity {
     return this.performRequest('put', { path: 'closed', urlArgs: { value } });
   }
 
-  /**
-   * Updates the description of the board.
-   * @param {string} value New description of the board.
-   * @returns {Promise}
-   * @see {@link https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-desc|PUT /1/boards/:boardId/desc}
-   */
   updateDescription(value: string): Promise<*> {
     if (typeof value !== 'string') {
       throw new InvalidStringError('value',
@@ -262,14 +233,24 @@ export default class Board extends Entity {
     return this.performRequest('put', { path: 'desc', urlArgs: { value } });
   }
 
-  /**
-   * Updates the specified myPref for the board.
-   * @param {MyPref} myPrefName Name of the myPref to update.
-   * @param {boolean|string|Position} value New value for myPref.
-   * @returns {Promise}
-   * @see {@link https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-myprefs-emailposition|PUT /1/boards/:boardId/myPrefs/[myPrefName]}
-   */
-  updateMyPrefs(
+  updateOrganizationId(value: string): Promise<*> {
+    return this.performRequest('put', {
+      path: 'idOrganization',
+      urlArgs: { value },
+    });
+  }
+
+  updateLabelNameForColor(
+    labelColor: LabelColor,
+    newValue: string,
+  ): Promise<*> {
+    return this.performRequest('put', {
+      path: `labelNames/${labelColor}`,
+      urlArgs: { value: newValue },
+    });
+  }
+
+  updateMyPref(
     myPrefName: MyPref,
     value: boolean | string | Position,
   ): Promise<*> {
@@ -284,50 +265,77 @@ export default class Board extends Entity {
       throw new InvalidBooleanError(myPrefName, helpUrl);
     }
     return this.performRequest('put', {
-      path: `myPrefs/${myPrefName}`, urlArgs: { value } });
+      path: `myPrefs/${myPrefName}`,
+      urlArgs: { value },
+    });
+  }
+
+  updateName(value: string): Promise<*> {
+    return this.performRequest('put', { path: 'name', urlArgs: { value } });
   }
 
   updatePref(
     prefName: BoardPref,
-    value: string | boolean | CardAging | GroupPermission |
-      Invitation | PermissionLevel,
+    value: boolean | string | CardAging | Invitation | GroupPermission |
+           PermissionLevel,
   ): Promise<*> {
-    return this.performRequest('put',
-      { path: `prefs/${prefName}`, urlArgs: { value } });
+    return this.performRequest('put', {
+      path: `prefs/${prefName}`,
+      urlArgs: { value },
+    });
   }
 
   updateSubscribed(value: boolean): Promise<*> {
-    return this.performRequest('put',
-      { path: 'subscribed', urlArgs: { value } });
+    return this.performRequest('put', {
+      path: 'subscribed',
+      urlArgs: { value },
+    });
   }
 
   createBoard(
     name: string,
-    urlArgs?: {
+    urlArgs?: PrefsUrlArgs & {
       defaultLabels?: boolean,
       defaultLists?: boolean,
       desc?: string,
       idOrganization?: string,
       idBoardSource?: string,
       keepFromSource?: 'all' | Array<string>,
-      powerUps?: PowerUps,
-      prefs?: {
-        permissionLevel?: PermissionLevel,
-        voting?: GroupPermission,
-        comments?: GroupPermission,
-        invitations?: Invitation,
-        selfJoin?: boolean,
-        cardCovers?: boolean,
-        background?: string,
-        cardAging?: CardAging,
-        separator?: string,
-      },
+      powerUps?: ArgumentGroup<PowerUp>,
     } = {},
   ): Promise<*> {
-    if (urlArgs.prefs) {
-      urlArgs.prefs.separator = '_';
-    }
-    const updatedArgs = Object.assign({}, { name }, urlArgs);
+    const updatedArgs = { ...urlArgs, name };
     return this.performRequest('post', { urlArgs: updatedArgs });
+  }
+
+  generateCalendarKey() {
+    return this.performRequest('post', { path: 'calendarKey/generate' });
+  }
+
+  generateEmailKey() {
+    return this.performRequest('post', { path: 'emailKey/generate' });
+  }
+
+  addTags(value: string) {
+    return this.performRequest('post', { path: 'tags', urlArgs: { value } });
+  }
+
+  markAsViewed() {
+    return this.performRequest('post', { path: 'markAsViewed' });
+  }
+
+  addPowerUps(value: PowerUp) {
+    return this.performRequest('post', {
+      path: 'powerUps',
+      urlArgs: { value },
+    });
+  }
+
+  // TODO: Look into this.  Does the power up need to be specified as a value and in the endpoint?
+  deletePowerUp(value: PowerUp) {
+    return this.performRequest('delete', {
+      path: `powerUps/${value}`,
+      urlArgs: { value },
+    });
   }
 }

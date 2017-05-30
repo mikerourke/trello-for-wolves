@@ -1,5 +1,8 @@
 /* @flow */
 
+/* External dependencies */
+import Promise from 'bluebird';
+
 /* Internal dependencies */
 import request from '../lib/request';
 
@@ -11,5 +14,11 @@ export default class Batch {
 
   constructor(auth: Auth) {
     this.auth = auth;
+  }
+
+  makeRequests(urls: Array<string>): Promise<*> {
+    return Promise.resolve(request(this.auth, 'get', '/batch', { urls })
+      .then(result => result)
+      .catch(error => error));
   }
 }

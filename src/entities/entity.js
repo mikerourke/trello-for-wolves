@@ -19,6 +19,7 @@ import type {
 type RequestOptions = {
   path?: string,
   urlArgs?: Object,
+  entityNameOverride?: string,
 };
 
 /**
@@ -28,6 +29,7 @@ export default class Entity {
   auth: Auth;
   endpoint: string;
   entity: EntityInstance;
+  parent: ?EntityInstance;
 
   /**
    * Creates a new Entity instance.
@@ -44,11 +46,15 @@ export default class Entity {
     parent?: ?EntityInstance,
   ) {
     this.auth = auth;
-    this.endpoint = buildEndpointString(`${entityName}s`, entityId, parent);
+    this.endpoint = buildEndpointString(`${entityName}s`, {
+      entityId,
+      parent,
+    });
     this.entity = {
       entityName,
       id: entityId,
     };
+    this.parent = parent;
   }
 
   /**
@@ -61,10 +67,13 @@ export default class Entity {
     httpMethod: HttpMethod,
     options?: RequestOptions = {},
   ) {
-    const { path = '', urlArgs = {} } = options;
+    const { path = '', urlArgs = {}, entityNameOverride = '' } = options;
     let endpoint = this.endpoint;
     if (path) {
       endpoint = `${endpoint}/${path}`;
+    }
+    if (entityNameOverride) {
+      endpoint = endpoint.replace(this.entity.entityName, entityNameOverride);
     }
     return Promise.resolve(request(this.auth, httpMethod, endpoint, urlArgs)
       .then(result => result)
@@ -84,22 +93,22 @@ export default class Entity {
   }
 
   checklists() {
-    //return new entities.Checklist(this.auth, '', this.entity);
+    return new entities.Checklist(this.auth, '', this.entity);
   }
 
   labels() {
-    //return new entities.Label(this.auth, '', this.entity);
+    return new entities.Label(this.auth, '', this.entity);
   }
 
   lists() {
-    //return new entities.List(this.auth, '', this.entity);
+    return new entities.List(this.auth, '', this.entity);
   }
 
   members() {
-    //return new entities.Member(this.auth, '', this.entity);
+    return new entities.Member(this.auth, '', this.entity);
   }
 
   organizations() {
-    //return new entities.Organization(this.auth, '', this.entity);
+    return new entities.Organization(this.auth, '', this.entity);
   }
 }

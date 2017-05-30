@@ -1,15 +1,53 @@
 /* @flow */
 
 /* Internal dependencies */
-import request from '../lib/request';
+import Entity from './entity';
 
 /* Types */
-import type { Auth } from '../types';
+import type {
+  ArgumentGroup,
+  Auth,
+  EntityInstance,
+} from '../types';
 
-export default class Label {
-  auth: Auth;
+export type LabelColor =
+  'blue'
+  | 'green'
+  | 'orange'
+  | 'purple'
+  | 'red'
+  | 'yellow';
+export type LabelField = 'color' | 'idBoard' | 'name' | 'uses';
 
-  constructor(auth: Auth) {
-    this.auth = auth;
+export default class Label extends Entity {
+  constructor(
+    auth: Auth,
+    labelId?: string = '',
+    parent?: ?EntityInstance,
+  ) {
+    super(auth, 'label', labelId, parent);
+  }
+
+  getLabel(urlArgs?: {
+    fields?: ArgumentGroup<LabelField>,
+  } = {}): Promise<*> {
+    const updatedArgs = (this.parent)
+      ? { idLabel: this.entity.id, ...urlArgs }
+      : urlArgs;
+    return this.performRequest('get', { urlArgs: updatedArgs });
+  }
+
+  getLabels(urlArgs?: {
+    fields?: ArgumentGroup<LabelField>,
+    limit?: number,
+  } = {}): Promise<*> {
+    return this.performRequest('get', { urlArgs });
+  }
+
+  createLabel(
+    name: string,
+    color: string,
+  ): Promise<*> {
+    return this.performRequest('post', { urlArgs: { name, color } });
   }
 }
