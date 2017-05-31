@@ -78,7 +78,7 @@ describe('String Builder', () => {
 
     it('builds an endpoint with a group name and ID', () => {
       const actualValue = buildEndpointString('boards', {
-        entityId: 'BoArDId'
+        instanceId: 'BoArDId'
       });
       const expectedValue = 'boards/BoArDId';
       expect(actualValue).to.equal(expectedValue);
@@ -90,7 +90,7 @@ describe('String Builder', () => {
         id: 'BoArDId',
       };
       const actualValue = buildEndpointString('actions', {
-        entityId: 'AcTiOnId',
+        instanceId: 'AcTiOnId',
         parent: parentEntity,
       });
       const expectedValue = 'boards/BoArDId/actions/AcTiOnId';

@@ -1,34 +1,41 @@
 /* @flow */
 
+/* Internal dependencies */
+import BaseResource from '../base-resource';
+
 /* Types */
 import type {
   ActionField,
   ActionType,
-  ArgumentGroup,
   Auth,
+  FieldsQueryArg,
   Format,
-  MemberCreatorQueryArgs,
-  MemberQueryArgs,
+  MemberCreatorInclusionQueryArgs,
+  MemberInclusionQueryArgs,
   PaginatedQueryArgs,
+  ValueQueryArg,
 } from '../types';
 
-type GetQueryArgs = MemberQueryArgs & MemberCreatorQueryArgs & {
-  display?: boolean,
-  entities?: boolean,
-  fields?: ArgumentGroup<ActionField>,
-};
+type GetQueryArgs =
+  MemberInclusionQueryArgs
+  & MemberCreatorInclusionQueryArgs
+  & FieldsQueryArg<ActionField>
+  & {
+    display?: boolean,
+    entities?: boolean,
+  };
 
 /**
- * Class representing an Action entity.
- * @extends Entity
+ * Class representing an Action resource.
+ * @extends BaseResource
  */
-export default class Action extends BaseEntity {
+export default class Action extends BaseResource {
   constructor(
     auth: Auth,
     actionId: string,
-    parentType?: string,
-    parentId?: string,) {
-    super(auth, 'action', actionId, parentType, parentId);
+    parentPath?: string,
+  ) {
+    super(auth, 'action', actionId, parentPath);
   }
 
   getAction(queryArgs?: GetQueryArgs): Promise<*> {
@@ -60,9 +67,7 @@ export default class Action extends BaseEntity {
     return this.httpPost('/', queryArgs);
   }
 
-  updateText(queryArgs: {
-    value: string,
-  }) {
+  updateText(queryArgs: ValueQueryArg<string>) {
     return this.httpPost('/text', queryArgs);
   }
 

@@ -9,41 +9,38 @@ import snakeCase from 'lodash.snakecase';
  *    call.
  * @example
  *   Given:
- *    urlArgs = {
+ *    queryArgs = {
  *      prefs: {
  *        invitations: 'admins'
  *        selfJoin: true,
- *        separator: '/',
  *      }
+ *      separator: '/',
  *    }
  *  Output: prefs/invitations=admins&prefs/selfJoin=true
  *
  * @param {string} childName Name of the key containing children.
- * @param {Object} urlArgs Arguments to parse.
+ * @param {Object} queryArgs Arguments to parse.
  * @returns {string} URL string in correct format.
  */
 const getQueryStringForNestedArgs = (
   childName: string,
-  urlArgs: Object,
+  queryArgs: Object,
 ): string => {
   let childUrlString = '';
-  const childGroup = urlArgs[childName];
+  const childGroup = queryArgs[childName];
 
-  // The separator needs to be a key on each child group, if it's not present,
-  // throw an error.
-  const { separator = '' } = childGroup;
-  if (separator === '') {
+  // Ensure the separator was specified for nested args.
+  const { separator } = queryArgs;
+  if (!separator) {
     throw new Error('Separator must be specified for child args');
   }
 
   Object.entries(childGroup).forEach(([childKey, childValue]) => {
-    // Ensure that the "separator" key isn't included in the URL string.
-    if (childKey !== 'separator') {
-      const childArgKey = `${childName}${separator}${childKey}`;
-      const childArgValue: string = (childValue: any);
-      childUrlString = `${childUrlString}${childArgKey}=${childArgValue}&`;
-    }
+    const childArgKey = `${childName}${separator}${childKey}`;
+    const childArgValue: string = (childValue: any);
+    childUrlString = `${childUrlString}${childArgKey}=${childArgValue}&`;
   });
+
   return childUrlString;
 };
 

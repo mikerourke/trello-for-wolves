@@ -14,7 +14,7 @@ export type CheckItemState = 'complete' | 'false' | 'incomplete' | 'true';
 
 export type CheckItemStateField = 'idCheckItem' | 'state';
 
-export type ChecklistFieldsQueryArgs = {
+export type ChecklistInclusionQueryArgs = {
   checklists?: AllOrNone,
   checklistFields?: ArgumentGroup<ChecklistField>,
 };

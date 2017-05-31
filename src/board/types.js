@@ -1,7 +1,10 @@
 /* @flow */
 
 /* Types */
-import type { ArgumentGroup } from '../types';
+import type {
+  ArgumentGroup,
+  CardAging,
+} from '../types';
 
 export type BoardField =
   'closed'
@@ -54,7 +57,20 @@ export type PowerUp =
   | 'recap'
   | 'voting';
 
-export type BoardFieldsQueryArgs = {
+export type BoardInclusionQueryArgs = {
   board?: boolean,
   boardFields?: ArgumentGroup<BoardField>,
+};
+
+export type PrefsQueryArgs = {
+  prefs?: {
+    permissionLevel?: PermissionLevel,
+    voting?: GroupPermission,
+    comments?: GroupPermission,
+    invitations?: Invitation,
+    selfJoin?: boolean,
+    cardCovers?: boolean,
+    background?: string,
+    cardAging?: CardAging,
+  },
 };

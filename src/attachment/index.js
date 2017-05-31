@@ -1,39 +1,38 @@
 /* @flow */
 
-import BaseEntity from '../base-entity';
+/* Internal dependencies */
+import BaseResource from '../base-resource';
 
 /* Types */
 import type {
-  ArgumentGroup,
   AttachmentField,
   AttachmentFilter,
   Auth,
+  FieldsQueryArg,
 } from '../types';
 
+type AttachmentFieldsQueryArg = FieldsQueryArg<AttachmentField>;
+
 /**
- * Class representing an Attachment entity.
- * @extends BaseEntity
+ * Class representing an Attachment resource.
+ * @extends BaseResource
  */
-export default class Attachment extends BaseEntity {
+export default class Attachment extends BaseResource {
   constructor(
     auth: Auth,
     attachmentId: string,
-    parentType?: string,
-    parentId?: string,
+    parentPath?: string,
   ) {
-    super(auth, 'attachments', attachmentId, parentType, parentId);
+    super(auth, 'attachments', attachmentId, parentPath);
   }
 
-  getAttachment(queryArgs?: {
-    fields?: ArgumentGroup<AttachmentField>,
-  } = {}): Promise<*> {
-    const idAttachment = this.entityId;
+  getAttachment(queryArgs?: AttachmentFieldsQueryArg): Promise<*> {
+    const idAttachment = this.instanceId;
     const updatedArgs = { idAttachment, ...queryArgs };
     return this.httpGet(`/${idAttachment}`, updatedArgs);
   }
 
-  getAttachments(queryArgs?: {
-    fields?: ArgumentGroup<AttachmentField>,
+  getAttachments(queryArgs?: AttachmentFieldsQueryArg & {
     filter?: AttachmentFilter,
   } = {}): Promise<*> {
     return this.httpGet('/', queryArgs);
@@ -44,7 +43,7 @@ export default class Attachment extends BaseEntity {
     queryArgs?: {
       url?: string,
       name?: string,
-      mimeType: string,
+      mimeType?: string,
     } = {},
     file?: Object,
   ): Promise<*> {

@@ -1,5 +1,8 @@
 /* @flow */
 
+/* Types */
+import type { ArgumentGroup } from '../types';
+
 export type OrganizationField =
   'billableMemberCount'
   | 'desc'
@@ -17,3 +20,8 @@ export type OrganizationField =
   | 'products'
   | 'url'
   | 'website';
+
+export type OrganizationInclusionQueryArgs = {
+  organization?: boolean,
+  organizationFields?: ArgumentGroup<OrganizationField>,
+};

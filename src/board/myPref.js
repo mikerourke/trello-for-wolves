@@ -5,39 +5,35 @@ import {
   InvalidBooleanError,
   InvalidStringError,
 } from '../errors';
-import BaseEntity from '../base-entity';
+import BaseResource from '../base-resource';
 
 /* Types */
 import type {
   Auth,
   Position,
+  ValueQueryArg,
 } from '../types';
 
-export default class MyPref extends BaseEntity {
+export default class MyPref extends BaseResource {
   constructor(
     auth: Auth,
     boardId: string,
   ) {
-    const basePath = 'myPrefs';
-    const parentPath = `boards/${boardId}`;
-    super(auth, basePath, parentPath);
+    super(auth, 'myPrefs', '', `boards/${boardId}`);
   }
 
   _updateField(
     fieldName: string,
     expectedType: string,
-    queryArgs: {
-      value: boolean | string,
-    },
+    queryArgs: Object,
   ): Promise<*> {
     const { value } = queryArgs;
     const helpLink = `board#put-1-boards-board-id-myprefs-${fieldName}`;
-    if (typeof value !== expectedType) {
-      if (expectedType === 'boolean') {
-        throw new InvalidBooleanError('value', helpLink);
-      } else {
-        throw new InvalidStringError('value', helpLink);
-      }
+    if (expectedType === 'boolean' && typeof value !== 'boolean') {
+      throw new InvalidBooleanError('value', helpLink);
+    }
+    if (expectedType === 'string' && typeof value !== 'string') {
+      throw new InvalidStringError('value', helpLink);
     }
     return this.httpPut(`/${fieldName}`, queryArgs);
   }
@@ -46,45 +42,31 @@ export default class MyPref extends BaseEntity {
     return this.httpGet('/');
   }
 
-  updateEmailPosition(queryArgs: {
-    value: Position,
-  }): Promise<*> {
+  updateEmailPosition(queryArgs: ValueQueryArg<Position>): Promise<*> {
     return this._updateField('emailPosition', 'string', queryArgs);
   }
 
-  updateIdEmailList(queryArgs: {
-    value: string,
-  }): Promise<*> {
+  updateIdEmailList(queryArgs: ValueQueryArg<string>): Promise<*> {
     return this._updateField('idEmailList', 'string', queryArgs);
   }
 
-  updateShowListGuide(queryArgs: {
-    value: boolean,
-  }): Promise<*> {
+  updateShowListGuide(queryArgs: ValueQueryArg<boolean>): Promise<*> {
     return this._updateField('showListGuide', 'boolean', queryArgs);
   }
 
-  updateShowSidebar(queryArgs: {
-    value: boolean,
-  }): Promise<*> {
+  updateShowSidebar(queryArgs: ValueQueryArg<boolean>): Promise<*> {
     return this._updateField('showSidebar', 'boolean', queryArgs);
   }
 
-  updateShowSidebarActivity(queryArgs: {
-    value: boolean,
-  }): Promise<*> {
+  updateShowSidebarActivity(queryArgs: ValueQueryArg<boolean>): Promise<*> {
     return this._updateField('showSidebarActivity', 'boolean', queryArgs);
   }
 
-  updateShowSidebarBoardActions(queryArgs: {
-    value: boolean,
-  }): Promise<*> {
+  updateShowSidebarBoardActions(queryArgs: ValueQueryArg<boolean>): Promise<*> {
     return this._updateField('showSidebarBoardActions', 'boolean', queryArgs);
   }
 
-  updateShowSidebarMembers(queryArgs: {
-    value: boolean,
-  }): Promise<*> {
+  updateShowSidebarMembers(queryArgs: ValueQueryArg<boolean>): Promise<*> {
     return this._updateField('showSidebarMembers', 'boolean', queryArgs);
   }
 }

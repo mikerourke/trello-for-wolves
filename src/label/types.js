@@ -1,7 +1,10 @@
 /* @flow */
 
 /* Types */
-import type { ArgumentGroup } from '../types';
+import type {
+  AllOrNone,
+  ArgumentGroup,
+} from '../types';
 
 export type LabelColor =
   'blue'
@@ -13,7 +16,7 @@ export type LabelColor =
 
 export type LabelField = 'color' | 'idBoard' | 'name' | 'uses';
 
-export type LabelFieldsQueryArgs = {
-  labels?: boolean,
+export type LabelInclusionQueryArgs = {
+  labels?: AllOrNone,
   labelFields?: ArgumentGroup<LabelField>,
 };

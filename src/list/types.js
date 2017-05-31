@@ -7,7 +7,7 @@ export type ListField = 'closed' | 'idBoard' | 'name' | 'pos' | 'subscribed';
 
 export type ListStatus = 'all' | 'closed' | 'none' | 'open';
 
-export type ListFieldsQueryArgs = {
-  list?: boolean,
+export type ListInclusionQueryArgs = {
+  list?: ListStatus,
   listFields?: ArgumentGroup<ListField>,
 };

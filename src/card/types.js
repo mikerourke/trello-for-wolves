@@ -40,3 +40,17 @@ export type StickerField =
   | 'rotate'
   | 'top'
   | 'zIndex';
+
+export type CardInclusionQueryArgs = {
+  cards?: CardStatus,
+  cardFields?: ArgumentGroup<CardField>,
+};
+
+export type StickerInclusionQueryArgs = {
+  stickers?: boolean,
+  stickerFields?: ArgumentGroup<StickerField>,
+};
+
+export type StickerFieldsQueryArg = {
+  fields?: ArgumentGroup<StickerField>,
+};

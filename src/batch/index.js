@@ -1,16 +1,16 @@
 /* @flow */
 
-/* External dependencies */
-import axios from 'axios';
-import Promise from 'bluebird';
-
 /* Internal dependencies */
-import BaseEntity from '../base-entity';
+import BaseResource from '../base-resource';
 
 /* Types */
 import type { Auth } from '../types';
 
-export default class Batch extends BaseEntity {
+/**
+ * Class representing a Batch resource.
+ * @extends BaseResource
+ */
+export default class Batch extends BaseResource {
   constructor(auth: Auth) {
     super(auth, 'batch');
   }

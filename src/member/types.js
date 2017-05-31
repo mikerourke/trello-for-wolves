@@ -33,27 +33,24 @@ export type InvitedMemberField = MemberField &
   | 'trophies'
   | 'uploadedAvatarHash';
 
-export type Membership =
-  'active'
-  | 'admin'
-  | 'deactivated'
-  | 'me'
-  | 'none'
-  | 'normal';
-
 export type MemberType = 'admin' | 'normal' | 'observer';
 
-export type MemberQueryArgs = {
+export type MemberInclusionQueryArgs = {
   member?: boolean,
   memberFields?: ArgumentGroup<MemberField>,
 };
 
-export type MemberCreatorQueryArgs = {
+export type MemberCreatorInclusionQueryArgs = {
   memberCreator?: boolean,
-  memberCreatorFields?: boolean,
+  memberCreatorFields?: ArgumentGroup<MemberField>,
 };
 
-export type MembershipsQueryArgs = {
+export type MembershipsMemberInclusionQueryArgs = {
   membershipsMember?: boolean,
   membershipsMemberFields?: ArgumentGroup<MemberField>,
+};
+
+export type MembersInvitedInclusionQueryArgs = {
+  membersInvited?: boolean,
+  membersInvitedFields?: ArgumentGroup<MemberField>,
 };

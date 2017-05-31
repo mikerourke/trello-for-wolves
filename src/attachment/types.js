@@ -16,14 +16,14 @@ export type AttachmentField =
   | 'previews'
   | 'url';
 
-export type AttachmentFieldsQueryArgs = {
+export type AttachmentInclusionQueryArgs = {
   attachments?: AttachmentFilter,
   attachmentFields?: ArgumentGroup<AttachmentField>,
 };
 
 export type AttachmentFieldsQueryArg = {
   fields?: ArgumentGroup<AttachmentField>,
-};
+}
 
 export type AttachmentFilterQueryArgs = AttachmentFieldsQueryArg & {
   filter?: AttachmentFilter,

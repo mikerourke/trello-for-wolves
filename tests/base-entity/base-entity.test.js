@@ -1,6 +1,6 @@
 /* Internal dependencies */
 import { auth, boardId, cardId } from '../helpers';
-import BaseEntity from '../../src/base-entity';
+import BaseResource from '../../src/base-resource';
 
 describe('Base Entity', () => {
   const authSuffix = `key=${auth.key}&token=${auth.token}`;
@@ -10,7 +10,7 @@ describe('Base Entity', () => {
   describe('Endpoint Builder', () => {
     describe('No Parent', () => {
       before(() => {
-        baseEntity = new BaseEntity(auth, 'card', cardId);
+        baseEntity = new BaseResource(auth, 'card', cardId);
       });
 
       it('builds an endpoint with the root path', () => {
@@ -79,7 +79,7 @@ describe('Base Entity', () => {
 
     describe('With Parent', () => {
       before(() => {
-        baseEntity = new BaseEntity(auth, 'card', cardId, 'board', boardId);
+        baseEntity = new BaseResource(auth, 'card', cardId, 'board', boardId);
       });
 
       it('builds an endpoint with the root path', () => {
@@ -149,8 +149,8 @@ describe('Base Entity', () => {
 
   describe('Help Link Builder', () => {
     it('builds the correct help link', () => {
-      const boardBaseEntity = new BaseEntity(auth, 'board', boardId);
-      const actualValue = boardBaseEntity.getHelpLink('get', 'boardstars');
+      const boardBaseResource = new BaseResource(auth, 'board', boardId);
+      const actualValue = boardBaseResource.getHelpLink('get', 'boardstars');
       const expectedValue = 'board#get-1-boards-board-id-boardstars';
       expect(actualValue).to.equal(expectedValue);
     });
