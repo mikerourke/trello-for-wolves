@@ -1,0 +1,368 @@
+{
+  "actionId": "592b4b6716732423b99d7f9a",
+  "getResults" : {
+    "id": "592b4b6716732423b99d7f9a",
+    "idMemberCreator": "56c266ee58b06885bc4e54e3",
+    "data": {
+      "board": {
+        "shortLink": "bJDPVV1A",
+        "name": "Test Board",
+        "id": "5927718c7a9e8015ddbedcfd"
+      },
+      "list": {
+        "name": "Backlog",
+        "id": "59277194db70c3e5d67e38e4"
+      },
+      "card": {
+        "shortLink": "GATVPdJ6",
+        "idShort": 1,
+        "name": "Test Card 1",
+        "id": "592b4b6716732423b99d7f99"
+      }
+    },
+    "type": "createCard",
+    "date": "2017-05-28T22:12:55.124Z",
+    "memberCreator": {
+      "id": "56c266ee58b06885bc4e54e3",
+      "avatarHash": "3de15cb68b376867085008b1b58c9742",
+      "fullName": "Mike Rourke",
+      "initials": "MWR",
+      "username": "mikewrourke"
+    }
+  },
+  "getWithArgsResults": {
+    "id": "592b4b6716732423b99d7f9a",
+    "idMemberCreator": "56c266ee58b06885bc4e54e3",
+    "data": {
+      "board": {
+        "shortLink": "bJDPVV1A",
+        "name": "Test Board",
+        "id": "5927718c7a9e8015ddbedcfd"
+      },
+      "list": {
+        "name": "Backlog",
+        "id": "59277194db70c3e5d67e38e4"
+      },
+      "card": {
+        "shortLink": "GATVPdJ6",
+        "idShort": 1,
+        "name": "Test Card 1",
+        "id": "592b4b6716732423b99d7f99"
+      }
+    },
+    "type": "createCard",
+    "date": "2017-05-28T22:12:55.124Z",
+    "memberCreator": {
+      "id": "56c266ee58b06885bc4e54e3",
+      "avatarHash": "3de15cb68b376867085008b1b58c9742",
+      "bio": "",
+      "bioData": {
+        "emoji": {}
+      },
+      "confirmed": true,
+      "fullName": "Mike Rourke",
+      "idPremOrgsAdmin": [],
+      "initials": "MWR",
+      "memberType": "normal",
+      "products": [
+        38
+      ],
+      "status": "disconnected",
+      "url": "https://trello.com/mikewrourke",
+      "username": "mikewrourke"
+    },
+    "entities": [
+      {
+        "type": "member",
+        "id": "56c266ee58b06885bc4e54e3",
+        "username": "mikewrourke",
+        "text": "Mike Rourke"
+      },
+      {
+        "type": "text",
+        "text": "added"
+      },
+      {
+        "type": "card",
+        "id": "592b4b6716732423b99d7f99",
+        "shortLink": "GATVPdJ6",
+        "text": "Test Card 1"
+      },
+      {
+        "type": "text",
+        "text": "to"
+      },
+      {
+        "type": "list",
+        "id": "59277194db70c3e5d67e38e4",
+        "text": "Backlog"
+      }
+    ],
+    "display": {
+      "translationKey": "action_create_card",
+      "entities": {
+        "card": {
+          "type": "card",
+          "id": "592b4b6716732423b99d7f99",
+          "shortLink": "GATVPdJ6",
+          "text": "Test Card 1"
+        },
+        "list": {
+          "type": "list",
+          "id": "59277194db70c3e5d67e38e4",
+          "text": "Backlog"
+        },
+        "memberCreator": {
+          "type": "member",
+          "id": "56c266ee58b06885bc4e54e3",
+          "username": "mikewrourke",
+          "text": "Mike Rourke"
+        }
+      }
+    }
+  },
+  "getDisplayResults": {
+    "translationKey": "action_create_card",
+    "entities": {
+      "card": {
+        "type": "card",
+        "id": "592b4b6716732423b99d7f99",
+        "shortLink": "GATVPdJ6",
+        "text": "Test Card 1"
+      },
+      "list": {
+        "type": "list",
+        "id": "59277194db70c3e5d67e38e4",
+        "text": "Backlog"
+      },
+      "memberCreator": {
+        "type": "member",
+        "id": "56c266ee58b06885bc4e54e3",
+        "username": "mikewrourke",
+        "text": "Mike Rourke"
+      }
+    }
+  },
+  "getEntitiesResults": [
+    {
+      "type": "member",
+      "id": "56c266ee58b06885bc4e54e3",
+      "username": "mikewrourke",
+      "text": "Mike Rourke"
+    },
+    {
+      "type": "text",
+      "text": "added"
+    },
+    {
+      "type": "card",
+      "id": "592b4b6716732423b99d7f99",
+      "shortLink": "GATVPdJ6",
+      "text": "Test Card 1"
+    },
+    {
+      "type": "text",
+      "text": "to"
+    },
+    {
+      "type": "list",
+      "id": "59277194db70c3e5d67e38e4",
+      "text": "Backlog"
+    }
+  ],
+  "getAssociatedBoardResults": {
+    "id": "5927718c7a9e8015ddbedcfd",
+    "name": "Test Board",
+    "desc": "Test description - 1495847058600",
+    "descData": {
+      "emoji": {}
+    },
+    "closed": false,
+    "idOrganization": null,
+    "invited": false,
+    "pinned": false,
+    "starred": true,
+    "url": "https://trello.com/b/bJDPVV1A/test-board",
+    "prefs": {
+      "permissionLevel": "private",
+      "voting": "disabled",
+      "comments": "members",
+      "invitations": "members",
+      "selfJoin": true,
+      "cardCovers": true,
+      "cardAging": "regular",
+      "calendarFeedEnabled": false,
+      "background": "blue",
+      "backgroundImage": null,
+      "backgroundImageScaled": null,
+      "backgroundTile": false,
+      "backgroundBrightness": "dark",
+      "backgroundColor": "#0079BF",
+      "canBePublic": true,
+      "canBeOrg": true,
+      "canBePrivate": true,
+      "canInvite": true
+    },
+    "invitations": [],
+    "memberships": [
+      {
+        "id": "5927718c7a9e8015ddbedcfe",
+        "idMember": "56c266ee58b06885bc4e54e3",
+        "memberType": "admin",
+        "unconfirmed": false,
+        "deactivated": false
+      }
+    ],
+    "shortLink": "bJDPVV1A",
+    "subscribed": false,
+    "labelNames": {
+      "green": "",
+      "yellow": "",
+      "orange": "",
+      "red": "",
+      "purple": "",
+      "blue": "",
+      "sky": "",
+      "lime": "",
+      "pink": "",
+      "black": ""
+    },
+    "powerUps": [],
+    "dateLastActivity": "2017-05-28T22:16:51.845Z",
+    "dateLastView": "2017-05-30T15:54:11.022Z",
+    "shortUrl": "https://trello.com/b/bJDPVV1A",
+    "idTags": [],
+    "datePluginDisable": null
+  },
+  "getAssociatedListResults": {
+    "id": "59277194db70c3e5d67e38e4",
+    "name": "Backlog",
+    "closed": false,
+    "idBoard": "5927718c7a9e8015ddbedcfd",
+    "pos": 65535,
+    "subscribed": false
+  },
+  "getAssociatedCardResults": {
+    "id": "592b4b6716732423b99d7f99",
+    "badges": {
+      "votes": 0,
+      "viewingMemberVoted": false,
+      "subscribed": false,
+      "fogbugz": "",
+      "checkItems": 0,
+      "checkItemsChecked": 0,
+      "comments": 0,
+      "attachments": 0,
+      "description": false,
+      "due": null,
+      "dueComplete": false
+    },
+    "checkItemStates": [],
+    "closed": false,
+    "dueComplete": false,
+    "dateLastActivity": "2017-05-28T22:12:55.116Z",
+    "desc": "",
+    "descData": null,
+    "due": null,
+    "email": null,
+    "idBoard": "5927718c7a9e8015ddbedcfd",
+    "idChecklists": [],
+    "idList": "59277194db70c3e5d67e38e4",
+    "idMembers": [],
+    "idMembersVoted": [],
+    "idShort": 1,
+    "idAttachmentCover": null,
+    "manualCoverAttachment": false,
+    "labels": [],
+    "idLabels": [],
+    "name": "Test Card 1",
+    "pos": 65535,
+    "shortLink": "GATVPdJ6",
+    "shortUrl": "https://trello.com/c/GATVPdJ6",
+    "subscribed": false,
+    "url": "https://trello.com/c/GATVPdJ6/1-test-card-1"
+  },
+  "getMemberCreatorResults": {
+    "id": "56c266ee58b06885bc4e54e3",
+    "avatarHash": "3de15cb68b376867085008b1b58c9742",
+    "bio": "",
+    "bioData": {
+      "emoji": {}
+    },
+    "confirmed": true,
+    "fullName": "Mike Rourke",
+    "idPremOrgsAdmin": [],
+    "initials": "MWR",
+    "memberType": "normal",
+    "products": [
+      38
+    ],
+    "status": "disconnected",
+    "url": "https://trello.com/mikewrourke",
+    "username": "mikewrourke",
+    "avatarSource": "gravatar",
+    "email": null,
+    "gravatarHash": "281c120844b58d83207716447e3c6d1b",
+    "idBoards": [
+      "56c266ef58b06885bc4e54e9",
+      "56c26dbaf6a8925241359316",
+      "56f3eb3918979c5163d9c6cf",
+      "5732779f0527ec711745ae7b",
+      "573b75916bf28a1e35e8df2c",
+      "576067ed227dcd007babb4eb",
+      "57cc7b6ee6eb78c563c24696",
+      "58461901f8a75b2c7184c25c",
+      "584b50ecd8ff358294ba9a21",
+      "586e7892a4faa17c5d22d581",
+      "5877a2ab6a2d8456ef89f4fe",
+      "58b058fcada1293202cff49f",
+      "58cc794e8b5b40079c77f10a",
+      "59138b26ca9a3d11fc079dd6",
+      "59139f01734e9f18e9d2fef8",
+      "591473163fd7afd40ddf7424",
+      "5926e8f86a3aab9dd41eeadb",
+      "5927718c7a9e8015ddbedcfd",
+      "59282c77632d4b8e5d9698ba",
+      "5928d8762b6888d8d62263d4",
+      "592b41ee3a20a8a0d59b049f"
+    ],
+    "idEnterprise": null,
+    "idOrganizations": [
+      "57d1c93476987e27871cd239",
+      "58472f2c5875d3fe77a3aa68",
+      "58b058abbe67a977768ef632"
+    ],
+    "idEnterprisesAdmin": [],
+    "loginTypes": null,
+    "oneTimeMessagesDismissed": [
+      "GoldIntro",
+      "PowerUpsPaneExplainer",
+      "PowerUpsLimitFullAd",
+      "nux-boards-page-ORG_TYPE_FREE-57d1c93476987e27871cd239-banner",
+      "nux-boards-page-ORG_TYPE_FREE-58472f2c5875d3fe77a3aa68-banner",
+      "nux-boards-page-ORG_TYPE_FREE-58b058abbe67a977768ef632-banner"
+    ],
+    "prefs": {
+      "sendSummaries": true,
+      "minutesBetweenSummaries": -1,
+      "minutesBeforeDeadlineToNotify": 1440,
+      "colorBlind": false,
+      "locale": "en-US"
+    },
+    "trophies": [],
+    "uploadedAvatarHash": null,
+    "premiumFeatures": [
+      "additionalStickers",
+      "customStickers",
+      "additionalBoardBackgrounds",
+      "customBoardBackgrounds",
+      "largeAttachments",
+      "customEmoji",
+      "savedSearches",
+      "crown",
+      "readSecrets",
+      "threePlugins"
+    ],
+    "idBoardsPinned": null
+  }
+}

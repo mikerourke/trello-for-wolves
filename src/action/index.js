@@ -8,10 +8,15 @@ import type {
   ActionField,
   ActionType,
   Auth,
+  BoardField,
+  CardField,
   FieldsQueryArg,
   Format,
+  ListField,
+  MemberField,
   MemberCreatorInclusionQueryArgs,
   MemberInclusionQueryArgs,
+  OrganizationField,
   PaginatedQueryArgs,
   ValueQueryArg,
 } from '../types';
@@ -53,12 +58,64 @@ export default class Action extends BaseResource {
     return this.httpGet(`/${field}`);
   }
 
+  getAssociatedBoard(queryArgs?: FieldsQueryArg<BoardField>): Promise<*> {
+    return this.httpGet('/board', queryArgs);
+  }
+
+  getAssociatedBoardFieldValue(field: BoardField): Promise<*> {
+    return this.httpGet(`/board/${field}`);
+  }
+
+  getAssociatedCard(queryArgs?: FieldsQueryArg<CardField>): Promise<*> {
+    return this.httpGet('/card', queryArgs);
+  }
+
+  getAssociatedCardFieldValue(field: CardField): Promise<*> {
+    return this.httpGet(`/card/${field}`);
+  }
+
   getDisplay(): Promise<*> {
     return this.httpGet('/display');
   }
 
   getEntities(): Promise<*> {
     return this.httpGet('/entities');
+  }
+
+  getAssociatedList(queryArgs?: FieldsQueryArg<ListField>): Promise<*> {
+    return this.httpGet('/list', queryArgs);
+  }
+
+  getAssociatedListFieldValue(field: ListField): Promise<*> {
+    return this.httpGet(`/list/${field}`);
+  }
+
+  getAssociatedMember(queryArgs?: FieldsQueryArg<MemberField>): Promise<*> {
+    return this.httpGet('/member', queryArgs);
+  }
+
+  getAssociatedMemberFieldValue(field: MemberField): Promise<*> {
+    return this.httpGet(`/member/${field}`);
+  }
+
+  getAssociatedMemberCreator(
+    queryArgs?: FieldsQueryArg<MemberField>
+  ): Promise<*> {
+    return this.httpGet('/memberCreator', queryArgs);
+  }
+
+  getAssociatedMemberCreatorFieldValue(field: MemberField): Promise<*> {
+    return this.httpGet(`/memberCreator/${field}`);
+  }
+
+  getAssociatedOrganization(
+    queryArgs?: FieldsQueryArg<OrganizationField>
+  ): Promise<*> {
+    return this.httpGet('/organization', queryArgs);
+  }
+
+  getAssociatedOrganizationFieldValue(field: OrganizationField): Promise<*> {
+    return this.httpGet(`/organization/${field}`);
   }
 
   updateAction(queryArgs?: {

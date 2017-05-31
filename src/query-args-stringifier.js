@@ -41,7 +41,8 @@ const getQueryStringForNestedArgs = (
     childUrlString = `${childUrlString}${childArgKey}=${childArgValue}&`;
   });
 
-  return childUrlString;
+  // Remove the trailing ampersand.
+  return childUrlString.slice(0, -1);
 };
 
 /**
@@ -83,14 +84,18 @@ const stringifyQueryArgs = (
       // These are simple key/value pairs in which the value is a string or
       // number.
     } else {
-      const argKey = recaseKeyForQueryString(key);
-      const argValue = (value: any);
-      queryArgsString = `${queryArgsString}${argKey}=${argValue}&`;
+      // Ensure the separator key specified for handling nested args isn't
+      // present in the query string.
+      if (key !== 'separator') {
+        const argKey = recaseKeyForQueryString(key);
+        const argValue = (value: any);
+        queryArgsString = `${queryArgsString}${argKey}=${argValue}&`;
+      }
     }
   });
 
-  // Ensure there are no double ampersands since the string was constructed
-  // manually.
+  // Ensure there is no double ampersand in the query string.  This may
+  // occur due to the string being constructed manually.
   return queryArgsString.replace('&&', '&');
 };
 

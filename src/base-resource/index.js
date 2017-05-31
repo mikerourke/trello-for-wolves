@@ -6,6 +6,7 @@ import axios from 'axios';
 import Promise from 'bluebird';
 
 /* Internal dependencies */
+import { ApiCallResponseError } from '../errors';
 import stringifyQueryArgs from '../query-args-stringifier';
 
 /* Types */
@@ -47,13 +48,17 @@ export default class BaseResource {
   }
 
   getRoutePath() {
-    let resourcePath = this.resourceName;
+    let resourcePath = `${this.resourceName}s`;
     if (this.instanceId) {
       resourcePath = `${resourcePath}/${this.instanceId}`;
     }
 
+    // Ensure there is a slash between the parent and resource path if the
+    // parent path was specified.
+    const pathSeparator = this.parentPath && '/';
+
     // Combine the parent and resource paths to form the route path.
-    return `${this.parentPath}${resourcePath}`;
+    return `${this.parentPath}${pathSeparator}${resourcePath}`;
   }
 
   /**
@@ -105,17 +110,30 @@ export default class BaseResource {
     queryArgs?: Object = {},
     routePathOverride?: string = '',
     data?: Object = {},
-  ): Promise.resolve<*> {
+  ): Promise<*> {
     const endpoint = this.getEndpoint(pathVariables, queryArgs,
       routePathOverride);
-    const requestConfig = {
-      data,
-      method: httpMethod,
-      url: `https://api.trello.com/1/${endpoint}`,
-    };
-    return Promise.resolve(axios(requestConfig)
-      .then(response => response)
-      .catch(error => error));
+    return new Promise((resolve, reject) => {
+      axios({
+        data,
+        method: httpMethod,
+        url: `https://api.trello.com/1/${endpoint}`,
+      })
+        .then(result => {
+          resolve(result);
+        })
+        .catch(error => {
+          if (error.response) {
+            reject(new ApiCallResponseError(error.response));
+          } else if (error.request) {
+            // TODO: Create custom error for API Request errors.
+            reject(error);
+          } else {
+            // TODO: Create custom error for other API errors.
+            reject(error);
+          }
+        })
+    });
   }
 
   /**

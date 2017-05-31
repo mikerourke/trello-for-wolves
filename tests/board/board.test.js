@@ -1,28 +1,28 @@
 /* Internal dependencies */
-import Trello from '../../src/index.new';
+import Trello from '../../src/index';
 import { auth, boardId } from '../helpers';
 
-describe('Board Entity', () => {
+describe('Board Resource', () => {
   let trello;
   before(() => {
     trello = new Trello(auth);
   });
 
-  describe.only('Board GET requests', () => {
+  describe('Board GET requests', () => {
     it('gets a board', (done) => {
-      trello.board(boardId).getBoard()
+      trello.boards(boardId).getBoard()
         .should.eventually.have.property('data')
         .notify(done)
     });
 
     it('gets a board with queryArgs', (done) => {
-      trello.board(boardId).getBoard({ actions: 'all' })
+      trello.boards(boardId).getBoard({ actions: 'all' })
         .should.eventually.have.property('data')
         .notify(done)
     });
 
     it('gets a board field value', (done) => {
-      trello.board(boardId).getFieldValue('name')
+      trello.boards(boardId).getFieldValue('name')
         .then((result) => {
           const actualValue = result.data._value;
           const expectedValue = 'Test Board';
@@ -33,7 +33,7 @@ describe('Board Entity', () => {
     });
 
     it('gets the actions for a board', (done) => {
-      trello.board(boardId).actions().getActions()
+      trello.boards(boardId).actions().getActions()
         .then((result) => {
           const actualValue = result.data;
           const expectedValue = 1;
@@ -44,7 +44,7 @@ describe('Board Entity', () => {
     });
 
     it('gets the stars for a board', (done) => {
-      trello.board(boardId).getBoardStars()
+      trello.boards(boardId).getBoardStars()
         .then((result) => {
           const actualValue = result.data.length;
           const expectedValue = 1;
@@ -55,7 +55,7 @@ describe('Board Entity', () => {
     });
 
     it('gets the cards for a board', (done) => {
-      trello.board(boardId).cards().getCards()
+      trello.boards(boardId).cards().getCards()
         .then((result) => {
           const actualValue = result.data;
           const expectedValue = 1;
@@ -66,7 +66,7 @@ describe('Board Entity', () => {
     });
 
     it('gets the filtered cards for a board', (done) => {
-      trello.board(boardId).cards().getCards({
+      trello.boards(boardId).cards().getCards({
         filter: 'closed',
       })
         .then((result) => {
@@ -79,7 +79,7 @@ describe('Board Entity', () => {
     });
 
     it('gets a cards for a board by ID', (done) => {
-      trello.board(boardId).cards().getCards()
+      trello.boards(boardId).cards().getCards()
         .then((result) => {
           const actualValue = result.data;
           const expectedValue = 1;
@@ -90,7 +90,7 @@ describe('Board Entity', () => {
     });
 
     it('gets the tags for a board', (done) => {
-      trello.board(boardId).getTags()
+      trello.boards(boardId).getTags()
         .then((result) => {
           const actualValue = result.data.length;
           const expectedValue = 1;
@@ -101,7 +101,7 @@ describe('Board Entity', () => {
     });
 
     it('gets myPrefs for a board', (done) => {
-      trello.board(boardId).getMyPrefs()
+      trello.boards(boardId).getMyPrefs()
         .then((result) => {
           const actualValue = result.data;
           const expectedValue = [
@@ -120,7 +120,7 @@ describe('Board Entity', () => {
     });
 
     it('gets the plugin data for a board', (done) => {
-      trello.board(boardId).getPluginData()
+      trello.boards(boardId).getPluginData()
         .then((result) => {
           const actualValue = result.data.length;
           const expectedValue = 1;
@@ -133,7 +133,7 @@ describe('Board Entity', () => {
 
   describe('Board PUT requests', () => {
     it('updates a board', (done) => {
-      trello.board(boardId).updateBoard({
+      trello.boards(boardId).updateBoard({
         prefs_selfJoin: true,
       })
         .then((result) => {
@@ -146,7 +146,7 @@ describe('Board Entity', () => {
     });
 
     it('updates myPrefs on a board', (done) => {
-      trello.board(boardId).updateMyPref('showSidebar', true)
+      trello.boards(boardId).updateMyPref('showSidebar', true)
         .then((result) => {
           const actualValue = result.data.length;
           const expectedValue = 1;
@@ -157,14 +157,14 @@ describe('Board Entity', () => {
     });
 
     it('updates the closed status on a board', (done) => {
-      trello.board(boardId).updateClosedStatus(false)
+      trello.boards(boardId).updateClosedStatus(false)
         .should.be.fulfilled
         .notify(done)
     });
 
     it('updates the description on a board', (done) => {
       const description = `Test description - ${Date.now()}`;
-      trello.board(boardId).updateDescription(description)
+      trello.boards(boardId).updateDescription(description)
         .then((result) => {
           const actualValue = result.data.desc;
           expect(actualValue).to.equal(description);
@@ -177,7 +177,7 @@ describe('Board Entity', () => {
   describe('Board POST requests', () => {
     it('creates a new board', (done) => {
       const boardName = 'Test Board 2';
-      trello.board().createBoard(boardName)
+      trello.boards().createBoard(boardName)
         .then((result) => {
           const actualValue = result.data.name;
           expect(actualValue).to.equal(boardName);

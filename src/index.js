@@ -1,6 +1,6 @@
 /* @flow */
 
-//import Action from './action';
+import Action from './action';
 //import Batch from './batch';
 import Board from './board';
 //import Card from './card';
@@ -25,7 +25,11 @@ export default class Trello {
     this.auth = auth;
   }
 
-  board(boardId?: string = ''): Object {
+  actions(actionId?: string = ''): Object {
+    return new Action(this.auth, actionId);
+  }
+
+  boards(boardId?: string = ''): Object {
     return new Board(this.auth, boardId);
   }
 }

@@ -9,12 +9,59 @@ class BaseError extends Error {
   /**
    * Assigns the message to the Error object and initiates the StackTrace.
    * @param {string} message Error message to display to the user.
+   * @param {string} [errorName='BaseError'] Name of the error being thrown.
    */
-  constructor(message: string) {
+  constructor(
+    message: string,
+    errorName?: string = 'BaseError'
+  ) {
     super(message);
-    this.name = 'BaseError';
     this.message = message;
+    this.name = errorName;
     Error.captureStackTrace(this, this.constructor);
+  }
+}
+
+/**
+ * Returns the URL associated with the API call with the key and token
+ *    values removed.
+ * @param {string} url Full URL used for the API call.
+ * @returns {string}
+ */
+const getCleanUrl = (url: string) => {
+  // Get everything before the "key=" string.  Since the key and token are
+  // always appended to the end of the URL, this ensures only the pertinent
+  // section is kept.
+  let cleanUrl = url.split('key=')[0];
+
+  // If the last character represents the start of the query string or is an
+  // ampersand, remove it.
+  const lastChar = cleanUrl.slice(-1);
+  if (lastChar === '?' || lastChar === '&') {
+    cleanUrl = cleanUrl.slice(0, -1);
+  }
+  return cleanUrl;
+};
+
+/**
+ * Error thrown if the API call was not successful and there was a response
+ *    error.
+ * @extends BaseError
+ */
+export class ApiCallResponseError extends BaseError {
+  constructor(
+    response: Object,
+  ) {
+    const { data, status, config: { method, url } } = response;
+    const cleanUrl = getCleanUrl(url);
+    const includedMessage = (data.includes('Cannot '))
+      ? ''
+      : ` with an error message of "${data}"`;
+    const message =
+      `The server returned status code ${status}${includedMessage} when ` +
+      `attempting to perform a ${method} request to ${cleanUrl}. (Note: The ` +
+      `key and token have been removed from the displayed url.)`;
+    super(message, 'ApiCallResponseError');
   }
 }
 
@@ -37,8 +84,7 @@ export class NumberBoundsError extends BaseError {
   ) {
     const message =
       `Parameter ${fieldName} must be between ${minValue} and ${maxValue}.`;
-    super(message);
-    this.name = 'NumberBoundsError';
+    super(message, 'NumberBoundsError');
   }
 }
 
@@ -61,8 +107,7 @@ export class StringLengthError extends BaseError {
     const message =
       `Length of parameter ${fieldName} must be between ` +
       `${minLength} and ${maxLength}.`;
-    super(message);
-    this.name = 'StringLengthError';
+    super(message, 'StringLengthError');
   }
 }
 
@@ -78,18 +123,20 @@ export class InvalidTypeError extends BaseError {
    *    supposed to be.
    * @param {string} helpUrl Link to the Trello API reference with a
    *    description of the endpoint.
+   * @param {string} [errorName='InvalidTypeError'] Name of the error being
+   *    thrown.
    */
- constructor(
-   fieldName: string,
-   typeName: string,
-   helpUrl: string,
- ) {
-   const message =
-     `Parameter ${fieldName} must be of type ${typeName}.  ` +
-     `See https://developers.trello.com/advanced-reference/${helpUrl}`;
-   super(message);
-   this.name = 'InvalidTypeError';
- }
+  constructor(
+    fieldName: string,
+    typeName: string,
+    helpUrl: string,
+    errorName?: string = 'InvalidTypeError'
+  ) {
+    const message =
+      `Parameter ${fieldName} must be of type ${typeName}.  ` +
+      `See https://developers.trello.com/advanced-reference/${helpUrl}`;
+    super(message, errorName);
+  }
 }
 
 /**
@@ -109,8 +156,7 @@ export class InvalidBooleanError extends InvalidTypeError {
     fieldName: string,
     helpUrl: string,
   ) {
-    super(fieldName, 'boolean', helpUrl);
-    this.name = 'InvalidBooleanError';
+    super(fieldName, 'boolean', helpUrl, 'InvalidBooleanError');
   }
 }
 
@@ -131,8 +177,7 @@ export class InvalidNumberError extends InvalidTypeError {
     fieldName: string,
     helpUrl: string,
   ) {
-    super(fieldName, 'number', helpUrl);
-    this.name = 'InvalidBooleanError';
+    super(fieldName, 'number', helpUrl, 'InvalidNumberError');
   }
 }
 
@@ -153,7 +198,6 @@ export class InvalidStringError extends InvalidTypeError {
     fieldName: string,
     helpUrl: string,
   ) {
-    super(fieldName, 'string', helpUrl);
-    this.name = 'InvalidStringError';
+    super(fieldName, 'string', helpUrl, 'InvalidStringError');
   }
 }

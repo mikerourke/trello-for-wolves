@@ -2,7 +2,7 @@
 import { auth, boardId, cardId } from '../helpers';
 import BaseResource from '../../src/base-resource';
 
-describe('Base Entity', () => {
+describe('Base Resource', () => {
   const authSuffix = `key=${auth.key}&token=${auth.token}`;
 
   let baseEntity;
@@ -50,8 +50,8 @@ describe('Base Entity', () => {
         const actualValue = baseEntity.getEndpoint('/', {
           prefs: {
             selfJoin: true,
-            separator: '/',
-          }
+          },
+          separator: '/',
         });
         const expectedValue =
           `cards/${cardId}?prefs/selfJoin=true&${authSuffix}`;
@@ -66,8 +66,8 @@ describe('Base Entity', () => {
           prefs: {
             selfJoin: true,
             invitations: 'admins',
-            separator: '/',
-          }
+          },
+          separator: '/',
         });
         const expectedValue =
           `cards/${cardId}?actions=copyBoard,copyCard&actions_entities=true&` +
@@ -79,7 +79,7 @@ describe('Base Entity', () => {
 
     describe('With Parent', () => {
       before(() => {
-        baseEntity = new BaseResource(auth, 'card', cardId, 'board', boardId);
+        baseEntity = new BaseResource(auth, 'card', cardId, `boards/${boardId}`);
       });
 
       it('builds an endpoint with the root path', () => {
@@ -119,8 +119,8 @@ describe('Base Entity', () => {
         const actualValue = baseEntity.getEndpoint('/', {
           prefs: {
             selfJoin: true,
-            separator: '/',
-          }
+          },
+          separator: '/',
         });
         const expectedValue =
           `boards/${boardId}/cards/${cardId}?prefs/selfJoin=true&${authSuffix}`;
@@ -135,8 +135,8 @@ describe('Base Entity', () => {
           prefs: {
             selfJoin: true,
             invitations: 'admins',
-            separator: '/',
-          }
+          },
+          separator: '/',
         });
         const expectedValue =
           `boards/${boardId}/cards/${cardId}?actions=copyBoard,copyCard&` +
