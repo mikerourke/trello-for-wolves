@@ -39,7 +39,7 @@ describe('Base Resource', () => {
 
       it('builds an endpoint with a single array queryArg', () => {
         const actualValue = baseEntity.getEndpoint('/', {
-          actions: ['copyBoard', 'copyCard'],
+          actions: 'copyBoard,copyCard',
         });
         const expectedValue =
           `cards/${cardId}?actions=copyBoard,copyCard&${authSuffix}`;
@@ -60,7 +60,7 @@ describe('Base Resource', () => {
 
       it('builds an endpoint with a several queryArgs', () => {
         const actualValue = baseEntity.getEndpoint('/', {
-          actions: ['copyBoard', 'copyCard'],
+          actions: 'copyBoard,copyCard',
           actionsEntities: true,
           actionsFormat: 'count',
           prefs: {
@@ -108,7 +108,7 @@ describe('Base Resource', () => {
 
       it('builds an endpoint with a single array queryArg', () => {
         const actualValue = baseEntity.getEndpoint('/', {
-          actions: ['copyBoard', 'copyCard'],
+          actions: 'copyBoard,copyCard',
         });
         const expectedValue =
           `boards/${boardId}/cards/${cardId}?actions=copyBoard,copyCard&${authSuffix}`;
@@ -129,7 +129,7 @@ describe('Base Resource', () => {
 
       it('builds an endpoint with a several queryArgs', () => {
         const actualValue = baseEntity.getEndpoint('/', {
-          actions: ['copyBoard', 'copyCard'],
+          actions: 'copyBoard,copyCard',
           actionsEntities: true,
           actionsFormat: 'count',
           prefs: {

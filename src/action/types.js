@@ -56,18 +56,20 @@ export type ActionType =
 
 /**
  * @apiDefine ActionFieldQueryArg
- * @apiParam {String} [field] Field to get value for.
+ * @apiParam {String=data,date,idMemberCreator,type} field
+ * Action field to get value for.
  */
 
 /**
  * @apiDefine ActionFieldsQueryArg
- * @apiParam {String[]} [fields] Fields to include in the response.
+ * @apiParam {String=all,data,date,idMemberCreator,type} [fields="all"]
+ * Action fields to include in the response, can either be <code>all</code> or a comma separated list of field names.
  */
 export type ActionField =
   'data'
   | 'date'
   | 'idMemberCreator'
-  | 'value';
+  | 'type';
 
 export type ExcludedActionType =
   'addAdminToBoard'

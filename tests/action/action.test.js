@@ -11,7 +11,7 @@ describe('Action Resource', () => {
     trello = new Trello(auth);
   });
 
-  describe.only('Action GET requests', () => {
+  describe('Action GET requests', () => {
     it('gets an action', (done) => {
       trello.actions(actionId).getAction()
         .then((result) => {

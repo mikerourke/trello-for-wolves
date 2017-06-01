@@ -37,8 +37,9 @@ export type MemberType = 'admin' | 'normal' | 'observer';
 
 /**
  * @apiDefine MemberInclusionQueryArgs
- * @apiParam {Boolean} [member] Include member fields in response.
- * @apiParam {String[]} [memberFields] Member fields to include in response.
+ * @apiParam {Boolean} [member=true] Include member fields in response.
+ * @apiParam {String=all,avatarHash,bio,bioData,confirmed,fullName,idPremOrgsAdmin,initials,memberType,products,status,url,username"} [memberFields="avatarHash,fullName,initials,username"]
+ * Member fields to include in response, can either be <code>all</code> or a comma separated list of field names.
  */
 export type MemberInclusionQueryArgs = {
   member?: boolean,
@@ -47,8 +48,9 @@ export type MemberInclusionQueryArgs = {
 
 /**
  * @apiDefine MemberCreatorInclusionQueryArgs
- * @apiParam {Boolean} [memberCreator] Include member creator fields in response.
- * @apiParam {String[]} [memberCreatorFields] Member creator fields to include in response.
+ * @apiParam {Boolean} [memberCreator=true] Include member creator fields in response.
+ * @apiParam {String=all,avatarHash,bio,bioData,confirmed,fullName,idPremOrgsAdmin,initials,memberType,products,status,url,username"} [memberCreatorFields="avatarHash,fullName,initials,username"]
+ * Member creator fields to include in response, can either be <code>all</code> or a comma separated list of field names.
  */
 export type MemberCreatorInclusionQueryArgs = {
   memberCreator?: boolean,

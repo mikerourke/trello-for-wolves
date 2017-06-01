@@ -40,19 +40,19 @@ describe('Query Args Stringifier', () => {
     expect(actualValue).to.equal(expectedValue);
   });
 
-  it('stringifies query args with a single array arg', () => {
+  it('stringifies query args with a single comma separated arg', () => {
     const queryArgs = {
-      actions: ['copyBoard', 'copyCard'],
+      actions: 'copyBoard,copyCard',
     };
     const actualValue = stringifyQueryArgs(queryArgs);
     const expectedValue = 'actions=copyBoard,copyCard&';
     expect(actualValue).to.equal(expectedValue);
   });
 
-  it('stringifies query args with multiple array args', () => {
+  it('stringifies query args with multiple comma separated args', () => {
     const queryArgs = {
-      actions: ['copyBoard', 'copyCard'],
-      memberFields: ['bio', 'fullName'],
+      actions: 'copyBoard,copyCard',
+      memberFields: 'bio,fullName',
     };
     const actualValue = stringifyQueryArgs(queryArgs);
     const expectedValue = 'actions=copyBoard,copyCard&member_fields=bio,fullName&';
@@ -63,7 +63,7 @@ describe('Query Args Stringifier', () => {
     const queryArgs = {
       actionsFormat: 'count',
       actionsEntities: true,
-      actions: ['copyBoard', 'copyCard'],
+      actions: 'copyBoard,copyCard',
     };
     const actualValue = stringifyQueryArgs(queryArgs);
     const expectedValue =
@@ -77,8 +77,8 @@ describe('Query Args Stringifier', () => {
       field: 'data',
       actionsEntities: true,
       display: false,
-      actions: ['copyBoard', 'copyCard'],
-      memberFields: ['bio', 'fullName'],
+      actions: 'copyBoard,copyCard',
+      memberFields: 'bio,fullName',
     };
     const actualValue = stringifyQueryArgs(queryArgs);
     const expectedValue =
@@ -89,7 +89,7 @@ describe('Query Args Stringifier', () => {
 
   it('stringifies query args for a single special case', () => {
     const queryArgs = {
-      memberCreatorFields: ['bio', 'fullName'],
+      memberCreatorFields: 'bio,fullName',
     };
     const actualValue = stringifyQueryArgs(queryArgs);
     const expectedValue = 'memberCreator_fields=bio,fullName&';
