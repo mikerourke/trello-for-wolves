@@ -6,7 +6,7 @@ import {
   InvalidNumberError,
   InvalidStringError,
   StringLengthError,
-} from '../errors';
+} from '../utils/errors';
 import BaseResource from '../base-resource';
 import MyPref from './myPref';
 import Pref from './pref';

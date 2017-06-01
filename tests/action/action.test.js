@@ -29,10 +29,9 @@ describe('Action Resource', () => {
         fields: 'all',
       })
         .then((result) => {
-          let updatedArgResults = apiData.getWithArgsResults;
-          delete updatedArgResults.entities;
-          const actualValue = result.data;
-          const expectedValue = updatedArgResults;
+          let actualValue = result.data;
+          actualValue.entities = [];
+          const expectedValue = apiData.getWithArgsResults;
           expect(actualValue).to.contain.keys(expectedValue);
           done();
         })
@@ -62,7 +61,7 @@ describe('Action Resource', () => {
       trello.actions(actionId).getFieldValue('type')
         .then((result) => {
           const actualValue = result.data._value;
-          const expectedValue = 'createBoard';
+          const expectedValue = 'createCard';
           expect(actualValue).to.equal(expectedValue);
           done();
         })
@@ -84,7 +83,7 @@ describe('Action Resource', () => {
       trello.actions(actionId).getEntities()
         .then((result) => {
           const actualValue = result.data.length;
-          const expectedValue = 3;
+          const expectedValue = 5;
           expect(actualValue).to.equal(expectedValue);
           done();
         })
@@ -195,7 +194,7 @@ describe('Action Resource', () => {
       })
         .then((result) => {
           const actualValue = result.data.idBoards;
-          const expectedValue = 5;
+          const expectedValue = 3;
           expect(actualValue).to.have.length.above(expectedValue);
           done();
         })

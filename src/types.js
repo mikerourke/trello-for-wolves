@@ -1,7 +1,5 @@
 /* @flow */
 
-/* eslint-disable */
-
 /* Types */
 export type * from './action/types';
 export type * from './attachment/types';

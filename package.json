@@ -7,8 +7,9 @@
   "author": "Mike Rourke <mike.w.rourke@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "doc": "apidoc -i internals/doc/ -o output/",
+    "doc": "apidoc -i src/ -o docs/",
     "flow": "flow check || exit 0",
+    "lint": "eslint src --color || exit 0",
     "setup": "rm -rf node_modules && yarn cache clean && yarn install",
     "test": "find ./tests -name '*.test.js' | xargs cross-env NODE_ENV=test mocha --opts ./mocha.opts || exit 0"
   },
@@ -32,7 +33,7 @@
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-flowtype": "^2.33.0",
     "eslint-plugin-import": "^2.2.0",
-    "flow-bin": "^0.46.0",
+    "flow-bin": "^0.47.0",
     "mocha": "^3.4.2"
   }
 }

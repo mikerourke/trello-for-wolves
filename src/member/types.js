@@ -35,11 +35,21 @@ export type InvitedMemberField = MemberField &
 
 export type MemberType = 'admin' | 'normal' | 'observer';
 
+/**
+ * @apiDefine MemberInclusionQueryArgs
+ * @apiParam {Boolean} [member] Include member fields in response.
+ * @apiParam {String[]} [memberFields] Member fields to include in response.
+ */
 export type MemberInclusionQueryArgs = {
   member?: boolean,
   memberFields?: ArgumentGroup<MemberField>,
 };
 
+/**
+ * @apiDefine MemberCreatorInclusionQueryArgs
+ * @apiParam {Boolean} [memberCreator] Include member creator fields in response.
+ * @apiParam {String[]} [memberCreatorFields] Member creator fields to include in response.
+ */
 export type MemberCreatorInclusionQueryArgs = {
   memberCreator?: boolean,
   memberCreatorFields?: ArgumentGroup<MemberField>,

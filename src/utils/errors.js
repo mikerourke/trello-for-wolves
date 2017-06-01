@@ -13,7 +13,7 @@ class BaseError extends Error {
    */
   constructor(
     message: string,
-    errorName?: string = 'BaseError'
+    errorName?: string = 'BaseError',
   ) {
     super(message);
     this.message = message;
@@ -60,7 +60,7 @@ export class ApiCallResponseError extends BaseError {
     const message =
       `The server returned status code ${status}${includedMessage} when ` +
       `attempting to perform a ${method} request to ${cleanUrl}. (Note: The ` +
-      `key and token have been removed from the displayed url.)`;
+      'key and token have been removed from the displayed url.)';
     super(message, 'ApiCallResponseError');
   }
 }
@@ -130,7 +130,7 @@ export class InvalidTypeError extends BaseError {
     fieldName: string,
     typeName: string,
     helpUrl: string,
-    errorName?: string = 'InvalidTypeError'
+    errorName?: string = 'InvalidTypeError',
   ) {
     const message =
       `Parameter ${fieldName} must be of type ${typeName}.  ` +

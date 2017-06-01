@@ -54,6 +54,15 @@ export type ActionType =
   | 'updateMember'
   | 'updateOrganization';
 
+/**
+ * @apiDefine ActionFieldQueryArg
+ * @apiParam {String} [field] Field to get value for.
+ */
+
+/**
+ * @apiDefine ActionFieldsQueryArg
+ * @apiParam {String[]} [fields] Fields to include in the response.
+ */
 export type ActionField =
   'data'
   | 'date'

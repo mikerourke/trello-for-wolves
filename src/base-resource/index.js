@@ -6,8 +6,8 @@ import axios from 'axios';
 import Promise from 'bluebird';
 
 /* Internal dependencies */
-import { ApiCallResponseError } from '../errors';
-import stringifyQueryArgs from '../query-args-stringifier';
+import { ApiCallResponseError } from '../utils/errors';
+import stringifyQueryArgs from '../utils/query-args-stringifier';
 
 /* Types */
 import type { Auth } from '../types';
@@ -119,10 +119,10 @@ export default class BaseResource {
         method: httpMethod,
         url: `https://api.trello.com/1/${endpoint}`,
       })
-        .then(result => {
+        .then((result) => {
           resolve(result);
         })
-        .catch(error => {
+        .catch((error) => {
           if (error.response) {
             reject(new ApiCallResponseError(error.response));
           } else if (error.request) {
@@ -132,7 +132,7 @@ export default class BaseResource {
             // TODO: Create custom error for other API errors.
             reject(error);
           }
-        })
+        });
     });
   }
 
@@ -192,5 +192,4 @@ export default class BaseResource {
     return this._performRequest('delete', pathVariables, queryArgs,
       routePathOverride);
   }
-
 }

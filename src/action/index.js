@@ -13,8 +13,8 @@ import type {
   FieldsQueryArg,
   Format,
   ListField,
-  MemberField,
   MemberCreatorInclusionQueryArgs,
+  MemberField,
   MemberInclusionQueryArgs,
   OrganizationField,
   PaginatedQueryArgs,
@@ -22,8 +22,8 @@ import type {
 } from '../types';
 
 type GetQueryArgs =
-  MemberInclusionQueryArgs
-  & MemberCreatorInclusionQueryArgs
+  MemberCreatorInclusionQueryArgs
+  & MemberInclusionQueryArgs
   & FieldsQueryArg<ActionField>
   & {
     display?: boolean,
@@ -43,21 +43,66 @@ export default class Action extends BaseResource {
     super(auth, 'action', actionId, parentPath);
   }
 
+  /**
+   * @api {get} /actions/:actionId getAction
+   * @apiVersion 1.0.0
+   * @apiName getAction
+   * @apiDescription Gets the details of the specified action.
+   * @apiGroup action
+   * @apiPermission read
+   *
+   * @apiParam {Boolean} [display] Include display status in response.
+   * @apiParam {Boolean} [entities] Include entities in response.
+   * @apiUse ActionFieldsQueryArg
+   * @apiUse MemberInclusionQueryArgs
+   * @apiUse MemberCreatorInclusionQueryArgs
+   * @apiExample {js} Example:
+   trello.actions('aCtIoNId').getAction();
+   */
   getAction(queryArgs?: GetQueryArgs): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
-  getActions(queryArgs?: GetQueryArgs & PaginatedQueryArgs<ActionType> & {
-    format?: Format,
-    idModels?: string,
-  }): Promise<*> {
+  getActions(queryArgs?: GetQueryArgs
+    & PaginatedQueryArgs<ActionType>
+    & {
+      format?: Format,
+      idModels?: string,
+    },
+  ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
+  /**
+   * @api {get} /actions/:actionId/:field getFieldValue
+   * @apiVersion 1.0.0
+   * @apiName getFieldValue
+   * @apiDescription Gets the field value for the specified action.
+   * @apiGroup action
+   * @apiPermission read
+   *
+   * @apiUse ActionFieldQueryArg
+   * @apiExample {js} Example:
+   trello.actions('aCtIoNId').getFieldValue('date');
+   */
   getFieldValue(field: ActionField): Promise<*> {
     return this.httpGet(`/${field}`);
   }
 
+  /**
+   * @api {get} /actions/:actionId/board getAssociatedBoard
+   * @apiVersion 1.0.0
+   * @apiName getAssociatedBoard
+   * @apiDescription Gets the board associated with the specified action.
+   * @apiGroup action
+   * @apiPermission read
+   *
+   * @apiUse BoardFieldsQueryArg
+   * @apiExample {js} Example (No Params):
+   trello.actions('aCtIoNId').getAssociatedBoard();
+   * @apiExample {js} Example (With Params):
+   trello.actions('aCtIoNId').getAssociatedBoard(['desc', 'descData']);
+   */
   getAssociatedBoard(queryArgs?: FieldsQueryArg<BoardField>): Promise<*> {
     return this.httpGet('/board', queryArgs);
   }
@@ -99,7 +144,7 @@ export default class Action extends BaseResource {
   }
 
   getAssociatedMemberCreator(
-    queryArgs?: FieldsQueryArg<MemberField>
+    queryArgs?: FieldsQueryArg<MemberField>,
   ): Promise<*> {
     return this.httpGet('/memberCreator', queryArgs);
   }
@@ -109,7 +154,7 @@ export default class Action extends BaseResource {
   }
 
   getAssociatedOrganization(
-    queryArgs?: FieldsQueryArg<OrganizationField>
+    queryArgs?: FieldsQueryArg<OrganizationField>,
   ): Promise<*> {
     return this.httpGet('/organization', queryArgs);
   }

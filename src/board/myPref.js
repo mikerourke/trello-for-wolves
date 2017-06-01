@@ -4,7 +4,7 @@
 import {
   InvalidBooleanError,
   InvalidStringError,
-} from '../errors';
+} from '../utils/errors';
 import BaseResource from '../base-resource';
 
 /* Types */

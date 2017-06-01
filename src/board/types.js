@@ -6,6 +6,11 @@ import type {
   CardAging,
 } from '../types';
 
+/**
+ * @apiDefine BoardFieldsQueryArg
+ * @apiParam {String[]} [fields] Board fields to include in response.
+ */
+
 export type BoardField =
   'closed'
   | 'dateLastActivity'

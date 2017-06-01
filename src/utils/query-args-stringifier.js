@@ -86,7 +86,7 @@ const stringifyQueryArgs = (
     } else {
       // Ensure the separator key specified for handling nested args isn't
       // present in the query string.
-      if (key !== 'separator') {
+      if (key !== 'separator') { // eslint-disable-line no-lonely-if
         const argKey = recaseKeyForQueryString(key);
         const argValue = (value: any);
         queryArgsString = `${queryArgsString}${argKey}=${argValue}&`;

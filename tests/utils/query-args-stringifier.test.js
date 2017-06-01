@@ -1,5 +1,5 @@
 /* Internal dependencies */
-import stringifyQueryArgs from '../src/query-args-stringifier';
+import stringifyQueryArgs from '../../src/utils/query-args-stringifier';
 
 describe('Query Args Stringifier', () => {
   it('stringifies query args with a single string arg', () => {
