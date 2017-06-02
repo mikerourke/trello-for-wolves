@@ -52,12 +52,38 @@ const getQueryStringForNestedArgs = (
  * @param {string} key Camel cased key.
  * @returns {string} Snake cased key.
  */
-const recaseKeyForQueryString = (key: string): string => {
+const getKeyForQueryString = (key: string): string => {
+  // Certain keys should not be recased.
+  switch (key) {
+    case 'boardBackgrounds':
+    case 'boardStars':
+    case 'customBoardBackgrounds':
+    case 'customEmoji':
+    case 'customStickers':
+    case 'savedSearches':
+      return key;
+
+    default:
+      break;
+  }
+
+  // All of the params that start with "id" (e.g. idBoard, idCard, etc.)
+  // shouldn't be recased.
+  if (key.substr(0, 2) === 'id') {
+    return key;
+  }
+
   let recasedKey: string = snakeCase(key);
 
-  // These are special exceptions.
+  // These are fields that have been recased to ensure all the other words
+  // are separated by underscores, but only part of the key needs to be
+  // changed.
   if (recasedKey.includes('member_creator')) {
     recasedKey = recasedKey.replace('_creator', 'Creator');
+  } else if (recasedKey.includes('plugin_data')) {
+    recasedKey = recasedKey.replace('_data', 'Data');
+  } else if (recasedKey.includes('_invited')) {
+    recasedKey = recasedKey.replace('_invited', 'Invited');
   }
 
   return recasedKey;
@@ -87,7 +113,7 @@ const stringifyQueryArgs = (
       // Ensure the separator key specified for handling nested args isn't
       // present in the query string.
       if (key !== 'separator') { // eslint-disable-line no-lonely-if
-        const argKey = recaseKeyForQueryString(key);
+        const argKey = getKeyForQueryString(key);
         const argValue = (value: any);
         queryArgsString = `${queryArgsString}${argKey}=${argValue}&`;
       }

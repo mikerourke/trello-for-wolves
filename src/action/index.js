@@ -13,29 +13,27 @@ import type {
   ActionType,
   Auth,
   FieldsQueryArg,
-  Format,
+  FilterQueryArg,
   MemberCreatorInclusionQueryArgs,
   MemberField,
   MemberInclusionQueryArgs,
   OrganizationField,
-  PaginatedQueryArgs,
   ResourceConstructorOptions,
   ValueQueryArg,
+  WithinLimitsQueryArgs,
 } from '../types';
 
 type GetQueryArgs =
-  MemberCreatorInclusionQueryArgs
-  & MemberInclusionQueryArgs
-  & FieldsQueryArg<ActionField>
-  & {
+  MemberCreatorInclusionQueryArgs &
+  MemberInclusionQueryArgs &
+  FieldsQueryArg<ActionField> &
+  {
     display?: boolean,
     entities?: boolean,
+    filter?: FilterQueryArg<ActionField>,
+    page?: number,
   };
 
-/**
- * Class representing an Action resource.
- * @extends BaseResource
- */
 export default class Action extends BaseResource {
   constructor(
     auth: Auth,
@@ -49,9 +47,8 @@ export default class Action extends BaseResource {
   }
 
   getActions(queryArgs?: GetQueryArgs
-    & PaginatedQueryArgs<ActionType>
+    & WithinLimitsQueryArgs
     & {
-      format?: Format,
       idModels?: string,
     } = {},
   ): Promise<*> {

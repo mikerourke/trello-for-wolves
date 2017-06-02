@@ -33,23 +33,32 @@ export type Format = 'count' | 'list' | 'minimal';
 
 export type Position = 'bottom' | 'top';
 
-export type WithinLimitsQueryArgs<F> = {
-  before?: ?FilterDate,
-  since?: ?FilterDate,
-  limit?: number,
-  filter?: F,
-};
+export type PositionNumbered = Position | number;
 
-export type PaginatedQueryArgs<F> = WithinLimitsQueryArgs<F> & { page?: number };
-
-export type ValueQueryArg<T> = {
-  value: T,
+export type DeltasQueryArgs = {
+  tags: string,
+  ixLastUpdate: number,
 };
 
 export type FieldsQueryArg<T> = {
   fields?: ArgumentGroup<T>,
 };
 
+export type FileQueryArg = {
+  file: Object,
+};
+
 export type FilterQueryArg<T> = {
   filter?: T,
-}
+};
+
+export type ValueQueryArg<T> = {
+  value: T,
+};
+
+export type WithinLimitsQueryArgs = {
+  before?: ?FilterDate,
+  since?: ?FilterDate,
+  limit?: number,
+  format?: Format,
+};

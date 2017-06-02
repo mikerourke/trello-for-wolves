@@ -11,13 +11,13 @@ import type {
   FieldsQueryArg,
   FilterQueryArg,
   ListField,
-  Position,
+  PositionNumbered,
   ResourceConstructorOptions,
   ValueQueryArg,
 } from '../types';
 
 type ListPosQueryArg = {
-  pos?: Position | number,
+  pos?: PositionNumbered,
 };
 
 /**
@@ -77,7 +77,7 @@ export default class List extends BaseResource {
     return this.httpPut('/name', queryArgs);
   }
 
-  updatePos(queryArgs: ValueQueryArg<Position | number>): Promise<*> {
+  updatePosition(queryArgs: ValueQueryArg<PositionNumbered>): Promise<*> {
     return this.httpPut('/pos', queryArgs);
   }
 

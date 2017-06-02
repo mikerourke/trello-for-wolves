@@ -5,33 +5,38 @@ import type { ArgumentGroup } from '../types';
 
 export type MemberLevel = 'admins' | 'all' | 'none' | 'normal' | 'owners';
 
+export type AvatarSourceField =
+  'gravatar'
+  | 'none'
+  | 'upload';
+
 export type MemberField =
   'avatarHash'
-  | 'bio'
   | 'bioData'
   | 'confirmed'
-  | 'fullName'
   | 'idPremOrgsAdmin'
-  | 'initials'
   | 'memberType'
   | 'products'
   | 'status'
-  | 'url'
-  | 'username';
+  | 'url';
 
 export type MemberDetailField =
   'avatarSource'
+  | 'bio'
   | 'email'
+  | 'fullName'
   | 'gravatarHash'
   | 'idBoards'
   | 'idBoardsPineed'
   | 'idOrganizations'
+  | 'initials'
   | 'loginTypes'
   | 'oneTimeMessageDismissed'
   | 'prefs'
   | 'premiumFeatures'
   | 'trophies'
-  | 'uploadedAvatarHash';
+  | 'uploadedAvatarHash'
+  | 'username';
 
 export type MemberEveryField = MemberField & MemberDetailField;
 

@@ -13,15 +13,17 @@ import Pref from './pref';
 
 /* Types */
 import type {
-  ActionChildrenQueryArgs,
+  ActionInclusionQueryArgs,
   AllOrNone,
   ArgumentGroup,
   Auth,
   BoardField,
+  BoardFilter,
   BoardStars,
   CardAttachmentInclusionQueryArgs,
   CardInclusionQueryArgs,
   ChecklistInclusionQueryArgs,
+  DeltasQueryArgs,
   FieldsQueryArg,
   FilterQueryArg,
   Format,
@@ -52,10 +54,6 @@ type LabelNamesQueryArgs = {
   },
 };
 
-/**
- * Class representing a Board resource.
- * @extends BaseResource
- */
 export default class Board extends BaseResource {
   constructor(
     auth: Auth,
@@ -72,7 +70,7 @@ export default class Board extends BaseResource {
     return new Pref(this.auth, this.instanceId);
   }
 
-  getBoard(queryArgs?: ActionChildrenQueryArgs &
+  getBoard(queryArgs?: ActionInclusionQueryArgs &
     CardAttachmentInclusionQueryArgs &
     CardInclusionQueryArgs &
     ChecklistInclusionQueryArgs &
@@ -84,6 +82,9 @@ export default class Board extends BaseResource {
     OrganizationInclusionQueryArgs &
     FieldsQueryArg<BoardField> &
     {
+      actionsEntities?: boolean,
+      actionsDisplay?: boolean,
+      actionsLimit?: number,
       actionsFormat?: Format,
       actionMember?: boolean,
       actionMemberFields?: ArgumentGroup<MemberField>,
@@ -115,22 +116,11 @@ export default class Board extends BaseResource {
     return this.httpGet(`/${field}`);
   }
 
-  getBoardStars(queryArgs?: FilterQueryArg<BoardStars>): Promise<*> {
-    let filter = '';
-    if (queryArgs) {
-      filter = queryArgs.filter;
-    }
-    if (typeof filter !== 'string') {
-      throw new InvalidStringError('filter',
-        this.getHelpLink('get', 'boardstars'));
-    }
-    return this.httpGet('/boardStars', queryArgs);
+  getFilteredBoards(queryArgs: FilterQueryArg<BoardFilter>): Promise<*> {
+    return this.httpGet('/', queryArgs);
   }
 
-  getDeltas(queryArgs: {
-    tags: string,
-    ixLastUpdate: number,
-  }): Promise<*> {
+  getDeltas(queryArgs: DeltasQueryArgs): Promise<*> {
     const { tags, ixLastUpdate } = queryArgs;
     const helpLink = this.getHelpLink('get', 'deltas');
     if (typeof tags !== 'string') {
@@ -152,6 +142,18 @@ export default class Board extends BaseResource {
 
   getPluginData(): Promise<*> {
     return this.httpGet('/pluginData');
+  }
+
+  getStars(queryArgs?: FilterQueryArg<BoardStars>): Promise<*> {
+    let filter = '';
+    if (queryArgs) {
+      filter = queryArgs.filter;
+    }
+    if (typeof filter !== 'string') {
+      throw new InvalidStringError('filter',
+        this.getHelpLink('get', 'boardstars'));
+    }
+    return this.httpGet('/boardStars', queryArgs);
   }
 
   updateBoard(queryArgs?: PrefsQueryArgs &

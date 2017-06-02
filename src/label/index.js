@@ -18,10 +18,6 @@ type LabelChangeQueryArgs = {
   color: ?LabelColor,
 };
 
-/**
- * Class representing a Label resource.
- * @extends BaseResource
- */
 export default class Label extends BaseResource {
   constructor(
     auth: Auth,

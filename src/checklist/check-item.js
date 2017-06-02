@@ -10,7 +10,7 @@ import type {
   CheckItemState,
   CheckItemStateField,
   FieldsQueryArg,
-  Position,
+  PositionNumbered,
   ResourceConstructorOptions,
   ValueQueryArg,
 } from '../types';
@@ -29,7 +29,7 @@ export default class CheckItem extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  getCheckItemStates(
+  getStates(
     queryArgs?: FieldsQueryArg<CheckItemStateField> = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
@@ -39,20 +39,20 @@ export default class CheckItem extends BaseResource {
     name?: string,
     state?: CheckItemState,
     idChecklist?: string,
-    pos?: Position | number,
+    pos?: PositionNumbered,
   } = {}): Promise<*> {
     return this.httpPut('/', queryArgs);
   }
 
-  updateCheckItemName(queryArgs: ValueQueryArg<string>): Promise<*> {
+  updateName(queryArgs: ValueQueryArg<string>): Promise<*> {
     return this.httpPut('/name', queryArgs);
   }
 
-  updateCheckItemPos(queryArgs: ValueQueryArg<Position | number>): Promise<*> {
+  updatePosition(queryArgs: ValueQueryArg<PositionNumbered>): Promise<*> {
     return this.httpPut('/pos', queryArgs);
   }
 
-  updateCheckItemState(queryArgs: ValueQueryArg<CheckItemState>): Promise<*> {
+  updateState(queryArgs: ValueQueryArg<CheckItemState>): Promise<*> {
     return this.httpPut('/state', queryArgs);
   }
 }

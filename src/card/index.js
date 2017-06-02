@@ -7,7 +7,7 @@ import BaseResource from '../base-resource';
 
 /* Types */
 import type {
-  ActionChildrenQueryArgs,
+  ActionInclusionQueryArgs,
   AllOrNone,
   ArgumentGroup,
   AttachmentInclusionQueryArgs,
@@ -20,14 +20,14 @@ import type {
   FieldsQueryArg,
   ListField,
   MemberField,
-  Position,
+  PositionNumbered,
   ResourceConstructorOptions,
   StickerInclusionQueryArgs,
   ValueQueryArg,
   WithinLimitsQueryArgs,
 } from '../types';
 
-type GetQueryArgs = ActionChildrenQueryArgs &
+type GetQueryArgs = ActionInclusionQueryArgs &
   AttachmentInclusionQueryArgs &
   {
     members?: boolean,
@@ -36,10 +36,6 @@ type GetQueryArgs = ActionChildrenQueryArgs &
     checklists?: AllOrNone,
   };
 
-/**
- * Class representing a Card resource.
- * @extends BaseResource
- */
 export default class Card extends BaseResource {
   constructor(
     auth: Auth,
@@ -51,6 +47,9 @@ export default class Card extends BaseResource {
   getCard(queryArgs?: GetQueryArgs &
     StickerInclusionQueryArgs &
     {
+      actionsEntities?: boolean,
+      actionsDisplay?: boolean,
+      actionsLimit?: number,
       actionMemberCreatorFields?: ArgumentGroup<MemberField>,
       checkItemStateFields?: ArgumentGroup<CheckItemStateField>,
       checklistFields?: ArgumentGroup<ChecklistField>,
@@ -102,7 +101,7 @@ export default class Card extends BaseResource {
     idLabels?: string,
     idList?: string,
     idMembers?: Array<string>,
-    pos?: Position | number,
+    pos?: PositionNumbered,
     due?: ?string,
     dueComplete?: boolean,
     subscribed?: boolean,

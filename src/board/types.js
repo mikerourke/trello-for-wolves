@@ -6,11 +6,22 @@ import type {
   CardAging,
 } from '../types';
 
-export type BoardBackground =
+export type BoardBackgroundBrightness =
+  'dark'
+  | 'light'
+  | 'unknown';
+
+export type BoardBackgroundFilter =
   'custom'
   | 'default'
   | 'none'
   | 'premium';
+
+export type BoardBackgroundField =
+  'brightness'
+  | 'fullSizeUrl'
+  | 'scaled'
+  | 'tile';
 
 export type BoardFilter =
     'closed'

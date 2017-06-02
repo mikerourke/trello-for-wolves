@@ -9,10 +9,6 @@ import type {
   StickerFieldsQueryArg,
 } from '../types';
 
-/**
- * Class representing a Sticker resource.
- * @extends BaseResource
- */
 export default class Sticker extends BaseResource {
   constructor(
     auth: Auth,

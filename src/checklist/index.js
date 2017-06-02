@@ -20,10 +20,6 @@ type GetQueryArgs =
   CheckItemInclusionQueryArgs &
   FieldsQueryArg<ChecklistField>;
 
-/**
- * Class representing a Checklist resource.
- * @extends BaseResource
- */
 export default class Checklist extends BaseResource {
   constructor(
     auth: Auth,

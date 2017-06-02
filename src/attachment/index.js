@@ -14,10 +14,6 @@ import type {
 
 type AttachmentFieldsQueryArg = FieldsQueryArg<AttachmentField>;
 
-/**
- * Class representing an Attachment resource.
- * @extends BaseResource
- */
 export default class Attachment extends BaseResource {
   constructor(
     auth: Auth,

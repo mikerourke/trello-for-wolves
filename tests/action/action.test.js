@@ -112,7 +112,7 @@ describe('Action Resource', () => {
         .catch(error => done(error));
     });
 
-    it.only('fails gracefully when attempting to get the incorrect association for an ID', (done) => {
+    it('fails gracefully when attempting to get the incorrect association for an ID', (done) => {
       trello.actions(actionId).card().getCard()
         .then(result => done())
         .catch((error) => {
@@ -143,7 +143,7 @@ describe('Action Resource', () => {
         .catch(error => done(error));
     });
 
-    it.only('gets the associated card', (done) => {
+    it('gets the associated card', (done) => {
       trello.actions(actionId).card().getCard()
         .then((result) => {
           const actualValue = result.data.name;
@@ -154,7 +154,7 @@ describe('Action Resource', () => {
         .catch(error => done(error));
     });
 
-    it.only('gets a field value for the associated card', (done) => {
+    it('gets a field value for the associated card', (done) => {
       trello.actions(actionId).card().getFieldValue('name')
         .then((result) => {
           const actualValue = result.data._value;

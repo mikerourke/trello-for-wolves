@@ -87,10 +87,7 @@ export type ExcludedActionType =
   | 'updateLabel'
   | 'voteOnCard';
 
-export type ActionChildrenQueryArgs = {
+export type ActionInclusionQueryArgs = {
   actions?: ArgumentGroup<ActionType>,
-  actionsEntities?: boolean,
-  actionsDisplay?: boolean,
-  actionsLimit?: number,
   actionFields?: ArgumentGroup<ActionField>,
 };
