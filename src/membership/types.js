@@ -3,7 +3,7 @@
 /* Types */
 import type { ArgumentGroup } from '../types';
 
-export type Membership =
+export type MembershipFilter =
   'active'
   | 'admin'
   | 'deactivated'

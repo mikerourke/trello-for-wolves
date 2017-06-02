@@ -31,6 +31,8 @@ export type FilterDate = ?Date | 'lastView';
 
 export type Format = 'count' | 'list' | 'minimal';
 
+export type PermissionLevel = 'private' | 'public';
+
 export type Position = 'bottom' | 'top';
 
 export type PositionNumbered = Position | number;

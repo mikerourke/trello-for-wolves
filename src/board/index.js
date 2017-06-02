@@ -30,10 +30,11 @@ import type {
   LabelColor,
   LabelInclusionQueryArgs,
   ListInclusionQueryArgs,
+  ListStatus,
   MemberCreatorInclusionQueryArgs,
   MemberField,
-  MemberLevel,
-  Membership,
+  MemberInclusionQueryArgs,
+  MembershipFilter,
   MembershipsMemberInclusionQueryArgs,
   MembersInvitedInclusionQueryArgs,
   OrganizationInclusionQueryArgs,
@@ -54,6 +55,17 @@ type LabelNamesQueryArgs = {
   },
 };
 
+type SharedGetQueryArgs =
+  ActionInclusionQueryArgs &
+  OrganizationInclusionQueryArgs &
+  FieldsQueryArg<BoardField> &
+  {
+    actionsEntities?: boolean,
+    actionsLimit?: number,
+    actionsFormat?: Format,
+    memberships?: ArgumentGroup<MembershipFilter>,
+  };
+
 export default class Board extends BaseResource {
   constructor(
     auth: Auth,
@@ -70,22 +82,17 @@ export default class Board extends BaseResource {
     return new Pref(this.auth, this.instanceId);
   }
 
-  getBoard(queryArgs?: ActionInclusionQueryArgs &
+  get(queryArgs?: SharedGetQueryArgs &
     CardAttachmentInclusionQueryArgs &
     CardInclusionQueryArgs &
     ChecklistInclusionQueryArgs &
     LabelInclusionQueryArgs &
     ListInclusionQueryArgs &
     MemberCreatorInclusionQueryArgs &
+    MemberInclusionQueryArgs &
     MembershipsMemberInclusionQueryArgs &
     MembersInvitedInclusionQueryArgs &
-    OrganizationInclusionQueryArgs &
-    FieldsQueryArg<BoardField> &
     {
-      actionsEntities?: boolean,
-      actionsDisplay?: boolean,
-      actionsLimit?: number,
-      actionsFormat?: Format,
       actionMember?: boolean,
       actionMemberFields?: ArgumentGroup<MemberField>,
       actionMemberCreator?: boolean,
@@ -95,14 +102,20 @@ export default class Board extends BaseResource {
       cardStickers?: boolean,
       boardStars?: BoardStars,
       labelsLimit?: number, // Valid values 0 to 1000
-      memberships?: ArgumentGroup<Membership>,
-      members?: MemberLevel,
-      memberFields?: ArgumentGroup<MemberField>,
       pluginData?: boolean,
-      organizationMemberships?: ArgumentGroup<Membership>,
+      organizationMemberships?: ArgumentGroup<MembershipFilter>,
       organizationPluginData?: boolean,
       myPrefs?: boolean,
       tags?: boolean,
+    } = {},
+  ): Promise<*> {
+    return this.httpGet('/', queryArgs);
+  }
+
+  getAll(queryArgs?: SharedGetQueryArgs &
+    FilterQueryArg<BoardFilter> &
+    {
+      lists?: ListStatus,
     } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
@@ -116,7 +129,7 @@ export default class Board extends BaseResource {
     return this.httpGet(`/${field}`);
   }
 
-  getFilteredBoards(queryArgs: FilterQueryArg<BoardFilter>): Promise<*> {
+  getFiltered(queryArgs: FilterQueryArg<BoardFilter>): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -156,7 +169,7 @@ export default class Board extends BaseResource {
     return this.httpGet('/boardStars', queryArgs);
   }
 
-  updateBoard(queryArgs?: PrefsQueryArgs &
+  update(queryArgs?: PrefsQueryArgs &
     LabelNamesQueryArgs &
     {
       name?: string,
@@ -208,16 +221,18 @@ export default class Board extends BaseResource {
     return this.httpPut('/subscribed', queryArgs);
   }
 
-  createBoard(queryArgs: PrefsQueryArgs & {
-    name: string,
-    defaultLabels?: boolean,
-    defaultLists?: boolean,
-    desc?: string,
-    idBoardSource?: string,
-    idOrganization?: string,
-    keepFromSource?: 'all' | Array<string>,
-    powerUps?: ArgumentGroup<PowerUp>,
-  }): Promise<*> {
+  create(queryArgs: PrefsQueryArgs &
+    {
+      name: string,
+      defaultLabels?: boolean,
+      defaultLists?: boolean,
+      desc?: string,
+      idBoardSource?: string,
+      idOrganization?: string,
+      keepFromSource?: 'all' | Array<string>,
+      powerUps?: ArgumentGroup<PowerUp>,
+    },
+  ): Promise<*> {
     return this.httpPost('/', queryArgs);
   }
 
@@ -241,9 +256,7 @@ export default class Board extends BaseResource {
     return this.httpPost('/powerUps', queryArgs);
   }
 
-  // TODO: Look into this.  Does the power up need to be specified as a value and in the endpoint?
-  deletePowerUp(queryArgs: ValueQueryArg<PowerUp>): Promise<*> {
-    const { value } = queryArgs;
-    return this.httpDelete(`/powerUps/${value}`, queryArgs);
+  deletePowerUp(powerUp: PowerUp): Promise<*> {
+    return this.httpDelete(`/powerUps/${powerUp}`);
   }
 }

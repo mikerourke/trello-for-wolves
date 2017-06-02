@@ -10,20 +10,18 @@ import Member from '../member';
 /* Types */
 import type {
   ActionField,
-  ActionType,
   Auth,
   FieldsQueryArg,
   FilterQueryArg,
   MemberCreatorInclusionQueryArgs,
   MemberField,
   MemberInclusionQueryArgs,
-  OrganizationField,
   ResourceConstructorOptions,
   ValueQueryArg,
   WithinLimitsQueryArgs,
 } from '../types';
 
-type GetQueryArgs =
+type SharedGetQueryArgs =
   MemberCreatorInclusionQueryArgs &
   MemberInclusionQueryArgs &
   FieldsQueryArg<ActionField> &
@@ -42,15 +40,16 @@ export default class Action extends BaseResource {
     super(auth, 'action', options);
   }
 
-  getAction(queryArgs?: GetQueryArgs): Promise<*> {
+  getAction(queryArgs?: SharedGetQueryArgs): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
-  getActions(queryArgs?: GetQueryArgs
-    & WithinLimitsQueryArgs
-    & {
-      idModels?: string,
-    } = {},
+  getActions(
+    queryArgs?: SharedGetQueryArgs &
+      WithinLimitsQueryArgs &
+      {
+        idModels?: string,
+      } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -95,24 +94,12 @@ export default class Action extends BaseResource {
     });
   }
 
-  getAssociatedMemberCreator(
-    queryArgs?: FieldsQueryArg<MemberField>,
-  ): Promise<*> {
+  getMemberCreator(queryArgs?: FieldsQueryArg<MemberField>): Promise<*> {
     return this.httpGet('/memberCreator', queryArgs);
   }
 
-  getAssociatedMemberCreatorFieldValue(field: MemberField): Promise<*> {
+  getMemberCreatorFieldValue(field: MemberField): Promise<*> {
     return this.httpGet(`/memberCreator/${field}`);
-  }
-
-  getAssociatedOrganization(
-    queryArgs?: FieldsQueryArg<OrganizationField>,
-  ): Promise<*> {
-    return this.httpGet('/organization', queryArgs);
-  }
-
-  getAssociatedOrganizationFieldValue(field: OrganizationField): Promise<*> {
-    return this.httpGet(`/organization/${field}`);
   }
 
   updateAction(queryArgs?: {

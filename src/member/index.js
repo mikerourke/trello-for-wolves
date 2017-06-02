@@ -30,7 +30,7 @@ import type {
   ListStatus,
   MemberEveryField,
   MemberField,
-  Membership,
+  MembershipFilter,
   NotificationField,
   NotificationType,
   OrganizationField,
@@ -53,7 +53,7 @@ export default class Member extends BaseResource {
     super(auth, 'member', options);
   }
 
-  getMember(queryArgs?: ActionInclusionQueryArgs &
+  get(queryArgs?: ActionInclusionQueryArgs &
     BoardInclusionQueryArgs &
     CardAttachmentInclusionQueryArgs &
     CardInclusionQueryArgs &
@@ -76,7 +76,7 @@ export default class Member extends BaseResource {
       boardActionsLimit?: number,
       boardActionFields?: ArgumentGroup<ActionField>,
       boardLists?: ArgumentGroup<ListStatus>,
-      boardMemberships?: ArgumentGroup<Membership>,
+      boardMemberships?: ArgumentGroup<MembershipFilter>,
       boardOrganization?: boolean,
       boardOrganizationFields?: ArgumentGroup<OrganizationField>,
       boardsInvited?: ArgumentGroup<BoardFilter>,
@@ -112,9 +112,11 @@ export default class Member extends BaseResource {
     return this.httpGet('/', updatedArgs);
   }
 
-  getMembers(queryArgs?: FieldsQueryArg<ListField> & {
-    limit?: number,
-  } = {}): Promise<*> {
+  getAll(queryArgs?: FieldsQueryArg<ListField> &
+    {
+      limit?: number,
+    } = {},
+  ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 

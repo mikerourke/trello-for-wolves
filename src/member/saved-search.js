@@ -26,15 +26,15 @@ export default class SavedSearch extends BaseResource {
     });
   }
 
-  getSavedSearch(): Promise<*> {
+  getForId(): Promise<*> {
     return this.httpGet('/');
   }
 
-  getSavedSearches(): Promise<*> {
+  getAll(): Promise<*> {
     return this.httpGet('/');
   }
 
-  updateSavedSearch(queryArgs?: {
+  update(queryArgs?: {
     name?: string,
     query?: string,
     pos?: PositionNumbered,
@@ -54,7 +54,7 @@ export default class SavedSearch extends BaseResource {
     return this.httpPut('/query', queryArgs);
   }
 
-  addSavedSearch(queryArgs: {
+  create(queryArgs: {
     name: string,
     query: string,
     pos: PositionNumbered,

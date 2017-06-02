@@ -60,6 +60,7 @@ const getKeyForQueryString = (key: string): string => {
     case 'customBoardBackgrounds':
     case 'customEmoji':
     case 'customStickers':
+    case 'modelTypes':
     case 'savedSearches':
       return key;
 

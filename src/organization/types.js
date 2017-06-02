@@ -3,6 +3,11 @@
 /* Types */
 import type { ArgumentGroup } from '../types';
 
+export type BoardVisibilityFilter =
+  'admin'
+  | 'none'
+  | 'org';
+
 export type OrganizationFilter =
   'all'
   | 'members'

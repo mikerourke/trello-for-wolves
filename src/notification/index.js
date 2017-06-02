@@ -22,10 +22,6 @@ import type {
   ValueQueryArg,
 } from '../types';
 
-/**
- * Class representing a Notification resource.
- * @extends BaseResource
- */
 export default class Notification extends BaseResource {
   constructor(
     auth: Auth,

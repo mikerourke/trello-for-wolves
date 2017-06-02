@@ -58,6 +58,6 @@ export type MembershipsMemberInclusionQueryArgs = {
 };
 
 export type MembersInvitedInclusionQueryArgs = {
-  membersInvited?: boolean,
+  membersInvited?: MemberLevel,
   membersInvitedFields?: ArgumentGroup<MemberField>,
 };

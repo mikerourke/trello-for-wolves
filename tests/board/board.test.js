@@ -9,14 +9,14 @@ describe('Board Resource', () => {
   });
 
   describe('Board GET requests', () => {
-    it('gets a board', (done) => {
-      trello.boards(boardId).getBoard()
+    it.only('gets a board', (done) => {
+      trello.boards(boardId).get()
         .should.eventually.have.property('data')
         .notify(done)
     });
 
     it('gets a board with queryArgs', (done) => {
-      trello.boards(boardId).getBoard({ actions: 'all' })
+      trello.boards(boardId).get({ actions: 'all' })
         .should.eventually.have.property('data')
         .notify(done)
     });
@@ -44,7 +44,7 @@ describe('Board Resource', () => {
     });
 
     it('gets the stars for a board', (done) => {
-      trello.boards(boardId).getBoardStars()
+      trello.boards(boardId).getStars()
         .then((result) => {
           const actualValue = result.data.length;
           const expectedValue = 1;
@@ -133,7 +133,7 @@ describe('Board Resource', () => {
 
   describe('Board PUT requests', () => {
     it('updates a board', (done) => {
-      trello.boards(boardId).updateBoard({
+      trello.boards(boardId).update({
         prefs_selfJoin: true,
       })
         .then((result) => {

@@ -20,10 +20,6 @@ type ListPosQueryArg = {
   pos?: PositionNumbered,
 };
 
-/**
- * Class representing a List resource.
- * @extends BaseResource
- */
 export default class List extends BaseResource {
   constructor(
     auth: Auth,

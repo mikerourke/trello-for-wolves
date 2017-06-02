@@ -67,8 +67,6 @@ export type BoardPref =
 
 export type BoardStars = 'none' | 'mine';
 
-export type PermissionLevel = 'org' | 'private' | 'public';
-
 export type Invitation = 'admins' | 'members';
 
 export type GroupPermission =
