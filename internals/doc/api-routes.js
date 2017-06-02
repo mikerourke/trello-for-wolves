@@ -137,3 +137,130 @@
  * @apiExample {js} Example:
  trello.boards('BoArDId').getPluginData();
  */
+
+/**
+ * @apiDefine ActionGetQueryArgs
+ * @apiParam {Boolean} [display=false] Include display data in the response.
+ * @apiParam {Boolean} [entities=false] Include entities data in the response.
+ */
+
+  /**
+   * @api {get} /actions/:actionId getAction
+   * @apiVersion 1.0.0
+   * @apiName getAction
+   * @apiDescription Gets the details of the specified action.
+   * @apiGroup action
+   * @apiPermission read
+   *
+   * @apiParam {Boolean} [display=false] Include display status in response.
+   * @apiParam {Boolean} [entities=false] Include entities in response.
+   * @apiUse ActionFieldsQueryArg
+   * @apiUse MemberInclusionQueryArgs
+   * @apiUse MemberCreatorInclusionQueryArgs
+   * @apiExample {js} Simple Example:
+   trello.actions('aCtIoNId').getAction();
+   * @apiExample {js} Params Example:
+   trello.actions('aCtIoNId').getAction({
+     display: true,
+     entities: false,
+     fields: 'data,date'
+   });
+   * @apiUse GetActionSuccessExample
+   */
+
+    /**
+   * @api {get} /actions/:actionId/:field getFieldValue
+   * @apiVersion 1.0.0
+   * @apiName getFieldValue
+   * @apiDescription Gets the field value for the specified action.
+   * @apiGroup action
+   * @apiPermission read
+   *
+   * @apiUse ActionFieldQueryArg
+   * @apiExample {js} Example:
+   trello.actions('aCtIoNId').getFieldValue('date');
+   */
+
+    /**
+   * @api {get} /actions/:actionId/board getAssociatedBoard
+   * @apiVersion 1.0.0
+   * @apiName getAssociatedBoard
+   * @apiDescription Gets the board associated with the specified action.
+   * @apiGroup action
+   * @apiPermission read
+   *
+   * @apiUse BoardFieldsQueryArg
+   * @apiExample {js} Simple Example:
+   trello.actions('aCtIoNId').getAssociatedBoard();
+   * @apiExample {js} Params Example:
+   trello.actions('aCtIoNId').getAssociatedBoard({
+     fields: 'closed,desc,name'
+   });
+   */
+
+    /**
+   * @api {get} /actions/:actionId/board/:field getAssociatedBoardFieldValue
+   * @apiVersion 1.0.0
+   * @apiName getAssociatedBoardFieldValue
+   * @apiDescription Gets the field value for the board associated with the action.
+   * @apiGroup action
+   * @apiPermission read
+   *
+   * @apiUse BoardFieldQueryArg
+   * @apiExample {js} Example:
+   trello.actions('aCtIoNId').getAssociatedBoardFieldValue('desc');
+   */
+
+    /**
+   * @api {get} /actions/:actionId/card getAssociatedCard
+   * @apiVersion 1.0.0
+   * @apiName getAssociatedCard
+   * @apiDescription Gets the card associated with the specified action.
+   * @apiGroup action
+   * @apiPermission read
+   *
+   * @apiUse CardFieldsQueryArg
+   * @apiExample {js} Simple Example:
+   trello.actions('aCtIoNId').getAssociatedCard();
+   * @apiExample {js} Params Example:
+   trello.actions('aCtIoNId').getAssociatedCard({
+     fields: 'badges,checkItemStates,closed'
+   });
+   */
+
+    /**
+   * @api {get} /actions/:actionId/card/:field getAssociatedCardFieldValue
+   * @apiVersion 1.0.0
+   * @apiName getAssociatedCardFieldValue
+   * @apiDescription Gets the field value for the card associated with the action.
+   * @apiGroup action
+   * @apiPermission read
+   *
+   * @apiUse CardFieldQueryArg
+   * @apiExample {js} Example:
+   trello.actions('aCtIoNId').getAssociatedCardFieldValue('desc');
+   */
+
+    /**
+   * @api {get} /actions/:actionId/display getDisplay
+   * @apiVersion 1.0.0
+   * @apiName getDisplay
+   * @apiDescription Gets the display value associated with the action.
+   * @apiGroup action
+   * @apiPermission read
+   *
+   * @apiExample {js} Example:
+   trello.actions('aCtIoNId').getDisplay();
+   */
+
+    /**
+   * @api {get} /actions/:actionId/entities getEntities
+   * @apiVersion 1.0.0
+   * @apiName getEntities
+   * @apiDescription Gets the entities associated with the action.
+   * @apiGroup action
+   * @apiPermission read
+   *
+   * @apiExample {js} Example:
+   trello.actions('aCtIoNId').getDisplay();
+   */

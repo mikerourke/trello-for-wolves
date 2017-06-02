@@ -38,10 +38,10 @@ export default class Trello {
   }
 
   actions(actionId?: string = ''): Object {
-    return new Action(this.auth, actionId);
+    return new Action(this.auth, { instanceId: actionId });
   }
 
   boards(boardId?: string = ''): Object {
-    return new Board(this.auth, boardId);
+    return new Board(this.auth, { instanceId: boardId });
   }
 }

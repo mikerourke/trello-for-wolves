@@ -27,7 +27,7 @@ export type AllOrNone = 'all' | 'none';
 
 export type ArgumentGroup<T> = T | Array<T> | 'all';
 
-export type FilterDate = Date | 'lastView';
+export type FilterDate = ?Date | 'lastView';
 
 export type Format = 'count' | 'list' | 'minimal';
 

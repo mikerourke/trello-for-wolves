@@ -21,11 +21,15 @@ export type AttachmentInclusionQueryArgs = {
   attachmentFields?: ArgumentGroup<AttachmentField>,
 };
 
+export type CardAttachmentInclusionQueryArgs = {
+  cardAttachments?: boolean,
+  cardAttachmentFields?: ArgumentGroup<AttachmentField>,
+};
+
 export type AttachmentFieldsQueryArg = {
   fields?: ArgumentGroup<AttachmentField>,
-}
+};
 
 export type AttachmentFilterQueryArgs = AttachmentFieldsQueryArg & {
   filter?: AttachmentFilter,
 };
-

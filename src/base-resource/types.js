@@ -14,3 +14,9 @@ export type ResourceName =
   | 'search'
   | 'token'
   | 'type';
+
+export type ResourceConstructorOptions = {
+  instanceId?: string,
+  parentPath?: string,
+  resourcePath?: string,
+};

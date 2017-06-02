@@ -19,7 +19,7 @@ export type MemberField =
   | 'url'
   | 'username';
 
-export type InvitedMemberField = MemberField &
+export type MemberDetailField =
   'avatarSource'
   | 'email'
   | 'gravatarHash'
@@ -33,25 +33,15 @@ export type InvitedMemberField = MemberField &
   | 'trophies'
   | 'uploadedAvatarHash';
 
+export type MemberEveryField = MemberField & MemberDetailField;
+
 export type MemberType = 'admin' | 'normal' | 'observer';
 
-/**
- * @apiDefine MemberInclusionQueryArgs
- * @apiParam {Boolean} [member=true] Include member fields in response.
- * @apiParam {String=all,avatarHash,bio,bioData,confirmed,fullName,idPremOrgsAdmin,initials,memberType,products,status,url,username"} [memberFields="avatarHash,fullName,initials,username"]
- * Member fields to include in response, can either be <code>all</code> or a comma separated list of field names.
- */
 export type MemberInclusionQueryArgs = {
   member?: boolean,
   memberFields?: ArgumentGroup<MemberField>,
 };
 
-/**
- * @apiDefine MemberCreatorInclusionQueryArgs
- * @apiParam {Boolean} [memberCreator=true] Include member creator fields in response.
- * @apiParam {String=all,avatarHash,bio,bioData,confirmed,fullName,idPremOrgsAdmin,initials,memberType,products,status,url,username"} [memberCreatorFields="avatarHash,fullName,initials,username"]
- * Member creator fields to include in response, can either be <code>all</code> or a comma separated list of field names.
- */
 export type MemberCreatorInclusionQueryArgs = {
   memberCreator?: boolean,
   memberCreatorFields?: ArgumentGroup<MemberField>,

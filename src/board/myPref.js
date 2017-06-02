@@ -19,7 +19,7 @@ export default class MyPref extends BaseResource {
     auth: Auth,
     boardId: string,
   ) {
-    super(auth, 'myPrefs', '', `boards/${boardId}`);
+    super(auth, 'myPrefs', { parentPath: `boards/${boardId}` });
   }
 
   _updateField(

@@ -9,6 +9,7 @@ import type {
   AttachmentFilter,
   Auth,
   FieldsQueryArg,
+  ResourceConstructorOptions,
 } from '../types';
 
 type AttachmentFieldsQueryArg = FieldsQueryArg<AttachmentField>;
@@ -20,10 +21,9 @@ type AttachmentFieldsQueryArg = FieldsQueryArg<AttachmentField>;
 export default class Attachment extends BaseResource {
   constructor(
     auth: Auth,
-    attachmentId: string,
-    parentPath?: string,
+    options?: ResourceConstructorOptions = {},
   ) {
-    super(auth, 'attachments', attachmentId, parentPath);
+    super(auth, 'attachments', options);
   }
 
   getAttachment(queryArgs?: AttachmentFieldsQueryArg): Promise<*> {
@@ -47,7 +47,7 @@ export default class Attachment extends BaseResource {
     } = {},
     file?: Object,
   ): Promise<*> {
-    return this.httpPost('/', queryArgs, '', file);
+    return this.httpPost('/', queryArgs, file);
   }
 
   deleteAttachment(): Promise<*> {

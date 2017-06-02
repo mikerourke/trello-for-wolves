@@ -3,6 +3,12 @@
 /* Types */
 import type { ArgumentGroup } from '../types';
 
+export type OrganizationFilter =
+  'all'
+  | 'members'
+  | 'none'
+  | 'public';
+
 export type OrganizationField =
   'billableMemberCount'
   | 'desc'

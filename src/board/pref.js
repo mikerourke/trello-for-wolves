@@ -22,7 +22,7 @@ export default class Pref extends BaseResource {
     auth: Auth,
     boardId: string,
   ) {
-    super(auth, 'prefs', '', `boards/${boardId}`);
+    super(auth, 'prefs', { parentPath: `boards/${boardId}` });
   }
 
   _updateField(

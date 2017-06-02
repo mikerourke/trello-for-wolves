@@ -10,7 +10,10 @@ import { ApiCallResponseError } from '../utils/errors';
 import stringifyQueryArgs from '../utils/query-args-stringifier';
 
 /* Types */
-import type { Auth } from '../types';
+import type {
+  Auth,
+  ResourceConstructorOptions,
+} from '../types';
 
 type HttpMethod = 'get' | 'put' | 'post' | 'delete';
 
@@ -22,35 +25,54 @@ export default class BaseResource {
   resourceName: string;
   instanceId: string;
   parentPath: string;
+  resourcePath: string;
 
   /**
    * @param {Auth} auth Auth object containing Trello API key and token.
    * @param {string} resourceName Name of resource.
-   * @param {string} [instanceId=''] Id of the resource instance.
-   * @param {string} [parentPath=''] Parent path for constructing the route
-   *    path.
+   * @param {Object} options Options for performing requests on the resource.
+   * @param {string} [options.instanceId=''] Id of the resource instance.
+   * @param {string} [options.parentPath=''] Parent path for constructing the
+   *    route path.
+   * @param {string} [options.resourcePath=''] Resource path override for
+   *    performing requests.
    * @constructor
    */
   constructor(
     auth: Auth,
     resourceName: string,
-    instanceId?: string = '',
-    parentPath?: string = '',
+    options?: ResourceConstructorOptions = {},
   ) {
+    const { instanceId = '', parentPath = '', resourcePath = '' } = options;
     this.auth = auth;
     this.resourceName = resourceName;
     this.instanceId = instanceId;
     this.parentPath = parentPath;
+    this.resourcePath = resourcePath;
   }
 
   getParentPath() {
     return this.parentPath;
   }
 
+  setResourcePath(resourcePath: string) {
+    this.resourcePath = resourcePath;
+  }
+
+  /**
+   * Constructs the full route path based on the parent and resource
+   *    path values.
+   * @returns {string}
+   */
   getRoutePath() {
-    let resourcePath = `${this.resourceName}s`;
-    if (this.instanceId) {
-      resourcePath = `${resourcePath}/${this.instanceId}`;
+    // If the resource path was manually specified, use that, otherwise
+    // construct it based on the resource name and ID.
+    let resourcePathToUse = this.resourcePath;
+    if (resourcePathToUse === '') {
+      resourcePathToUse = `${this.resourceName}s`;
+      if (this.instanceId) {
+        resourcePathToUse = `${resourcePathToUse}/${this.instanceId}`;
+      }
     }
 
     // Ensure there is a slash between the parent and resource path if the
@@ -58,7 +80,10 @@ export default class BaseResource {
     const pathSeparator = this.parentPath && '/';
 
     // Combine the parent and resource paths to form the route path.
-    return `${this.parentPath}${pathSeparator}${resourcePath}`;
+    const fullPath = `${this.parentPath}${pathSeparator}${resourcePathToUse}`;
+
+    // Ensure there are no double slashes in the final path.
+    return fullPath.replace('//', '/');
   }
 
   /**
@@ -66,16 +91,13 @@ export default class BaseResource {
    * @param {string} pathVariables Path to append to the route path.
    * @param {Object} [queryArgs={}] Optional arguments specified for performing
    *    the request.
-   * @param {string} [routePathOverride=''] Alternate route path for the
-   *    endpoint.
    * @returns {string} Endpoint for performing the request.
    */
   getEndpoint(
     pathVariables: string,
     queryArgs?: Object = {},
-    routePathOverride?: string,
   ): string {
-    const routePath = routePathOverride || this.getRoutePath();
+    const routePath = this.getRoutePath();
     const basePath = `${routePath}${pathVariables}`;
 
     // By default, the path '/' is provided if the endpoint uses the base
@@ -98,8 +120,6 @@ export default class BaseResource {
    * @param {HttpMethod} httpMethod Method associated with the request.
    * @param {string} pathVariables Path to append to the route path.
    * @param {Object} [queryArgs={}] Arguments for building the querystring.
-   * @param {string} [routePathOverride=''] Alternate route path for the
-   *    endpoint.
    * @param {Object} [data={}] Data to include in the body of the request.
    * @returns {Promise}
    * @private
@@ -108,11 +128,10 @@ export default class BaseResource {
     httpMethod: HttpMethod,
     pathVariables: string,
     queryArgs?: Object = {},
-    routePathOverride?: string = '',
     data?: Object = {},
   ): Promise<*> {
-    const endpoint = this.getEndpoint(pathVariables, queryArgs,
-      routePathOverride);
+    const endpoint = this.getEndpoint(pathVariables, queryArgs);
+    console.log(endpoint);
     return new Promise((resolve, reject) => {
       axios({
         data,
@@ -158,38 +177,30 @@ export default class BaseResource {
   httpGet(
     pathVariables: string,
     queryArgs?: Object = {},
-    routePathOverride?: string = '',
   ): Promise<Object> {
-    return this._performRequest('get', pathVariables, queryArgs,
-      routePathOverride);
+    return this._performRequest('get', pathVariables, queryArgs);
   }
 
   httpPut(
     pathVariables: string,
     queryArgs?: Object = {},
-    routePathOverride?: string = '',
     data?: Object = {},
   ): Promise<Object> {
-    return this._performRequest('put', pathVariables, queryArgs,
-      routePathOverride, data);
+    return this._performRequest('put', pathVariables, queryArgs, data);
   }
 
   httpPost(
     pathVariables: string,
     queryArgs?: Object = {},
-    routePathOverride?: string = '',
     data?: Object = {},
   ): Promise<Object> {
-    return this._performRequest('post', pathVariables, queryArgs,
-      routePathOverride, data);
+    return this._performRequest('post', pathVariables, queryArgs, data);
   }
 
   httpDelete(
     pathVariables: string,
     queryArgs?: Object = {},
-    routePathOverride?: string = '',
   ): Promise<Object> {
-    return this._performRequest('delete', pathVariables, queryArgs,
-      routePathOverride);
+    return this._performRequest('delete', pathVariables, queryArgs);
   }
 }

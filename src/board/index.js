@@ -16,10 +16,10 @@ import type {
   ActionChildrenQueryArgs,
   AllOrNone,
   ArgumentGroup,
-  AttachmentField,
   Auth,
   BoardField,
   BoardStars,
+  CardAttachmentInclusionQueryArgs,
   CardInclusionQueryArgs,
   ChecklistInclusionQueryArgs,
   FieldsQueryArg,
@@ -37,6 +37,7 @@ import type {
   OrganizationInclusionQueryArgs,
   PowerUp,
   PrefsQueryArgs,
+  ResourceConstructorOptions,
   ValueQueryArg,
 } from '../types';
 
@@ -58,10 +59,9 @@ type LabelNamesQueryArgs = {
 export default class Board extends BaseResource {
   constructor(
     auth: Auth,
-    boardId: string,
-    parentPath?: string,
+    options?: ResourceConstructorOptions = {},
   ) {
-    super(auth, 'board', boardId, parentPath);
+    super(auth, 'board', options);
   }
 
   myPrefs() {
@@ -73,6 +73,7 @@ export default class Board extends BaseResource {
   }
 
   getBoard(queryArgs?: ActionChildrenQueryArgs &
+    CardAttachmentInclusionQueryArgs &
     CardInclusionQueryArgs &
     ChecklistInclusionQueryArgs &
     LabelInclusionQueryArgs &
@@ -84,13 +85,10 @@ export default class Board extends BaseResource {
     FieldsQueryArg<BoardField> &
     {
       actionsFormat?: Format,
-      actionsLimit?: number,
       actionMember?: boolean,
       actionMemberFields?: ArgumentGroup<MemberField>,
       actionMemberCreator?: boolean,
       actionMemberCreatorFields?: ArgumentGroup<MemberField>,
-      cardAttachments?: boolean,
-      cardAttachmentFields?: ArgumentGroup<AttachmentField>,
       cardChecklists?: AllOrNone,
       cardPluginData?: boolean,
       cardStickers?: boolean,
@@ -104,7 +102,7 @@ export default class Board extends BaseResource {
       organizationPluginData?: boolean,
       myPrefs?: boolean,
       tags?: boolean,
-    },
+    } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }

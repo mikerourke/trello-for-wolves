@@ -21,6 +21,7 @@ import type {
   ListField,
   MemberField,
   Position,
+  ResourceConstructorOptions,
   StickerInclusionQueryArgs,
   ValueQueryArg,
   WithinLimitsQueryArgs,
@@ -42,10 +43,9 @@ type GetQueryArgs = ActionChildrenQueryArgs &
 export default class Card extends BaseResource {
   constructor(
     auth: Auth,
-    cardId: string,
-    parentPath?: string,
+    options?: ResourceConstructorOptions = {},
   ) {
-    super(auth, 'card', cardId, parentPath);
+    super(auth, 'card', options);
   }
 
   getCard(queryArgs?: GetQueryArgs &

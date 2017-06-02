@@ -6,17 +6,22 @@ import type {
   CardAging,
 } from '../types';
 
-/**
- * @apiDefine BoardFieldQueryArg
- * @apiParam {String=closed,dateLastActivity,dateLastView,desc,descData,idOrganization,invitations,invited,labelNames,memberships,name,pinned,powerUps,prefs,shortLink,shortUrl,starred,subscribed,url} field
- * Board field to get value for.
- */
+export type BoardBackground =
+  'custom'
+  | 'default'
+  | 'none'
+  | 'premium';
 
-/**
- * @apiDefine BoardFieldsQueryArg
- * @apiParam {String=closed,dateLastActivity,dateLastView,desc,descData,idOrganization,invitations,invited,labelNames,memberships,name,pinned,powerUps,prefs,shortLink,shortUrl,starred,subscribed,url} [fields="all"]
- * Board fields to include in response, can either be <code>all</code> or a comma separated list of field names.
- */
+export type BoardFilter =
+    'closed'
+  | 'members'
+  | 'open'
+  | 'organization'
+  | 'pinned'
+  | 'public'
+  | 'starred'
+  | 'unpinned'
+
 export type BoardField =
   'closed'
   | 'dateLastActivity'
@@ -68,9 +73,12 @@ export type PowerUp =
   | 'recap'
   | 'voting';
 
-export type BoardInclusionQueryArgs = {
-  board?: boolean,
+type BoardFieldsQueryArg = {
   boardFields?: ArgumentGroup<BoardField>,
+};
+
+export type BoardInclusionQueryArgs = BoardFieldsQueryArg & {
+  board?: boolean,
 };
 
 export type PrefsQueryArgs = {

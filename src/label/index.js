@@ -9,6 +9,7 @@ import type {
   LabelColor,
   LabelField,
   FieldsQueryArg,
+  ResourceConstructorOptions,
   ValueQueryArg,
 } from '../types';
 
@@ -24,11 +25,11 @@ type LabelChangeQueryArgs = {
 export default class Label extends BaseResource {
   constructor(
     auth: Auth,
-    labelId: string,
-    parentPath?: string,
+    options?: ResourceConstructorOptions = {},
   ) {
-    super(auth, 'label', labelId, parentPath);
+    super(auth, 'label', options);
   }
+
   getLabel(queryArgs?: FieldsQueryArg<LabelField>): Promise<*> {
     const idLabel = this.instanceId;
     const updatedArgs = (this.parentPath)

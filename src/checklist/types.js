@@ -19,7 +19,12 @@ export type ChecklistInclusionQueryArgs = {
   checklistFields?: ArgumentGroup<ChecklistField>,
 };
 
-export type CheckItemStatesQueryArgs = {
+export type CheckItemInclusionQueryArgs = {
+  checkItems?: AllOrNone,
+  checkItemFields?: ArgumentGroup<ChecklistField>,
+};
+
+export type CheckItemStateInclusionQueryArgs = {
   checkItemStates?: AllOrNone,
   checkItemStateFields?: ArgumentGroup<CheckItemState>,
 };
