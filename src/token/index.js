@@ -23,9 +23,12 @@ export default class Token extends BaseResource {
     super(auth, 'token', options);
   }
 
-  getToken(queryArgs?: FieldsQueryArg<TokenField> & {
-    webhooks?: boolean,
-  }): Promise<*> {
+  getToken(
+    queryArgs?: FieldsQueryArg<TokenField> &
+      {
+        webhooks?: boolean,
+      } = {},
+  ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 

@@ -1,5 +1,6 @@
 /* @flow */
 
+/* Internal dependencies */
 import Action from './action';
 import Batch from './batch';
 import Board from './board';
@@ -10,13 +11,25 @@ import List from './list';
 import Member from './member';
 import Notification from './notification';
 import Organization from './organization';
- //import Search from './search';
+import Search from './search';
 import Token from './token';
 import Type from './type';
 import Webhook from './webhook';
 
 /* Types */
 import type { Auth } from './types';
+
+/**
+ * @apiDefine read Read access rights needed.
+ */
+
+/**
+ * @apiDefine write Write access rights needed.
+ */
+
+/**
+ * @apiDefine owner Owner access rights needed.
+ */
 
 export default class Trello {
   auth: Auth;
@@ -63,6 +76,10 @@ export default class Trello {
 
   organizations(orgIdOrName?: string = ''): Object {
     return new Organization(this.auth, { instanceId: orgIdOrName });
+  }
+
+  search(): Object {
+    return new Search(this.auth);
   }
 
   tokens(tokenName?: string = ''): Object {

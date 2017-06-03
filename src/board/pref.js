@@ -66,7 +66,7 @@ export default class Pref extends BaseResource {
   }
 
   updatePermissionLevel(
-    queryArgs: ValueQueryArg<PermissionLevel | 'org'>
+    queryArgs: ValueQueryArg<PermissionLevel | 'org'>,
   ): Promise<*> {
     return this._updateField('permissionLevel', 'string', queryArgs);
   }

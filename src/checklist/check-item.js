@@ -35,12 +35,14 @@ export default class CheckItem extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  updateCheckItem(queryArgs?: {
-    name?: string,
-    state?: CheckItemState,
-    idChecklist?: string,
-    pos?: PositionNumbered,
-  } = {}): Promise<*> {
+  updateCheckItem(
+    queryArgs?: {
+      name?: string,
+      state?: CheckItemState,
+      idChecklist?: string,
+      pos?: PositionNumbered,
+    } = {},
+  ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }
 

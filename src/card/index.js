@@ -14,7 +14,7 @@ import type {
   Auth,
   BoardField,
   CardField,
-  CardStatus,
+  CardFilter,
   CheckItemStateField,
   ChecklistField,
   FieldsQueryArg,
@@ -36,6 +36,31 @@ type GetQueryArgs = ActionInclusionQueryArgs &
     checklists?: AllOrNone,
   };
 
+/**
+ * @api {path} /cards card
+ * @apiVersion 1.0.0
+ * @apiName card
+ * @apiGroup overview
+ * @apiDescription
+ * A Card is the most basic unit of information in Trello. Cards have a name,
+ * description, labels, members, and a set of historical actions that have been
+ * taken on the card, including any comments.
+ * <h3>Child Methods</h3>
+ * <ul>
+ * <li>
+ * <h4>Actions</h4>
+ * Actions are the audit log/record of everything that has been
+ * done to a card throughout its history, including any comments that have been
+ * made.
+ * </li>
+ * <br>
+ * <li>
+ * <h4>Labels</h4>
+ * Labels can be as simple as colors attached to a Card, or Labels can have
+ * names.
+ * </li>
+ * </ul>
+ */
 export default class Card extends BaseResource {
   constructor(
     auth: Auth,
@@ -44,25 +69,26 @@ export default class Card extends BaseResource {
     super(auth, 'card', options);
   }
 
-  getCard(queryArgs?: GetQueryArgs &
-    StickerInclusionQueryArgs &
-    {
-      actionsEntities?: boolean,
-      actionsDisplay?: boolean,
-      actionsLimit?: number,
-      actionMemberCreatorFields?: ArgumentGroup<MemberField>,
-      checkItemStateFields?: ArgumentGroup<CheckItemStateField>,
-      checklistFields?: ArgumentGroup<ChecklistField>,
-      membersVoted?: boolean,
-      memberVotedFields?: ArgumentGroup<MemberField>,
-      board?: boolean,
-      boardFields?: ArgumentGroup<BoardField>,
-      list?: boolean,
-      listFields?: ArgumentGroup<ListField>,
-      pluginData?: boolean,
-      fields?: ArgumentGroup<CardField> | 'dueComplete',
-      labels?: boolean,
-    } = {},
+  getCard(
+    queryArgs?: GetQueryArgs &
+      StickerInclusionQueryArgs &
+      {
+        actionsEntities?: boolean,
+        actionsDisplay?: boolean,
+        actionsLimit?: number,
+        actionMemberCreatorFields?: ArgumentGroup<MemberField>,
+        checkItemStateFields?: ArgumentGroup<CheckItemStateField>,
+        checklistFields?: ArgumentGroup<ChecklistField>,
+        membersVoted?: boolean,
+        memberVotedFields?: ArgumentGroup<MemberField>,
+        board?: boolean,
+        boardFields?: ArgumentGroup<BoardField>,
+        list?: boolean,
+        listFields?: ArgumentGroup<ListField>,
+        pluginData?: boolean,
+        fields?: ArgumentGroup<CardField> | 'dueComplete',
+        labels?: boolean,
+      } = {},
   ): Promise<*> {
     const updatedArgs = (this.parentPath)
       ? { idCard: this.instanceId, ...queryArgs }
@@ -70,17 +96,18 @@ export default class Card extends BaseResource {
     return this.httpGet('/', updatedArgs);
   }
 
-  getCards(queryArgs?: GetQueryArgs &
-    WithinLimitsQueryArgs<CardStatus> &
-    FieldsQueryArg<CardField> &
-    {
-      stickers?: boolean,
-    } = {},
+  getCards(
+    queryArgs?: GetQueryArgs &
+      WithinLimitsQueryArgs &
+      FieldsQueryArg<CardField> &
+      {
+        stickers?: boolean,
+      } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
-  getFilteredCards(filter: CardStatus): Promise<*> {
+  getFilteredCards(filter: CardFilter): Promise<*> {
     return this.httpGet(`/${filter}`);
   }
 
@@ -92,20 +119,22 @@ export default class Card extends BaseResource {
     return this.httpGet('/pluginData');
   }
 
-  updateCard(queryArgs?: {
-    name?: string,
-    desc?: string,
-    closed?: boolean,
-    idAttachmentCover?: string,
-    idBoard?: string,
-    idLabels?: string,
-    idList?: string,
-    idMembers?: Array<string>,
-    pos?: PositionNumbered,
-    due?: ?string,
-    dueComplete?: boolean,
-    subscribed?: boolean,
-  } = {}): Promise<*> {
+  updateCard(
+    queryArgs?: {
+      name?: string,
+      desc?: string,
+      closed?: boolean,
+      idAttachmentCover?: string,
+      idBoard?: string,
+      idLabels?: string,
+      idList?: string,
+      idMembers?: Array<string>,
+      pos?: PositionNumbered,
+      due?: ?string,
+      dueComplete?: boolean,
+      subscribed?: boolean,
+    } = {},
+  ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }
 
@@ -129,9 +158,12 @@ export default class Card extends BaseResource {
     return this.httpPut('/idAttachmentCover', queryArgs);
   }
 
-  updateIdBoard(queryArgs: ValueQueryArg<string> & {
-    idList?: string,
-  }): Promise<*> {
+  updateIdBoard(
+    queryArgs: ValueQueryArg<string> &
+      {
+        idList?: string,
+      },
+  ): Promise<*> {
     return this.httpPut('/idBoard', queryArgs);
   }
 

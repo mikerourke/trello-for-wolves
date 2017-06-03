@@ -131,7 +131,6 @@ export default class BaseResource {
     data?: Object = {},
   ): Promise<*> {
     const endpoint = this.getEndpoint(pathVariables, queryArgs);
-    console.log(endpoint);
     return new Promise((resolve, reject) => {
       axios({
         data,

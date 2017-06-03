@@ -7,6 +7,7 @@ import BaseResource from '../base-resource';
 import type {
   ActionInclusionQueryArgs,
   ActionField,
+  ActionLimitsQueryArgs,
   ActionType,
   AllOrNone,
   ArgumentGroup,
@@ -27,7 +28,7 @@ import type {
   FilterQueryArg,
   Format,
   ListField,
-  ListStatus,
+  ListFilter,
   MemberEveryField,
   MemberField,
   MembershipFilter,
@@ -53,57 +54,55 @@ export default class Member extends BaseResource {
     super(auth, 'member', options);
   }
 
-  get(queryArgs?: ActionInclusionQueryArgs &
-    BoardInclusionQueryArgs &
-    CardAttachmentInclusionQueryArgs &
-    CardInclusionQueryArgs &
-    FieldsQueryArg<MemberEveryField> &
-    {
-      actionsEntities?: boolean,
-      actionsDisplay?: boolean,
-      actionsLimit?: number,
-      actionsSince?: FilterDate,
-      actionBefore?: ?Date,
-      cardMembers?: boolean,
-      cardMemberFields?: ArgumentGroup<MemberField>,
-      cardStickers?: boolean,
-      boards?: ArgumentGroup<BoardFilter>,
-      boardActions?: ArgumentGroup<ActionType>,
-      boardActionsEntities?: boolean,
-      boardActionsDisplay?: boolean,
-      boardActionsFormat?: Format,
-      boardActionsSince?: FilterDate,
-      boardActionsLimit?: number,
-      boardActionFields?: ArgumentGroup<ActionField>,
-      boardLists?: ArgumentGroup<ListStatus>,
-      boardMemberships?: ArgumentGroup<MembershipFilter>,
-      boardOrganization?: boolean,
-      boardOrganizationFields?: ArgumentGroup<OrganizationField>,
-      boardsInvited?: ArgumentGroup<BoardFilter>,
-      boardsInvitedFields?: ArgumentGroup<BoardField>,
-      boardStars?: boolean,
-      savedSearches?: boolean,
-      organizations?: ArgumentGroup<OrganizationFilter>,
-      organizationFields?: ArgumentGroup<OrganizationField>,
-      organizationPaidAccount?: boolean,
-      organizationsInvited?: OrganizationFilter,
-      organizationsInvitedFields?: ArgumentGroup<OrganizationField>,
-      notifications?: ArgumentGroup<NotificationType>,
-      notificationsEntities?: boolean,
-      notificationsDisplay?: boolean,
-      notificationsLimit?: number,
-      notificationFields?: ArgumentGroup<NotificationField>,
-      notificationMemberCreator?: boolean,
-      notificationMemberCreatorFields?: ArgumentGroup<MemberField>,
-      notificationBefore?: ?string,
-      notificationSince?: ?string,
-      tokens?: AllOrNone,
-      paidAccount?: boolean,
-      boardBackgrounds?: ArgumentGroup<BoardBackgroundField>,
-      customBoardBackgrounds?: AllOrNone,
-      customStickers?: AllOrNone,
-      customEmoji?: AllOrNone,
-    } = {},
+  getMember(
+    queryArgs?: ActionInclusionQueryArgs &
+      ActionLimitsQueryArgs &
+      BoardInclusionQueryArgs &
+      CardAttachmentInclusionQueryArgs &
+      CardInclusionQueryArgs &
+      FieldsQueryArg<MemberEveryField> &
+      {
+        actionBefore?: ?Date,
+        cardMembers?: boolean,
+        cardMemberFields?: ArgumentGroup<MemberField>,
+        cardStickers?: boolean,
+        boards?: ArgumentGroup<BoardFilter>,
+        boardActions?: ArgumentGroup<ActionType>,
+        boardActionsEntities?: boolean,
+        boardActionsDisplay?: boolean,
+        boardActionsFormat?: Format,
+        boardActionsSince?: FilterDate,
+        boardActionsLimit?: number,
+        boardActionFields?: ArgumentGroup<ActionField>,
+        boardLists?: ArgumentGroup<ListFilter>,
+        boardMemberships?: ArgumentGroup<MembershipFilter>,
+        boardOrganization?: boolean,
+        boardOrganizationFields?: ArgumentGroup<OrganizationField>,
+        boardsInvited?: ArgumentGroup<BoardFilter>,
+        boardsInvitedFields?: ArgumentGroup<BoardField>,
+        boardStars?: boolean,
+        savedSearches?: boolean,
+        organizations?: ArgumentGroup<OrganizationFilter>,
+        organizationFields?: ArgumentGroup<OrganizationField>,
+        organizationPaidAccount?: boolean,
+        organizationsInvited?: OrganizationFilter,
+        organizationsInvitedFields?: ArgumentGroup<OrganizationField>,
+        notifications?: ArgumentGroup<NotificationType>,
+        notificationsEntities?: boolean,
+        notificationsDisplay?: boolean,
+        notificationsLimit?: number,
+        notificationFields?: ArgumentGroup<NotificationField>,
+        notificationMemberCreator?: boolean,
+        notificationMemberCreatorFields?: ArgumentGroup<MemberField>,
+        notificationBefore?: ?string,
+        notificationSince?: ?string,
+        tokens?: AllOrNone,
+        paidAccount?: boolean,
+        boardBackgrounds?: ArgumentGroup<BoardBackgroundField>,
+        customBoardBackgrounds?: AllOrNone,
+        customStickers?: AllOrNone,
+        customEmoji?: AllOrNone,
+      } = {},
   ): Promise<*> {
     const idList = this.instanceId;
     const updatedArgs = (this.parentPath)
@@ -112,10 +111,11 @@ export default class Member extends BaseResource {
     return this.httpGet('/', updatedArgs);
   }
 
-  getAll(queryArgs?: FieldsQueryArg<ListField> &
-    {
-      limit?: number,
-    } = {},
+  getMembers(
+    queryArgs?: FieldsQueryArg<ListField> &
+      {
+        limit?: number,
+      } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -189,22 +189,24 @@ export default class Member extends BaseResource {
   }
 
   getDeltas(queryArgs: DeltasQueryArgs): Promise<*> {
-    return this.httpGet('/deltas', queryArgs)
+    return this.httpGet('/deltas', queryArgs);
   }
 
-  updateMember(queryArgs?: {
-    fullName?: string,
-    initials?: string,
-    username?: string,
-    bio?: string,
-    avatarSource?: AvatarSourceField,
-    prefs: {
-      colorBlind?: boolean,
-      locale?: string,
-      minutesBetweenSummaries?: number,
-    },
-    separator?: string,
-  } = {}): Promise<*> {
+  updateMember(
+    queryArgs?: {
+      fullName?: string,
+      initials?: string,
+      username?: string,
+      bio?: string,
+      avatarSource?: AvatarSourceField,
+      prefs?: {
+        colorBlind?: boolean,
+        locale?: string,
+        minutesBetweenSummaries?: number,
+      },
+      separator?: string,
+    } = {},
+  ): Promise<*> {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
 
@@ -275,10 +277,12 @@ export default class Member extends BaseResource {
     return this.httpPost('/boardBackgrounds', queryArgs);
   }
 
-  starBoard(queryArgs: {
-    idBoard: string,
-    pos: PositionNumbered,
-  }): Promise<*> {
+  starBoard(
+    queryArgs: {
+      idBoard: string,
+      pos: PositionNumbered,
+    },
+  ): Promise<*> {
     return this.httpPost('/boardStars', queryArgs);
   }
 
@@ -286,9 +290,12 @@ export default class Member extends BaseResource {
     return this.httpPost('/customBoardBackgrounds', queryArgs);
   }
 
-  addCustomEmoji(queryArgs: FileQueryArg & {
-    name: string,
-  }): Promise<*> {
+  addCustomEmoji(
+    queryArgs: FileQueryArg &
+      {
+        name: string,
+      },
+  ): Promise<*> {
     return this.httpPost('/customEmoji', queryArgs);
   }
 

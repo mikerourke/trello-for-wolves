@@ -30,17 +30,18 @@ export default class Notification extends BaseResource {
     super(auth, 'notification', options);
   }
 
-  getNotification(queryArgs?: BoardInclusionQueryArgs &
-    CardInclusionQueryArgs &
-    FieldsQueryArg<NotificationField> &
-    FilterQueryArg<NotificationField> &
-    MemberInclusionQueryArgs &
-    MemberCreatorInclusionQueryArgs &
-    OrganizationInclusionQueryArgs &
-    {
-      entities?: boolean,
-      list?: boolean,
-    } = {},
+  getNotification(
+    queryArgs?: BoardInclusionQueryArgs &
+      CardInclusionQueryArgs &
+      FieldsQueryArg<NotificationField> &
+      FilterQueryArg<NotificationField> &
+      MemberCreatorInclusionQueryArgs &
+      MemberInclusionQueryArgs &
+      OrganizationInclusionQueryArgs &
+      {
+        entities?: boolean,
+        list?: boolean,
+      } = {},
   ): Promise<*> {
     const idNotification = this.instanceId;
     const updatedArgs = (this.parentPath)
@@ -49,9 +50,12 @@ export default class Notification extends BaseResource {
     return this.httpGet('/', updatedArgs);
   }
 
-  getNotifications(queryArgs?: FieldsQueryArg<NotificationField> & {
-    limit?: number,
-  } = {}): Promise<*> {
+  getNotifications(
+    queryArgs?: FieldsQueryArg<NotificationField> &
+      {
+        limit?: number,
+      } = {},
+  ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -95,12 +99,14 @@ export default class Notification extends BaseResource {
     });
   }
 
-  updateNotification(queryArgs?: {
-    name?: string,
-    closed?: boolean,
-    idBoard?: string,
-    subscribed?: boolean,
-  }): Promise<*> {
+  updateNotification(
+    queryArgs?: {
+      name?: string,
+      closed?: boolean,
+      idBoard?: string,
+      subscribed?: boolean,
+    } = {},
+  ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }
 
@@ -108,11 +114,13 @@ export default class Notification extends BaseResource {
     return this.httpPut('/closed', queryArgs);
   }
 
-  createNotification(queryArgs: {
-    name: string,
-    idBoard: string,
-    idNotificationSource?: string,
-  }): Promise<*> {
+  createNotification(
+    queryArgs: {
+      name: string,
+      idBoard: string,
+      idNotificationSource?: string,
+    },
+  ): Promise<*> {
     return this.httpPost('/', queryArgs);
   }
 }

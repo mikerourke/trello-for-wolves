@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "description": "Node.js wrapper for the Trello API",
   "title": "Trello for Wolves",
-  "url" : "https://api.trello.com/1"
+  "url" : "https://api.trello.com/1",
+  "order": [
+    "overview"
+  ]
 }

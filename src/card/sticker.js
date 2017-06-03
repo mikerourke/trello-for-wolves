@@ -6,22 +6,20 @@ import BaseResource from '../base-resource';
 /* Types */
 import type {
   Auth,
+  ResourceConstructorOptions,
   StickerFieldsQueryArg,
 } from '../types';
 
 export default class Sticker extends BaseResource {
   constructor(
     auth: Auth,
-    stickerId: string,
-    parentPath?: string,
+    options?: ResourceConstructorOptions = {},
   ) {
-    super(auth, 'sticker', stickerId, parentPath);
+    super(auth, 'sticker', options);
   }
 
-  getSticker(queryArgs?: StickerFieldsQueryArg): Promise<*> {
-    const idSticker = this.instanceId;
-    const updatedArgs = { idSticker, ...queryArgs };
-    return this.httpGet(`/${idSticker}`, updatedArgs);
+  getSticker(queryArgs?: StickerFieldsQueryArg = {}): Promise<*> {
+    return this.httpGet('/', queryArgs);
   }
 
   getStickers(queryArgs?: StickerFieldsQueryArg): Promise<*> {

@@ -122,7 +122,7 @@ describe('Action Resource', () => {
     });
 
     it('gets the associated list', (done) => {
-      trello.actions(actionId).getAssociatedList()
+      trello.actions(actionId).list().getList()
         .then((result) => {
           const actualValue = result.data.name;
           const expectedValue = 'Backlog';
@@ -133,7 +133,7 @@ describe('Action Resource', () => {
     });
 
     it('gets a field value for the associated list', (done) => {
-      trello.actions(actionId).getAssociatedListFieldValue('name')
+      trello.actions(actionId).list().getFieldValue('name')
         .then((result) => {
           const actualValue = result.data._value;
           const expectedValue = 'Backlog';
@@ -166,19 +166,19 @@ describe('Action Resource', () => {
     });
 
     it('gets the associated member', (done) => {
-      trello.actions(actionId).getAssociatedMember()
+      trello.actions(actionId).member().getMember()
         .should.eventually.be.rejected
         .notify(done);
     });
 
     it('gets a field value for the associated member', (done) => {
-      trello.actions(actionId).getAssociatedMemberFieldValue('fullName')
+      trello.actions(actionId).member().getFieldValue('fullName')
         .should.eventually.be.rejected
         .notify(done);
     });
 
     it('gets the associated member creator', (done) => {
-      trello.actions(actionId).getAssociatedMemberCreator()
+      trello.actions(actionId).memberCreator().getMember()
         .then((result) => {
           const actualValue = result.data.id;
           const expectedValue = memberIds.forMemberCreator;
@@ -189,7 +189,7 @@ describe('Action Resource', () => {
     });
 
     it('gets the associated member creator with some arguments', (done) => {
-      trello.actions(actionId).getAssociatedMemberCreator({
+      trello.actions(actionId).memberCreator().getMember({
         fields: ['avatarSource', 'bio', 'bioData', 'confirmed', 'idBoards'],
       })
         .then((result) => {
@@ -202,7 +202,7 @@ describe('Action Resource', () => {
     });
 
     it('gets a field value for the associated member creator', (done) => {
-      trello.actions(actionId).getAssociatedMemberCreatorFieldValue('avatarHash')
+      trello.actions(actionId).memberCreator().getFieldValue('avatarHash')
         .then((result) => {
           const actualValue = result.data._value;
           const expectedValue = memberIds.forAvatarHash;
@@ -214,14 +214,14 @@ describe('Action Resource', () => {
 
     // TODO: Find board with an organization to get actions for.
     it('gets the associated organization', (done) => {
-      trello.actions(actionId).getAssociatedOrganization()
+      trello.actions(actionId).organization().getOrganization()
         .should.eventually.be.rejected
         .notify(done);
     });
 
     // TODO: Find board with an organization to get actions for.
     it('gets a field value for the associated organization', (done) => {
-      trello.actions(actionId).getAssociatedOrganizationFieldValue('logoHash')
+      trello.actions(actionId).organization().getFieldValue('logoHash')
         .should.eventually.be.rejected
         .notify(done);
     });

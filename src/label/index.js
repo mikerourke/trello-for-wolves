@@ -34,9 +34,12 @@ export default class Label extends BaseResource {
     return this.httpGet('/', updatedArgs);
   }
 
-  getLabels(queryArgs?: FieldsQueryArg<LabelField> & {
-    limit?: number,
-  } = {}): Promise<*> {
+  getLabels(
+    queryArgs?: FieldsQueryArg<LabelField> &
+      {
+        limit?: number,
+      } = {},
+  ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -52,9 +55,12 @@ export default class Label extends BaseResource {
     return this.httpPut('/name', queryArgs);
   }
 
-  createLabel(queryArgs: LabelChangeQueryArgs & {
-    idBoard: string,
-  }): Promise<*> {
+  createLabel(
+    queryArgs: LabelChangeQueryArgs &
+      {
+        idBoard: string,
+      },
+  ): Promise<*> {
     return this.httpPost('/', queryArgs);
   }
 

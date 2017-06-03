@@ -20,6 +20,15 @@ type ListPosQueryArg = {
   pos?: PositionNumbered,
 };
 
+/**
+ * @api {path} /lists list
+ * @apiVersion 1.0.0
+ * @apiName list
+ * @apiGroup overview
+ * @apiDescription
+ * A List is a collection of Cards. In the standard Trello interface, Lists are
+ * stacked horizontally and are ordered on a board.
+ */
 export default class List extends BaseResource {
   constructor(
     auth: Auth,
@@ -28,10 +37,11 @@ export default class List extends BaseResource {
     super(auth, 'list', options);
   }
 
-  getList(queryArgs?: BoardInclusionQueryArgs &
-    CardInclusionQueryArgs &
-    FieldsQueryArg<ListField> &
-    FilterQueryArg<ListField> = {},
+  getList(
+    queryArgs?: BoardInclusionQueryArgs &
+      CardInclusionQueryArgs &
+      FieldsQueryArg<ListField> &
+      FilterQueryArg<ListField> = {},
   ): Promise<*> {
     const idList = this.instanceId;
     const updatedArgs = (this.parentPath)
@@ -40,9 +50,12 @@ export default class List extends BaseResource {
     return this.httpGet('/', updatedArgs);
   }
 
-  getLists(queryArgs?: FieldsQueryArg<ListField> & {
-    limit?: number,
-  } = {}): Promise<*> {
+  getLists(
+    queryArgs?: FieldsQueryArg<ListField> &
+      {
+        limit?: number,
+      } = {},
+  ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -50,12 +63,15 @@ export default class List extends BaseResource {
     return this.httpGet(`/${field}`);
   }
 
-  updateList(queryArgs?: ListPosQueryArg & {
-    name?: string,
-    closed?: boolean,
-    idBoard?: string,
-    subscribed?: boolean,
-  }): Promise<*> {
+  updateList(
+    queryArgs?: ListPosQueryArg &
+      {
+        name?: string,
+        closed?: boolean,
+        idBoard?: string,
+        subscribed?: boolean,
+      } = {},
+  ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }
 
@@ -81,11 +97,13 @@ export default class List extends BaseResource {
     return this.httpPut('/subscribed', queryArgs);
   }
 
-  createList(queryArgs: ListPosQueryArg & {
-    name: string,
-    idBoard: string,
-    idListSource?: string,
-  }): Promise<*> {
+  createList(
+    queryArgs: ListPosQueryArg & {
+      name: string,
+      idBoard: string,
+      idListSource?: string,
+    },
+  ): Promise<*> {
     return this.httpPost('/', queryArgs);
   }
 
@@ -93,10 +111,12 @@ export default class List extends BaseResource {
     return this.httpPost('/archiveAllCards');
   }
 
-  moveAllCards(queryArgs: {
-    idBoard: string,
-    idList: string,
-  }) {
+  moveAllCards(
+    queryArgs: {
+      idBoard: string,
+      idList: string,
+    },
+  ) {
     return this.httpPost('/moveAllCards', queryArgs);
   }
 }

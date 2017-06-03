@@ -10,3 +10,12 @@ export type MembershipFilter =
   | 'me'
   | 'none'
   | 'normal';
+
+/**
+ * @apiDefine MembershipsQueryArgs
+ * @apiParam {String="all","active","admin","deactivated","me","none","normal"} [memberships='"none"']
+ *    Membership data to include in response.
+ */
+export type MembershipsQueryArgs = {
+  memberships?: ArgumentGroup<MembershipFilter>,
+}

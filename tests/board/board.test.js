@@ -9,7 +9,7 @@ describe('Board Resource', () => {
   });
 
   describe('Board GET requests', () => {
-    it.only('gets a board', (done) => {
+    it('gets a board', (done) => {
       trello.boards(boardId).get()
         .should.eventually.have.property('data')
         .notify(done)

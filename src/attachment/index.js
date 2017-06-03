@@ -9,10 +9,9 @@ import type {
   AttachmentFilter,
   Auth,
   FieldsQueryArg,
+  FilterQueryArg,
   ResourceConstructorOptions,
 } from '../types';
-
-type AttachmentFieldsQueryArg = FieldsQueryArg<AttachmentField>;
 
 export default class Attachment extends BaseResource {
   constructor(
@@ -22,15 +21,16 @@ export default class Attachment extends BaseResource {
     super(auth, 'attachments', options);
   }
 
-  getAttachment(queryArgs?: AttachmentFieldsQueryArg): Promise<*> {
-    const idAttachment = this.instanceId;
-    const updatedArgs = { idAttachment, ...queryArgs };
-    return this.httpGet(`/${idAttachment}`, updatedArgs);
+  getAttachment(
+    queryArgs?: FieldsQueryArg<AttachmentField> = {},
+  ): Promise<*> {
+    return this.httpGet('/', queryArgs);
   }
 
-  getAttachments(queryArgs?: AttachmentFieldsQueryArg & {
-    filter?: AttachmentFilter,
-  } = {}): Promise<*> {
+  getAttachments(
+    queryArgs?: FieldsQueryArg<AttachmentField> &
+      FilterQueryArg<AttachmentFilter> = {},
+  ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 

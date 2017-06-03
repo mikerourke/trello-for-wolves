@@ -37,6 +37,11 @@ export type Position = 'bottom' | 'top';
 
 export type PositionNumbered = Position | number;
 
+/**
+ * @apiDefine DeltasQueryArgs
+ * @apiParam {String} tags A valid tag for subscribing.
+ * @apiParam {Number{-1-Infinity}} ixLastUpdate Index of last update.
+ */
 export type DeltasQueryArgs = {
   tags: string,
   ixLastUpdate: number,

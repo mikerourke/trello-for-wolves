@@ -5,8 +5,9 @@ import BaseResource from '../base-resource';
 
 /* Types */
 import type {
-  ActionType,
+  ActionField,
   ActionInclusionQueryArgs,
+  ActionType,
   ArgumentGroup,
   Auth,
   BoardInclusionQueryArgs,
@@ -16,14 +17,13 @@ import type {
   FileQueryArg,
   FilterDate,
   Format,
-  ListStatus,
+  ListFilter,
   MemberInclusionQueryArgs,
   MembershipFilter,
   MembershipsMemberInclusionQueryArgs,
   MembersInvitedInclusionQueryArgs,
   OrganizationField,
   PermissionLevel,
-  PositionNumbered,
   ResourceConstructorOptions,
   ValueQueryArg,
 } from '../types';
@@ -35,10 +35,6 @@ type SharedUpdateQueryArgs = {
   website?: ?string,
 };
 
-type ListPosQueryArg = {
-  pos?: PositionNumbered,
-};
-
 export default class Organization extends BaseResource {
   constructor(
     auth: Auth,
@@ -47,35 +43,39 @@ export default class Organization extends BaseResource {
     super(auth, 'organization', options);
   }
 
-  getOrganization(queryArgs?: ActionInclusionQueryArgs &
-    BoardInclusionQueryArgs &
-    MemberInclusionQueryArgs &
-    MembershipsMemberInclusionQueryArgs &
-    MembersInvitedInclusionQueryArgs &
-    FieldsQueryArg<OrganizationField> &
-    {
-      actionsDisplay?: boolean,
-      actionsEntities?: boolean,
-      actionsLimit?: number,
-      memberActivity?: boolean,
-      memberships?: ArgumentGroup<MembershipFilter>,
-      boardActions?: ArgumentGroup<ActionType>,
-      boardActionsDisplay?: boolean,
-      boardActionsFormat?: Format,
-      boardActionsSince?: FilterDate,
-      boardActionsLimit?: number
-      boardActionFields?: ArgumentGroup<ActionFilter>,
-      boardLists?: ArgumentGroup<ListStatus>,
-      boardPluginData?: boolean,
-      paidAccount?: boolean,
-    }= {},
+  getOrganization(
+    queryArgs?: ActionInclusionQueryArgs &
+      BoardInclusionQueryArgs &
+      MemberInclusionQueryArgs &
+      MembershipsMemberInclusionQueryArgs &
+      MembersInvitedInclusionQueryArgs &
+      FieldsQueryArg<OrganizationField> &
+      {
+        actionsDisplay?: boolean,
+        actionsEntities?: boolean,
+        actionsLimit?: number,
+        memberActivity?: boolean,
+        memberships?: ArgumentGroup<MembershipFilter>,
+        boardActions?: ArgumentGroup<ActionType>,
+        boardActionsDisplay?: boolean,
+        boardActionsFormat?: Format,
+        boardActionsSince?: FilterDate,
+        boardActionsLimit?: number,
+        boardActionFields?: ArgumentGroup<ActionField>,
+        boardLists?: ArgumentGroup<ListFilter>,
+        boardPluginData?: boolean,
+        paidAccount?: boolean,
+      }= {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
-  getOrganizations(queryArgs?: FieldsQueryArg<OrganizationField> & {
-    limit?: number,
-  } = {}): Promise<*> {
+  getOrganizations(
+    queryArgs?: FieldsQueryArg<OrganizationField> &
+      {
+        limit?: number,
+      } = {},
+  ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -98,7 +98,7 @@ export default class Organization extends BaseResource {
   updateOrganization(
     queryArgs?: SharedUpdateQueryArgs &
       {
-        prefs: {
+        prefs?: {
           associatedDomain?: string,
           externalMembersDisabled?: boolean,
           googleAppsVersion?: number,

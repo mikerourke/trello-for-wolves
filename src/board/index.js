@@ -14,6 +14,8 @@ import Pref from './pref';
 /* Types */
 import type {
   ActionInclusionQueryArgs,
+  ActionLimitsQueryArgs,
+  ActionMemberInclusionQueryArgs,
   AllOrNone,
   ArgumentGroup,
   Auth,
@@ -29,10 +31,9 @@ import type {
   Format,
   LabelColor,
   LabelInclusionQueryArgs,
+  ListFilter,
   ListInclusionQueryArgs,
-  ListStatus,
   MemberCreatorInclusionQueryArgs,
-  MemberField,
   MemberInclusionQueryArgs,
   MembershipFilter,
   MembershipsMemberInclusionQueryArgs,
@@ -55,17 +56,38 @@ type LabelNamesQueryArgs = {
   },
 };
 
+/**
+ * @apiDefine BoardSharedGetQueryArgs
+ * @apiParam {String="list","count","minimal"} [actionsFormat='"list"'] Format
+ *    for returning actions in the response.
+ * @apiParam {String="all","active","admin","deactivated","me","none","normal"} [memberships='"none"']
+ *    Memberships to include in the response.
+ */
 type SharedGetQueryArgs =
   ActionInclusionQueryArgs &
+  ActionLimitsQueryArgs &
   OrganizationInclusionQueryArgs &
   FieldsQueryArg<BoardField> &
   {
-    actionsEntities?: boolean,
-    actionsLimit?: number,
     actionsFormat?: Format,
     memberships?: ArgumentGroup<MembershipFilter>,
   };
 
+/**
+ * @api {path} /boards board
+ * @apiVersion 1.0.0
+ * @apiName board
+ * @apiGroup overview
+ * @apiDescription
+ * Boards are the highest level concept within the Trello workflow. The Boards
+ * API allows you to list, view, create, and edit Boards. Each Board has a
+ * name, description, a set of members attached, and an ordered array of Lists.
+ * <br><br>
+ * Boards can be open or closed, starred, and/or subscribed. Each
+ * Board belongs to an organization. Each board also has a set of preferences
+ * that affect its visual display, and additional features that may have been
+ * attached to the Board (such as Power-Ups).
+ */
 export default class Board extends BaseResource {
   constructor(
     auth: Auth,
@@ -82,57 +104,124 @@ export default class Board extends BaseResource {
     return new Pref(this.auth, this.instanceId);
   }
 
-  get(queryArgs?: SharedGetQueryArgs &
-    CardAttachmentInclusionQueryArgs &
-    CardInclusionQueryArgs &
-    ChecklistInclusionQueryArgs &
-    LabelInclusionQueryArgs &
-    ListInclusionQueryArgs &
-    MemberCreatorInclusionQueryArgs &
-    MemberInclusionQueryArgs &
-    MembershipsMemberInclusionQueryArgs &
-    MembersInvitedInclusionQueryArgs &
-    {
-      actionMember?: boolean,
-      actionMemberFields?: ArgumentGroup<MemberField>,
-      actionMemberCreator?: boolean,
-      actionMemberCreatorFields?: ArgumentGroup<MemberField>,
-      cardChecklists?: AllOrNone,
-      cardPluginData?: boolean,
-      cardStickers?: boolean,
-      boardStars?: BoardStars,
-      labelsLimit?: number, // Valid values 0 to 1000
-      pluginData?: boolean,
-      organizationMemberships?: ArgumentGroup<MembershipFilter>,
-      organizationPluginData?: boolean,
-      myPrefs?: boolean,
-      tags?: boolean,
-    } = {},
+  /**
+   * @api {get} /boards/:boardId getBoard
+   * @apiVersion 1.0.0
+   * @apiName getBoard
+   * @apiDescription Get details of a single board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse ActionInclusionQueryArgs
+   * @apiUse ActionLimitsQueryArgs
+   * @apiUse ActionMemberInclusionQueryArgs
+   * @apiUse BoardFieldsQueryArg
+   * @apiUse BoardSharedGetQueryArgs
+   * @apiUse CardAttachmentInclusionQueryArgs
+   * @apiUse ChecklistInclusionQueryArgs
+   * @apiUse LabelInclusionQueryArgs
+   * @apiUse ListInclusionQueryArgs
+   * @apiUse MemberCreatorInclusionQueryArgs
+   * @apiUse MemberInclusionQueryArgs
+   * @apiUse MembershipsMemberInclusionQueryArgs
+   * @apiUse MembersInvitedInclusionQueryArgs
+   * @apiUse OrganizationInclusionQueryArgs
+   *
+   * @apiParam {String="all","none"} [cardChecklists='"none"'] Indicates if card
+   *    checklists should be included in response.
+   * @apiParam {Boolean} [cardPluginData=false] Indicates if card plugin data
+   *    should be included in response.
+   * @apiParam {Boolean} [cardStickers=false] Indicates if card stickers data
+   *    should be included in response.
+   * @apiParam {String="mine","none"} [boardStars='"none"'] Board stars to include
+   *    in response.
+   * @apiParam {Number{0-1000}} [labelsLimit=50] Maximum number of labels to
+   *    show in response.
+   * @apiParam {Boolean} [pluginData=false] Indicates if plugin data should
+   *    be included in response.
+   * @apiParam {String="all","active","admin","deactivated","me","none","normal"} [organizationMemberships='"none"']
+   *    Organization memberships to include in the response.
+   * @apiParam {Boolean} [organizationPluginData=false] Indicates if
+   *    organization plugin data should be included in response.
+   * @apiParam {Boolean} [myPrefs=false] Indicates if <code>myPrefs</code> data
+   *    should be included in response.
+   * @apiParam {Boolean} [tags=false] Indicates if tags data should be included
+   *    in response.
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').getBoard({ ... });
+   */
+  getBoard(
+    queryArgs?: SharedGetQueryArgs &
+      ActionMemberInclusionQueryArgs &
+      CardAttachmentInclusionQueryArgs &
+      CardInclusionQueryArgs &
+      ChecklistInclusionQueryArgs &
+      LabelInclusionQueryArgs &
+      ListInclusionQueryArgs &
+      MemberCreatorInclusionQueryArgs &
+      MemberInclusionQueryArgs &
+      MembershipsMemberInclusionQueryArgs &
+      MembersInvitedInclusionQueryArgs &
+      {
+        cardChecklists?: AllOrNone,
+        cardPluginData?: boolean,
+        cardStickers?: boolean,
+        boardStars?: BoardStars,
+        labelsLimit?: number, // Valid values 0 to 1000
+        pluginData?: boolean,
+        organizationMemberships?: ArgumentGroup<MembershipFilter>,
+        organizationPluginData?: boolean,
+        myPrefs?: boolean,
+        tags?: boolean,
+      } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
-  getAll(queryArgs?: SharedGetQueryArgs &
+  getBoards(queryArgs?: SharedGetQueryArgs &
     FilterQueryArg<BoardFilter> &
     {
-      lists?: ListStatus,
+      lists?: ListFilter,
     } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
+  /**
+   * @api {get} /boards/:boardId/:field getFieldValue
+   * @apiVersion 1.0.0
+   * @apiName getFieldValue
+   * @apiDescription Gets the value of the specified field on a board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse BoardFieldQueryArg
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').getFieldValue('closed');
+   */
   getFieldValue(field: BoardField): Promise<*> {
     if (typeof field !== 'string') {
-      throw new InvalidStringError('field',
-        'board#get-1-boards-board-id-field');
+      throw new InvalidStringError('field', this.getHelpLink('get', 'field'));
     }
     return this.httpGet(`/${field}`);
   }
 
-  getFiltered(queryArgs: FilterQueryArg<BoardFilter>): Promise<*> {
+  getFilteredBoards(queryArgs: FilterQueryArg<BoardFilter>): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
+  /**
+   * @api {get} /boards/:boardId/deltas getDeltas
+   * @apiVersion 1.0.0
+   * @apiName getDeltas
+   * @apiDescription Gets the deltas for a board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse DeltasQueryArgs
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').getDeltas('none', 5);
+   */
   getDeltas(queryArgs: DeltasQueryArgs): Promise<*> {
     const { tags, ixLastUpdate } = queryArgs;
     const helpLink = this.getHelpLink('get', 'deltas');
@@ -145,18 +234,60 @@ export default class Board extends BaseResource {
     return this.httpGet('/deltas', queryArgs);
   }
 
+  /**
+   * @api {get} /boards/:boardId/tags getTags
+   * @apiVersion 1.0.0
+   * @apiName getTags
+   * @apiDescription Gets the tags associated with a board.
+   * @apiGroup board
+   * @apiPermission read
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').getTags();
+   */
   getTags(): Promise<*> {
     return this.httpGet('/tags');
   }
 
+  /**
+   * @api {get} /boards/:boardId/myPrefs getMyPrefs
+   * @apiVersion 1.0.0
+   * @apiName getMyPrefs
+   * @apiDescription Gets all myPrefs associated with a board.
+   * @apiGroup board
+   * @apiPermission read
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').getMyPrefs();
+   */
   getMyPrefs(): Promise<*> {
     return this.httpGet('/myPrefs');
   }
 
+  /**
+   * @api {get} /boards/:boardId/pluginData getPluginData
+   * @apiVersion 1.0.0
+   * @apiName getPluginData
+   * @apiDescription Gets plugin data associated with a board.
+   * @apiGroup board
+   * @apiPermission read
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').getPluginData();
+   */
   getPluginData(): Promise<*> {
     return this.httpGet('/pluginData');
   }
 
+  /**
+   * @api {get} /boards/:boardId/boardStars getBoardStars
+   * @apiVersion 1.0.0
+   * @apiName getBoardStars
+   * @apiDescription Gets the stars associated with a board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse BoardStarsFilterQueryArg
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').getBoardStars('none');
+   */
   getStars(queryArgs?: FilterQueryArg<BoardStars>): Promise<*> {
     let filter = '';
     if (queryArgs) {
@@ -169,16 +300,17 @@ export default class Board extends BaseResource {
     return this.httpGet('/boardStars', queryArgs);
   }
 
-  update(queryArgs?: PrefsQueryArgs &
-    LabelNamesQueryArgs &
-    {
-      name?: string,
-      desc?: string,
-      closed?: boolean,
-      subscribed?: boolean,
-      idOrganization?: string,
-      separator?: string,
-    } = {},
+  updateBoard(
+    queryArgs?: PrefsQueryArgs &
+      LabelNamesQueryArgs &
+      {
+        name?: string,
+        desc?: string,
+        closed?: boolean,
+        subscribed?: boolean,
+        idOrganization?: string,
+        separator?: string,
+      } = {},
   ): Promise<*> {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
@@ -221,17 +353,18 @@ export default class Board extends BaseResource {
     return this.httpPut('/subscribed', queryArgs);
   }
 
-  create(queryArgs: PrefsQueryArgs &
-    {
-      name: string,
-      defaultLabels?: boolean,
-      defaultLists?: boolean,
-      desc?: string,
-      idBoardSource?: string,
-      idOrganization?: string,
-      keepFromSource?: 'all' | Array<string>,
-      powerUps?: ArgumentGroup<PowerUp>,
-    },
+  createBoard(
+    queryArgs: PrefsQueryArgs &
+      {
+        name: string,
+        defaultLabels?: boolean,
+        defaultLists?: boolean,
+        desc?: string,
+        idBoardSource?: string,
+        idOrganization?: string,
+        keepFromSource?: 'all' | Array<string>,
+        powerUps?: ArgumentGroup<PowerUp>,
+      },
   ): Promise<*> {
     return this.httpPost('/', queryArgs);
   }

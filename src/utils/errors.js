@@ -49,6 +49,10 @@ const getCleanUrl = (url: string) => {
  * @extends BaseError
  */
 export class ApiCallResponseError extends BaseError {
+  apiMessage: string;
+  apiStatus: string;
+  apiConfig: Object;
+
   constructor(
     response: Object,
   ) {
@@ -62,6 +66,10 @@ export class ApiCallResponseError extends BaseError {
       `attempting to perform a ${method} request to ${cleanUrl}. (Note: The ` +
       'key and token have been removed from the displayed url.)';
     super(message, 'ApiCallResponseError');
+
+    this.apiMessage = data;
+    this.apiStatus = status;
+    this.apiConfig = response.config;
   }
 }
 
