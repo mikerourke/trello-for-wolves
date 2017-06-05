@@ -7,7 +7,9 @@
   "author": "Mike Rourke <mike.w.rourke@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "doc": "apidoc -i src/ -o docs/",
+    "doc:clean": "rm -rf docs/",
+    "doc:generate": "apidoc -i src/ -o docs/",
+    "doc": "yarn run doc:clean && yarn run doc:generate",
     "flow": "flow check || exit 0",
     "lint": "eslint src --color || exit 0",
     "setup": "rm -rf node_modules && yarn cache clean && yarn install",
