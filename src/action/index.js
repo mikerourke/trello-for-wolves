@@ -10,12 +10,16 @@ import Organization from '../organization';
 
 /* Types */
 import type {
+  ActionDisplayEntitiesQueryArgs,
   ActionField,
+  ActionFilter,
+  ActionIdModelsQueryArg,
   Auth,
   FieldsQueryArg,
   FilterQueryArg,
   MemberCreatorInclusionQueryArgs,
   MemberInclusionQueryArgs,
+  PageQueryArg,
   ResourceConstructorOptions,
   ValueQueryArg,
   WithinLimitsQueryArgs,
@@ -24,12 +28,11 @@ import type {
 type SharedGetQueryArgs =
   MemberCreatorInclusionQueryArgs &
   MemberInclusionQueryArgs &
+  ActionDisplayEntitiesQueryArgs &
   FieldsQueryArg<ActionField> &
+  PageQueryArg &
   {
-    display?: boolean,
-    entities?: boolean,
-    filter?: FilterQueryArg<ActionField>,
-    page?: number,
+    filter?: FilterQueryArg<ActionFilter>,
   };
 
 /**
@@ -76,10 +79,8 @@ export default class Action extends BaseResource {
 
   getActions(
     queryArgs?: SharedGetQueryArgs &
-      WithinLimitsQueryArgs &
-      {
-        idModels?: string,
-      } = {},
+      ActionIdModelsQueryArg &
+      WithinLimitsQueryArgs = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }

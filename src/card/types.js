@@ -42,6 +42,11 @@ export type CardField =
   | 'shortUrl'
   | 'subscribed';
 
+/**
+ * @apiDefine CardFilterQueryArg
+ * @apiParam {String="all","closed","none","open","visible"} [filter='"all"']
+ *    Card types to include in the response
+ */
 export type CardFilter = 'all' | 'closed' | 'none' | 'open' | 'visible';
 
 export type StickerField =

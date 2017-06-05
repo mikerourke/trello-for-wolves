@@ -14,6 +14,12 @@ export type LabelColor =
   | 'red'
   | 'yellow';
 
+/**
+ * @apiDefine LabelFieldsQueryArg
+ * @apiParam {String="all","color","idBoard","name","uses"} [fields='"all"']
+ *    Label fields to include in response, can either be <code>"all"</code>
+ *    or a comma separated list of field names.
+ */
 export type LabelField = 'color' | 'idBoard' | 'name' | 'uses';
 
 /**

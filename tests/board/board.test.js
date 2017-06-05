@@ -44,7 +44,7 @@ describe('Board Resource', () => {
     });
 
     it('gets the stars for a board', (done) => {
-      trello.boards(boardId).getStars()
+      trello.boards(boardId).getBoardStars()
         .then((result) => {
           const actualValue = result.data.length;
           const expectedValue = 1;

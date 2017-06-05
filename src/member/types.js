@@ -3,7 +3,12 @@
 /* Types */
 import type { ArgumentGroup } from '../types';
 
-export type MemberLevel = 'admins' | 'all' | 'none' | 'normal' | 'owners';
+/**
+ * @apiDefine MemberFilterQueryArg
+ * @apiParam {String="admins","all","none","normal","owners"} [filter]
+ *    Member level types to include in the response
+ */
+export type MemberFilter = 'admins' | 'all' | 'none' | 'normal' | 'owners';
 
 export type AvatarSourceField =
   'gravatar'
@@ -122,6 +127,6 @@ export type MembershipsMemberInclusionQueryArgs = {
  *    <code>"all"</code> or a comma separated list of field names.
  */
 export type MembersInvitedInclusionQueryArgs = {
-  membersInvited?: MemberLevel,
+  membersInvited?: MemberFilter,
   membersInvitedFields?: ArgumentGroup<MemberField>,
 };

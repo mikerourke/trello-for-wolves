@@ -8,7 +8,7 @@ import type {
   ActionInclusionQueryArgs,
   ActionField,
   ActionLimitsQueryArgs,
-  ActionType,
+  ActionFilter,
   AllOrNone,
   ArgumentGroup,
   Auth,
@@ -63,11 +63,12 @@ export default class Member extends BaseResource {
       FieldsQueryArg<MemberEveryField> &
       {
         actionBefore?: ?Date,
+        actionSince?: FilterDate,
         cardMembers?: boolean,
         cardMemberFields?: ArgumentGroup<MemberField>,
         cardStickers?: boolean,
         boards?: ArgumentGroup<BoardFilter>,
-        boardActions?: ArgumentGroup<ActionType>,
+        boardActions?: ArgumentGroup<ActionFilter>,
         boardActionsEntities?: boolean,
         boardActionsDisplay?: boolean,
         boardActionsFormat?: Format,

@@ -27,6 +27,7 @@ import type {
   ChecklistInclusionQueryArgs,
   DeltasQueryArgs,
   FieldsQueryArg,
+  FilterDate,
   FilterQueryArg,
   Format,
   LabelColor,
@@ -127,6 +128,8 @@ export default class Board extends BaseResource {
    * @apiUse MembersInvitedInclusionQueryArgs
    * @apiUse OrganizationInclusionQueryArgs
    *
+   * @apiParam {String="lastView",date,null} [actionsSince] Starting date for
+   *    actions to include in the response.
    * @apiParam {String="all","none"} [cardChecklists='"none"'] Indicates if card
    *    checklists should be included in response.
    * @apiParam {Boolean} [cardPluginData=false] Indicates if card plugin data
@@ -163,11 +166,12 @@ export default class Board extends BaseResource {
       MembershipsMemberInclusionQueryArgs &
       MembersInvitedInclusionQueryArgs &
       {
+        actionsSince?: FilterDate,
         cardChecklists?: AllOrNone,
         cardPluginData?: boolean,
         cardStickers?: boolean,
         boardStars?: BoardStars,
-        labelsLimit?: number, // Valid values 0 to 1000
+        labelsLimit?: number,
         pluginData?: boolean,
         organizationMemberships?: ArgumentGroup<MembershipFilter>,
         organizationPluginData?: boolean,
@@ -178,11 +182,12 @@ export default class Board extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  getBoards(queryArgs?: SharedGetQueryArgs &
-    FilterQueryArg<BoardFilter> &
-    {
-      lists?: ListFilter,
-    } = {},
+  getBoards(
+    queryArgs?: SharedGetQueryArgs &
+      FilterQueryArg<BoardFilter> &
+      {
+        lists?: ListFilter,
+      } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -209,6 +214,134 @@ export default class Board extends BaseResource {
   getFilteredBoards(queryArgs: FilterQueryArg<BoardFilter>): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
+
+  /**
+   * @api {get} /boards/:boardId/actions getActionsForBoard
+   * @apiVersion 1.0.0
+   * @apiName getActionsForBoard
+   * @apiDescription Gets the actions associated with the specified board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse ActionDisplayEntitiesQueryArgs
+   * @apiUse ActionFilterQueryArg
+   * @apiUse ActionFieldsQueryArg
+   * @apiUse ActionIdModelsQueryArg
+   * @apiUse MemberInclusionQueryArgs
+   * @apiUse MemberCreatorInclusionQueryArgs
+   * @apiUse PageQueryArg
+   * @apiUse WithinLimitsQueryArgs
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').action().getActions({...});
+   */
+
+  /**
+   * @api {get} /boards/:boardId/boardStars getBoardStars
+   * @apiVersion 1.0.0
+   * @apiName getBoardStars
+   * @apiDescription Gets the stars associated with a board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse BoardStarsFilterQueryArg
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').getBoardStars('none');
+   */
+  getBoardStars(queryArgs?: FilterQueryArg<BoardStars>): Promise<*> {
+    let filter = '';
+    if (queryArgs) {
+      filter = queryArgs.filter;
+    }
+    if (typeof filter !== 'string') {
+      throw new InvalidStringError('filter',
+        this.getHelpLink('get', 'boardstars'));
+    }
+    return this.httpGet('/boardStars', queryArgs);
+  }
+
+  /**
+   * @api {get} /boards/:boardId/cards getCardsInBoard
+   * @apiVersion 1.0.0
+   * @apiName getCardsForBoard
+   * @apiDescription Gets the cards associated with the specified board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse ActionsFilterNamedQueryArg
+   * @apiUse AttachmentInclusionQueryArgs
+   * @apiUse CardFieldsQueryArg
+   * @apiUse IdModelsQueryArg
+   * @apiUse LimitQueryArg
+   * @apiUse MemberInclusionQueryArgs
+   * @apiUse MemberCreatorInclusionQueryArgs
+   * @apiUse PageQueryArg
+   * @apiUse WithinLimitsQueryArgs
+   * @apiParam {Boolean} [checkItemStates=false] Indicates if checklist item
+   *    state data should be included in the response.
+   * @apiParam {String="all","none"} [checklists='"none"'] Checklist data to
+   *    include in the response.
+   * @apiParam {Boolean} [stickers=false] Indicates if sticker data should be
+   *    included in the response.
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').cards().getCards({...});
+   */
+
+  /**
+   * @api {get} /boards/:boardId/cards/:filter getFilteredCardsInBoard
+   * @apiVersion 1.0.0
+   * @apiName getFilteredCardsForBoard
+   * @apiDescription Gets the cards associated with the specified board that
+   *    match the filter criteria.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse CardFilterQueryArg
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').cards().getFilteredCards('all');
+   */
+
+  /**
+   * @api {get} /boards/:boardId/cards/:cardId getCardInBoard
+   * @apiVersion 1.0.0
+   * @apiName getCardInBoard
+   * @apiDescription Gets the card data with the specified ID for the
+   *    specified board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse ActionInclusionQueryArgs
+   * @apiUse ActionLimitsQueryArgs
+   * @apiUse ActionsFilterNamedQueryArg
+   * @apiUse AttachmentInclusionQueryArgs
+   * @apiUse CardFieldsQueryArg
+   * @apiUse CardFilterQueryArg
+   * @apiUse CheckItemStateInclusionQueryArgs
+   * @apiUse ChecklistInclusionQueryArgs
+   * @apiUse MemberInclusionQueryArgs
+   * @apiParam {String="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [actionMemberCreatorFields='"avatarHash,fullName,initials,username"']
+   *    Action member creator fields to include in response, can either be
+   *    <code>"all"</code> or a comma separated list of field names.
+   * @apiParam {Boolean} [labels=true] Indicates if label data should be
+   *    included in the response.
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').cards('CaRdId').getCard({...});
+   */
+
+  /**
+   * @api {get} /boards/:boardId/checklists getChecklistsInBoard
+   * @apiVersion 1.0.0
+   * @apiName getChecklistsInBoard
+   * @apiDescription Gets the checklists associated with the specified board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse CardInclusionQueryArgs
+   * @apiUse CheckItemInclusionQueryArgs
+   * @apiUse ChecklistFieldsQueryArg
+   * @apiUse ChecklistFilterQueryArg
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').checklists().getChecklists({...});
+   */
 
   /**
    * @api {get} /boards/:boardId/deltas getDeltas
@@ -249,6 +382,118 @@ export default class Board extends BaseResource {
   }
 
   /**
+   * @api {get} /boards/:boardId/labels getLabelsInBoard
+   * @apiVersion 1.0.0
+   * @apiName getLabelsInBoard
+   * @apiDescription Gets the labels for a board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse LabelFieldsQueryArgs
+   * @apiUse LimitQueryArg
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').labels().getLabels({...});
+   */
+
+  /**
+   * @api {get} /boards/:boardId/label/:labelId getLabelInBoard
+   * @apiVersion 1.0.0
+   * @apiName getLabelInBoard
+   * @apiDescription Gets the label data with the specified ID for the
+   *    specified board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse LabelFieldsQueryArgs
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').labels('LaBeLiD').getLabel({...});
+   */
+
+  /**
+   * @api {get} /boards/:boardId/lists getListsInBoard
+   * @apiVersion 1.0.0
+   * @apiName getListsInBoard
+   * @apiDescription Gets the lists for a board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse CardInclusionQueryArgs
+   * @apiUse ListFieldsQueryArg
+   * @apiUse ListFilterQueryArg
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').lists().getLists({...});
+   */
+
+  /**
+   * @api {get} /boards/:boardId/list/:filter getFilteredListsInBoard
+   * @apiVersion 1.0.0
+   * @apiName getFilteredListsInBoard
+   * @apiDescription Gets the lists associated with the specified board that
+   *    match the filter criteria.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse ListFilterQueryArg
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').lists().getFilteredLists('closed');
+   */
+
+  /**
+   * @api {get} /boards/:boardId/members getMembersInBoard
+   * @apiVersion 1.0.0
+   * @apiName getMembersInBoard
+   * @apiDescription Gets the members for a board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse MemberFieldsQueryArg
+   * @apiUse MemberFilterQueryArg
+   * @apiParam {Boolean} [activity=false] Indicates if activity should be
+   *    included in the response.  This works for premium organizations
+   *    only.
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').members().getMembers({...});
+   */
+
+  /**
+   * @api {get} /boards/:boardId/member/:filter getFilteredMembersInBoard
+   * @apiVersion 1.0.0
+   * @apiName getFilteredMembersInBoard
+   * @apiDescription Gets the members associated with the specified board that
+   *    match the filter criteria.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse MemberFilterQueryArg
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').members().getFilteredMembers('normal');
+   */
+
+  /**
+   * @api {get} /boards/:boardId/member/:memberId getMemberInBoard
+   * @apiVersion 1.0.0
+   * @apiName getMemberInBoard
+   * @apiDescription Gets the member data with the specified ID for the
+   *    specified board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse ActionsFilterNamedQueryArg
+   * @apiUse AttachmentInclusionQueryArgs
+   * @apiUse BoardInclusionQueryArgs
+   * @apiUse CardFieldsQueryArg
+   * @apiUse CardFilterQueryArg
+   * @apiUse ListInclusionQueryArgs
+   * @apiUse MemberInclusionQueryArgs
+   * @apiParam {Boolean} [checkItemStates=true] Indicates if check item state
+   *    data should be included in response.
+   * @apiParam {String="all","none"} [checklists='"none"'] Checklist data to
+   *    include in the response.
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').members('MeMbErId').getMember({...});
+   */
+
+  /**
    * @api {get} /boards/:boardId/myPrefs getMyPrefs
    * @apiVersion 1.0.0
    * @apiName getMyPrefs
@@ -274,30 +519,6 @@ export default class Board extends BaseResource {
    */
   getPluginData(): Promise<*> {
     return this.httpGet('/pluginData');
-  }
-
-  /**
-   * @api {get} /boards/:boardId/boardStars getBoardStars
-   * @apiVersion 1.0.0
-   * @apiName getBoardStars
-   * @apiDescription Gets the stars associated with a board.
-   * @apiGroup board
-   * @apiPermission read
-   *
-   * @apiUse BoardStarsFilterQueryArg
-   * @apiExample {js} Example:
-   trello.boards('BoArDId').getBoardStars('none');
-   */
-  getStars(queryArgs?: FilterQueryArg<BoardStars>): Promise<*> {
-    let filter = '';
-    if (queryArgs) {
-      filter = queryArgs.filter;
-    }
-    if (typeof filter !== 'string') {
-      throw new InvalidStringError('filter',
-        this.getHelpLink('get', 'boardstars'));
-    }
-    return this.httpGet('/boardStars', queryArgs);
   }
 
   updateBoard(

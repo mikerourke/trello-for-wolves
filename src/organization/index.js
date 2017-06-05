@@ -7,7 +7,7 @@ import BaseResource from '../base-resource';
 import type {
   ActionField,
   ActionInclusionQueryArgs,
-  ActionType,
+  ActionFilter,
   ArgumentGroup,
   Auth,
   BoardInclusionQueryArgs,
@@ -56,7 +56,7 @@ export default class Organization extends BaseResource {
         actionsLimit?: number,
         memberActivity?: boolean,
         memberships?: ArgumentGroup<MembershipFilter>,
-        boardActions?: ArgumentGroup<ActionType>,
+        boardActions?: ArgumentGroup<ActionFilter>,
         boardActionsDisplay?: boolean,
         boardActionsFormat?: Format,
         boardActionsSince?: FilterDate,
