@@ -19,18 +19,6 @@ import Webhook from './webhook';
 /* Types */
 import type { Auth } from './types';
 
-/**
- * @apiDefine read Read access rights needed.
- */
-
-/**
- * @apiDefine write Write access rights needed.
- */
-
-/**
- * @apiDefine owner Owner access rights needed.
- */
-
 export default class Trello {
   auth: Auth;
 

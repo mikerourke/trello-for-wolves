@@ -11,10 +11,6 @@ import type {
   TokenField,
 } from '../types';
 
-/**
- * Class representing a Token resource.
- * @extends BaseResource
- */
 export default class Token extends BaseResource {
   constructor(
     auth: Auth,

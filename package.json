@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "doc:clean": "rm -rf docs/",
-    "doc:generate": "apidoc -i src/ -o docs/",
+    "doc:generate": "apidoc -i internals/api-docs/ -o docs/",
     "doc": "yarn run doc:clean && yarn run doc:generate",
     "flow": "flow check || exit 0",
     "lint": "eslint src --color || exit 0",
