@@ -11,7 +11,6 @@ import BaseResource from '../base-resource';
 import type {
   Auth,
   Position,
-  ValueQueryArg,
 } from '../types';
 
 export default class MyPref extends BaseResource {

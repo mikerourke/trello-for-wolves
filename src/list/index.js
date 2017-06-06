@@ -66,7 +66,7 @@ export default class List extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  updateClosedStatus(queryArgs: ValueQueryArg<boolean>): Promise<*> {
+  updateClosedStatus(value: boolean): Promise<*> {
     return this.httpPut('/closed', queryArgs);
   }
 
@@ -76,16 +76,16 @@ export default class List extends BaseResource {
     return this.httpPut('/idBoard', queryArgs);
   }
 
-  updateName(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/name', queryArgs);
+  updateName(value: string): Promise<*> {
+    return this.httpPut('/name', { value });
   }
 
-  updatePosition(queryArgs: ValueQueryArg<PositionNumbered>): Promise<*> {
-    return this.httpPut('/pos', queryArgs);
+  updatePosition(value: PositionNumbered): Promise<*> {
+    return this.httpPut('/pos', { value });
   }
 
-  updatedSubscribed(queryArgs: ValueQueryArg<boolean>): Promise<*> {
-    return this.httpPut('/subscribed', queryArgs);
+  updatedSubscribed(value: boolean): Promise<*> {
+    return this.httpPut('/subscribed', { value });
   }
 
   createList(

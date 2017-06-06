@@ -4,6 +4,11 @@
 
 /* Internal dependencies */
 import BaseResource from '../base-resource';
+import Action from '../action';
+import Board from '../board';
+import List from '../list';
+import Member from '../member';
+import Organization from '../organization';
 
 /* Types */
 import type {
@@ -23,7 +28,6 @@ import type {
   PositionNumbered,
   ResourceConstructorOptions,
   StickerInclusionQueryArgs,
-  ValueQueryArg,
   WithinLimitsQueryArgs,
 } from '../types';
 
@@ -90,6 +94,10 @@ export default class Card extends BaseResource {
     return this.httpGet(`/${field}`);
   }
 
+  actions(actionId?: string = '') {
+    return new Action(this.auth, this.getOptionsForChild(actionId));
+  }
+
   getPluginData(): Promise<*> {
     return this.httpGet('/pluginData');
   }
@@ -113,40 +121,40 @@ export default class Card extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  updateClosedStatus(queryArgs: ValueQueryArg<boolean>): Promise<*> {
-    return this.httpPut('/closed', queryArgs);
+  updateClosedStatus(value: boolean): Promise<*> {
+    return this.httpPut('/closed', { value });
   }
 
-  updateDescription(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/desc', queryArgs);
+  updateDescription(value: string): Promise<*> {
+    return this.httpPut('/desc', { value });
   }
 
-  updateDueDate(queryArgs: ValueQueryArg<?Date>): Promise<*> {
-    return this.httpPut('/due', queryArgs);
+  updateDueDate(value: ?Date): Promise<*> {
+    return this.httpPut('/due', { value });
   }
 
-  updateDueComplete(queryArgs: ValueQueryArg<boolean>): Promise<*> {
-    return this.httpPut('/dueComplete', queryArgs);
+  updateDueComplete(value: boolean): Promise<*> {
+    return this.httpPut('/dueComplete', { value });
   }
 
-  updateIdAttachmentCover(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/idAttachmentCover', queryArgs);
+  updateIdAttachmentCover(value: string): Promise<*> {
+    return this.httpPut('/idAttachmentCover', { value });
   }
 
   updateIdBoard(
-    queryArgs: ValueQueryArg<string> &
-      {
-        idList?: string,
-      },
+    queryArgs: {
+      value: string,
+      idList?: string,
+    },
   ): Promise<*> {
     return this.httpPut('/idBoard', queryArgs);
   }
 
-  updateIdList(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/idList', queryArgs);
+  updateIdList(value: string): Promise<*> {
+    return this.httpPut('/idList', { value });
   }
 
-  updateIdMembers(queryArgs: ValueQueryArg<Array<string>>): Promise<*> {
-    return this.httpPut('/idMembers', queryArgs);
+  updateIdMembers(value: Array<string>): Promise<*> {
+    return this.httpPut('/idMembers', { value });
   }
 }

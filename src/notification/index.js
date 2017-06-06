@@ -19,7 +19,6 @@ import type {
   OrganizationInclusionQueryArgs,
   NotificationField,
   ResourceConstructorOptions,
-  ValueQueryArg,
 } from '../types';
 
 export default class Notification extends BaseResource {
@@ -110,8 +109,8 @@ export default class Notification extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  updateClosedStatus(queryArgs: ValueQueryArg<boolean>): Promise<*> {
-    return this.httpPut('/closed', queryArgs);
+  updateClosedStatus(value: boolean): Promise<*> {
+    return this.httpPut('/closed', { value });
   }
 
   createNotification(

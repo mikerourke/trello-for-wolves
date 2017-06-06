@@ -8,7 +8,6 @@ import type {
   Auth,
   ResourceConstructorOptions,
   WehookField,
-  ValueQueryArg,
 } from '../types';
 
 type CreationQueryArgs = {
@@ -53,20 +52,20 @@ export default class Webhook extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  updateActiveStatus(queryArgs: ValueQueryArg<boolean>): Promise<*> {
-    return this.httpPut('/active', queryArgs);
+  updateActiveStatus(value: boolean): Promise<*> {
+    return this.httpPut('/active', { value });
   }
 
-  updateCallbackUrl(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/callbackURL', queryArgs);
+  updateCallbackUrl(value: string): Promise<*> {
+    return this.httpPut('/callbackURL', { value });
   }
 
-  updateDescription(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/description', queryArgs);
+  updateDescription(value: string): Promise<*> {
+    return this.httpPut('/description', { value });
   }
 
-  updateIdModel(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/idModel', queryArgs);
+  updateIdModel(value: string): Promise<*> {
+    return this.httpPut('/idModel', { value });
   }
 
   createWebhook(queryArgs: CreationQueryArgs): Promise<*> {

@@ -46,15 +46,15 @@ export default class CheckItem extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  updateName(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/name', queryArgs);
+  updateName(value: string): Promise<*> {
+    return this.httpPut('/name', { value });
   }
 
-  updatePosition(queryArgs: ValueQueryArg<PositionNumbered>): Promise<*> {
-    return this.httpPut('/pos', queryArgs);
+  updatePosition(value: PositionNumbered): Promise<*> {
+    return this.httpPut('/pos', { value });
   }
 
-  updateState(queryArgs: ValueQueryArg<CheckItemState>): Promise<*> {
-    return this.httpPut('/state', queryArgs);
+  updateState(value: CheckItemState): Promise<*> {
+    return this.httpPut('/state', { value });
   }
 }

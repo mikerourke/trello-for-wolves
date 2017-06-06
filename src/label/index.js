@@ -11,7 +11,6 @@ import type {
   LabelField,
   LimitQueryArg,
   ResourceConstructorOptions,
-  ValueQueryArg,
 } from '../types';
 
 type LabelChangeQueryArgs = {
@@ -42,12 +41,12 @@ export default class Label extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  updateColor(queryArgs: ValueQueryArg<?LabelColor>) {
-    return this.httpPut('/color', queryArgs);
+  updateColor(value: ?LabelColor) {
+    return this.httpPut('/color', { value });
   }
 
-  updateName(queryArgs: ValueQueryArg<string>) {
-    return this.httpPut('/name', queryArgs);
+  updateName(value: string) {
+    return this.httpPut('/name', { value });
   }
 
   createLabel(

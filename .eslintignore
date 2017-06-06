@@ -2,5 +2,4 @@ internals/
 docs/
 src/types.js
 *.test.js
-helpers.js
 apidoc.js

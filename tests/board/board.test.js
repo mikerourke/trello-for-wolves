@@ -1,14 +1,14 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import { auth, resourceIds, logResult } from '../helpers';
+import { auth, resourceIds, logResults } from '../helpers';
 
-describe.only('Board Resource', () => {
+describe('Board Resource', () => {
   const { boardId, labelId, memberId, membershipId } = resourceIds;
   let trello;
 
   before((done) => {
     trello = new Trello(auth);
-    // setTimeout(() => { done(); }, 3000);
+     setTimeout(() => { done(); }, 3000);
     done();
   });
 
@@ -225,7 +225,7 @@ describe.only('Board Resource', () => {
     });
   });
 
-  describe.only('Board myPref PUT requests', () => {
+  describe('Board myPref PUT requests', () => {
     it('updates the myPref emailPosition of the board', (done) => {
       trello.boards(boardId).myPrefs().updateEmailPosition('bottom')
         .should.eventually.be.fulfilled

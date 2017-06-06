@@ -51,7 +51,6 @@ import type {
   PowerUp,
   PrefsQueryArgs,
   ResourceConstructorOptions,
-  ValueQueryArg,
 } from '../types';
 
 type LabelNamesQueryArgs = {
@@ -223,46 +222,44 @@ export default class Board extends BaseResource {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
 
-  updateClosedStatus(queryArgs: ValueQueryArg<boolean>): Promise<*> {
-    const { value } = queryArgs;
+  updateClosedStatus(value: boolean): Promise<*> {
     if (typeof value !== 'boolean') {
       throw new InvalidBooleanError('value', this.getHelpLink('get', 'closed'));
     }
-    return this.httpPut('/closed', queryArgs);
+    return this.httpPut('/closed', { value });
   }
 
-  updateDescription(queryArgs: ValueQueryArg<string>): Promise<*> {
-    const { value } = queryArgs;
+  updateDescription(value: string): Promise<*> {
     if (typeof value !== 'string') {
       throw new InvalidStringError('value', this.getHelpLink('get', 'desc'));
     }
     if (value.length < 0 || value.length > 16384) {
       throw new StringLengthError('value');
     }
-    return this.httpPut('/desc', queryArgs);
+    return this.httpPut('/desc', { value });
   }
 
-  updateOrganizationId(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/idOrganization', queryArgs);
+  updateOrganizationId(value: string): Promise<*> {
+    return this.httpPut('/idOrganization', { value });
   }
 
   updateLabelNameForColor(
     labelColor: LabelColor,
-    queryArgs: ValueQueryArg<string>,
+    value: string,
   ): Promise<*> {
-    return this.httpPut(`/labelNames/${labelColor}`, queryArgs);
+    return this.httpPut(`/labelNames/${labelColor}`, { value });
   }
 
-  updateName(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/name', queryArgs);
+  updateName(value: string): Promise<*> {
+    return this.httpPut('/name', { value });
   }
 
   prefs() {
     return new Pref(this.auth, this.instanceId);
   }
 
-  updateSubscribed(queryArgs: ValueQueryArg<boolean>): Promise<*> {
-    return this.httpPut('/subscribed', queryArgs);
+  updateSubscribed(value: boolean): Promise<*> {
+    return this.httpPut('/subscribed', { value });
   }
 
   createBoard(
@@ -289,16 +286,16 @@ export default class Board extends BaseResource {
     return this.httpPost('/emailKey/generate');
   }
 
-  addTags(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPost('/tags', queryArgs);
+  addTags(value: string): Promise<*> {
+    return this.httpPost('/tags', { value });
   }
 
   markAsViewed(): Promise<*> {
     return this.httpPost('/markAsViewed');
   }
 
-  addPowerUps(queryArgs: ValueQueryArg<PowerUp>): Promise<*> {
-    return this.httpPost('/powerUps', queryArgs);
+  addPowerUps(value: PowerUp): Promise<*> {
+    return this.httpPost('/powerUps', { value });
   }
 
   deletePowerUp(powerUp: PowerUp): Promise<*> {

@@ -14,7 +14,6 @@ import type {
   GroupPermission,
   Invitation,
   PermissionLevel,
-  ValueQueryArg,
 } from '../types';
 
 export default class Pref extends BaseResource {

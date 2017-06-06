@@ -11,7 +11,6 @@ import BaseResource from '../base-resource';
 import type {
   Auth,
   PositionNumbered,
-  ValueQueryArg,
 } from '../types';
 
 export default class SavedSearch extends BaseResource {
@@ -26,15 +25,15 @@ export default class SavedSearch extends BaseResource {
     });
   }
 
-  getForId(): Promise<*> {
+  getSavedSearch(): Promise<*> {
     return this.httpGet('/');
   }
 
-  getAll(): Promise<*> {
+  getSavedSearches(): Promise<*> {
     return this.httpGet('/');
   }
 
-  update(queryArgs?: {
+  updateSavedSearch(queryArgs?: {
     name?: string,
     query?: string,
     pos?: PositionNumbered,
@@ -42,19 +41,19 @@ export default class SavedSearch extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  updateName(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/name', queryArgs);
+  updateName(value: string): Promise<*> {
+    return this.httpPut('/name', { value });
   }
 
-  updatePosition(queryArgs: ValueQueryArg<PositionNumbered>): Promise<*> {
-    return this.httpPut('/pos', queryArgs);
+  updatePosition(value: PositionNumbered): Promise<*> {
+    return this.httpPut('/pos', { value });
   }
 
-  updateQuery(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/query', queryArgs);
+  updateQuery(value: string): Promise<*> {
+    return this.httpPut('/query', { value });
   }
 
-  create(queryArgs: {
+  createSavedSearch(queryArgs: {
     name: string,
     query: string,
     pos: PositionNumbered,

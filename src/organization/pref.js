@@ -13,7 +13,6 @@ import type {
   Auth,
   BoardVisibilityFilter,
   PermissionLevel,
-  ValueQueryArg,
 } from '../types';
 
 export default class Pref extends BaseResource {
@@ -27,9 +26,8 @@ export default class Pref extends BaseResource {
   _updateField(
     fieldName: string,
     expectedType: string,
-    queryArgs: Object,
+    value: boolean | number | string,
   ): Promise<*> {
-    const { value } = queryArgs;
     const helpField = fieldName.toLowerCase().replace('/', '');
     const helpLink =
       `organization#put-1-organizations-idorg-or-name-prefs-${helpField}`;
@@ -45,41 +43,39 @@ export default class Pref extends BaseResource {
     return this.httpPut(`/${fieldName}`, queryArgs);
   }
 
-  updateAssociatedDomain(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this._updateField('associatedDomain', 'string', queryArgs);
+  updateAssociatedDomain(value: string): Promise<*> {
+    return this._updateField('associatedDomain', 'string', { value });
   }
 
   updateBoardVisibilityRestriction(
     boardLevel: 'org' | 'private' | 'public',
-    queryArgs: ValueQueryArg<BoardVisibilityFilter>
+    value: BoardVisibilityFilter
   ): Promise<*> {
     return this._updateField(
-      `boardVisibilityRestrict/${boardLevel}`, 'string', queryArgs);
+      `boardVisibilityRestrict/${boardLevel}`, 'string', { value });
   }
 
-  updateExternalMembersDisabledStatus(
-    queryArgs: ValueQueryArg<boolean>
-  ): Promise<*> {
-    return this._updateField('externalMembersDisabled', 'boolean', queryArgs);
+  updateExternalMembersDisabledStatus(value: boolean): Promise<*> {
+    return this._updateField('externalMembersDisabled', 'boolean', { value });
   }
 
-  updateGoogleAppsVersion(queryArgs: ValueQueryArg<number>): Promise<*> {
-    return this._updateField('googleAppsVersion', 'number', queryArgs);
+  updateGoogleAppsVersion(value: number): Promise<*> {
+    return this._updateField('googleAppsVersion', 'number', { value });
   }
 
-  updateOrgInviteRestriction(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this._updateField('orgInviteRestrict', 'string', queryArgs);
+  updateOrgInviteRestriction(value: string): Promise<*> {
+    return this._updateField('orgInviteRestrict', 'string', { value });
   }
 
-  updatePermissionLevel(queryArgs: ValueQueryArg<PermissionLevel>): Promise<*> {
-    return this._updateField('permissionLevel', 'string', queryArgs);
+  updatePermissionLevel(value: PermissionLevel): Promise<*> {
+    return this._updateField('permissionLevel', 'string', { value });
   }
 
   deleteAssociatedDomain(): Promise<*> {
     return this.httpDelete('/associatedDomain');
   }
 
-  deleteOrgInviteRestriction(queryArgs: ValueQueryArg<string>): Promise<*> {
+  deleteOrgInviteRestriction(value: string): Promise<*> {
     return this.httpDelete('/orgInviteRestrict', queryArgs);
   }
 }

@@ -25,7 +25,6 @@ import type {
   OrganizationField,
   PermissionLevel,
   ResourceConstructorOptions,
-  ValueQueryArg,
 } from '../types';
 
 type SharedUpdateQueryArgs = {
@@ -114,20 +113,20 @@ export default class Organization extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  updateDescription(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/desc', queryArgs);
+  updateDescription(value: string): Promise<*> {
+    return this.httpPut('/desc', { value });
   }
 
-  updateDisplayName(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/displayName', queryArgs);
+  updateDisplayName(value: string): Promise<*> {
+    return this.httpPut('/displayName', { value });
   }
 
-  updateName(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/name', queryArgs);
+  updateName(value: string): Promise<*> {
+    return this.httpPut('/name', { value });
   }
 
-  updateWebsite(queryArgs: ValueQueryArg<?string>): Promise<*> {
-    return this.httpPut('/website', queryArgs);
+  updateWebsite(value: ?string): Promise<*> {
+    return this.httpPut('/website', { value });
   }
 
   createOrganization(queryArgs: SharedUpdateQueryArgs): Promise<*> {
@@ -138,8 +137,8 @@ export default class Organization extends BaseResource {
     return this.httpPost('/logo', queryArgs);
   }
 
-  addTags(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPost('/tags', queryArgs);
+  addTags(value: string): Promise<*> {
+    return this.httpPost('/tags', { value });
   }
 
   deleteOrganization(): Promise<*> {

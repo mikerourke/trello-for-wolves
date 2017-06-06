@@ -241,12 +241,12 @@ export default class Member extends BaseResource {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
 
-  updateAvatarSource(queryArgs: ValueQueryArg<AvatarSourceField>): Promise<*> {
-    return this.httpPut('/avatarSource', queryArgs);
+  updateAvatarSource(value: AvatarSourceField): Promise<*> {
+    return this.httpPut('/avatarSource', { value });
   }
 
-  updateBio(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/bio', queryArgs);
+  updateBio(value: string): Promise<*> {
+    return this.httpPut('/bio', { value });
   }
 
   updateBoardBackground(
@@ -288,16 +288,16 @@ export default class Member extends BaseResource {
       queryArgs);
   }
 
-  updateFullName(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/fullName', queryArgs);
+  updateFullName(value: string): Promise<*> {
+    return this.httpPut('/fullName', { value });
   }
 
-  updateInitials(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/initials', queryArgs);
+  updateInitials(value: string): Promise<*> {
+    return this.httpPut('/initials', { value });
   }
 
-  updateUsername(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPut('/username', queryArgs);
+  updateUsername(value: string): Promise<*> {
+    return this.httpPut('/username', { value });
   }
 
   addAvatar(queryArgs: FileQueryArg): Promise<*> {
@@ -334,7 +334,7 @@ export default class Member extends BaseResource {
     return this.httpPost('/customStickers', queryArgs);
   }
 
-  dismissOneTimeMessages(queryArgs: ValueQueryArg<string>): Promise<*> {
-    return this.httpPost('/oneTimeMessagesDismissed', queryArgs);
+  dismissOneTimeMessages(value: string): Promise<*> {
+    return this.httpPost('/oneTimeMessagesDismissed', { value });
   }
 }

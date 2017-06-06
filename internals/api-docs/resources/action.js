@@ -14,10 +14,19 @@
  *    given board.
  */
 
+/* Definitions */
+
 /**
- * @apiDefine ActionBooleanQueryArgs
- * @apiParam {Boolean} [display=false] Include display data in the response.
- * @apiParam {Boolean} [entities=false] Include entities data in the response.
+ * @apiDefine ActionFieldQueryArg
+ * @apiParam {String="data","date","idMemberCreator","type"} field
+ *    Action field value to return in the response.
+ */
+
+/**
+ * @apiDefine ActionFieldsQueryArg
+ * @apiParam {String="all","data","date","idMemberCreator","type"} [fields='"all"']
+ *    Action fields to include in the response, can either be <code>"all"</code>
+ *    or a comma separated list of field names.
  */
 
 /**
@@ -31,19 +40,6 @@
  * @apiDefine ActionsFilterNamedQueryArg
  * @apiParam {String="all","addAttachmentToCard","addChecklistToCard","addMemberToBoard","addMemberToCard","addMemberToOrganization","addToOrganizationBoard","commentCard","convertToCardFromCheckItem","copyBoard","copyCard","copyCommentCard","createBoard","createCard","createList","createOrganization","deleteAttachmentFromCard","deleteBoardInvitation","deleteCard","deleteOrganizationInvitation","disablePowerUp","emailCard","enablePowerUp","makeAdminOfBoard","makeNormalMemberOfBoard","makeNormalMemberOfOrganization","makeObserverOfBoard","memberJoinedTrello","moveCardFromBoard","moveCardToBoard","moveListFromBoard","moveListToBoard","removeChecklistFromCard","removeFromOrganizationBoard","removeMemberFromCard","unconfirmedBoardInvitation","unconfirmedOrganizationInvitation","updateBoard","updateCard","updateCard:closed","updateCard:desc","updateCard:idList","updateCard:name","updateCheckItemStateOnCard","updateChecklist","updateList","updateList:closed","updateList:name","updateMember","updateOrganization"} [actions='"all"']
  *    Action types to include in the response, can either be <code>"all"</code>
- *    or a comma separated list of field names.
- */
-
-/**
- * @apiDefine ActionFieldQueryArg
- * @apiParam {String="data","date","idMemberCreator","type"} field
- *    Action field value to return in the response.
- */
-
-/**
- * @apiDefine ActionFieldsQueryArg
- * @apiParam {String="all","data","date","idMemberCreator","type"} [fields='"all"']
- *    Action fields to include in the response, can either be <code>"all"</code>
  *    or a comma separated list of field names.
  */
 
@@ -81,6 +77,8 @@
  *    included in response.
  */
 
+/* Routes */
+
 /**
  * @api {get} /actions/:actionId getAction
  * @apiVersion 1.0.0
@@ -89,13 +87,13 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse ActionBooleanQueryArgs
+ * @apiUse ActionDisplayEntitiesQueryArgs
  * @apiUse ActionFieldsQueryArg
  * @apiUse MemberInclusionQueryArgs
  * @apiUse MemberCreatorInclusionQueryArgs
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').getAction({...});
- */
+*/
 
 /**
  * @api {get} /actions/:actionId/:field getFieldValue
@@ -108,30 +106,6 @@
  * @apiUse ActionFieldQueryArg
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').getFieldValue('date');
- */
-
-/**
- * @api {get} /actions/:actionId/display getDisplay
- * @apiVersion 1.0.0
- * @apiName getDisplay
- * @apiDescription Gets the <code>display</code> data for the specified action.
- * @apiGroup action
- * @apiPermission read
- *
- * @apiExample {js} Example:
- trello.actions('aCtIoNId').getDisplay();
- */
-
-/**
- * @api {get} /actions/:actionId/entities getEntities
- * @apiVersion 1.0.0
- * @apiName getEntities
- * @apiDescription Gets the <code>entities</code> data for the specified action.
- * @apiGroup action
- * @apiPermission read
- *
- * @apiExample {js} Example:
- trello.actions('aCtIoNId').getEntities();
  */
 
 /**
@@ -186,6 +160,30 @@
  * @apiUse CardFieldQueryArg
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').card().getFieldValue('desc');
+ */
+
+/**
+ * @api {get} /actions/:actionId/display getDisplay
+ * @apiVersion 1.0.0
+ * @apiName getDisplay
+ * @apiDescription Gets the <code>display</code> data for the specified action.
+ * @apiGroup action
+ * @apiPermission read
+ *
+ * @apiExample {js} Example:
+ trello.actions('aCtIoNId').getDisplay();
+ */
+
+/**
+ * @api {get} /actions/:actionId/entities getEntities
+ * @apiVersion 1.0.0
+ * @apiName getEntities
+ * @apiDescription Gets the <code>entities</code> data for the specified action.
+ * @apiGroup action
+ * @apiPermission read
+ *
+ * @apiExample {js} Example:
+ trello.actions('aCtIoNId').getEntities();
  */
 
 /**
@@ -302,9 +300,9 @@
  * @apiVersion 1.0.0
  * @apiName updateAction
  * @apiDescription Updates the text associated with the action.
- * Note: You can only use <code>PUT</code> on <code>commentCard</code>
- * actions to update the comment. PUTing a new text value will also
- * update the comment on the card.
+ *    Note: You can only use <code>PUT</code> on <code>commentCard</code>
+ *    actions to update the comment. PUTing a new text value will also
+ *    update the comment on the card.
  * @apiGroup action
  * @apiPermission write
  *
@@ -320,17 +318,15 @@
  * @apiVersion 1.0.0
  * @apiName updateText
  * @apiDescription Updates the text associated with the action.
- * Note: You can only use <code>PUT</code> on <code>commentCard</code>
- * actions to update the comment. PUTing a new text value will also
- * update the comment on the card.
+ *    Note: You can only use <code>PUT</code> on <code>commentCard</code>
+ *    actions to update the comment. PUTing a new text value will also
+ *    update the comment on the card.
  * @apiGroup action
  * @apiPermission write
  *
  * @apiParam {String{1..16384}} [value] Updated text for the comment.
  * @apiExample {js} Example:
- trello.actions('aCtIoNId').updateText({
-   value: 'This is the updated comment text.'
- });
+ trello.actions('aCtIoNId').updateText('This is the updated comment text.');
  */
 
 /**
@@ -338,12 +334,12 @@
  * @apiVersion 1.0.0
  * @apiName deleteAction
  * @apiDescription Deletes the action.
- * Note: You can only use <code>DELETE</code> on <code>commentCard</code>
- * actions.  Deleting a <code>commentCard</code> action will also delete the
- * comment on the card. You can only delete a <code>commentCard</code> action
- * if you are the one that created the comment, you have more permissions
- * on the board than the person that created the comment, or the person
- * that created the comment has deleted their account.
+ *    Note: You can only use <code>DELETE</code> on <code>commentCard</code>
+ *    actions.  Deleting a <code>commentCard</code> action will also delete the
+ *    comment on the card. You can only delete a <code>commentCard</code> action
+ *    if you are the one that created the comment, you have more permissions
+ *    on the board than the person that created the comment, or the person
+ *    that created the comment has deleted their account.
  * @apiGroup action
  * @apiPermission write
  *
