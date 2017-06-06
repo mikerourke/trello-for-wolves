@@ -2,13 +2,18 @@
 
 /* Internal dependencies */
 import BaseResource from '../base-resource';
+import Action from '../action';
+import Board from '../board';
+import Card from '../card';
+import Notification from '../notification';
+import Organization from '../organization';
 
 /* Types */
 import type {
-  ActionInclusionQueryArgs,
   ActionField,
-  ActionLimitsQueryArgs,
   ActionFilter,
+  ActionInclusionQueryArgs,
+  ActionLimitsQueryArgs,
   AllOrNone,
   ArgumentGroup,
   Auth,
@@ -27,10 +32,12 @@ import type {
   FilterDate,
   FilterQueryArg,
   Format,
+  LimitQueryArg,
   ListField,
   ListFilter,
   MemberEveryField,
   MemberField,
+  MemberFilter,
   MembershipFilter,
   NotificationField,
   NotificationType,
@@ -105,24 +112,26 @@ export default class Member extends BaseResource {
         customEmoji?: AllOrNone,
       } = {},
   ): Promise<*> {
-    const idList = this.instanceId;
-    const updatedArgs = (this.parentPath)
-      ? { idList, ...queryArgs }
-      : queryArgs;
-    return this.httpGet('/', updatedArgs);
+    return this.httpGet('/', queryArgs);
   }
 
   getMembers(
     queryArgs?: FieldsQueryArg<ListField> &
-      {
-        limit?: number,
-      } = {},
+      LimitQueryArg = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
   getFieldValue(field: MemberEveryField): Promise<*> {
     return this.httpGet(`/${field}`);
+  }
+
+  getFilteredMembers(queryArgs: FilterQueryArg<MemberFilter>): Promise<*> {
+    return this.httpGet('/', queryArgs);
+  }
+
+  actions() {
+    return new Action(this.auth, this.getOptionsForChild());
   }
 
   getBoardBackground(
@@ -146,12 +155,20 @@ export default class Member extends BaseResource {
     return this.httpGet('/boardStars');
   }
 
-  getBoardInvited(field: BoardField): Promise<*> {
-    return this.httpGet(`/boardsInvited/${field}`);
+  boards() {
+    return new Board(this.auth, this.getOptionsForChild());
   }
 
   getBoardsInvited(queryArgs?: FieldsQueryArg<BoardField>): Promise<*> {
     return this.httpGet('/boardsInvited', queryArgs);
+  }
+
+  getBoardsInvitedFieldValue(field: BoardField): Promise<*> {
+    return this.httpGet(`/boardsInvited/${field}`);
+  }
+
+  cards() {
+    return new Card(this.auth, this.getOptionsForChild());
   }
 
   getCustomBoardBackground(
@@ -191,6 +208,19 @@ export default class Member extends BaseResource {
 
   getDeltas(queryArgs: DeltasQueryArgs): Promise<*> {
     return this.httpGet('/deltas', queryArgs);
+  }
+
+  notifications() {
+    return new Notification(this.auth, this.getOptionsForChild());
+  }
+
+  organizations() {
+    return new Organization(this.auth, this.getOptionsForChild());
+  }
+
+  organizationsInvited() {
+    return new Organization(
+      this.auth, this.getOptionsForChild('', '/organizationsInvited'));
   }
 
   updateMember(

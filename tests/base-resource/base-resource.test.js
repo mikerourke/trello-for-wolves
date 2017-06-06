@@ -10,7 +10,9 @@ describe('Base Resource', () => {
   describe('Endpoint Builder', () => {
     describe('No Parent', () => {
       before(() => {
-        baseEntity = new BaseResource(auth, 'card', cardId);
+        baseEntity = new BaseResource(auth, 'card', {
+          instanceId: cardId,
+        });
       });
 
       it('builds an endpoint with the root path', () => {
@@ -79,7 +81,10 @@ describe('Base Resource', () => {
 
     describe('With Parent', () => {
       before(() => {
-        baseEntity = new BaseResource(auth, 'card', cardId, `boards/${boardId}`);
+        baseEntity = new BaseResource(auth, 'card', {
+          instanceId: cardId,
+          parentPath: `boards/${boardId}`,
+        });
       });
 
       it('builds an endpoint with the root path', () => {

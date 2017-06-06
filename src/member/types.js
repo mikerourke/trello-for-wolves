@@ -15,6 +15,18 @@ export type AvatarSourceField =
   | 'none'
   | 'upload';
 
+/**
+ * @apiDefine MemberFieldQueryArg
+ * @apiParam {String="avatarHash","bioData","idPremOrgsAdmin","memberType","products","status","url"} field
+ *    Member field to get value for.
+ */
+
+/**
+ * @apiDefine MemberFieldsQueryArg
+ * @apiParam {String="all","avatarHash","bioData","idPremOrgsAdmin","memberType","products","status","url"} [fields='"all"']
+ *    Member fields to include in response, can either be <code>"all"</code> or
+ *    a comma separated list of field names.
+ */
 export type MemberField =
   'avatarHash'
   | 'bioData'

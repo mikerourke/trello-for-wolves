@@ -51,12 +51,31 @@ export default class BaseResource {
     this.resourcePath = resourcePath;
   }
 
-  getParentPath() {
-    return this.parentPath;
-  }
-
-  setResourcePath(resourcePath: string) {
-    this.resourcePath = resourcePath;
+  /**
+   * Returns the constructor options object for passing to the constructor
+   *    of a child resource (e.g. creating an "actions" instance in a "board").
+   * @param {string} [childId=''] Id of the child resource.
+   * @param {string} [resourcePath=''] Resource path to use in the child
+   *    resource instance.
+   * @returns {Object}
+   */
+  getOptionsForChild(
+    childId?: string = '',
+    resourcePath?: string = '',
+  ): ResourceConstructorOptions {
+    // If there was a parent path present for the parent resource, make sure
+    // this is included in the parent path for the child resource.
+    // An example of a path that meets these conditions is:
+    // /boards/:boardId/members/:memberId/cards
+    let parentPathToUse = `/${this.resourceName}s/${this.instanceId}`;
+    if (this.parentPath) {
+      parentPathToUse = `${this.parentPath}${parentPathToUse}`;
+    }
+    return {
+      instanceId: childId,
+      resourcePath,
+      parentPath: parentPathToUse,
+    };
   }
 
   /**
@@ -131,6 +150,9 @@ export default class BaseResource {
     data?: Object = {},
   ): Promise<*> {
     const endpoint = this.getEndpoint(pathVariables, queryArgs);
+    // TODO: Remove this after testing.
+    console.log(`ENDPOINT: ${endpoint}`);
+
     return new Promise((resolve, reject) => {
       axios({
         data,

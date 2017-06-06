@@ -2,22 +2,18 @@
 import Trello from '../../src/index';
 import { auth } from '../helpers';
 
-describe.only('Action Resource', () => {
+describe('Batch Resource', () => {
   let trello;
 
-  before(() => {
+  before((done) => {
     trello = new Trello(auth);
+    setTimeout(() => { done(); }, 3000);
   });
 
   it('performs a batch request when passed correct URLs', (done) => {
     trello.batch().makeRequests(['/boards/bJDPVV1A', '/cards/GATVPdJ6'])
-      .then((result) => {
-        const actualValue = result.data.length;
-        const expectedValue = 2;
-        expect(actualValue).to.equal(expectedValue);
-        done();
-      })
-      .catch(error => done(error));
+      .should.eventually.be.fulfilled
+      .notify(done);
   });
 
   it('fails gracefully when passed an invalid URL', (done) => {

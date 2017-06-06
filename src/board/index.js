@@ -8,6 +8,14 @@ import {
   StringLengthError,
 } from '../utils/errors';
 import BaseResource from '../base-resource';
+import Action from '../action';
+import Card from '../card';
+import Checklist from '../checklist';
+import Label from '../label';
+import List from '../list';
+import Member from '../member';
+import Membership from '../membership';
+import Organization from '../organization';
 import MyPref from './myPref';
 import Pref from './pref';
 
@@ -95,14 +103,6 @@ export default class Board extends BaseResource {
     options?: ResourceConstructorOptions = {},
   ) {
     super(auth, 'board', options);
-  }
-
-  myPrefs() {
-    return new MyPref(this.auth, this.instanceId);
-  }
-
-  prefs() {
-    return new Pref(this.auth, this.instanceId);
   }
 
   /**
@@ -234,6 +234,9 @@ export default class Board extends BaseResource {
    * @apiExample {js} Example:
    trello.boards('BoArDId').action().getActions({...});
    */
+  actions() {
+    return new Action(this.auth, this.getOptionsForChild());
+  }
 
   /**
    * @api {get} /boards/:boardId/boardStars getBoardStars
@@ -268,9 +271,9 @@ export default class Board extends BaseResource {
    * @apiPermission read
    *
    * @apiUse ActionsFilterNamedQueryArg
+   * @apiUse ActionIdModelsQueryArg
    * @apiUse AttachmentInclusionQueryArgs
    * @apiUse CardFieldsQueryArg
-   * @apiUse IdModelsQueryArg
    * @apiUse LimitQueryArg
    * @apiUse MemberInclusionQueryArgs
    * @apiUse MemberCreatorInclusionQueryArgs
@@ -326,6 +329,9 @@ export default class Board extends BaseResource {
    * @apiExample {js} Example:
    trello.boards('BoArDId').cards('CaRdId').getCard({...});
    */
+  cards(cardId?: string = '') {
+    return new Card(this.auth, this.getOptionsForChild(cardId));
+  }
 
   /**
    * @api {get} /boards/:boardId/checklists getChecklistsInBoard
@@ -342,6 +348,9 @@ export default class Board extends BaseResource {
    * @apiExample {js} Example:
    trello.boards('BoArDId').checklists().getChecklists({...});
    */
+  checklists() {
+    return new Checklist(this.auth, this.getOptionsForChild());
+  }
 
   /**
    * @api {get} /boards/:boardId/deltas getDeltas
@@ -389,7 +398,7 @@ export default class Board extends BaseResource {
    * @apiGroup board
    * @apiPermission read
    *
-   * @apiUse LabelFieldsQueryArgs
+   * @apiUse LabelFieldsQueryArg
    * @apiUse LimitQueryArg
    * @apiExample {js} Example:
    trello.boards('BoArDId').labels().getLabels({...});
@@ -404,10 +413,13 @@ export default class Board extends BaseResource {
    * @apiGroup board
    * @apiPermission read
    *
-   * @apiUse LabelFieldsQueryArgs
+   * @apiUse LabelFieldsQueryArg
    * @apiExample {js} Example:
    trello.boards('BoArDId').labels('LaBeLiD').getLabel({...});
    */
+  labels(labelId?: string = '') {
+    return new Label(this.auth, this.getOptionsForChild(labelId));
+  }
 
   /**
    * @api {get} /boards/:boardId/lists getListsInBoard
@@ -437,6 +449,9 @@ export default class Board extends BaseResource {
    * @apiExample {js} Example:
    trello.boards('BoArDId').lists().getFilteredLists('closed');
    */
+  lists() {
+    return new List(this.auth, this.getOptionsForChild());
+  }
 
   /**
    * @api {get} /boards/:boardId/members getMembersInBoard
@@ -470,11 +485,11 @@ export default class Board extends BaseResource {
    */
 
   /**
-   * @api {get} /boards/:boardId/member/:memberId getMemberInBoard
+   * @api {get} /boards/:boardId/member/:memberId getCardsForMemberInBoard
    * @apiVersion 1.0.0
    * @apiName getMemberInBoard
-   * @apiDescription Gets the member data with the specified ID for the
-   *    specified board.
+   * @apiDescription Gets the card data associated with the specified member
+   *    on this board.
    * @apiGroup board
    * @apiPermission read
    *
@@ -490,8 +505,45 @@ export default class Board extends BaseResource {
    * @apiParam {String="all","none"} [checklists='"none"'] Checklist data to
    *    include in the response.
    * @apiExample {js} Example:
-   trello.boards('BoArDId').members('MeMbErId').getMember({...});
+   trello.boards('BoArDId').members('MeMbErId').cards().getCards({...});
    */
+  members(memberId?: string = '') {
+    return new Member(this.auth, this.getOptionsForChild(memberId));
+  }
+
+  /**
+   * @api {get} /boards/:boardId/membersInvited getMembersInvitedToBoard
+   * @apiVersion 1.0.0
+   * @apiName getMembersInvitedToBoard
+   * @apiDescription Gets the members invited for a board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse MemberEveryFieldsQueryArg
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').membersInvited().getMembers({...});
+   */
+
+  /**
+   * @api {get} /boards/:boardId/membersInvited getMembersInvitedFieldValue
+   * @apiVersion 1.0.0
+   * @apiName getMembersInvitedFieldValue
+   * @apiDescription Gets the field value of the members invited for a board.
+   * @apiGroup board
+   * @apiPermission read
+   *
+   * @apiUse MemberEveryFieldQueryArg
+   * @apiExample {js} Example:
+   trello.boards('BoArDId').membersInvited().getFieldValue('bio');
+   */
+  membersInvited() {
+    return new Member(
+      this.auth, this.getOptionsForChild('', '/membersInvited'));
+  }
+
+  memberships(membershipId?: string = '') {
+    return new Membership(this.auth, this.getOptionsForChild(membershipId));
+  }
 
   /**
    * @api {get} /boards/:boardId/myPrefs getMyPrefs
@@ -501,10 +553,16 @@ export default class Board extends BaseResource {
    * @apiGroup board
    * @apiPermission read
    * @apiExample {js} Example:
-   trello.boards('BoArDId').getMyPrefs();
+   trello.boards('BoArDId').myPrefs().getMyPrefs();
    */
-  getMyPrefs(): Promise<*> {
-    return this.httpGet('/myPrefs');
+  myPrefs() {
+    return new MyPref(this.auth, this.instanceId);
+  }
+
+  organization() {
+    // "organization" must be singular for board requests.
+    return new Organization(
+      this.auth, this.getOptionsForChild('', '/organization'));
   }
 
   /**
@@ -568,6 +626,10 @@ export default class Board extends BaseResource {
 
   updateName(queryArgs: ValueQueryArg<string>): Promise<*> {
     return this.httpPut('/name', queryArgs);
+  }
+
+  prefs() {
+    return new Pref(this.auth, this.instanceId);
   }
 
   updateSubscribed(queryArgs: ValueQueryArg<boolean>): Promise<*> {

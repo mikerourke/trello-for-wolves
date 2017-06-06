@@ -125,7 +125,7 @@ export default class Action extends BaseResource {
    * @apiPermission read
    *
    * @apiExample {js} Example:
-   trello.actions('aCtIoNId').getDisplay();
+   trello.actions('aCtIoNId').getEntities();
    */
   getEntities(): Promise<*> {
     return this.httpGet('/entities');

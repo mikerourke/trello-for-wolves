@@ -6,10 +6,21 @@ export const auth = {
   token,
 };
 
-export const boardId = 'bJDPVV1A';
-export const cardId = 'GATVPdJ6';
-export const memberIds = {
-  forMemberCreator: '56c266ee58b06885bc4e54e3',
-  forAvatarHash: '3de15cb68b376867085008b1b58c9742',
+export const resourceIds = {
+  actionId: '592b4b6716732423b99d7f9a',
+  boardId: 'bJDPVV1A',
+  cardId: 'GATVPdJ6',
+  labelId: '5927718cced82109ffc85150',
+  memberId: '56c266ee58b06885bc4e54e3',
+  membershipId: '5927718c7a9e8015ddbedcfe',
 };
 
+export const logResult = (result) =>
+  new Promise((resolve, reject) => {
+    if (result.data) {
+      console.log(result.data);
+      resolve();
+    } else {
+      reject();
+    }
+  });

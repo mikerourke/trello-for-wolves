@@ -10,7 +10,9 @@ import type {
   CardInclusionQueryArgs,
   FieldsQueryArg,
   FilterQueryArg,
+  LimitQueryArg,
   ListField,
+  ListFilter,
   PositionNumbered,
   ResourceConstructorOptions,
   ValueQueryArg,
@@ -43,24 +45,22 @@ export default class List extends BaseResource {
       FieldsQueryArg<ListField> &
       FilterQueryArg<ListField> = {},
   ): Promise<*> {
-    const idList = this.instanceId;
-    const updatedArgs = (this.parentPath)
-      ? { idList, ...queryArgs }
-      : queryArgs;
-    return this.httpGet('/', updatedArgs);
+    return this.httpGet('/', queryArgs);
   }
 
   getLists(
     queryArgs?: FieldsQueryArg<ListField> &
-      {
-        limit?: number,
-      } = {},
+      LimitQueryArg = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
   getFieldValue(field: ListField): Promise<*> {
     return this.httpGet(`/${field}`);
+  }
+
+  getFilteredLists(queryArgs: FilterQueryArg<ListFilter>): Promise<*> {
+    return this.httpGet('/', queryArgs);
   }
 
   updateList(

@@ -13,7 +13,8 @@
     "flow": "flow check || exit 0",
     "lint": "eslint src --color || exit 0",
     "setup": "rm -rf node_modules && yarn cache clean && yarn install",
-    "test": "find ./tests -name '*.test.js' | xargs cross-env NODE_ENV=test mocha --opts ./mocha.opts || exit 0"
+    "test:run": "find ./tests -name '*.test.js' | xargs mocha --opts ./mocha.opts || exit 0",
+    "test": "cross-env NODE_ENV=test yarn run test:run"
   },
   "dependencies": {
     "axios": "^0.16.1",

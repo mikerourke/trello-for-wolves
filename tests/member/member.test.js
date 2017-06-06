@@ -1,6 +1,6 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import { auth, boardId } from '../helpers';
+import { auth } from '../helpers';
 
 describe('Board Resource', () => {
   let trello;

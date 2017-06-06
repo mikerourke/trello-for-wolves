@@ -10,6 +10,7 @@ import type {
   BoardField,
   CardField,
   MemberField,
+  ModelType,
   OrganizationField,
 } from '../types';
 
@@ -35,6 +36,7 @@ export default class Search extends BaseResource {
     super(auth, 'search');
   }
 
+  // TODO: Add missing parameter information.
   /**
    * @api {get} /search performSearch
    * @apiVersion 1.0.0
@@ -53,7 +55,7 @@ export default class Search extends BaseResource {
    * @apiParam {String} [idCards] Card IDs to limit search to.  Valid values are
    *    a comma-separated list of objectIds, 24-character hex strings.
    * @apiExample {js} Example:
-   trello.actions('aCtIoNId').getAction({...});
+   trello.search().performSearch({ query: 'funstuff' });
    */
   performSearch(
     queryArgs: {
@@ -61,7 +63,7 @@ export default class Search extends BaseResource {
       idBoards?: 'mine' | string,
       idOrganizations?: string,
       idCards?: string,
-      modelTypes?: string,
+      modelTypes?: ArgumentGroup<ModelType>,
       boardFields?: ArgumentGroup<BoardField>,
       boardsLimit?: number,
       cardFields?: ArgumentGroup<CardField>,
@@ -82,6 +84,26 @@ export default class Search extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
+  /**
+   * @api {get} /search/members searchMembers
+   * @apiVersion 1.0.0
+   * @apiName searchMembers
+   * @apiDescription Performs a search for the members associated with the
+   *    specified query string and parameters.
+   * @apiGroup search
+   * @apiPermission read
+   *
+   * @apiParam {String{1...16384}} query Query string to search content for.
+   * @apiParam {Number{1-20}} [limit=8] Limit amount of records returned.
+   * @apiParam {String} [idBoard] Board ID to limit search to, can be an ID or
+   *    <code>null</code>.
+   * @apiParam {String} [idOrganizations] Organization ID to limit search to,
+   *    can be an ID or <code>null</code>.
+   * @apiParam {Boolean} [onlyOrgMembers=false] Limit results to members of the
+   *    specified Organization.
+   * @apiExample {js} Example:
+   trello.search().searchMembers({ query: 'bob' });
+   */
   searchMembers(
     queryArgs: {
       query: string,
