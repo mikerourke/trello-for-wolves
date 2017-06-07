@@ -12,7 +12,7 @@
  * @apiDefine ChecklistFieldsQueryArg
  * @apiParam {String="all","idBoard","idCard","name","pos"} [fields='"all"']
  *    Checklist fields to include in response, can either be <code>"all"</code>
- *    or a comma separated list of field names.
+ *    or an array of field names.
  */
 
 /**
@@ -27,7 +27,7 @@
  *    in response.
  * @apiParam {String="all","idBoard","idCard","name","pos"} [checklistFields='"all"']
  *    Checklist fields to include in response, can either be <code>"all"</code>
- *    or a comma separated list of field names.
+ *    or an array of field names.
  */
 
 /**
@@ -36,7 +36,7 @@
  *    include in response.
  * @apiParam {String="all","name","nameData","pos","state","value"} [checkItemFields='"all"']
  *    Checklist item fields to include in response, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  */
 
 /**
@@ -45,5 +45,5 @@
  *    data should be included in response.
  * @apiParam {String="all","idCheckItem","state"} [checkItemStateFields='"all"']
  *    Check item state fields to include in response, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  */

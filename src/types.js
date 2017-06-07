@@ -1,22 +1,26 @@
 /* @flow */
 
 /* Types */
-export type * from './action/types';
-export type * from './attachment/types';
-export type * from './base-resource/types';
-export type * from './board/types';
-export type * from './card/types';
-export type * from './checklist/types';
-export type * from './label/types';
-export type * from './list/types';
-export type * from './member/types';
-export type * from './membership/types';
-export type * from './notification/types';
-export type * from './organization/types';
-export type * from './search/types';
-export type * from './token/types';
-export type * from './type/types';
-export type * from './webhook/types';
+export type * from './resources/action';
+export type * from './resources/attachment';
+export type * from './resources/base-resource';
+export type * from './resources/board';
+export type * from './resources/board-background';
+export type * from './resources/card';
+export type * from './resources/check-item';
+export type * from './resources/checklist';
+export type * from './resources/custom-emoji';
+export type * from './resources/label';
+export type * from './resources/list';
+export type * from './resources/member';
+export type * from './resources/membership';
+export type * from './resources/notification';
+export type * from './resources/organization';
+export type * from './resources/search';
+export type * from './resources/sticker';
+export type * from './resources/token';
+export type * from './resources/type';
+export type * from './resources/webhook';
 
 export type Auth = {
   key: string,
@@ -62,14 +66,3 @@ export type LimitQueryArg = {
   limit?: number
 };
 
-export type PageQueryArg = {
-  page?: number,
-};
-
-export type WithinLimitsQueryArgs =
-  LimitQueryArg &
-  {
-    format?: Format,
-    since?: ?FilterDate,
-    before?: ?FilterDate,
-  };

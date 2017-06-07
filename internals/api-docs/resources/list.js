@@ -18,22 +18,22 @@
  * @apiDefine ListFieldsQueryArg
  * @apiParam {String="all","closed","idBoard","name","pos","subscribed"} [fields='"all"']
  *    List fields to include in response, can either be <code>"all"</code> or
- *    a comma separated list of field names.
+ *    an array of field names.
  */
 
 /**
  * @apiDefine ListFilterQueryArg
  * @apiParam {String="all","closed","none","open"} [filter='"all"']
  *    Limit response to include specified statuses, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  */
 
 /**
  * @apiDefine ListInclusionQueryArgs
  * @apiParam {String="all","closed","none","open"} [list='"all"']
  *    Limit response to include specified statuses, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  * @apiParam {String="all","closed","idBoard","name","pos","subscribed"} [listFields='"all"']
  *    List fields to include in response, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  */

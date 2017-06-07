@@ -25,7 +25,7 @@
  * @apiDefine BoardFieldsQueryArg
  * @apiParam {String="all","closed","dateLastActivity","dateLastView","desc","descData","idOrganization","invitations","invited","labelNames","memberships","name","pinned","powerUps","prefs","shortLink","shortUrl","starred","subscribed","url"} [fields='"all"']
  *    Board fields to include in response, can either be <code>"all"</code> or
- *    a comma separated list of field names.
+ *    an array of field names.
  */
 
 /**
@@ -40,7 +40,7 @@
  *    in the response.
  * @apiParam {String="all","closed","dateLastActivity","dateLastView","desc","descData","idOrganization","invitations","invited","labelNames","memberships","name","pinned","powerUps","prefs","shortLink","shortUrl","starred","subscribed","url"} [boardFields='"all"']
  *    Board fields to include in response, can either be <code>"all"</code> or
- *    a comma separated list of field names.
+ *    an array of field names.
  */
 
 /**
@@ -207,7 +207,7 @@
  * @apiUse MemberInclusionQueryArgs
  * @apiParam {String="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [actionMemberCreatorFields='"avatarHash,fullName,initials,username"']
  *    Action member creator fields to include in response, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  * @apiParam {Boolean} [labels=true] Indicates if label data should be
  *    included in the response.
  * @apiExample {js} Example:

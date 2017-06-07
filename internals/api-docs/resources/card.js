@@ -32,7 +32,7 @@
  *    attachments.
  * @apiParam {String="all","bytes","date","edgeColor","idMember","isUpload","mimeType","name","previews","url"} [attachmentFields='"all"']
  *    Attachment fields to include in the response, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  */
 
 /**
@@ -43,5 +43,5 @@
  *    attachments.
  * @apiParam {String="all","bytes","date","edgeColor","idMember","isUpload","mimeType","name","previews","url"} [cardAttachmentFields='"all"']
  *    Card attachment fields to include in the response, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  */

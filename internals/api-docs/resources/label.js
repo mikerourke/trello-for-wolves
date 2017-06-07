@@ -17,7 +17,7 @@
  * @apiDefine LabelFieldsQueryArg
  * @apiParam {String="all","color","idBoard","name","uses"} [fields='"all"']
  *    Label fields to include in response, can either be <code>"all"</code>
- *    or a comma separated list of field names.
+ *    or an array of field names.
  */
 
 /**
@@ -26,5 +26,5 @@
  *    response.
  * @apiParam {String="all","color","idBoard","name","uses"} [labelFields='"all"']
  *    Label fields to include in response, can either be <code>"all"</code> or
- *    a comma separated list of field names.
+ *    an array of field names.
  */

@@ -24,7 +24,7 @@
  * @apiDefine OrganizationFieldsQueryArg
  * @apiParam {String="all","billableMemberCount","desc","descData","displayName","idBoards","invitations","invited","logoHash","memberships","name","powerUps","prefs","premiumFeatures","products","url","website"} [fields='"all"']
  *    Organization fields to include in response, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  */
 
 /**
@@ -33,5 +33,5 @@
  *    data in the response.
  * @apiParam {String="all","billableMemberCount","desc","descData","displayName","idBoards","invitations","invited","logoHash","memberships","name","powerUps","prefs","premiumFeatures","products","url","website"} [organizationFields='"name,displayName"']
  *    Organization fields to include in the response, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  */

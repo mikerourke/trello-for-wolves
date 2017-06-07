@@ -25,7 +25,7 @@
  * @apiDefine MemberFieldsQueryArg
  * @apiParam {String="all","avatarHash","bioData","idPremOrgsAdmin","memberType","products","status","url"} [fields='"all"']
  *    Member fields to include in response, can either be <code>"all"</code> or
- *    a comma separated list of field names.
+ *    an array of field names.
  */
 
 /**
@@ -38,7 +38,7 @@
  * @apiDefine MemberEveryFieldsQueryArg
  * @apiParam {String="all","avatarHash","avatarSource","bio","bioData","confirmed","email","fullName","gravatarHash","idBoards","idBoardsPinned","idOrganizations","idPremOrgsAdmin","initials","loginTypes","memberType","oneTimeMessagesDismissed","prefs","premiumFeatures","products","status","status","trophies","uploadedAvatarHash","url","username"} [fields='"all"']
  *    Member fields to include in response, can either be <code>"all"</code> or
- *    a comma separated list of field names.
+ *    an array of field names.
  */
 
 /**
@@ -47,12 +47,12 @@
  *    included in response for actions.
  * @apiParam {String="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [actionMemberFields='"avatarHash,fullName,initials,username"']
  *    Member fields for actions to include in response, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  * @apiParam {Boolean} [actionMemberCreator=true] Indicates if member creator
  *    fields should be included in response for actions.
  * @apiParam {String="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [actionMemberFields='"avatarHash,fullName,initials,username"']
  *    Member creator fields for actions to include in response, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  */
 
 /**
@@ -61,7 +61,7 @@
  *    included in response.
  * @apiParam {String="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [memberFields='"avatarHash,fullName,initials,username"']
  *    Member fields to include in response, can either be <code>"all"</code>
- *    or a comma separated list of field names.
+ *    or an array of field names.
  */
 
 /**
@@ -70,7 +70,7 @@
  *    should be included in response.
  * @apiParam {String="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [memberCreatorFields='"avatarHash,fullName,initials,username"']
  *    Member creator fields to include in response, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  */
 
 /**
@@ -79,7 +79,7 @@
  *    fields should be included in response.
  * @apiParam {String="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [memberCreatorFields='"avatarHash,fullName,initials,username"']
  *    Membership member fields to include in response, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  */
 
 /**
@@ -88,7 +88,7 @@
  *    Member levels for invited members that should be included in response.
  * @apiParam {String="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [membersInvitedFields='"avatarHash,fullName,initials,username"']
  *    Invited member fields to include in response, can either be
- *    <code>"all"</code> or a comma separated list of field names.
+ *    <code>"all"</code> or an array of field names.
  */
 
 /**

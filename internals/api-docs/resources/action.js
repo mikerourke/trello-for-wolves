@@ -26,21 +26,28 @@
  * @apiDefine ActionFieldsQueryArg
  * @apiParam {String="all","data","date","idMemberCreator","type"} [fields='"all"']
  *    Action fields to include in the response, can either be <code>"all"</code>
- *    or a comma separated list of field names.
+ *    or an array of field names.
+ */
+
+/**
+ * @apiDefine ActionListFilterQueryArg
+ * @apiParam {String="all","commentCard","convertToCardFromCheckItem","copyCard","createCard","createList","deleteCard","emailCard","updateCard","updateCard:closed","updateCard:desc","updateCard:idList","updateCard:name","updateList","updateList:closed","updateList:name"} [filter='"all"']
+ *    Action types to include in the response, can either be <code>"all"</code>
+ *    or an array of field names.
  */
 
 /**
  * @apiDefine ActionFilterQueryArg
  * @apiParam {String="all","addAttachmentToCard","addChecklistToCard","addMemberToBoard","addMemberToCard","addMemberToOrganization","addToOrganizationBoard","commentCard","convertToCardFromCheckItem","copyBoard","copyCard","copyCommentCard","createBoard","createCard","createList","createOrganization","deleteAttachmentFromCard","deleteBoardInvitation","deleteCard","deleteOrganizationInvitation","disablePowerUp","emailCard","enablePowerUp","makeAdminOfBoard","makeNormalMemberOfBoard","makeNormalMemberOfOrganization","makeObserverOfBoard","memberJoinedTrello","moveCardFromBoard","moveCardToBoard","moveListFromBoard","moveListToBoard","removeChecklistFromCard","removeFromOrganizationBoard","removeMemberFromCard","unconfirmedBoardInvitation","unconfirmedOrganizationInvitation","updateBoard","updateCard","updateCard:closed","updateCard:desc","updateCard:idList","updateCard:name","updateCheckItemStateOnCard","updateChecklist","updateList","updateList:closed","updateList:name","updateMember","updateOrganization"} [filter='"all"']
  *    Action types to include in the response, can either be <code>"all"</code>
- *    or a comma separated list of field names.
+ *    or an array of field names.
  */
 
 /**
  * @apiDefine ActionsFilterNamedQueryArg
  * @apiParam {String="all","addAttachmentToCard","addChecklistToCard","addMemberToBoard","addMemberToCard","addMemberToOrganization","addToOrganizationBoard","commentCard","convertToCardFromCheckItem","copyBoard","copyCard","copyCommentCard","createBoard","createCard","createList","createOrganization","deleteAttachmentFromCard","deleteBoardInvitation","deleteCard","deleteOrganizationInvitation","disablePowerUp","emailCard","enablePowerUp","makeAdminOfBoard","makeNormalMemberOfBoard","makeNormalMemberOfOrganization","makeObserverOfBoard","memberJoinedTrello","moveCardFromBoard","moveCardToBoard","moveListFromBoard","moveListToBoard","removeChecklistFromCard","removeFromOrganizationBoard","removeMemberFromCard","unconfirmedBoardInvitation","unconfirmedOrganizationInvitation","updateBoard","updateCard","updateCard:closed","updateCard:desc","updateCard:idList","updateCard:name","updateCheckItemStateOnCard","updateChecklist","updateList","updateList:closed","updateList:name","updateMember","updateOrganization"} [actions='"all"']
  *    Action types to include in the response, can either be <code>"all"</code>
- *    or a comma separated list of field names.
+ *    or an array of field names.
  */
 
 /**
@@ -61,10 +68,10 @@
  * @apiDefine ActionInclusionQueryArgs
  * @apiParam {String="all","addAttachmentToCard","addChecklistToCard","addMemberToBoard","addMemberToCard","addMemberToOrganization","addToOrganizationBoard","commentCard","convertToCardFromCheckItem","copyBoard","copyCard","copyCommentCard","createBoard","createCard","createList","createOrganization","deleteAttachmentFromCard","deleteBoardInvitation","deleteCard","deleteOrganizationInvitation","disablePowerUp","emailCard","enablePowerUp","makeAdminOfBoard","makeNormalMemberOfBoard","makeNormalMemberOfOrganization","makeObserverOfBoard","memberJoinedTrello","moveCardFromBoard","moveCardToBoard","moveListFromBoard","moveListToBoard","removeChecklistFromCard","removeFromOrganizationBoard","removeMemberFromCard","unconfirmedBoardInvitation","unconfirmedOrganizationInvitation","updateBoard","updateCard","updateCard:closed","updateCard:desc","updateCard:idList","updateCard:name","updateCheckItemStateOnCard","updateChecklist","updateList","updateList:closed","updateList:name","updateMember","updateOrganization"} [actions='"all"']
  *    Action types to include in the response, can either be <code>"all"</code>
- *    or a comma separated list of field names.
+ *    or an array of field names.
  * @apiParam {String="all","data","date","idMemberCreator","type"} [actionFields='"all"']
  *    Action fields to include in the response, can either be <code>"all"</code>
- *    or a comma separated list of field names.
+ *    or an array of field names.
  */
 
 /**
