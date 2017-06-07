@@ -9,8 +9,23 @@ import Member from './member';
 import Organization from './organization';
 
 /* Types */
-import type { ArgumentGroup } from '../types';
+import type {
+  ArgumentGroup,
+  Auth,
+  FilterDate,
+  Format,
+  MemberField,
+  MemberEveryField,
+  ResourceConstructorOptions,
+} from '../types';
 
+export type ActionField =
+  'data'
+  | 'date'
+  | 'idMemberCreator'
+  | 'type';
+
+// These actions only apply to List resources:
 export type ActionListFilter =
   'commentCard'
   | 'convertToCardFromCheckItem'
@@ -28,7 +43,7 @@ export type ActionListFilter =
   | 'updateList:closed'
   | 'updateList:name';
 
-export type ActionCommonFilter =
+export type ActionFilter = ActionListFilter &
   'addAttachmentToCard'
   | 'addChecklistToCard'
   | 'addMemberToBoard'
@@ -65,69 +80,12 @@ export type ActionCommonFilter =
   | 'updateMember'
   | 'updateOrganization';
 
-export type ActionFilter = ActionListFilter & ActionCommonFilter;
-
-export type ActionField =
-  'data'
-  | 'date'
-  | 'idMemberCreator'
-  | 'type';
-
-export type ExcludedActionFilter =
-  'addAdminToBoard'
-  | 'addAdminToOrganization'
-  | 'addBoardsPinnedToMember'
-  | 'addLabelToCard'
-  | 'copyChecklist'
-  | 'createBoardInvitation'
-  | 'createBoardPreference'
-  | 'createCheckItem'
-  | 'createChecklist'
-  | 'createLabel'
-  | 'createOrganizationInvitation'
-  | 'deleteCheckItem'
-  | 'deleteComment'
-  | 'deleteLabel'
-  | 'makeAdminOfOrganization'
-  | 'removeAdminFromBoard'
-  | 'removeAdminFromOrganization'
-  | 'removeBoardsPinnedFromMember'
-  | 'removeLabelFromCard'
-  | 'removeMemberFromBoard'
-  | 'removeMemberFromOrganization'
-  | 'updateCheckItem'
-  | 'updateComment'
-  | 'updateLabel'
-  | 'voteOnCard';
-
-import type {
-  Auth,
-  FilterDate,
-  Format,
-  MemberField,
-  ResourceConstructorOptions,
-} from '../types';
-
 export default class Action extends BaseResource {
   constructor(
     auth: Auth,
     options?: ResourceConstructorOptions = {},
   ) {
     super(auth, 'action', options);
-  }
-
-  getAction(
-    queryArgs?: {
-      display?: boolean,
-      entities?: boolean,
-      fields?: ArgumentGroup<ActionField>,
-      member?: boolean,
-      memberFields?: ArgumentGroup<MemberField>,
-      memberCreator?: boolean,
-      memberCreatorFields?: ArgumentGroup<MemberField>,
-    } = {},
-  ): Promise<*> {
-    return this.httpGet('/', queryArgs);
   }
 
   getActions(
@@ -151,8 +109,30 @@ export default class Action extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
+  getAction(
+    queryArgs?: {
+      display?: boolean,
+      entities?: boolean,
+      fields?: ArgumentGroup<ActionField>,
+      member?: boolean,
+      memberFields?: ArgumentGroup<MemberField>,
+      memberCreator?: boolean,
+      memberCreatorFields?: ArgumentGroup<MemberField>,
+    } = {},
+  ): Promise<*> {
+    return this.httpGet('/', queryArgs);
+  }
+
   getFieldValue(field: ActionField): Promise<*> {
     return this.httpGet(`/${field}`);
+  }
+
+  board() {
+    return new Board(this.auth, this.getOptionsForChild('', '/board'));
+  }
+
+  card() {
+    return new Card(this.auth, this.getOptionsForChild('', '/card'));
   }
 
   getDisplay(): Promise<*> {
@@ -163,51 +143,21 @@ export default class Action extends BaseResource {
     return this.httpGet('/entities');
   }
 
-  board() {
-    return new Board(this.auth, {
-      parentPath: `actions/${this.instanceId}`,
-      resourcePath: '/board',
-    });
-  }
-
-  card() {
-    return new Card(this.auth, {
-      parentPath: `actions/${this.instanceId}`,
-      resourcePath: '/card',
-    });
-  }
-
   list() {
-    return new List(this.auth, {
-      parentPath: `actions/${this.instanceId}`,
-      resourcePath: '/list',
-    });
-  }
-
-  _getMember(resourcePath: string) {
-    return new Member(this.auth, {
-      parentPath: `actions/${this.instanceId}`,
-      resourcePath,
-    });
+    return new List(this.auth, this.getOptionsForChild('', '/list'));
   }
 
   member() {
-    return this._getMember('/member');
+    return new Member(this.auth, this.getOptionsForChild('', '/member'));
   }
 
   memberCreator() {
-    return this._getMember('/memberCreator');
+    return new Member(this.auth, this.getOptionsForChild('', '/memberCreator'));
   }
 
   organization() {
-    return new Organization(this.auth, {
-      parentPath: `actions/${this.instanceId}`,
-      resourcePath: '/organization',
-    });
-  }
-
-  addComment(text: string): Promise<*> {
-    return this.httpPost('/comments', { text });
+    return new Organization(
+      this.auth, this.getOptionsForChild('', '/organization'));
   }
 
   updateAction(
@@ -218,19 +168,11 @@ export default class Action extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  updateText(value: string) {
+  updateText(value: string): Promise<*> {
     return this.httpPut('/text', { value });
   }
 
-  updateComment(text: string): Promise<*> {
-    return this.httpPut('/comments', { text });
-  }
-
-  deleteAction() {
+  deleteAction(): Promise<*> {
     return this.httpDelete('/');
-  }
-
-  deleteComment() {
-    return this.httpDelete('/comments');
   }
 }

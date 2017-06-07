@@ -12,6 +12,15 @@
  *    can be listed from nested action endpoints - e.g. the resource
  *    <code>GET board/:boardId/actions</code> lists all of the actions for the
  *    given board.
+ *    <br><br>
+ *    Note: Due to the number of actions that occur in Trello, nested action
+ *    resources filter out specific action types. For example, changing the
+ *    name of a checklistItem will trigger a webhook on the board and will
+ *    POST an action of type updateCheckItem with the old and new name of the
+ *    checklistItem. However, no nested actions resource will return action
+ *    types of updateCheckItem: /cards/idCard/actions/,
+ *    /boards/idBoard/actions/. However you can get that specific action
+ *    instance via GET /actions/idAction/.
  */
 
 /* Definitions */

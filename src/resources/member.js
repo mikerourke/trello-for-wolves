@@ -19,18 +19,17 @@ import type {
   AllOrNone,
   ArgumentGroup,
   AttachmentField,
+  AttachmentFilter,
   Auth,
   AvatarSourceField,
   BoardBackgroundBrightness,
   BoardBackgroundField,
-  BoardBackgroundFilter,
   BoardField,
   BoardFilter,
   CardField,
   CardFilter,
   FilterDate,
   Format,
-  ListField,
   ListFilter,
   MemberEveryField,
   MemberField,
@@ -44,8 +43,6 @@ import type {
   ResourceConstructorOptions,
 } from '../types';
 
-export type MemberFilter = 'admins' | 'all' | 'none' | 'normal' | 'owners';
-
 export type AvatarSourceField =
   'gravatar'
   | 'none'
@@ -53,35 +50,33 @@ export type AvatarSourceField =
 
 export type MemberField =
   'avatarHash'
+  | 'bio'
   | 'bioData'
   | 'confirmed'
+  | 'fullName'
   | 'idPremOrgsAdmin'
+  | 'initials'
   | 'memberType'
   | 'products'
   | 'status'
-  | 'url';
+  | 'url'
+  | 'username';
 
-export type MemberDetailField =
+export type MemberEveryField = MemberField &
   'avatarSource'
-  | 'bio'
   | 'email'
-  | 'fullName'
   | 'gravatarHash'
   | 'idBoards'
-  | 'idBoardsPineed'
+  | 'idBoardsPinned'
   | 'idOrganizations'
-  | 'initials'
   | 'loginTypes'
   | 'oneTimeMessageDismissed'
   | 'prefs'
   | 'premiumFeatures'
   | 'trophies'
-  | 'uploadedAvatarHash'
-  | 'username';
+  | 'uploadedAvatarHash';
 
-export type MemberEveryField = MemberField & MemberDetailField;
-
-export type MemberType = 'admin' | 'normal' | 'observer';
+export type MemberFilter = 'admins' | 'all' | 'none' | 'normal' | 'owners';
 
 type BoardBackgroundBrightnessQueryArgs = {
   tile?: boolean,
@@ -109,7 +104,7 @@ export default class Member extends BaseResource {
       cardFields?: ArgumentGroup<CardField>,
       cardMembers?: boolean,
       cardMemberFields?: ArgumentGroup<MemberField>,
-      cardAttachments?: boolean | 'cover',
+      cardAttachments?: AttachmentFilter,
       cardAttachmentFields?: ArgumentGroup<AttachmentField>,
       cardStickers?: boolean,
       boards?: ArgumentGroup<BoardFilter>,
@@ -149,6 +144,9 @@ export default class Member extends BaseResource {
       customBoardBackgrounds?: AllOrNone,
       customStickers?: AllOrNone,
       customEmoji?: AllOrNone,
+      fields?: ArgumentGroup<MemberEveryField>,
+    } | {
+      // This is the only option if calling from a different resource.
       fields?: ArgumentGroup<MemberEveryField>,
     } = {},
   ): Promise<*> {
@@ -266,7 +264,6 @@ export default class Member extends BaseResource {
         locale?: string,
         minutesBetweenSummaries?: number,
       },
-      separator?: string,
     } = {},
   ): Promise<*> {
     return this.httpPut('/', { ...queryArgs, separator: '/' });

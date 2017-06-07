@@ -1,14 +1,13 @@
 /* @flow */
 
 /* Internal dependencies */
-import BaseResource from '../base-resource';
+import BaseResource from './base-resource';
 
 /* Types */
 import type {
+  ArgumentGroup,
   Auth,
-  FilterQueryArg,
-  MembershipFilter,
-  MemberInclusionQueryArgs,
+  MemberField,
   ResourceConstructorOptions,
 } from '../types';
 
@@ -29,13 +28,21 @@ export default class Membership extends BaseResource {
   }
 
   getMembership(
-    queryArgs?: FilterQueryArg<MembershipFilter> &
-      MemberInclusionQueryArgs = {},
+    queryArgs?: {
+      filter?: ArgumentGroup<MembershipFilter>,
+      member?: boolean,
+      memberFields?: ArgumentGroup<MemberField>,
+    } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
-  getMemberships(queryArgs?: MemberInclusionQueryArgs = {}): Promise<*> {
+  getMemberships(
+    queryArgs?: {
+      member?: boolean,
+      memberFields?: ArgumentGroup<MemberField>,
+    } = {},
+  ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 }

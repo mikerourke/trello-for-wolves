@@ -18,6 +18,7 @@ import type {
   AllOrNone,
   ArgumentGroup,
   AttachmentField,
+  AttachmentFilter,
   Auth,
   CardAging,
   CardField,
@@ -25,10 +26,11 @@ import type {
   ChecklistField,
   FilterDate,
   Format,
+  KeepFromSourceField,
   LabelColor,
   LabelField,
-  ListFilter,
   ListField,
+  ListFilter,
   MemberField,
   MemberFilter,
   MembershipFilter,
@@ -37,16 +39,6 @@ import type {
   Position,
   ResourceConstructorOptions,
 } from '../types';
-
-export type BoardFilter =
-  'closed'
-  | 'members'
-  | 'open'
-  | 'organization'
-  | 'pinned'
-  | 'public'
-  | 'starred'
-  | 'unpinned'
 
 export type BoardField =
   'closed'
@@ -69,22 +61,30 @@ export type BoardField =
   | 'subscribed'
   | 'url';
 
-export type BoardStars = 'none' | 'mine';
+export type BoardFilter =
+  'closed'
+  | 'members'
+  | 'open'
+  | 'organization'
+  | 'pinned'
+  | 'public'
+  | 'starred'
+  | 'unpinned'
 
-export type Invitation = 'admins' | 'members';
+export type BoardStarsFilter = 'none' | 'mine';
 
-export type GroupPermission =
+type BoardPermissionLevel = PermissionLevel | 'org';
+
+type GroupPermission =
   'disabled'
   | 'members'
   | 'observers'
   | 'org'
   | 'public';
 
-export type PowerUp =
-  'calendar'
-  | 'cardAging'
-  | 'recap'
-  | 'voting';
+type Invitation = 'admins' | 'members';
+
+type PowerUp = 'calendar' | 'cardAging' | 'recap' | 'voting';
 
 class MyPref extends BaseResource {
   constructor(
@@ -159,7 +159,7 @@ class Pref extends BaseResource {
     return this.httpPut('/invitations', { value });
   }
 
-  updatePermissionLevel(value: PermissionLevel | 'org'): Promise<*> {
+  updatePermissionLevel(value: BoardPermissionLevel): Promise<*> {
     return this.httpPut('/permissionLevel', { value });
   }
 
@@ -178,54 +178,6 @@ export default class Board extends BaseResource {
     options?: ResourceConstructorOptions = {},
   ) {
     super(auth, 'board', options);
-  }
-
-  getBoard(
-    queryArgs?: {
-      actions?: ArgumentGroup<ActionFilter>,
-      actionsEntities?: boolean,
-      actionsDisplay?: boolean,
-      actionsFormat?: Format,
-      actionsSince?: FilterDate,
-      actionsLimit?: number,
-      actionFields?: ArgumentGroup<ActionField>,
-      actionMember?: boolean,
-      actionMemberFields?: ArgumentGroup<MemberField>,
-      actionMemberCreator?: boolean,
-      actionMemberCreatorFields?: ArgumentGroup<MemberField>,
-      cards?: CardFilter,
-      cardFields?: ArgumentGroup<CardField>,
-      cardAttachments?: boolean | 'cover',
-      cardAttachmentFields?: ArgumentGroup<AttachmentField>,
-      cardChecklists?: AllOrNone,
-      cardPluginData?: boolean,
-      cardStickers?: boolean,
-      boardStars?: BoardStars,
-      labels?: AllOrNone,
-      labelFields?: ArgumentGroup<LabelField>,
-      labelsLimit?: number,
-      list?: ListFilter,
-      listFields?: ArgumentGroup<ListField>,
-      memberships?: ArgumentGroup<MembershipFilter>,
-      membershipsMember?: boolean,
-      membershipsMemberFields?: ArgumentGroup<MemberField>,
-      members?: MemberFilter,
-      memberFields?: ArgumentGroup<MemberField>,
-      membersInvited?: MemberFilter,
-      membersInvitedFields?: ArgumentGroup<MemberField>,
-      pluginData?: boolean,
-      checklists?: AllOrNone,
-      checklistFields?: ArgumentGroup<ChecklistField>,
-      organization?: boolean,
-      organizationFields?: ArgumentGroup<OrganizationField>,
-      organizationMemberships?: ArgumentGroup<MembershipFilter>,
-      organizationPluginData?: boolean,
-      myPrefs?: boolean,
-      tags?: boolean,
-      fields?: ArgumentGroup<BoardField>, // This is the only option for parent calls.
-      } = {},
-  ): Promise<*> {
-    return this.httpGet('/', queryArgs);
   }
 
   getBoards(
@@ -247,6 +199,57 @@ export default class Board extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
+  getBoard(
+    queryArgs?: {
+      actions?: ArgumentGroup<ActionFilter>,
+      actionsEntities?: boolean,
+      actionsDisplay?: boolean,
+      actionsFormat?: Format,
+      actionsSince?: FilterDate,
+      actionsLimit?: number,
+      actionFields?: ArgumentGroup<ActionField>,
+      actionMember?: boolean,
+      actionMemberFields?: ArgumentGroup<MemberField>,
+      actionMemberCreator?: boolean,
+      actionMemberCreatorFields?: ArgumentGroup<MemberField>,
+      cards?: CardFilter,
+      cardFields?: ArgumentGroup<CardField>,
+      cardAttachments?: AttachmentFilter,
+      cardAttachmentFields?: ArgumentGroup<AttachmentField>,
+      cardChecklists?: AllOrNone,
+      cardPluginData?: boolean,
+      cardStickers?: boolean,
+      boardStars?: BoardStarsFilter,
+      labels?: AllOrNone,
+      labelFields?: ArgumentGroup<LabelField>,
+      labelsLimit?: number,
+      lists?: ListFilter,
+      listFields?: ArgumentGroup<ListField>,
+      memberships?: ArgumentGroup<MembershipFilter>,
+      membershipsMember?: boolean,
+      membershipsMemberFields?: ArgumentGroup<MemberField>,
+      members?: MemberFilter,
+      memberFields?: ArgumentGroup<MemberField>,
+      membersInvited?: MemberFilter,
+      membersInvitedFields?: ArgumentGroup<MemberField>,
+      pluginData?: boolean,
+      checklists?: AllOrNone,
+      checklistFields?: ArgumentGroup<ChecklistField>,
+      organization?: boolean,
+      organizationFields?: ArgumentGroup<OrganizationField>,
+      organizationMemberships?: ArgumentGroup<MembershipFilter>,
+      organizationPluginData?: boolean,
+      myPrefs?: boolean,
+      tags?: boolean,
+      fields?: ArgumentGroup<BoardField>,
+    } | {
+      // This is the only option if calling from a different resource.
+      fields?: ArgumentGroup<BoardField>,
+    }= {},
+  ): Promise<*> {
+    return this.httpGet('/', queryArgs);
+  }
+
   getFieldValue(field: BoardField): Promise<*> {
     return this.httpGet(`/${field}`);
   }
@@ -261,7 +264,7 @@ export default class Board extends BaseResource {
 
   getBoardStars(
     queryArgs?: {
-      filter?: ArgumentGroup<BoardFilter>,
+      filter?: BoardStarsFilter,
     } = {},
   ): Promise<*> {
     return this.httpGet('/boardStars', queryArgs);
@@ -314,7 +317,6 @@ export default class Board extends BaseResource {
   }
 
   organization() {
-    // "organization" must be singular for board requests.
     return new Organization(
       this.auth, this.getOptionsForChild('', '/organization'));
   }
@@ -331,7 +333,7 @@ export default class Board extends BaseResource {
       subscribed?: boolean,
       idOrganization?: string,
       prefs?: {
-        permissionLevel?: PermissionLevel,
+        permissionLevel?: BoardPermissionLevel,
         selfJoin?: boolean,
         cardCovers?: boolean,
         invitations?: Invitation,
@@ -349,7 +351,6 @@ export default class Board extends BaseResource {
         purple?: string,
         blue?: string,
       },
-      separator?: string,
     } = {},
   ): Promise<*> {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
@@ -363,7 +364,7 @@ export default class Board extends BaseResource {
     return this.httpPut('/desc', { value });
   }
 
-  updateOrganizationId(value: string): Promise<*> {
+  updateIdOrganization(value: string): Promise<*> {
     return this.httpPut('/idOrganization', { value });
   }
 
@@ -394,7 +395,7 @@ export default class Board extends BaseResource {
       desc?: string,
       idOrganization?: string,
       idBoardSource?: string,
-      keepFromSource?: 'all' | Array<string>,
+      keepFromSource?: ArgumentGroup<KeepFromSourceField>,
       powerUps?: ArgumentGroup<PowerUp>,
       prefs?: {
         permissionLevel?: PermissionLevel,
@@ -406,7 +407,6 @@ export default class Board extends BaseResource {
         background?: string,
         cardAging?: CardAging,
       },
-      separator?: string,
     },
   ): Promise<*> {
     return this.httpPost('/', { ...queryArgs, separator: '_' });

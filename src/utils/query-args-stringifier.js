@@ -61,6 +61,7 @@ const getKeyForQueryString = (key: string): string => {
     case 'customEmoji':
     case 'customStickers':
     case 'modelTypes':
+    case 'myPrefs':
     case 'savedSearches':
       return key;
 
@@ -81,8 +82,10 @@ const getKeyForQueryString = (key: string): string => {
   // changed.
   if (recasedKey.includes('member_creator')) {
     recasedKey = recasedKey.replace('_creator', 'Creator');
+
   } else if (recasedKey.includes('plugin_data')) {
     recasedKey = recasedKey.replace('_data', 'Data');
+
   } else if (recasedKey.includes('_invited')) {
     recasedKey = recasedKey.replace('_invited', 'Invited');
   }

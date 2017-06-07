@@ -14,7 +14,6 @@ import type {
   CardField,
   CardFilter,
   CheckItemField,
-  ChecklistField,
   PositionNumbered,
   ResourceConstructorOptions,
 } from '../types';
@@ -27,18 +26,6 @@ export default class Checklist extends BaseResource {
     options?: ResourceConstructorOptions = {},
   ) {
     super(auth, 'checklist', options);
-  }
-
-  getChecklist(
-    queryArgs?: {
-      cards?: CardFilter,
-      cardFields?: ArgumentGroup<CardField>,
-      checkItems?: AllOrNone,
-      checkItemFields?: ArgumentGroup<CheckItemField>,
-      fields?: ArgumentGroup<ChecklistField>,
-    } = {},
-  ): Promise<*> {
-    return this.httpGet('/', queryArgs);
   }
 
   getChecklists(
@@ -54,7 +41,19 @@ export default class Checklist extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  getChecklistFieldValue(field: ChecklistField): Promise<*> {
+  getChecklist(
+    queryArgs?: {
+      cards?: CardFilter,
+      cardFields?: ArgumentGroup<CardField>,
+      checkItems?: AllOrNone,
+      checkItemFields?: ArgumentGroup<CheckItemField>,
+      fields?: ArgumentGroup<ChecklistField>,
+    } = {},
+  ): Promise<*> {
+    return this.httpGet('/', queryArgs);
+  }
+
+  getFieldValue(field: ChecklistField): Promise<*> {
     return this.httpGet(`/${field}`);
   }
 
@@ -84,7 +83,7 @@ export default class Checklist extends BaseResource {
   }
 
   updatePosition(value: PositionNumbered): Promise<*> {
-    return this.httpPut('/name', { value });
+    return this.httpPut('/pos', { value });
   }
 
   addChecklist(
@@ -98,7 +97,7 @@ export default class Checklist extends BaseResource {
     return this.httpPost('/', queryArgs);
   }
 
-  deleteChecklist() {
+  deleteChecklist(): Promise<*> {
     return this.httpDelete('/');
   }
 }

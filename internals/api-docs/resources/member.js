@@ -23,7 +23,7 @@
 
 /**
  * @apiDefine MemberFieldsQueryArg
- * @apiParam {String="all","avatarHash","bioData","idPremOrgsAdmin","memberType","products","status","url"} [fields='"all"']
+ * @apiParam {String[]="all","avatarHash","bioData","idPremOrgsAdmin","memberType","products","status","url"} [fields=["avatarHash","fullName","initials","username"]]
  *    Member fields to include in response, can either be <code>"all"</code> or
  *    an array of field names.
  */

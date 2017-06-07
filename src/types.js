@@ -41,6 +41,15 @@ export type Position = 'bottom' | 'top';
 
 export type PositionNumbered = Position | number;
 
+export type KeepFromSourceField =
+  'attachments'
+  | 'checklists'
+  | 'comments'
+  | 'due'
+  | 'labels'
+  | 'members'
+  | 'stickers';
+
 export type DeltasQueryArgs = {
   tags: string,
   ixLastUpdate: number,

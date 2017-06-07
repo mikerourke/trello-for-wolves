@@ -25,11 +25,6 @@ export type LabelColor =
 
 export type LabelField = 'color' | 'idBoard' | 'name' | 'uses';
 
-type LabelChangeQueryArgs = {
-  name: string,
-  color: ?LabelColor,
-};
-
 export default class Label extends BaseResource {
   constructor(
     auth: Auth,

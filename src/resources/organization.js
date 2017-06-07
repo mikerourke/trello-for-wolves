@@ -1,16 +1,14 @@
 /* @flow */
 
 /* Internal dependencies */
-import BaseResource from '../base-resource';
+import BaseResource from './base-resource';
 
 /* Types */
 import type {
   ActionField,
-  ActionInclusionQueryArgs,
   ActionFilter,
   ArgumentGroup,
   Auth,
-  BoardInclusionQueryArgs,
   BoardVisibilityFilter,
   DeltasQueryArgs,
   FieldsQueryArg,
@@ -18,10 +16,7 @@ import type {
   FilterDate,
   Format,
   ListFilter,
-  MemberInclusionQueryArgs,
   MembershipFilter,
-  MembershipsMemberInclusionQueryArgs,
-  MembersInvitedInclusionQueryArgs,
   OrganizationField,
   PermissionLevel,
   ResourceConstructorOptions,
@@ -136,7 +131,6 @@ export default class Organization extends BaseResource {
           'boardVisibilityRestrict/private'?: BoardVisibilityFilter,
           'boardVisibilityRestrict/public'?: BoardVisibilityFilter,
         },
-        separator?: string,
       } = {},
   ): Promise<*> {
     return this.httpPut('/', queryArgs);

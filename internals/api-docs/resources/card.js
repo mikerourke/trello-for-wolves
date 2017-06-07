@@ -25,6 +25,34 @@
  */
 
 /**
+ * @apiDefine CardFieldQueryArg
+ * @apiParam {String="badges","checkItemStates","closed","dateLastActivity","desc","descData","due","email","idAttachmentCover","idBoard","idChecklists","idLabels","idList","idMembers","idMembersVoted","idShort","labels","manualCoverAttachment","name","pos","shortLink","shortUrl","subscribed","url"} field
+ *    Card field to get value for.
+ */
+
+/**
+ * @apiDefine CardFieldsQueryArg
+ * @apiParam {String="all","badges","checkItemStates","closed","dateLastActivity","desc","descData","due","email","idAttachmentCover","idBoard","idChecklists","idLabels","idList","idMembers","idMembersVoted","idShort","labels","manualCoverAttachment","name","pos","shortLink","shortUrl","subscribed","url"} [fields='"all"']
+ *    Card fields to include in response, can either be <code>"all"</code> or
+ *    an array of field names.
+ */
+
+/**
+ * @apiDefine CardFilterQueryArg
+ * @apiParam {String="all","closed","none","open","visible"} [filter='"all"']
+ *    Card types to include in the response
+ */
+
+/**
+ * @apiDefine CardInclusionQueryArgs
+ * @apiParam {String="all","closed","none","open","visible"} [cards='"none"']
+ *    Limit cards in the response.
+ * @apiParam {String="all","badges","checkItemStates","closed","dateLastActivity","desc","descData","due","email","idAttachmentCover","idBoard","idChecklists","idLabels","idList","idMembers","idMembersVoted","idShort","labels","manualCoverAttachment","name","pos","shortLink","shortUrl","subscribed","url"} [cardFields='"all"']
+ *    Card fields to include in response, can either be <code>"all"</code> or
+ *    an array of field names.
+ */
+
+/**
  * @apiDefine AttachmentInclusionQueryArgs
  * @apiParam {Boolean=true,false,"cover"} [attachments=true]
  *    If <code>true</code>, include all attachments, if <code>false</code>,

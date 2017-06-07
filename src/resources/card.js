@@ -1,7 +1,5 @@
 /* @flow */
 
-// TODO: Add error handling and unify query args.
-
 /* Internal dependencies */
 import BaseResource from './base-resource';
 import Action from './action';
@@ -20,12 +18,14 @@ import type {
   AllOrNone,
   ArgumentGroup,
   AttachmentField,
+  AttachmentFilter,
   Auth,
   BoardField,
   CardField,
   CardFilter,
   CheckItemStateField,
   ChecklistField,
+  KeepFromSourceField,
   ListField,
   MemberField,
   PositionNumbered,
@@ -39,10 +39,16 @@ export type CardField =
   'badges'
   | 'checkItemStates'
   | 'closed'
+  // The datetime of the last activity on the card. Note: There are activities
+  // that update dateLastActivity that do not create a corresponding action.
+  // For instance, updating the name field of a checklist item on a card does
+  // not create an action but does update the card and board's
+  // dateLastActivity value.
   | 'dateLastActivity'
   | 'desc'
   | 'descData'
   | 'due'
+  | 'dueComplete'
   | 'email'
   | 'idAttachmentCover'
   | 'idBoard'
@@ -58,18 +64,10 @@ export type CardField =
   | 'pos'
   | 'shortLink'
   | 'shortUrl'
-  | 'subscribed';
+  | 'subscribed'
+  | 'url';
 
 export type CardFilter = 'all' | 'closed' | 'none' | 'open' | 'visible';
-
-type KeepFromSourceField =
-  'attachments'
-  | 'checklists'
-  | 'comments'
-  | 'due'
-  | 'labels'
-  | 'members'
-  | 'stickers';
 
 export default class Card extends BaseResource {
   constructor(
@@ -79,41 +77,10 @@ export default class Card extends BaseResource {
     super(auth, 'card', options);
   }
 
-  getCard(
-    queryArgs?: {
-      actions?: ArgumentGroup<ActionFilter>,
-      actionsEntities?: boolean,
-      actionsDisplay?: boolean,
-      actionsLimit?: number,
-      actionFields?: ArgumentGroup<ActionField>,
-      actionMemberCreatorFields?: ArgumentGroup<MemberField>,
-      attachments?: boolean | 'cover',
-      attachmentFields?: ArgumentGroup<AttachmentField>,
-      members?: boolean,
-      memberFields?: ArgumentGroup<MemberField>,
-      membersVoted?: boolean,
-      memberVotedFields?: ArgumentGroup<MemberField>,
-      checkItemStates?: boolean,
-      checkItemStateFields?: ArgumentGroup<CheckItemStateField>,
-      checklists?: AllOrNone,
-      checklistFields?: ArgumentGroup<ChecklistField>,
-      board?: boolean,
-      boardFields?: ArgumentGroup<BoardField>,
-      list?: boolean,
-      listFields?: ArgumentGroup<ListField>,
-      pluginData?: boolean,
-      stickers?: boolean,
-      stickerFields?: ArgumentGroup<StickerField>,
-      fields?: ArgumentGroup<CardField> & 'dueComplete',
-    } = {},
-  ): Promise<*> {
-    return this.httpGet('/', queryArgs);
-  }
-
   getCards(
     queryArgs?: {
       actions?: ArgumentGroup<ActionFilter>,
-      attachments?: boolean | 'cover',
+      attachments?: AttachmentFilter,
       attachmentFields?: ArgumentGroup<AttachmentField>,
       stickers?: boolean,
       members?: boolean,
@@ -130,6 +97,37 @@ export default class Card extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
+  getCard(
+    queryArgs?: {
+      actions?: ArgumentGroup<ActionFilter>,
+      actionsEntities?: boolean,
+      actionsDisplay?: boolean,
+      actionsLimit?: number,
+      actionFields?: ArgumentGroup<ActionField>,
+      actionMemberCreatorFields?: ArgumentGroup<MemberField>,
+      attachments?: AttachmentFilter,
+      attachmentFields?: ArgumentGroup<AttachmentField>,
+      members?: boolean,
+      memberFields?: ArgumentGroup<MemberField>,
+      membersVoted?: boolean,
+      memberVotedFields?: ArgumentGroup<MemberField>,
+      checkItemStates?: boolean,
+      checkItemStateFields?: ArgumentGroup<CheckItemStateField>,
+      checklists?: AllOrNone,
+      checklistFields?: ArgumentGroup<ChecklistField>,
+      board?: boolean,
+      boardFields?: ArgumentGroup<BoardField>,
+      list?: boolean,
+      listFields?: ArgumentGroup<ListField>,
+      pluginData?: boolean,
+      stickers?: boolean,
+      stickerFields?: ArgumentGroup<StickerField>,
+      fields?: ArgumentGroup<CardField>,
+    } = {},
+  ): Promise<*> {
+    return this.httpGet('/', queryArgs);
+  }
+
   getFilteredCards(filter: CardFilter): Promise<*> {
     return this.httpGet(`/${filter}`);
   }
@@ -138,6 +136,7 @@ export default class Card extends BaseResource {
     return this.httpGet(`/${field}`);
   }
 
+  // TODO: Check if the ID is needed for Actions in Cards.
   actions(actionId?: string = '') {
     return new Action(this.auth, this.getOptionsForChild(actionId));
   }
@@ -155,8 +154,13 @@ export default class Card extends BaseResource {
       this.auth, this.getOptionsForChild('', '/checkItemStates'));
   }
 
-  checklists(checklistId?: string = '') {
-    return new Checklist(this.auth, this.getOptionsForChild(checklistId));
+  checklist(checklistId: string) {
+    return new Checklist(
+      this.auth, this.getOptionsForChild(checklistId, '/checklist'));
+  }
+
+  checklists() {
+    return new Checklist(this.auth, this.getOptionsForChild());
   }
 
   checkItem(checkItemId: string) {
@@ -164,6 +168,7 @@ export default class Card extends BaseResource {
       this.auth, this.getOptionsForChild(checkItemId, '/checkItem'));
   }
 
+  // TODO: Check if the ID is needed for Lists in Cards.
   list(listId?: string = '') {
     return new List(
       this.auth, this.getOptionsForChild(listId, '/list'));
@@ -193,7 +198,7 @@ export default class Card extends BaseResource {
       idMembers?: Array<string>,
       idAttachmentCover?: string,
       idList?: string,
-      idLabels?: string,
+      idLabels?: Array<string>,
       idBoard?: string,
       pos?: PositionNumbered,
       due?: ?Date,
@@ -246,7 +251,7 @@ export default class Card extends BaseResource {
   }
 
   updatePosition(value: PositionNumbered): Promise<*> {
-    return this.httpPut('/name', { value });
+    return this.httpPut('/pos', { value });
   }
 
   updateSubscribed(value: boolean): Promise<*> {
@@ -272,27 +277,27 @@ export default class Card extends BaseResource {
     return this.httpPost('/', queryArgs);
   }
 
-  addIdLabel(value: string) {
+  addIdLabel(value: string): Promise<*> {
     return this.httpPost('/idLabels', { value });
   }
 
-  addIdMember(value: string) {
+  addIdMember(value: string): Promise<*> {
     return this.httpPost('/idMembers', { value });
   }
 
-  markAssociatedNotificationsRead() {
+  markAssociatedNotificationsRead(): Promise<*> {
     return this.httpPost('/markAssociatedNotificationsRead');
   }
 
-  deleteCard() {
+  deleteCard(): Promise<*> {
     return this.httpDelete('/');
   }
 
-  deleteIdLabel(idLabel: string) {
+  deleteIdLabel(idLabel: string): Promise<*> {
     return this.httpDelete(`/idLabels/${idLabel}`);
   }
 
-  deleteIdMember(idMember: string) {
+  deleteIdMember(idMember: string): Promise<*> {
     return this.httpDelete(`/idMembers/${idMember}`);
   }
 }
