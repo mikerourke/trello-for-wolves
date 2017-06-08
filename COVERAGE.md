@@ -106,15 +106,15 @@ The table below contains all of the available Trello routes and their status in 
 | CAR-G-13 | card         | get    | /cards/[id]/members                                       | ✓     |        |            |
 | CAR-G-14 | card         | get    | /cards/[id]/membersVoted                                  | ✓     |        |            |
 | CAR-G-15 | card         | get    | /cards/[id]/pluginData                                    | ✓     |        |            |
-| CAR-G-16 | card         | get    | /cards/[id]/stickers                                      |       |        |            |
-| CAR-G-17 | card         | get    | /cards/[id]/stickers/[idSticker]                          |       |        |            |
+| CAR-G-16 | card         | get    | /cards/[id]/stickers                                      | ✓     |        |            |
+| CAR-G-17 | card         | get    | /cards/[id]/stickers/[idSticker]                          | ✓     |        |            |
 | CAR-U-01 | card         | put    | /cards/[id]                                               | ✓     |        |            |
 | CAR-U-02 | card         | put    | /cards/[id]/actions/[id]/comments                         |       |        |            |
-| CAR-U-03 | card         | put    | /cards/[id]/checklist/[id]/checkItem/[id]/name            |       |        |            |
-| CAR-U-04 | card         | put    | /cards/[id]/checklist/[id]/checkItem/[id]/pos             |       |        |            |
-| CAR-U-05 | card         | put    | /cards/[id]/checklist/[id]/checkItem/[id]/state           |       |        |            |
-| CAR-U-06 | card         | put    | /cards/[id]/checklist/[id]/checkItem/[id]                 |       |        |            |
-| CAR-U-07 | card         | put    | /cards/[id]/checkItem/[idCheckItem]                       |       |        |            |
+| CAR-U-03 | card         | put    | /cards/[id]/checklist/[id]/checkItem/[id]/name            | ✓     |        |            |
+| CAR-U-04 | card         | put    | /cards/[id]/checklist/[id]/checkItem/[id]/pos             | ✓     |        |            |
+| CAR-U-05 | card         | put    | /cards/[id]/checklist/[id]/checkItem/[id]/state           | ✓     |        |            |
+| CAR-U-06 | card         | put    | /cards/[id]/checklist/[id]/checkItem/[id]                 | ✓     |        |            |
+| CAR-U-07 | card         | put    | /cards/[id]/checkItem/[idCheckItem]                       | ✓     |        |            |
 | CAR-U-08 | card         | put    | /cards/[id]/closed                                        | ✓     |        |            |
 | CAR-U-09 | card         | put    | /cards/[id]/desc                                          | ✓     |        |            |
 | CAR-U-10 | card         | put    | /cards/[id]/due                                           | ✓     |        |            |
@@ -125,71 +125,71 @@ The table below contains all of the available Trello routes and their status in 
 | CAR-U-15 | card         | put    | /cards/[id]/idMembers                                     | ✓     |        |            |
 | CAR-U-16 | card         | put    | /cards/[id]/name                                          | ✓     |        |            |
 | CAR-U-17 | card         | put    | /cards/[id]/pos                                           | ✓     |        |            |
-| CAR-U-18 | card         | put    | /cards/[id]/stickers/[idSticker]                          |       |        |            |
+| CAR-U-18 | card         | put    | /cards/[id]/stickers/[idSticker]                          | ✓     |        |            |
 | CAR-U-19 | card         | put    | /cards/[id]/subscribed                                    | ✓     |        |            |
 | CAR-P-01 | card         | post   | /cards                                                    | ✓     |        |            |
 | CAR-P-02 | card         | post   | /cards/[id]/actions/comments                              |       |        |            |
 | CAR-P-03 | card         | post   | /cards/[id]/attachments                                   | ✓     |        |            |
-| CAR-P-04 | card         | post   | /cards/[id]/checklist/[id]/checkItem                      |       |        |            |
-| CAR-P-05 | card         | post   | /cards/[id]/checklist/[id]/checkItem/[id]/convertToCard   |       |        |            |
-| CAR-P-06 | card         | post   | /cards/[id]/checklists                                    |       |        |            |
+| CAR-P-04 | card         | post   | /cards/[id]/checklist/[id]/checkItem                      | ✓     |        |            |
+| CAR-P-05 | card         | post   | /cards/[id]/checklist/[id]/checkItem/[id]/convertToCard   | ✓     |        |            |
+| CAR-P-06 | card         | post   | /cards/[id]/checklists                                    | ✓     |        |            |
 | CAR-P-07 | card         | post   | /cards/[id]/idLabels                                      | ✓     |        |            |
 | CAR-P-08 | card         | post   | /cards/[id]/idMembers                                     | ✓     |        |            |
 | CAR-P-09 | card         | post   | /cards/[id]/labels                                        |       |        |            |
 | CAR-P-10 | card         | post   | /cards/[id]/markAssociatedNotificationsRead               | ✓     |        |            |
 | CAR-P-11 | card         | post   | /cards/[id]/membersVoted                                  | ✓     |        |            |
-| CAR-P-12 | card         | post   | /cards/[id]/stickers                                      |       |        |            |
+| CAR-P-12 | card         | post   | /cards/[id]/stickers                                      | ✓     |        |            |
 | CAR-D-01 | card         | delete | /cards/[id]                                               | ✓     |        |            |
 | CAR-D-02 | card         | delete | /cards/[id]/actions/[id]/comments                         |       |        |            |
 | CAR-D-03 | card         | delete | /cards/[id]/attachments/[idAttachment]                    | ✓     |        |            |
-| CAR-D-04 | card         | delete | /cards/[id]/checklist/[id]/checkItem/[id]                 |       |        |            |
-| CAR-D-05 | card         | delete | /cards/[id]/checkItem/[idCheckItem]                       |       |        |            |
-| CAR-D-06 | card         | delete | /cards/[id]/checklists/[id]                               |       |        |            |
+| CAR-D-04 | card         | delete | /cards/[id]/checklist/[id]/checkItem/[id]                 | ✓     |        |            |
+| CAR-D-05 | card         | delete | /cards/[id]/checkItem/[idCheckItem]                       | ✓     |        |            |
+| CAR-D-06 | card         | delete | /cards/[id]/checklists/[id]                               | ✓     |        |            |
 | CAR-D-07 | card         | delete | /cards/[id]/idLabels/[idLabel]                            | ✓     |        |            |
 | CAR-D-08 | card         | delete | /cards/[id]/idMembers/[idMember]                          | ✓     |        |            |
 | CAR-D-09 | card         | delete | /cards/[id]/labels/[color]                                |       |        |            |
 | CAR-D-10 | card         | delete | /cards/[id]/membersVoted/[idMember]                       |       |        |            |
-| CAR-D-11 | card         | delete | /cards/[id]/stickers/[idSticker]                          |       |        |            |
+| CAR-D-11 | card         | delete | /cards/[id]/stickers/[idSticker]                          | ✓     |        |            |
 | CHK-G-01 | checklist    | get    | /checklists/[id]                                          | ✓     |        |            |
 | CHK-G-02 | checklist    | get    | /checklists/[id]/[field]                                  | ✓     |        |            |
 | CHK-G-03 | checklist    | get    | /checklists/[id]/board                                    | ✓     |        |            |
 | CHK-G-04 | checklist    | get    | /checklists/[id]/board/[field]                            | ✓     |        |            |
 | CHK-G-05 | checklist    | get    | /checklists/[id]/cards                                    | ✓     |        |            |
 | CHK-G-06 | checklist    | get    | /checklists/[id]/cards/[filter]                           | ✓     |        |            |
-| CHK-G-07 | checklist    | get    | /checklists/[id]/checkItems                               |       |        |            |
-| CHK-G-08 | checklist    | get    | /checklists/[id]/checkItems/[id]                          |       |        |            |
+| CHK-G-07 | checklist    | get    | /checklists/[id]/checkItems                               | ✓     |        |            |
+| CHK-G-08 | checklist    | get    | /checklists/[id]/checkItems/[id]                          | ✓     |        |            |
 | CHK-U-01 | checklist    | put    | /checklists/[id]                                          | ✓     |        |            |
 | CHK-U-02 | checklist    | put    | /checklists/[id]/name                                     | ✓     |        |            |
 | CHK-U-03 | checklist    | put    | /checklists/[id]/pos                                      | ✓     |        |            |
 | CHK-P-01 | checklist    | post   | /checklists                                               | ✓     |        |            |
 | CHK-P-02 | checklist    | post   | /checklists/[id]/checkItems                               |       |        |            |
 | CHK-D-01 | checklist    | delete | /checklists/[id]                                          | ✓     |        |            |
-| CHK-D-02 | checklist    | delete | /checklists/[id]/checkItems/[id]                          |       |        |            |
-| LBL-G-01 | label        | get    | /labels/[idLabel]                                         |       |        |            |
-| LBL-G-02 | label        | get    | /labels/[idLabel]/board                                   |       |        |            |
-| LBL-G-03 | label        | get    | /labels/[idLabel]/board/[field]                           |       |        |            |
-| LBL-U-01 | label        | put    | /labels/[idLabel]                                         |       |        |            |
-| LBL-U-02 | label        | put    | /labels/[idLabel]/color                                   |       |        |            |
-| LBL-U-03 | label        | put    | /labels/[idLabel]/name                                    |       |        |            |
-| LBL-P-01 | label        | post   | /labels                                                   |       |        |            |
-| LBL-D-01 | label        | delete | /labels/[idLabel]                                         |       |        |            |
-| LST-G-01 | list         | get    | /lists/[idList]                                           |       |        |            |
-| LST-G-02 | list         | get    | /lists/[idList]/[field]                                   |       |        |            |
-| LST-G-03 | list         | get    | /lists/[idList]/actions                                   |       |        |            |
-| LST-G-04 | list         | get    | /lists/[idList]/board                                     |       |        |            |
-| LST-G-05 | list         | get    | /lists/[idList]/board/[field]                             |       |        |            |
-| LST-G-06 | list         | get    | /lists/[idList]/cards                                     |       |        |            |
-| LST-G-07 | list         | get    | /lists/[idList]/cards/[filter]                            |       |        |            |
-| LST-U-01 | list         | put    | /lists/[idList]                                           |       |        |            |
-| LST-U-02 | list         | put    | /lists/[idList]/closed                                    |       |        |            |
-| LST-U-03 | list         | put    | /lists/[idList]/idBoard                                   |       |        |            |
-| LST-U-04 | list         | put    | /lists/[idList]/name                                      |       |        |            |
-| LST-U-05 | list         | put    | /lists/[idList]/pos                                       |       |        |            |
-| LST-U-06 | list         | put    | /lists/[idList]/subscribed                                |       |        |            |
-| LST-P-01 | list         | post   | /lists                                                    |       |        |            |
-| LST-P-02 | list         | post   | /lists/[idList]/archiveAllCards                           |       |        |            |
-| LST-P-03 | list         | post   | /lists/[idList]/cards                                     |       |        |            |
-| LST-P-04 | list         | post   | /lists/[idList]/moveAllCards                              |       |        |            |
+| CHK-D-02 | checklist    | delete | /checklists/[id]/checkItems/[id]                          | ✓     |        |            |
+| LBL-G-01 | label        | get    | /labels/[idLabel]                                         | ✓     |        |            |
+| LBL-G-02 | label        | get    | /labels/[idLabel]/board                                   | ✓     |        |            |
+| LBL-G-03 | label        | get    | /labels/[idLabel]/board/[field]                           | ✓     |        |            |
+| LBL-U-01 | label        | put    | /labels/[idLabel]                                         | ✓     |        |            |
+| LBL-U-02 | label        | put    | /labels/[idLabel]/color                                   | ✓     |        |            |
+| LBL-U-03 | label        | put    | /labels/[idLabel]/name                                    | ✓     |        |            |
+| LBL-P-01 | label        | post   | /labels                                                   | ✓     |        |            |
+| LBL-D-01 | label        | delete | /labels/[idLabel]                                         | ✓     |        |            |
+| LST-G-01 | list         | get    | /lists/[idList]                                           | ✓     |        |            |
+| LST-G-02 | list         | get    | /lists/[idList]/[field]                                   | ✓     |        |            |
+| LST-G-03 | list         | get    | /lists/[idList]/actions                                   | ✓     |        |            |
+| LST-G-04 | list         | get    | /lists/[idList]/board                                     | ✓     |        |            |
+| LST-G-05 | list         | get    | /lists/[idList]/board/[field]                             | ✓     |        |            |
+| LST-G-06 | list         | get    | /lists/[idList]/cards                                     | ✓     |        |            |
+| LST-G-07 | list         | get    | /lists/[idList]/cards/[filter]                            | ✓     |        |            |
+| LST-U-01 | list         | put    | /lists/[idList]                                           | ✓     |        |            |
+| LST-U-02 | list         | put    | /lists/[idList]/closed                                    | ✓     |        |            |
+| LST-U-03 | list         | put    | /lists/[idList]/idBoard                                   | ✓     |        |            |
+| LST-U-04 | list         | put    | /lists/[idList]/name                                      | ✓     |        |            |
+| LST-U-05 | list         | put    | /lists/[idList]/pos                                       | ✓     |        |            |
+| LST-U-06 | list         | put    | /lists/[idList]/subscribed                                | ✓     |        |            |
+| LST-P-01 | list         | post   | /lists                                                    | ✓     |        |            |
+| LST-P-02 | list         | post   | /lists/[idList]/archiveAllCards                           | ✓     |        |            |
+| LST-P-03 | list         | post   | /lists/[idList]/cards                                     | ✓     |        |            |
+| LST-P-04 | list         | post   | /lists/[idList]/moveAllCards                              | ✓     |        |            |
 | MBR-G-01 | member       | get    | /members/[id]                                             |       |        |            |
 | MBR-G-02 | member       | get    | /members/[id]/[field]                                     |       |        |            |
 | MBR-G-03 | member       | get    | /members/[id]/actions                                     |       |        |            |
@@ -250,86 +250,86 @@ The table below contains all of the available Trello routes and their status in 
 | MBR-D-03 | member       | delete | /members/[id]/customBoardBackgrounds/[idBoardBackground]  |       |        |            |
 | MBR-D-04 | member       | delete | /members/[id]/customStickers/[idCustomSticker]            |       |        |            |
 | MBR-D-05 | member       | delete | /members/[id]/savedSearches/[idSavedSearch]               |       |        |            |
-| NTF-G-01 | notification | get    | /notifications/[id]                                       |       |        |            |
-| NTF-G-02 | notification | get    | /notifications/[id]/[field]                               |       |        |            |
-| NTF-G-03 | notification | get    | /notifications/[id]/board                                 |       |        |            |
-| NTF-G-04 | notification | get    | /notifications/[id]/board/[field]                         |       |        |            |
-| NTF-G-05 | notification | get    | /notifications/[id]/card                                  |       |        |            |
-| NTF-G-06 | notification | get    | /notifications/[id]/card/[field]                          |       |        |            |
-| NTF-G-07 | notification | get    | /notifications/[id]/display                               |       |        |            |
-| NTF-G-08 | notification | get    | /notifications/[id]/entities                              |       |        |            |
-| NTF-G-09 | notification | get    | /notifications/[id]/list                                  |       |        |            |
-| NTF-G-10 | notification | get    | /notifications/[id]/list/[field]                          |       |        |            |
-| NTF-G-11 | notification | get    | /notifications/[id]/member                                |       |        |            |
-| NTF-G-12 | notification | get    | /notifications/[id]/member/[field]                        |       |        |            |
-| NTF-G-13 | notification | get    | /notifications/[id]/memberCreator                         |       |        |            |
-| NTF-G-14 | notification | get    | /notifications/[id]/memberCreator/[field]                 |       |        |            |
-| NTF-G-15 | notification | get    | /notifications/[id]/organization                          |       |        |            |
-| NTF-G-16 | notification | get    | /notifications/[id]/organization/[field]                  |       |        |            |
-| NTF-U-01 | notification | put    | /notifications/[id]                                       |       |        |            |
-| NTF-U-02 | notification | put    | /notifications/[id]/unread                                |       |        |            |
-| NTF-P-01 | notification | post   | /notifications/all/read                                   |       |        |            |
-| ORG-G-01 | organization | get    | /organizations/[id]                                       |       |        |            |
-| ORG-G-02 | organization | get    | /organizations/[id]/[field]                               |       |        |            |
-| ORG-G-03 | organization | get    | /organizations/[id]/actions                               |       |        |            |
-| ORG-G-04 | organization | get    | /organizations/[id]/boards                                |       |        |            |
-| ORG-G-05 | organization | get    | /organizations/[id]/boards/[filter]                       |       |        |            |
-| ORG-G-06 | organization | get    | /organizations/[id]/deltas                                |       |        |            |
-| ORG-G-07 | organization | get    | /organizations/[id]/members                               |       |        |            |
-| ORG-G-08 | organization | get    | /organizations/[id]/members/[filter]                      |       |        |            |
-| ORG-G-09 | organization | get    | /organizations/[id]/members/[idMember]/cards              |       |        |            |
-| ORG-G-10 | organization | get    | /organizations/[id]/membersInvited                        |       |        |            |
-| ORG-G-11 | organization | get    | /organizations/[id]/membersInvited/[field]                |       |        |            |
-| ORG-G-12 | organization | get    | /organizations/[id]/memberships                           |       |        |            |
-| ORG-G-13 | organization | get    | /organizations/[id]/memberships/[idMembership]            |       |        |            |
-| ORG-G-14 | organization | get    | /organizations/[id]/pluginData                            |       |        |            |
-| ORG-G-15 | organization | get    | /organizations/[id]/tags                                  |       |        |            |
-| ORG-U-01 | organization | put    | /organizations/[id]                                       |       |        |            |
-| ORG-U-02 | organization | put    | /organizations/[id]/desc                                  |       |        |            |
-| ORG-U-03 | organization | put    | /organizations/[id]/displayName                           |       |        |            |
-| ORG-U-04 | organization | put    | /organizations/[id]/members                               |       |        |            |
-| ORG-U-05 | organization | put    | /organizations/[id]/members/[idMember]                    |       |        |            |
-| ORG-U-06 | organization | put    | /organizations/[id]/members/[idMember]/deactivated        |       |        |            |
-| ORG-U-07 | organization | put    | /organizations/[id]/memberships/[idMembership]            |       |        |            |
-| ORG-U-08 | organization | put    | /organizations/[id]/name                                  |       |        |            |
-| ORG-U-09 | organization | put    | /organizations/[id]/prefs/associatedDomain                |       |        |            |
-| ORG-U-10 | organization | put    | /organizations/[id]/prefs/boardVisibilityRestrict/org     |       |        |            |
-| ORG-U-11 | organization | put    | /organizations/[id]/prefs/boardVisibilityRestrict/private |       |        |            |
-| ORG-U-12 | organization | put    | /organizations/[id]/prefs/boardVisibilityRestrict/public  |       |        |            |
-| ORG-U-13 | organization | put    | /organizations/[id]/prefs/externalMembersDisabled         |       |        |            |
-| ORG-U-14 | organization | put    | /organizations/[id]/prefs/googleAppsVersion               |       |        |            |
-| ORG-U-15 | organization | put    | /organizations/[id]/prefs/orgInviteRestrict               |       |        |            |
-| ORG-U-16 | organization | put    | /organizations/[id]/prefs/permissionLevel                 |       |        |            |
-| ORG-U-17 | organization | put    | /organizations/[id]/website                               |       |        |            |
-| ORG-P-01 | organization | post   | /organizations                                            |       |        |            |
-| ORG-P-02 | organization | post   | /organizations/[id]/logo                                  |       |        |            |
-| ORG-P-03 | organization | post   | /organizations/[id]/tags                                  |       |        |            |
-| ORG-D-01 | organization | delete | /organizations/[id]                                       |       |        |            |
-| ORG-D-02 | organization | delete | /organizations/[id]/logo                                  |       |        |            |
-| ORG-D-03 | organization | delete | /organizations/[id]/members/[idMember]                    |       |        |            |
-| ORG-D-04 | organization | delete | /organizations/[id]/members/[idMember]/all                |       |        |            |
-| ORG-D-05 | organization | delete | /organizations/[id]/prefs/associatedDomain                |       |        |            |
-| ORG-D-06 | organization | delete | /organizations/[id]/prefs/orgInviteRestrict               |       |        |            |
-| SRC-G-01 | search       | get    | /search                                                   |       |        |            |
-| SRC-G-02 | search       | get    | /search/members                                           |       |        |            |
-| TKN-G-03 | token        | get    | /tokens/[token]                                           |       |        |            |
-| TKN-G-04 | token        | get    | /tokens/[token]/[field]                                   |       |        |            |
-| TKN-G-05 | token        | get    | /tokens/[token]/member                                    |       |        |            |
-| TKN-G-06 | token        | get    | /tokens/[token]/member/[field]                            |       |        |            |
-| TKN-G-07 | token        | get    | /tokens/[token]/webhooks                                  |       |        |            |
-| TKN-G-08 | token        | get    | /tokens/[token]/webhooks/[idWebhook]                      |       |        |            |
-| TKN-U-01 | token        | put    | /tokens/[token]/webhooks                                  |       |        |            |
-| TKN-P-01 | token        | post   | /tokens/[token]/webhooks                                  |       |        |            |
-| TKN-D-01 | token        | delete | /tokens/[token]                                           |       |        |            |
-| TKN-D-02 | token        | delete | /tokens/[token]/webhooks/[idWebhook]                      |       |        |            |
-| TYP-G-01 | type         | get    | /types/[id]                                               |       |        |            |
-| WEB-G-02 | webhook      | get    | /webhooks/[idWebhook]                                     |       |        |            |
-| WEB-G-03 | webhook      | get    | /webhooks/[idWebhook]/[field]                             |       |        |            |
-| WEB-U-01 | webhook      | put    | /webhooks/[idWebhook]                                     |       |        |            |
-| WEB-U-02 | webhook      | put    | /webhooks/                                                |       |        |            |
-| WEB-U-03 | webhook      | put    | /webhooks/[idWebhook]/active                              |       |        |            |
-| WEB-U-04 | webhook      | put    | /webhooks/[idWebhook]/callbackURL                         |       |        |            |
-| WEB-U-05 | webhook      | put    | /webhooks/[idWebhook]/description                         |       |        |            |
-| WEB-U-06 | webhook      | put    | /webhooks/[idWebhook]/idModel                             |       |        |            |
-| WEB-P-01 | webhook      | post   | /webhooks                                                 |       |        |            |
-| WEB-D-01 | webhook      | delete | /webhooks/[idWebhook]                                     |       |        |            |
+| NTF-G-01 | notification | get    | /notifications/[id]                                       | ✓     |        |            |
+| NTF-G-02 | notification | get    | /notifications/[id]/[field]                               | ✓     |        |            |
+| NTF-G-03 | notification | get    | /notifications/[id]/board                                 | ✓     |        |            |
+| NTF-G-04 | notification | get    | /notifications/[id]/board/[field]                         | ✓     |        |            |
+| NTF-G-05 | notification | get    | /notifications/[id]/card                                  | ✓     |        |            |
+| NTF-G-06 | notification | get    | /notifications/[id]/card/[field]                          | ✓     |        |            |
+| NTF-G-07 | notification | get    | /notifications/[id]/display                               | ✓     |        |            |
+| NTF-G-08 | notification | get    | /notifications/[id]/entities                              | ✓     |        |            |
+| NTF-G-09 | notification | get    | /notifications/[id]/list                                  | ✓     |        |            |
+| NTF-G-10 | notification | get    | /notifications/[id]/list/[field]                          | ✓     |        |            |
+| NTF-G-11 | notification | get    | /notifications/[id]/member                                | ✓     |        |            |
+| NTF-G-12 | notification | get    | /notifications/[id]/member/[field]                        | ✓     |        |            |
+| NTF-G-13 | notification | get    | /notifications/[id]/memberCreator                         | ✓     |        |            |
+| NTF-G-14 | notification | get    | /notifications/[id]/memberCreator/[field]                 | ✓     |        |            |
+| NTF-G-15 | notification | get    | /notifications/[id]/organization                          | ✓     |        |            |
+| NTF-G-16 | notification | get    | /notifications/[id]/organization/[field]                  | ✓     |        |            |
+| NTF-U-01 | notification | put    | /notifications/[id]                                       | ✓     |        |            |
+| NTF-U-02 | notification | put    | /notifications/[id]/unread                                | ✓     |        |            |
+| NTF-P-01 | notification | post   | /notifications/all/read                                   | ✓     |        |            |
+| ORG-G-01 | organization | get    | /organizations/[id]                                       | ✓     |        |            |
+| ORG-G-02 | organization | get    | /organizations/[id]/[field]                               | ✓     |        |            |
+| ORG-G-03 | organization | get    | /organizations/[id]/actions                               | ✓     |        |            |
+| ORG-G-04 | organization | get    | /organizations/[id]/boards                                | ✓     |        |            |
+| ORG-G-05 | organization | get    | /organizations/[id]/boards/[filter]                       | ✓     |        |            |
+| ORG-G-06 | organization | get    | /organizations/[id]/deltas                                | ✓     |        |            |
+| ORG-G-07 | organization | get    | /organizations/[id]/members                               | ✓     |        |            |
+| ORG-G-08 | organization | get    | /organizations/[id]/members/[filter]                      | ✓     |        |            |
+| ORG-G-09 | organization | get    | /organizations/[id]/members/[idMember]/cards              | ✓     |        |            |
+| ORG-G-10 | organization | get    | /organizations/[id]/membersInvited                        | ✓     |        |            |
+| ORG-G-11 | organization | get    | /organizations/[id]/membersInvited/[field]                | ✓     |        |            |
+| ORG-G-12 | organization | get    | /organizations/[id]/memberships                           | ✓     |        |            |
+| ORG-G-13 | organization | get    | /organizations/[id]/memberships/[idMembership]            | ✓     |        |            |
+| ORG-G-14 | organization | get    | /organizations/[id]/pluginData                            | ✓     |        |            |
+| ORG-G-15 | organization | get    | /organizations/[id]/tags                                  | ✓     |        |            |
+| ORG-U-01 | organization | put    | /organizations/[id]                                       | ✓     |        |            |
+| ORG-U-02 | organization | put    | /organizations/[id]/desc                                  | ✓     |        |            |
+| ORG-U-03 | organization | put    | /organizations/[id]/displayName                           | ✓     |        |            |
+| ORG-U-04 | organization | put    | /organizations/[id]/members                               | ✓     |        |            |
+| ORG-U-05 | organization | put    | /organizations/[id]/members/[idMember]                    | ✓     |        |            |
+| ORG-U-06 | organization | put    | /organizations/[id]/members/[idMember]/deactivated        | ✓     |        |            |
+| ORG-U-07 | organization | put    | /organizations/[id]/memberships/[idMembership]            | ✓     |        |            |
+| ORG-U-08 | organization | put    | /organizations/[id]/name                                  | ✓     |        |            |
+| ORG-U-09 | organization | put    | /organizations/[id]/prefs/associatedDomain                | ✓     |        |            |
+| ORG-U-10 | organization | put    | /organizations/[id]/prefs/boardVisibilityRestrict/org     | ✓     |        |            |
+| ORG-U-11 | organization | put    | /organizations/[id]/prefs/boardVisibilityRestrict/private | ✓     |        |            |
+| ORG-U-12 | organization | put    | /organizations/[id]/prefs/boardVisibilityRestrict/public  | ✓     |        |            |
+| ORG-U-13 | organization | put    | /organizations/[id]/prefs/externalMembersDisabled         | ✓     |        |            |
+| ORG-U-14 | organization | put    | /organizations/[id]/prefs/googleAppsVersion               | ✓     |        |            |
+| ORG-U-15 | organization | put    | /organizations/[id]/prefs/orgInviteRestrict               | ✓     |        |            |
+| ORG-U-16 | organization | put    | /organizations/[id]/prefs/permissionLevel                 | ✓     |        |            |
+| ORG-U-17 | organization | put    | /organizations/[id]/website                               | ✓     |        |            |
+| ORG-P-01 | organization | post   | /organizations                                            | ✓     |        |            |
+| ORG-P-02 | organization | post   | /organizations/[id]/logo                                  | ✓     |        |            |
+| ORG-P-03 | organization | post   | /organizations/[id]/tags                                  | ✓     |        |            |
+| ORG-D-01 | organization | delete | /organizations/[id]                                       | ✓     |        |            |
+| ORG-D-02 | organization | delete | /organizations/[id]/logo                                  | ✓     |        |            |
+| ORG-D-03 | organization | delete | /organizations/[id]/members/[idMember]                    | ✓     |        |            |
+| ORG-D-04 | organization | delete | /organizations/[id]/members/[idMember]/all                | ✓     |        |            |
+| ORG-D-05 | organization | delete | /organizations/[id]/prefs/associatedDomain                | ✓     |        |            |
+| ORG-D-06 | organization | delete | /organizations/[id]/prefs/orgInviteRestrict               | ✓     |        |            |
+| SRC-G-01 | search       | get    | /search                                                   | ✓     |        |            |
+| SRC-G-02 | search       | get    | /search/members                                           | ✓     |        |            |
+| TKN-G-03 | token        | get    | /tokens/[token]                                           | ✓     |        |            |
+| TKN-G-04 | token        | get    | /tokens/[token]/[field]                                   | ✓     |        |            |
+| TKN-G-05 | token        | get    | /tokens/[token]/member                                    | ✓     |        |            |
+| TKN-G-06 | token        | get    | /tokens/[token]/member/[field]                            | ✓     |        |            |
+| TKN-G-07 | token        | get    | /tokens/[token]/webhooks                                  | ✓     |        |            |
+| TKN-G-08 | token        | get    | /tokens/[token]/webhooks/[idWebhook]                      | ✓     |        |            |
+| TKN-U-01 | token        | put    | /tokens/[token]/webhooks                                  | ✓     |        |            |
+| TKN-P-01 | token        | post   | /tokens/[token]/webhooks                                  | ✓     |        |            |
+| TKN-D-01 | token        | delete | /tokens/[token]                                           | ✓     |        |            |
+| TKN-D-02 | token        | delete | /tokens/[token]/webhooks/[idWebhook]                      | ✓     |        |            |
+| TYP-G-01 | type         | get    | /types/[id]                                               | ✓     |        |            |
+| WEB-G-02 | webhook      | get    | /webhooks/[idWebhook]                                     | ✓     |        |            |
+| WEB-G-03 | webhook      | get    | /webhooks/[idWebhook]/[field]                             | ✓     |        |            |
+| WEB-U-01 | webhook      | put    | /webhooks/[idWebhook]                                     | ✓     |        |            |
+| WEB-U-02 | webhook      | put    | /webhooks/                                                | ✓     |        |            |
+| WEB-U-03 | webhook      | put    | /webhooks/[idWebhook]/active                              | ✓     |        |            |
+| WEB-U-04 | webhook      | put    | /webhooks/[idWebhook]/callbackURL                         | ✓     |        |            |
+| WEB-U-05 | webhook      | put    | /webhooks/[idWebhook]/description                         | ✓     |        |            |
+| WEB-U-06 | webhook      | put    | /webhooks/[idWebhook]/idModel                             | ✓     |        |            |
+| WEB-P-01 | webhook      | post   | /webhooks                                                 | ✓     |        |            |
+| WEB-D-01 | webhook      | delete | /webhooks/[idWebhook]                                     | ✓     |        |            |

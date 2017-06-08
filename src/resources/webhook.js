@@ -1,26 +1,19 @@
 /* @flow */
 
 /* Internal dependencies */
-import BaseResource from '../base-resource';
+import BaseResource from './base-resource';
 
 /* Types */
 import type {
   Auth,
   ResourceConstructorOptions,
-  WehookField,
 } from '../types';
 
-export type WehookField =
+type WehookField =
   'active'
   | 'callbackURL'
   | 'description'
   | 'idModel';
-
-type CreationQueryArgs = {
-  description?: string,
-  callbackURL: string,
-  idModel: string,
-};
 
 export default class Webhook extends BaseResource {
   constructor(
@@ -30,11 +23,11 @@ export default class Webhook extends BaseResource {
     super(auth, 'webhook', options);
   }
 
-  getWebhook(): Promise<*> {
+  getWebhooks(): Promise<*> {
     return this.httpGet('/');
   }
 
-  getWebhooks(): Promise<*> {
+  getWebhook(): Promise<*> {
     return this.httpGet('/');
   }
 
@@ -54,7 +47,13 @@ export default class Webhook extends BaseResource {
   }
 
   // TODO: Find out how this is different from the POST request.
-  updateWebhooks(queryArgs: CreationQueryArgs): Promise<*> {
+  updateWebhooks(
+    queryArgs: {
+      description?: string,
+      callbackURL: string,
+      idModel: string,
+    },
+  ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }
 
@@ -74,7 +73,13 @@ export default class Webhook extends BaseResource {
     return this.httpPut('/idModel', { value });
   }
 
-  addWebhook(queryArgs: CreationQueryArgs): Promise<*> {
+  addWebhook(
+    queryArgs: {
+      description?: string,
+      callbackURL: string,
+      idModel: string,
+    },
+  ): Promise<*> {
     return this.httpPost('/', queryArgs);
   }
 

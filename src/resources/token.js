@@ -1,7 +1,9 @@
 /* @flow */
 
 /* Internal dependencies */
-import BaseResource from '../base-resource';
+import BaseResource from './base-resource';
+import Member from './member';
+import Webhook from './webhook';
 
 /* Types */
 import type {
@@ -11,7 +13,7 @@ import type {
   ResourceConstructorOptions,
 } from '../types';
 
-export type TokenField =
+type TokenField =
   'dateCreated'
   | 'dateExpires'
   | 'idMember'
@@ -26,15 +28,6 @@ export default class Token extends BaseResource {
     super(auth, 'token', options);
   }
 
-  getToken(
-    queryArgs?: {
-      fields?: ArgumentGroup<TokenField>,
-      webhooks?: boolean,
-    } = {},
-  ): Promise<*> {
-    return this.httpGet('/', queryArgs);
-  }
-
   getTokens(
     queryArgs?: {
       filter?: AllOrNone,
@@ -44,8 +37,25 @@ export default class Token extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
+  getToken(
+    queryArgs?: {
+      fields?: ArgumentGroup<TokenField>,
+      webhooks?: boolean,
+    } = {},
+  ): Promise<*> {
+    return this.httpGet('/', queryArgs);
+  }
+
   getFieldValue(field: TokenField): Promise<*> {
     return this.httpGet(`/${field}`);
+  }
+
+  member() {
+    return new Member(this.auth, this.getOptionsForChild('', '/member'));
+  }
+
+  webhook(webhookId?: string = '') {
+    return new Webhook(this.auth, this.getOptionsForChild(webhookId));
   }
 
   deleteToken(): Promise<*> {

@@ -25,21 +25,9 @@ type CustomStickerField = 'scaled' | 'url';
 export default class Sticker extends BaseResource {
   constructor(
     auth: Auth,
-    isCustom: boolean,
     options?: ResourceConstructorOptions = {},
   ) {
-    const resourceName = isCustom ? 'customSticker' : 'sticker';
-    super(auth, resourceName, options);
-  }
-
-  getSticker(
-    queryArgs?: {
-      fields?: ArgumentGroup<StickerField>,
-    } | {
-      fields?: ArgumentGroup<CustomStickerField>,
-    } = {},
-  ): Promise<*> {
-    return this.httpGet('/', queryArgs);
+    super(auth, 'sticker', options);
   }
 
   getStickers(
@@ -52,7 +40,40 @@ export default class Sticker extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  addSticker(file: Object): Promise<*> {
+  getSticker(
+    queryArgs?: {
+      fields?: ArgumentGroup<StickerField>,
+    } | {
+      fields?: ArgumentGroup<CustomStickerField>,
+    } = {},
+  ): Promise<*> {
+    return this.httpGet('/', queryArgs);
+  }
+
+  updateSticker(
+    queryArgs?: {
+      top?: number,
+      left?: number,
+      zIndex?: number,
+      rotate?: number,
+    } = {},
+  ): Promise<*> {
+    return this.httpPut('/', queryArgs);
+  }
+
+  addSticker(
+    queryArgs: {
+      image: string,
+      top: number,
+      left: number,
+      zIndex: number,
+      rotate?: number,
+    },
+  ): Promise<*> {
+    return this.httpPost('/', queryArgs);
+  }
+
+  uploadSticker(file: Object): Promise<*> {
     return this.httpPost('/', {}, file);
   }
 

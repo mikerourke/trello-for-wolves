@@ -15,7 +15,6 @@ import type {
   FilterDate,
   Format,
   MemberField,
-  MemberEveryField,
   ResourceConstructorOptions,
 } from '../types';
 

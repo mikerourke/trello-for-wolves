@@ -1,7 +1,7 @@
 /* @flow */
 
 /* Internal dependencies */
-import BaseResource from '../base-resource';
+import BaseResource from './base-resource';
 
 /* Types */
 import type {

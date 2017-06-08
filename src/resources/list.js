@@ -13,14 +13,13 @@ import type {
   BoardField,
   CardField,
   CardFilter,
-  LabelColor,
   PositionNumbered,
   ResourceConstructorOptions,
 } from '../types';
 
-export type ListFilter = 'all' | 'closed' | 'none' | 'open';
-
 export type ListField = 'closed' | 'idBoard' | 'name' | 'pos' | 'subscribed';
+
+export type ListFilter = 'all' | 'closed' | 'none' | 'open';
 
 export default class List extends BaseResource {
   constructor(
@@ -30,23 +29,23 @@ export default class List extends BaseResource {
     super(auth, 'list', options);
   }
 
-  getList(
+  getLists(
     queryArgs?: {
       cards?: CardFilter,
       cardFields?: ArgumentGroup<CardField>,
-      board?: boolean,
-      boardFields?: ArgumentGroup<BoardField>,
+      filter?: ListFilter,
       fields?: ArgumentGroup<ListField>,
     } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
-  getLists(
+  getList(
     queryArgs?: {
       cards?: CardFilter,
       cardFields?: ArgumentGroup<CardField>,
-      filter?: ListFilter,
+      board?: boolean,
+      boardFields?: ArgumentGroup<BoardField>,
       fields?: ArgumentGroup<ListField>,
     } = {},
   ): Promise<*> {
@@ -66,11 +65,11 @@ export default class List extends BaseResource {
   }
 
   board() {
-    return new Board(this.auth, this.getOptionsForChild('', '/board'))
+    return new Board(this.auth, this.getOptionsForChild('', '/board'));
   }
 
   cards() {
-    return new Card(this.auth, this.getOptionsForChild())
+    return new Card(this.auth, this.getOptionsForChild());
   }
 
   updateList(
@@ -89,13 +88,18 @@ export default class List extends BaseResource {
     return this.httpPut('/closed', { value });
   }
 
-  updateIdBoard(
+  /**
+   * @example
+   * PUT > .../lists/[listId]/idBoard?value=[boardId]&pos=1&key=...
+   * @see {@link https://developers.trello.com/advanced-reference/list#put-1-lists-idlist-idboard}
+   */
+  moveToBoard(
+    idBoard: string,
     queryArgs: {
-      value: string,
       pos?: PositionNumbered,
     },
   ): Promise<*> {
-    return this.httpPut('/idBoard', queryArgs);
+    return this.httpPut('/idBoard', { ...queryArgs, value: idBoard });
   }
 
   updateName(value: string): Promise<*> {
@@ -121,29 +125,16 @@ export default class List extends BaseResource {
     return this.httpPost('/', queryArgs);
   }
 
-  archiveAllCards() {
+  archiveAllCards(): Promise<*> {
     return this.httpPost('/archiveAllCards');
   }
-
-  addToCard(
-    queryArgs: {
-      name: string,
-      desc?: string,
-      labels?: ArgumentGroup<LabelColor>,
-      idMembers?: Array<string>,
-      due?: ?Date,
-    },
-  ): Promise<*> {
-    return this.httpPost('/', queryArgs);
-  }
-
 
   moveAllCards(
     queryArgs: {
       idBoard: string,
       idList: string,
     },
-  ) {
+  ): Promise<*> {
     return this.httpPost('/moveAllCards', queryArgs);
   }
 }

@@ -25,10 +25,10 @@ type HttpMethod = 'get' | 'put' | 'post' | 'delete';
  */
 export default class BaseResource {
   auth: Auth;
-  resourceName: string;
   instanceId: string;
-  parentPath: string;
   resourcePath: string;
+  _resourceName: string;
+  _parentPath: string;
 
   /**
    * @param {Auth} auth Auth object containing Trello API key and token.
@@ -48,10 +48,10 @@ export default class BaseResource {
   ) {
     const { instanceId = '', parentPath = '', resourcePath = '' } = options;
     this.auth = auth;
-    this.resourceName = resourceName;
     this.instanceId = instanceId;
-    this.parentPath = parentPath;
     this.resourcePath = resourcePath;
+    this._resourceName = resourceName;
+    this._parentPath = parentPath;
   }
 
   /**
@@ -70,9 +70,9 @@ export default class BaseResource {
     // this is included in the parent path for the child resource.
     // An example of a path that meets these conditions is:
     // /boards/:boardId/members/:memberId/cards
-    let parentPathToUse = `/${this.resourceName}s/${this.instanceId}`;
-    if (this.parentPath) {
-      parentPathToUse = `${this.parentPath}${parentPathToUse}`;
+    let parentPathToUse = `/${this._resourceName}s/${this.instanceId}`;
+    if (this._parentPath) {
+      parentPathToUse = `${this._parentPath}${parentPathToUse}`;
     }
     return {
       instanceId: childId,
@@ -91,7 +91,7 @@ export default class BaseResource {
     // construct it based on the resource name and ID.
     let resourcePathToUse = this.resourcePath;
     if (resourcePathToUse === '') {
-      resourcePathToUse = `${this.resourceName}s`;
+      resourcePathToUse = `${this._resourceName}s`;
       if (this.instanceId) {
         resourcePathToUse = `${resourcePathToUse}/${this.instanceId}`;
       }
@@ -99,10 +99,10 @@ export default class BaseResource {
 
     // Ensure there is a slash between the parent and resource path if the
     // parent path was specified.
-    const pathSeparator = this.parentPath && '/';
+    const pathSeparator = this._parentPath && '/';
 
     // Combine the parent and resource paths to form the route path.
-    const fullPath = `${this.parentPath}${pathSeparator}${resourcePathToUse}`;
+    const fullPath = `${this._parentPath}${pathSeparator}${resourcePathToUse}`;
 
     // Ensure there are no double slashes in the final path.
     return fullPath.replace('//', '/');

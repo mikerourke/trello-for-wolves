@@ -8,10 +8,6 @@ import Board from './board';
 import type {
   ArgumentGroup,
   Auth,
-  FieldsQueryArg,
-  LabelColor,
-  LabelField,
-  LimitQueryArg,
   ResourceConstructorOptions,
 } from '../types';
 
@@ -33,6 +29,14 @@ export default class Label extends BaseResource {
     super(auth, 'label', options);
   }
 
+  getLabels(
+    queryArgs?: {
+      fields?: ArgumentGroup<LabelField>,
+    } = {},
+  ): Promise<*> {
+    return this.httpGet('/', queryArgs);
+  }
+
   getLabel(
     queryArgs?: {
       fields?: ArgumentGroup<LabelField>,
@@ -41,31 +45,24 @@ export default class Label extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  getLabels(
-    queryArgs?: FieldsQueryArg<LabelField> &
-      LimitQueryArg = {},
-  ): Promise<*> {
-    return this.httpGet('/', queryArgs);
-  }
-
   board() {
-    return new Board(this.auth, this.getOptionsForChild('', '/board'))
+    return new Board(this.auth, this.getOptionsForChild('', '/board'));
   }
 
   updateLabel(
     queryArgs?: {
       name?: string,
-      color: ?LabelColor,
+      color?: ?LabelColor,
     } = {},
-  ) {
+  ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }
 
-  updateColor(value: ?LabelColor) {
+  updateColor(value: ?LabelColor): Promise<*> {
     return this.httpPut('/color', { value });
   }
 
-  updateName(value: string) {
+  updateName(value: string): Promise<*> {
     return this.httpPut('/name', { value });
   }
 
@@ -79,7 +76,7 @@ export default class Label extends BaseResource {
     return this.httpPost('/', queryArgs);
   }
 
-  deleteLabel() {
+  deleteLabel(): Promise<*> {
     return this.httpDelete('/');
   }
 }

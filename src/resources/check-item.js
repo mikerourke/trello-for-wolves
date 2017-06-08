@@ -5,13 +5,14 @@ import BaseResource from './base-resource';
 
 /* Types */
 import type {
+  AllOrNone,
   ArgumentGroup,
   Auth,
   PositionNumbered,
   ResourceConstructorOptions,
 } from '../types';
 
-export type CheckItemField = 'name' | 'nameData' | 'pos' | 'state' | 'value';
+export type CheckItemField = 'name' | 'nameData' | 'pos' | 'state';
 
 export type CheckItemState = 'complete' | 'false' | 'incomplete' | 'true';
 
@@ -25,6 +26,15 @@ export default class CheckItem extends BaseResource {
     super(auth, 'checkItem', options);
   }
 
+  getCheckItems(
+    queryArgs?: {
+      filter?: AllOrNone,
+      fields?: ArgumentGroup<CheckItemField>,
+    } = {},
+  ): Promise<*> {
+    return this.httpGet('/', queryArgs);
+  }
+
   getCheckItem(
     queryArgs?: {
       fields?: ArgumentGroup<CheckItemField>,
@@ -33,7 +43,7 @@ export default class CheckItem extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  getStates(
+  getCheckItemStates(
     queryArgs?: {
       fields?: ArgumentGroup<CheckItemStateField>,
     } = {},
@@ -45,7 +55,7 @@ export default class CheckItem extends BaseResource {
     queryArgs?: {
       name?: string,
       state?: CheckItemState,
-      idChecklist?: string,
+      idChecklist?: ?string,
       pos?: PositionNumbered,
     } = {},
   ): Promise<*> {
@@ -74,7 +84,11 @@ export default class CheckItem extends BaseResource {
     return this.httpPost('/', queryArgs);
   }
 
-  deleteCheckItem() {
+  convertToCard(): Promise<*> {
+    return this.httpPost('/convertToCard');
+  }
+
+  deleteCheckItem(): Promise<*> {
     return this.httpDelete('/');
   }
 }

@@ -8,6 +8,7 @@ import type {
   ArgumentGroup,
   Auth,
   MemberField,
+  MemberType,
   ResourceConstructorOptions,
 } from '../types';
 
@@ -27,6 +28,15 @@ export default class Membership extends BaseResource {
     super(auth, 'membership', options);
   }
 
+  getMemberships(
+    queryArgs?: {
+      member?: boolean,
+      memberFields?: ArgumentGroup<MemberField>,
+    } = {},
+  ): Promise<*> {
+    return this.httpGet('/', queryArgs);
+  }
+
   getMembership(
     queryArgs?: {
       filter?: ArgumentGroup<MembershipFilter>,
@@ -37,12 +47,12 @@ export default class Membership extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  getMemberships(
-    queryArgs?: {
-      member?: boolean,
-      memberFields?: ArgumentGroup<MemberField>,
-    } = {},
+  updateMembership(
+    queryArgs: {
+      type: MemberType,
+      fields?: ArgumentGroup<MemberField>,
+    },
   ): Promise<*> {
-    return this.httpGet('/', queryArgs);
+    return this.httpPut('/', queryArgs);
   }
 }

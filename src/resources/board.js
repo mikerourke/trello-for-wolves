@@ -102,8 +102,13 @@ class MyPref extends BaseResource {
     return this.httpPut('/emailPosition', { value });
   }
 
-  updateIdEmailList(value: string): Promise<*> {
-    return this.httpPut('/idEmailList', { value });
+  /**
+   * @example
+   * PUT > .../boards/[boardId]/myPrefs/idEmailList?value=[emailListId]&key=...
+   * @see {@link https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-myprefs-idemaillist}
+   */
+  moveToEmailList(emailListId: string): Promise<*> {
+    return this.httpPut('/idEmailList', { value: emailListId });
   }
 
   updateShowListGuide(value: boolean): Promise<*> {
@@ -282,13 +287,13 @@ export default class Board extends BaseResource {
     queryArgs: {
       tags: string,
       ixLastUpdate: number,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/deltas', queryArgs);
   }
 
   getTags(): Promise<*> {
-    return this.httpGet('/tags');
+    return this.httpGet('/idTags');
   }
 
   labels(labelId?: string = '') {
@@ -362,10 +367,6 @@ export default class Board extends BaseResource {
 
   updateDescription(value: string): Promise<*> {
     return this.httpPut('/desc', { value });
-  }
-
-  updateIdOrganization(value: string): Promise<*> {
-    return this.httpPut('/idOrganization', { value });
   }
 
   updateLabelNameForColor(

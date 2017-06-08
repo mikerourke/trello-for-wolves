@@ -7,6 +7,7 @@ import Attachment from './attachment';
 import Board from './board';
 import CheckItem from './check-item';
 import Checklist from './checklist';
+import Label from './label';
 import List from './list';
 import Member from './member';
 import Sticker from './sticker';
@@ -21,11 +22,10 @@ import type {
   AttachmentFilter,
   Auth,
   BoardField,
-  CardField,
-  CardFilter,
   CheckItemStateField,
   ChecklistField,
   KeepFromSourceField,
+  LabelColor,
   ListField,
   MemberField,
   PositionNumbered,
@@ -168,14 +168,19 @@ export default class Card extends BaseResource {
       this.auth, this.getOptionsForChild(checkItemId, '/checkItem'));
   }
 
-  // TODO: Check if the ID is needed for Lists in Cards.
-  list(listId?: string = '') {
-    return new List(
-      this.auth, this.getOptionsForChild(listId, '/list'));
+  labels(labelId?: string = '') {
+    const resourcePath = labelId && '/idLabels';
+    return new Label(this.auth, this.getOptionsForChild(labelId, resourcePath));
   }
 
-  members() {
-    return new Member(this.auth, this.getOptionsForChild());
+  list() {
+    return new List(this.auth, this.getOptionsForChild('', '/list'));
+  }
+
+  members(memberId?: string = '') {
+    const resourcePath = memberId && '/idMembers';
+    return new Member(
+      this.auth, this.getOptionsForChild(memberId, resourcePath));
   }
 
   membersVoted() {
@@ -225,25 +230,36 @@ export default class Card extends BaseResource {
     return this.httpPut('/dueComplete', { value });
   }
 
-  updateIdAttachmentCover(value: string): Promise<*> {
-    return this.httpPut('/idAttachmentCover', { value });
+  /**
+   * @example
+   * PUT > .../cards/[cardId]/idAttachmentCover?value=[attachmentCoverId]&key=...
+   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idattachmentcover}
+   */
+  updateAttachmentCoverImage(idAttachmentCover: string): Promise<*> {
+    return this.httpPut('/idAttachmentCover', { value: idAttachmentCover });
   }
 
-  updateIdBoard(
+  /**
+   * @example
+   * PUT > .../cards/[cardId]/idBoard?value=[boardId]&idList=[listId]&key=...
+   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idboard}
+   */
+  moveToBoard(
+    idBoard: string,
     queryArgs: {
-      value: string,
       idList?: string,
     },
   ): Promise<*> {
-    return this.httpPut('/idBoard', queryArgs);
+    return this.httpPut('/idBoard', { ...queryArgs, value: idBoard });
   }
 
-  updateIdList(value: string): Promise<*> {
-    return this.httpPut('/idList', { value });
-  }
-
-  updateIdMembers(value: Array<string>): Promise<*> {
-    return this.httpPut('/idMembers', { value });
+  /**
+   * @example
+   * PUT > .../cards/[cardId]/idList?value=[listId]&key=...
+   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idlist}
+   */
+  moveToList(idList: string): Promise<*> {
+    return this.httpPut('/idList', { value: idList });
   }
 
   updateName(value: string): Promise<*> {
@@ -272,6 +288,13 @@ export default class Card extends BaseResource {
       fileSource?: Object,
       idCardSource?: string,
       keepFromSource?: KeepFromSourceField | Array<KeepFromSourceField>,
+    } | {
+      // These are for adding a card from a List.
+      name: string,
+      desc?: string,
+      labels?: ArgumentGroup<LabelColor>,
+      idMembers?: Array<string>,
+      due?: ?Date,
     },
   ): Promise<*> {
     return this.httpPost('/', queryArgs);
@@ -291,13 +314,5 @@ export default class Card extends BaseResource {
 
   deleteCard(): Promise<*> {
     return this.httpDelete('/');
-  }
-
-  deleteIdLabel(idLabel: string): Promise<*> {
-    return this.httpDelete(`/idLabels/${idLabel}`);
-  }
-
-  deleteIdMember(idMember: string): Promise<*> {
-    return this.httpDelete(`/idMembers/${idMember}`);
   }
 }

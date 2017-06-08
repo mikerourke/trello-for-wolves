@@ -1,7 +1,7 @@
 /* @flow */
 
 /* Internal dependencies */
-import BaseResource from '../base-resource';
+import BaseResource from './base-resource';
 
 /* Types */
 import type {
@@ -10,7 +10,6 @@ import type {
   BoardField,
   CardField,
   MemberField,
-  ModelType,
   OrganizationField,
 } from '../types';
 
@@ -29,9 +28,9 @@ export default class Search extends BaseResource {
   performSearch(
     queryArgs: {
       query: string,
-      idBoards?: 'mine' | string,
-      idOrganizations?: string,
-      idCards?: string,
+      idBoards?: 'mine' | Array<string>,
+      idOrganizations?: Array<string>,
+      idCards?: Array<string>,
       modelTypes?: ArgumentGroup<ModelType>,
       boardFields?: ArgumentGroup<BoardField>,
       boardsLimit?: number,
@@ -42,7 +41,7 @@ export default class Search extends BaseResource {
       cardList?: boolean,
       cardMembers?: boolean,
       cardStickers?: boolean,
-      cardAttachments?: boolean,
+      cardAttachments?: boolean | 'cover',
       organizationFields?: ArgumentGroup<OrganizationField>,
       organizationsLimit?: number,
       memberFields?: ArgumentGroup<MemberField>,
@@ -57,8 +56,8 @@ export default class Search extends BaseResource {
     queryArgs: {
       query: string,
       limit?: number,
-      idBoard?: string,
-      idOrganization?: string,
+      idBoard?: ?string,
+      idOrganization?: ?string,
       onlyOrgMembers?: boolean,
     },
   ): Promise<*> {

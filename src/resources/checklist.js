@@ -58,15 +58,15 @@ export default class Checklist extends BaseResource {
   }
 
   board() {
-    return new Board(this.auth, this.getOptionsForChild('', '/board'))
+    return new Board(this.auth, this.getOptionsForChild('', '/board'));
   }
 
   cards() {
-    return new Card(this.auth, this.getOptionsForChild())
+    return new Card(this.auth, this.getOptionsForChild());
   }
 
   checkItems(checkItemId?: string = '') {
-    return new CheckItem(this.auth, this.getOptionsForChild(checkItemId))
+    return new CheckItem(this.auth, this.getOptionsForChild(checkItemId));
   }
 
   updateChecklist(
@@ -92,7 +92,7 @@ export default class Checklist extends BaseResource {
       name?: string,
       pos?: PositionNumbered,
       idChecklistSource?: string,
-    }
+    },
   ): Promise<*> {
     return this.httpPost('/', queryArgs);
   }
