@@ -15,6 +15,9 @@ type WehookField =
   | 'description'
   | 'idModel';
 
+/**
+ * @namespace Webhook
+ */
 export default class Webhook extends BaseResource {
   constructor(
     auth: Auth,

@@ -14,7 +14,7 @@ export const resourceIds = {
   actionId: '592b4b6716732423b99d7f9a',
   commentId: '59370991f5bdf80363e086ad',
   boardId: 'bJDPVV1A',
-  cardId: 'GATVPdJ6',
+  cardId: '592b4b6716732423b99d7f99',
   labelId: '5927718cced82109ffc85150',
   memberId: '56c266ee58b06885bc4e54e3',
   membershipId: '5927718c7a9e8015ddbedcfe',
@@ -79,26 +79,25 @@ export class Logger {
 
   /**
    * If the SAVE_TEST_RESULTS environment variable is "true", save the test
-   *    results to a JSON file in the directory specified in the constructor.
-   * @param {string} folderName Name of the folder to save the results.json
-   *    file.
+   *    results to a JSON file in the results directory.
+   * @param {string} resourceName Name of the resource, this will be used to
+   *    name the results JSON file.
    * @returns {Promise}
    */
-  writeResultsToFile(folderName) {
+  writeResultsToFile(resourceName) {
     // Don't write the results if the environment variable isn't set.
-    if (process.env.LOG_TEST_RESULTS) {
+    if (!process.env.LOG_TEST_RESULTS) {
       return Promise.resolve();
     }
 
-    // The "folderName" was specified in the constructor.  If it isn't present,
-    // return a rejected Promise.
-    if (!folderName) {
-      return Promise.reject(new Error('No folder name was specified.'));
+    if (!resourceName) {
+      return Promise.reject(new Error('No resource name was specified.'));
     }
 
-    // The test results are stored in a single file named "results.json".  The
-    // file is located in the folder associated with the resource.
-    const filePath = `./tests/${folderName}/results.json`;
+    // The test results are stored in a file named "[resourceName].json",
+    // where "resourceName" was passed as an argument.  The results file is
+    // located in the results folder.
+    const filePath = `./tests/results/${resourceName}.json`;
     const dataToWrite = this.testResults || {};
     return new Promise((resolve, reject) => {
       jsonFile.writeFile(filePath, dataToWrite, { spaces: 2}, (error) => {

@@ -1,27 +1,28 @@
 /* Internal dependencies */
-import { auth, boardId, cardId } from '../helpers';
-import BaseResource from '../../src/base-resource';
+import { auth, resourceIds } from '../helpers';
+import BaseResource from '../../src/resources/base-resource';
 
-describe('Base Resource', () => {
+describe('BASE | Base Resource', () => {
+  const { boardId, cardId } = resourceIds;
   const authSuffix = `key=${auth.key}&token=${auth.token}`;
 
   let baseEntity;
 
-  describe('Endpoint Builder', () => {
-    describe('No Parent', () => {
+  describe('BASE-EB | Endpoint Builder', () => {
+    describe('BASE-EB-PN | No Parent', () => {
       before(() => {
         baseEntity = new BaseResource(auth, 'card', {
           instanceId: cardId,
         });
       });
 
-      it('builds an endpoint with the root path', () => {
+      it('BASE-EB-PN-T01 | builds an endpoint with the root path', () => {
         const actualValue = baseEntity.getEndpoint('/');
         const expectedValue = `cards/${cardId}?${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
-      it('builds an endpoint with a single string queryArg', () => {
+      it('BASE-EB-PN-T02 | builds an endpoint with a single string queryArg', () => {
         const actualValue = baseEntity.getEndpoint('/', {
           actionsFormat: 'count',
         });
@@ -30,7 +31,7 @@ describe('Base Resource', () => {
         expect(actualValue).to.equal(expectedValue);
       });
 
-      it('builds an endpoint with a single boolean queryArg', () => {
+      it('BASE-EB-PN-T03 | builds an endpoint with a single boolean queryArg', () => {
         const actualValue = baseEntity.getEndpoint('/', {
           actionsEntities: true,
         });
@@ -39,16 +40,16 @@ describe('Base Resource', () => {
         expect(actualValue).to.equal(expectedValue);
       });
 
-      it('builds an endpoint with a single array queryArg', () => {
+      it('BASE-EB-PN-T04 | builds an endpoint with a single array queryArg', () => {
         const actualValue = baseEntity.getEndpoint('/', {
-          actions: 'copyBoard,copyCard',
+          actions: ['copyBoard', 'copyCard'],
         });
         const expectedValue =
           `cards/${cardId}?actions=copyBoard,copyCard&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
-      it('builds an endpoint with a single nested queryArg', () => {
+      it('BASE-EB-PN-T05 | builds an endpoint with a single nested queryArg', () => {
         const actualValue = baseEntity.getEndpoint('/', {
           prefs: {
             selfJoin: true,
@@ -60,9 +61,9 @@ describe('Base Resource', () => {
         expect(actualValue).to.equal(expectedValue);
       });
 
-      it('builds an endpoint with a several queryArgs', () => {
+      it('BASE-EB-PN-T06 | builds an endpoint with a several queryArgs', () => {
         const actualValue = baseEntity.getEndpoint('/', {
-          actions: 'copyBoard,copyCard',
+          actions: ['copyBoard', 'copyCard'],
           actionsEntities: true,
           actionsFormat: 'count',
           prefs: {
@@ -79,7 +80,7 @@ describe('Base Resource', () => {
       });
     });
 
-    describe('With Parent', () => {
+    describe('BASE-EB-PY | With Parent', () => {
       before(() => {
         baseEntity = new BaseResource(auth, 'card', {
           instanceId: cardId,
@@ -87,13 +88,13 @@ describe('Base Resource', () => {
         });
       });
 
-      it('builds an endpoint with the root path', () => {
+      it('BASE-EB-PY-T01 | builds an endpoint with the root path', () => {
         const actualValue = baseEntity.getEndpoint('/');
         const expectedValue = `boards/${boardId}/cards/${cardId}?${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
-      it('builds an endpoint with a single string queryArg', () => {
+      it('BASE-EB-PY-T02 | builds an endpoint with a single string queryArg', () => {
         const actualValue = baseEntity.getEndpoint('/', {
           actionsFormat: 'count',
         });
@@ -102,7 +103,7 @@ describe('Base Resource', () => {
         expect(actualValue).to.equal(expectedValue);
       });
 
-      it('builds an endpoint with a single boolean queryArg', () => {
+      it('BASE-EB-PY-T03 | builds an endpoint with a single boolean queryArg', () => {
         const actualValue = baseEntity.getEndpoint('/', {
           actionsEntities: true,
         });
@@ -111,16 +112,16 @@ describe('Base Resource', () => {
         expect(actualValue).to.equal(expectedValue);
       });
 
-      it('builds an endpoint with a single array queryArg', () => {
+      it('BASE-EB-PY-T04 | builds an endpoint with a single array queryArg', () => {
         const actualValue = baseEntity.getEndpoint('/', {
-          actions: 'copyBoard,copyCard',
+          actions: ['copyBoard', 'copyCard'],
         });
         const expectedValue =
           `boards/${boardId}/cards/${cardId}?actions=copyBoard,copyCard&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
-      it('builds an endpoint with a single nested queryArg', () => {
+      it('BASE-EB-PY-T05 | builds an endpoint with a single nested queryArg', () => {
         const actualValue = baseEntity.getEndpoint('/', {
           prefs: {
             selfJoin: true,
@@ -132,9 +133,9 @@ describe('Base Resource', () => {
         expect(actualValue).to.equal(expectedValue);
       });
 
-      it('builds an endpoint with a several queryArgs', () => {
+      it('BASE-EB-PY-T06 | builds an endpoint with a several queryArgs', () => {
         const actualValue = baseEntity.getEndpoint('/', {
-          actions: 'copyBoard,copyCard',
+          actions: ['copyBoard', 'copyCard'],
           actionsEntities: true,
           actionsFormat: 'count',
           prefs: {
@@ -149,15 +150,6 @@ describe('Base Resource', () => {
           `prefs/invitations=admins&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
-    });
-  });
-
-  describe('Help Link Builder', () => {
-    it('builds the correct help link', () => {
-      const boardBaseResource = new BaseResource(auth, 'board', boardId);
-      const actualValue = boardBaseResource.getHelpLink('get', 'boardstars');
-      const expectedValue = 'board#get-1-boards-board-id-boardstars';
-      expect(actualValue).to.equal(expectedValue);
     });
   });
 });

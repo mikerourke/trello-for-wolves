@@ -37,6 +37,9 @@ export type AttachmentField =
   // The URL to the attachment in Trello's static assets.
   | 'url';
 
+/**
+ * @namespace Attachment
+ */
 export default class Attachment extends BaseResource {
   constructor(
     auth: Auth,
@@ -63,7 +66,7 @@ export default class Attachment extends BaseResource {
   }
 
   // TODO: Make sure this works for a file.
-  addAttachment(
+  uploadAttachment(
     file?: Object,
     queryArgs?: {
       url?: string,

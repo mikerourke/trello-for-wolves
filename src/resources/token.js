@@ -20,6 +20,9 @@ type TokenField =
   | 'identifier'
   | 'permissions';
 
+/**
+ * @namespace Token
+ */
 export default class Token extends BaseResource {
   constructor(
     auth: Auth,

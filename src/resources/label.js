@@ -21,6 +21,9 @@ export type LabelColor =
 
 export type LabelField = 'color' | 'idBoard' | 'name' | 'uses';
 
+/**
+ * @namespace Label
+ */
 export default class Label extends BaseResource {
   constructor(
     auth: Auth,

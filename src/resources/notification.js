@@ -57,6 +57,9 @@ export type NotificationFilter =
 
 type ReadFilter = 'all' | 'read' | 'unread';
 
+/**
+ * @namespace Notification
+ */
 export default class Notification extends BaseResource {
   constructor(
     auth: Auth,

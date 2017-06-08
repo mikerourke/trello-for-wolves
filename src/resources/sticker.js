@@ -22,6 +22,9 @@ export type StickerField =
 
 type CustomStickerField = 'scaled' | 'url';
 
+/**
+ * @namespace Sticker
+ */
 export default class Sticker extends BaseResource {
   constructor(
     auth: Auth,
@@ -32,8 +35,10 @@ export default class Sticker extends BaseResource {
 
   getStickers(
     queryArgs?: {
+      // Arguments for "/stickers":
       fields?: ArgumentGroup<StickerField>,
     } | {
+      // Arguments for "/customStickers":
       filter?: AllOrNone,
     } = {},
   ): Promise<*> {
@@ -42,8 +47,10 @@ export default class Sticker extends BaseResource {
 
   getSticker(
     queryArgs?: {
+      // Arguments for "/stickers":
       fields?: ArgumentGroup<StickerField>,
     } | {
+      // Arguments for "/customStickers":
       fields?: ArgumentGroup<CustomStickerField>,
     } = {},
   ): Promise<*> {

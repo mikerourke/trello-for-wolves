@@ -79,6 +79,9 @@ export type ActionFilter = ActionListFilter &
   | 'updateMember'
   | 'updateOrganization';
 
+/**
+ * @namespace Action
+ */
 export default class Action extends BaseResource {
   constructor(
     auth: Auth,

@@ -1,22 +1,36 @@
 /* @flow */
 
 /* Internal dependencies */
-import {
-  Action,
-  Batch,
-  Board,
-  Card,
-  Checklist,
-  Label,
-  List,
-  Member,
-  Notification,
-  Organization,
-  Search,
-  Token,
-  Type,
-  Webhook,
-} from './resources';
+//import {
+//  Action,
+//  Batch,
+//  Board,
+//  Card,
+//  Checklist,
+//  Label,
+//  List,
+//  Member,
+//  Notification,
+//  Organization,
+//  Search,
+//  Token,
+//  Type,
+//  Webhook,
+//} from './resources';
+import Action from './resources/action';
+import Batch from './resources/batch';
+import Board from './resources/board';
+import Card from './resources/card';
+import Checklist from './resources/checklist';
+import Label from './resources/label';
+import List from './resources/list';
+import Member from './resources/member';
+import Notification from './resources/notification';
+import Organization from './resources/organization';
+import Search from './resources/search';
+import Token from './resources/token';
+import Type from './resources/type';
+import Webhook from './resources/webhook';
 
 /* Types */
 import type { Auth } from './types';

@@ -7,6 +7,7 @@ import Attachment from './attachment';
 import Board from './board';
 import CheckItem from './check-item';
 import Checklist from './checklist';
+import Comment from './comment';
 import Label from './label';
 import List from './list';
 import Member from './member';
@@ -69,6 +70,9 @@ export type CardField =
 
 export type CardFilter = 'all' | 'closed' | 'none' | 'open' | 'visible';
 
+/**
+ * @namespace Card
+ */
 export default class Card extends BaseResource {
   constructor(
     auth: Auth,
@@ -136,9 +140,8 @@ export default class Card extends BaseResource {
     return this.httpGet(`/${field}`);
   }
 
-  // TODO: Check if the ID is needed for Actions in Cards.
-  actions(actionId?: string = '') {
-    return new Action(this.auth, this.getOptionsForChild(actionId));
+  actions() {
+    return new Action(this.auth, this.getOptionsForChild());
   }
 
   attachments(attachmentId?: string = '') {
@@ -146,7 +149,8 @@ export default class Card extends BaseResource {
   }
 
   board(boardId?: string = '') {
-    return new Board(this.auth, this.getOptionsForChild(boardId, '/board'));
+    const resourcePath = boardId ? '/idBoard' : 'board';
+    return new Board(this.auth, this.getOptionsForChild(boardId, resourcePath));
   }
 
   checkItemStates() {
@@ -173,8 +177,9 @@ export default class Card extends BaseResource {
     return new Label(this.auth, this.getOptionsForChild(labelId, resourcePath));
   }
 
-  list() {
-    return new List(this.auth, this.getOptionsForChild('', '/list'));
+  list(listId?: string = '') {
+    const resourcePath = listId ? '/idList' : '/list';
+    return new List(this.auth, this.getOptionsForChild(listId, resourcePath));
   }
 
   members(memberId?: string = '') {
@@ -214,6 +219,10 @@ export default class Card extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
+  comments(commentId?: string = '') {
+    return new Comment(this.auth, this.getOptionsForChild(commentId));
+  }
+
   updateClosedStatus(value: boolean): Promise<*> {
     return this.httpPut('/closed', { value });
   }
@@ -231,35 +240,12 @@ export default class Card extends BaseResource {
   }
 
   /**
-   * @example
-   * PUT > .../cards/[cardId]/idAttachmentCover?value=[attachmentCoverId]&key=...
+   * Update the ID of the image attachment of this card to use as its cover.
+   * @example PUT /1/cards/:cardId/idAttachmentCover
    * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idattachmentcover}
    */
   updateAttachmentCoverImage(idAttachmentCover: string): Promise<*> {
     return this.httpPut('/idAttachmentCover', { value: idAttachmentCover });
-  }
-
-  /**
-   * @example
-   * PUT > .../cards/[cardId]/idBoard?value=[boardId]&idList=[listId]&key=...
-   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idboard}
-   */
-  moveToBoard(
-    idBoard: string,
-    queryArgs: {
-      idList?: string,
-    },
-  ): Promise<*> {
-    return this.httpPut('/idBoard', { ...queryArgs, value: idBoard });
-  }
-
-  /**
-   * @example
-   * PUT > .../cards/[cardId]/idList?value=[listId]&key=...
-   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idlist}
-   */
-  moveToList(idList: string): Promise<*> {
-    return this.httpPut('/idList', { value: idList });
   }
 
   updateName(value: string): Promise<*> {
@@ -297,7 +283,8 @@ export default class Card extends BaseResource {
       due?: ?Date,
     },
   ): Promise<*> {
-    return this.httpPost('/', queryArgs);
+    const { fileSource, ...otherArgs } = queryArgs;
+    return this.httpPost('/', otherArgs, fileSource);
   }
 
   addIdLabel(value: string): Promise<*> {

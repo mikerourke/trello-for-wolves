@@ -97,6 +97,9 @@ class Pref extends BaseResource {
   }
 }
 
+/**
+ * @namespace Organization
+ */
 export default class Organization extends BaseResource {
   constructor(
     auth: Auth,
@@ -245,7 +248,7 @@ export default class Organization extends BaseResource {
     return this.httpPost('/', queryArgs);
   }
 
-  addLogo(file: Object): Promise<*> {
+  uploadLogo(file: Object): Promise<*> {
     return this.httpPost('/logo', {}, file);
   }
 

@@ -37,6 +37,7 @@ import type {
   OrganizationField,
   PermissionLevel,
   Position,
+  PositionNumbered,
   ResourceConstructorOptions,
 } from '../types';
 
@@ -70,6 +71,8 @@ export type BoardFilter =
   | 'public'
   | 'starred'
   | 'unpinned'
+
+export type BoardMemberType = 'admin' | 'normal' | 'observer';
 
 export type BoardStarsFilter = 'none' | 'mine';
 
@@ -177,6 +180,9 @@ class Pref extends BaseResource {
   }
 }
 
+/**
+ * @namespace Board
+ */
 export default class Board extends BaseResource {
   constructor(
     auth: Auth,
@@ -386,6 +392,31 @@ export default class Board extends BaseResource {
 
   updateSubscribed(value: boolean): Promise<*> {
     return this.httpPut('/subscribed', { value });
+  }
+
+  /**
+   * Associates a board with a Card or List.
+   * @example PUT /1/cards/:cardId/idBoard
+   * @memberOf Card
+   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idboard}
+   *
+   * @example PUT /1/lists/:listId/idBoard
+   * @memberOf List
+   * @see {@link https://developers.trello.com/advanced-reference/list#put-1-lists-idlist-idboard}
+   */
+  associateBoard(
+    queryArgs?: {
+      // When associating a Card:
+      idList?: string,
+    } | {
+      // When associating a List:
+      pos?: PositionNumbered,
+    } = {},
+  ): Promise<*> {
+    // See associateMember in the Member class for explanation:
+    const boardId = this.instanceId;
+    this.instanceId = '';
+    return this.httpPut('/', { ...queryArgs, value: boardId });
   }
 
   addBoard(

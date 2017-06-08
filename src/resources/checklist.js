@@ -20,6 +20,9 @@ import type {
 
 export type ChecklistField = 'idBoard' | 'idCard' | 'name' | 'pos';
 
+/**
+ * @namespace Checklist
+ */
 export default class Checklist extends BaseResource {
   constructor(
     auth: Auth,

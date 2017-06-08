@@ -7,6 +7,7 @@ import BaseResource from './base-resource';
 import type {
   ArgumentGroup,
   Auth,
+  BoardMemberType,
   MemberField,
   MemberType,
   ResourceConstructorOptions,
@@ -20,6 +21,9 @@ export type MembershipFilter =
   | 'none'
   | 'normal';
 
+/**
+ * @namespace Membership
+ */
 export default class Membership extends BaseResource {
   constructor(
     auth: Auth,
@@ -30,7 +34,9 @@ export default class Membership extends BaseResource {
 
   getMemberships(
     queryArgs?: {
+      filter?: ArgumentGroup<MembershipFilter>,
       member?: boolean,
+      // Member Fields are only allowed when called from a Board:
       memberFields?: ArgumentGroup<MemberField>,
     } = {},
   ): Promise<*> {
@@ -39,8 +45,8 @@ export default class Membership extends BaseResource {
 
   getMembership(
     queryArgs?: {
-      filter?: ArgumentGroup<MembershipFilter>,
       member?: boolean,
+      // Member Fields are only allowed when called from a Board:
       memberFields?: ArgumentGroup<MemberField>,
     } = {},
   ): Promise<*> {
@@ -49,6 +55,11 @@ export default class Membership extends BaseResource {
 
   updateMembership(
     queryArgs: {
+      // When called from a Board:
+      type: BoardMemberType,
+      fields?: ArgumentGroup<MemberField>,
+    } | {
+      // When called from Member or Organization:
       type: MemberType,
       fields?: ArgumentGroup<MemberField>,
     },

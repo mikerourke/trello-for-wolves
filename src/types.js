@@ -35,12 +35,6 @@ export type FilterDate = ?Date | 'lastView';
 
 export type Format = 'count' | 'list' | 'minimal';
 
-export type PermissionLevel = 'private' | 'public';
-
-export type Position = 'bottom' | 'top';
-
-export type PositionNumbered = Position | number;
-
 export type KeepFromSourceField =
   'attachments'
   | 'checklists'
@@ -50,28 +44,8 @@ export type KeepFromSourceField =
   | 'members'
   | 'stickers';
 
-export type DeltasQueryArgs = {
-  tags: string,
-  ixLastUpdate: number,
-};
+export type PermissionLevel = 'private' | 'public';
 
-export type FieldsQueryArg<T> = {
-  fields?: ArgumentGroup<T>,
-};
+export type Position = 'bottom' | 'top';
 
-export type FileQueryArg = {
-  file: Object,
-};
-
-export type FilterQueryArg<T> = {
-  filter?: T,
-};
-
-export type ValueQueryArg<T> = {
-  value: T,
-};
-
-export type LimitQueryArg = {
-  limit?: number
-};
-
+export type PositionNumbered = Position | number;

@@ -248,14 +248,4 @@ describe('ACT | Action Resource', function() {
         .notify(done);
     });
   });
-
-  describe.skip('ACT-D | Action DELETE Requests', () => {
-    it('ACT-D-01-T01 | deletes an action', (done) => {
-      // TODO: Write code to first create a comment, then delete it.
-      trello.actions(commentId).deleteAction()
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
-    });
-  });
 });

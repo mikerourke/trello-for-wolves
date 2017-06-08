@@ -1,8 +1,8 @@
 /* Internal dependencies */
 import stringifyQueryArgs from '../../src/utils/query-args-stringifier';
 
-describe('Query Args Stringifier', () => {
-  it('stringifies query args with a single string arg', () => {
+describe('QAS | Query Args Stringifier', () => {
+  it('QAS-T01 | stringifies query args with a single string arg', () => {
     const queryArgs = {
       actionsFormat: 'count',
     };
@@ -11,7 +11,7 @@ describe('Query Args Stringifier', () => {
     expect(actualValue).to.equal(expectedValue);
   });
 
-  it('stringifies query args with multiple string args', () => {
+  it('QAS-T02 | stringifies query args with multiple string args', () => {
     const queryArgs = {
       actionsFormat: 'count',
       field: 'data',
@@ -21,7 +21,7 @@ describe('Query Args Stringifier', () => {
     expect(actualValue).to.equal(expectedValue);
   });
 
-  it('stringifies query args with a single boolean arg', () => {
+  it('QAS-T03 | stringifies query args with a single boolean arg', () => {
     const queryArgs = {
       actionsEntities: true,
     };
@@ -30,7 +30,7 @@ describe('Query Args Stringifier', () => {
     expect(actualValue).to.equal(expectedValue);
   });
 
-  it('stringifies query args with multiple boolean args', () => {
+  it('QAS-T04 | stringifies query args with multiple boolean args', () => {
     const queryArgs = {
       actionsEntities: true,
       display: false,
@@ -40,18 +40,18 @@ describe('Query Args Stringifier', () => {
     expect(actualValue).to.equal(expectedValue);
   });
 
-  it('stringifies query args with a single comma separated arg', () => {
+  it('QAS-T05 | stringifies query args with a single comma separated arg', () => {
     const queryArgs = {
-      actions: 'copyBoard,copyCard',
+      actions: ['copyBoard', 'copyCard'],
     };
     const actualValue = stringifyQueryArgs(queryArgs);
     const expectedValue = 'actions=copyBoard,copyCard&';
     expect(actualValue).to.equal(expectedValue);
   });
 
-  it('stringifies query args with multiple comma separated args', () => {
+  it('QAS-T06 | stringifies query args with multiple comma separated args', () => {
     const queryArgs = {
-      actions: 'copyBoard,copyCard',
+      actions: ['copyBoard', 'copyCard'],
       memberFields: 'bio,fullName',
     };
     const actualValue = stringifyQueryArgs(queryArgs);
@@ -59,11 +59,11 @@ describe('Query Args Stringifier', () => {
     expect(actualValue).to.equal(expectedValue);
   });
 
-  it('stringifies query args with multiple args of one type each', () => {
+  it('QAS-T07 | stringifies query args with multiple args of one type each', () => {
     const queryArgs = {
       actionsFormat: 'count',
       actionsEntities: true,
-      actions: 'copyBoard,copyCard',
+      actions: ['copyBoard', 'copyCard'],
     };
     const actualValue = stringifyQueryArgs(queryArgs);
     const expectedValue =
@@ -71,13 +71,13 @@ describe('Query Args Stringifier', () => {
     expect(actualValue).to.equal(expectedValue);
   });
 
-  it('stringifies query args with multiple args with multiple types', () => {
+  it('QAS-T08 | stringifies query args with multiple args with multiple types', () => {
     const queryArgs = {
       actionsFormat: 'count',
       field: 'data',
       actionsEntities: true,
       display: false,
-      actions: 'copyBoard,copyCard',
+      actions: ['copyBoard', 'copyCard'],
       memberFields: 'bio,fullName',
     };
     const actualValue = stringifyQueryArgs(queryArgs);
@@ -87,16 +87,16 @@ describe('Query Args Stringifier', () => {
     expect(actualValue).to.equal(expectedValue);
   });
 
-  it('stringifies query args for a single special case', () => {
+  it('QAS-T09 | stringifies query args for a single special case', () => {
     const queryArgs = {
-      memberCreatorFields: 'bio,fullName',
+      memberCreatorFields: ['bio', 'fullName'],
     };
     const actualValue = stringifyQueryArgs(queryArgs);
     const expectedValue = 'memberCreator_fields=bio,fullName&';
     expect(actualValue).to.equal(expectedValue);
   });
 
-  it('stringifies query args for nested args with a slash separator', () => {
+  it('QAS-T10 | stringifies query args for nested args with a slash separator', () => {
     const queryArgs = {
       prefs: {
         selfJoin: true,
@@ -108,7 +108,7 @@ describe('Query Args Stringifier', () => {
     expect(actualValue).to.equal(expectedValue);
   });
 
-  it('stringifies query args for nested args with an underscore separator', () => {
+  it('QAS-T11 | stringifies query args for nested args with an underscore separator', () => {
     const queryArgs = {
       prefs: {
         selfJoin: true,

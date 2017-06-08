@@ -24,7 +24,7 @@ describe('CAR | Card Resource', function() {
 
   const logResponse = (response) => logger.processResponse(response);
 
-  describe.only('CAR-G | Card GET Requests', () => {
+  describe('CAR-G | Card GET Requests', () => {
     it('CAR-G-01-T01 | gets a card', (done) => {
       trello.cards(cardId).getCard()
         .then(logResponse)
@@ -32,7 +32,7 @@ describe('CAR | Card Resource', function() {
         .notify(done);
     });
 
-    it.only('CAR-G-03-T01 | gets the actions for a card', (done) => {
+    it('CAR-G-03-T01 | gets the actions for a card', (done) => {
       trello.cards(cardId).actions().getActions()
         .then(logResponse)
         .should.eventually.be.fulfilled

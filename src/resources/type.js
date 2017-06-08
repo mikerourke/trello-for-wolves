@@ -9,6 +9,9 @@ import type {
   ResourceConstructorOptions,
 } from '../types';
 
+/**
+ * @namespace Type
+ */
 export default class Type extends BaseResource {
   constructor(
     auth: Auth,

@@ -7,6 +7,7 @@ import BaseResource from './base-resource';
 import type {
   ArgumentGroup,
   Auth,
+  AttachmentFilter,
   BoardField,
   CardField,
   MemberField,
@@ -20,6 +21,9 @@ export type ModelType =
   | 'members'
   | 'organizations';
 
+/**
+ * @namespace Search
+ */
 export default class Search extends BaseResource {
   constructor(auth: Auth) {
     super(auth, 'search');
@@ -41,7 +45,7 @@ export default class Search extends BaseResource {
       cardList?: boolean,
       cardMembers?: boolean,
       cardStickers?: boolean,
-      cardAttachments?: boolean | 'cover',
+      cardAttachments?: AttachmentFilter,
       organizationFields?: ArgumentGroup<OrganizationField>,
       organizationsLimit?: number,
       memberFields?: ArgumentGroup<MemberField>,

@@ -18,6 +18,9 @@ export type CheckItemState = 'complete' | 'false' | 'incomplete' | 'true';
 
 export type CheckItemStateField = 'idCheckItem' | 'state';
 
+/**
+ * @namespace CheckItem
+ */
 export default class CheckItem extends BaseResource {
   constructor(
     auth: Auth,

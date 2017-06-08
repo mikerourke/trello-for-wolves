@@ -176,25 +176,6 @@ export default class BaseResource {
     });
   }
 
-  /**
-   * Builds the help link for referencing the Trello API based on the
-   *    resource.
-   * @param {HttpMethod} httpMethod Method associated with the action.
-   * @param {string} fieldName Field name to get help for.
-   * @returns {string}
-   * @example
-   *  const helpLink = this.getHelpLink('get', 'boardstars');
-   *  console.log(helpLink);
-   *  >> Output: board#get-1-boards-board-id-boardstars
-   */
-  getHelpLink(
-    httpMethod: HttpMethod,
-    fieldName: string,
-  ): string {
-    const { resourceName } = this;
-    return `${resourceName}#${httpMethod}-1-${resourceName}s-${resourceName}-id-${fieldName}`;
-  }
-
   httpGet(
     pathVariables: string,
     queryArgs?: Object = {},

@@ -68,20 +68,14 @@ export type MemberEveryField = MemberField &
   | 'trophies'
   | 'uploadedAvatarHash';
 
-type MemberFilter = 'admins' | 'all' | 'none' | 'normal' | 'owners';
+export type MemberFilter = 'admins' | 'all' | 'none' | 'normal' | 'owners';
 
-type MemberType = 'admin' | 'normal';
+export type MemberType = 'admin' | 'normal';
 
 type BoardBackgroundBrightness =
   'dark'
   | 'light'
   | 'unknown';
-
-type BoardBackgroundFilter =
-  'custom'
-  | 'default'
-  | 'none'
-  | 'premium';
 
 type BoardBackgroundField =
   'brightness'
@@ -89,8 +83,20 @@ type BoardBackgroundField =
   | 'scaled'
   | 'tile';
 
+type BoardBackgroundFilter =
+  'all'
+  | 'custom'
+  | 'default'
+  | 'none'
+  | 'premium';
+
 type CustomEmojiField = 'name' | 'url';
 
+/**
+ * This class handles both the "boardBackground" and "customBoardBackground"
+ *    resources.  For "customBoardBackgrounds", the resource path is overridden
+ *    when an instance is created in the Member class.
+ */
 class BoardBackground extends BaseResource {
   constructor(
     auth: Auth,
@@ -99,21 +105,21 @@ class BoardBackground extends BaseResource {
     super(auth, 'boardBackground', options);
   }
 
-  getBoardBackground(
-    // Regular board backgrounds use the first argument, custom board
-    // backgrounds use the "AllOrNone" argument.
+  getBoardBackgrounds(
     queryArgs?: {
-      fields?: ArgumentGroup<BoardBackgroundField>,
+      // boardBackgrounds:
+      filter?: BoardBackgroundFilter,
     } | {
-      fields?: AllOrNone,
-    } = {},
+      // customBoardBackgrounds:
+      filter?: AllOrNone
+    }= {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
 
-  getBoardBackgrounds(
+  getBoardBackground(
     queryArgs?: {
-      filter?: ArgumentGroup<BoardBackgroundFilter>,
+      fields?: ArgumentGroup<BoardBackgroundField>,
     } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
@@ -128,11 +134,57 @@ class BoardBackground extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  addBoardBackground(file: Object): Promise<*> {
+  uploadBoardBackground(file: Object): Promise<*> {
     return this.httpPost('/', {}, file);
   }
 
   deleteBoardBackground(): Promise<*> {
+    return this.httpDelete('/');
+  }
+}
+
+class BoardStar extends BaseResource {
+  constructor(
+    auth: Auth,
+    options?: ResourceConstructorOptions = {},
+  ) {
+    super(auth, 'boardStar', options);
+  }
+
+  getBoardStars(): Promise<*> {
+    return this.httpGet('/');
+  }
+
+  getBoardStar(): Promise<*> {
+    return this.httpGet('/');
+  }
+
+  updateBoardStar(
+    queryArgs?: {
+      pos?: PositionNumbered,
+    } = {},
+  ): Promise<*> {
+    return this.httpPut('/', queryArgs);
+  }
+
+  moveBoardStarToBoard(idBoard: string): Promise<*> {
+    return this.httpPut('/idBoard', { value: idBoard });
+  }
+
+  updatePosition(value: PositionNumbered): Promise<*> {
+    return this.httpPut('/pos', { value });
+  }
+
+  addBoardStar(
+    queryArgs: {
+      idBoard: string,
+      pos: PositionNumbered,
+    },
+  ): Promise<*> {
+    return this.httpPost('/', queryArgs);
+  }
+
+  deleteBoardStar(): Promise<*> {
     return this.httpDelete('/');
   }
 }
@@ -145,14 +197,6 @@ class CustomEmoji extends BaseResource {
     super(auth, 'customEmoji', options);
   }
 
-  getCustomEmoji(
-    queryArgs?: {
-      fields?: ArgumentGroup<CustomEmojiField>,
-    } = {},
-  ): Promise<*> {
-    return this.httpGet('/', queryArgs);
-  }
-
   getCustomEmojis(
     queryArgs?: {
       filter?: AllOrNone,
@@ -161,11 +205,40 @@ class CustomEmoji extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  addCustomEmoji(
+  getCustomEmoji(
+    queryArgs?: {
+      fields?: ArgumentGroup<CustomEmojiField>,
+    } = {},
+  ): Promise<*> {
+    return this.httpGet('/', queryArgs);
+  }
+
+  uploadCustomEmoji(
     file: Object,
     name: string,
   ): Promise<*> {
     return this.httpPost('/', { name }, file);
+  }
+}
+
+class Pref extends BaseResource {
+  constructor(
+    auth: Auth,
+    memberId: string,
+  ) {
+    super(auth, 'pref', { parentPath: `members/${memberId}` });
+  }
+
+  updateColorBlind(value: boolean): Promise<*> {
+    return this.httpPut('/colorBlind', { value });
+  }
+
+  updateLocale(value: string): Promise<*> {
+    return this.httpPut('/locale', { value });
+  }
+
+  updateMinutesBetweenSummaries(value: number): Promise<*> {
+    return this.httpPut('/minutesBetweenSummaries', { value });
   }
 }
 
@@ -177,11 +250,11 @@ class SavedSearch extends BaseResource {
     super(auth, 'savedSearch', options);
   }
 
-  getSavedSearch(): Promise<*> {
+  getSavedSearches(): Promise<*> {
     return this.httpGet('/');
   }
 
-  getSavedSearches(): Promise<*> {
+  getSavedSearch(): Promise<*> {
     return this.httpGet('/');
   }
 
@@ -216,14 +289,30 @@ class SavedSearch extends BaseResource {
   ): Promise<*> {
     return this.httpPost('/', queryArgs);
   }
+
+  deleteSavedSearch(): Promise<*> {
+    return this.httpDelete('/');
+  }
 }
 
+/**
+ * @namespace Member
+ */
 export default class Member extends BaseResource {
   constructor(
     auth: Auth,
     options?: ResourceConstructorOptions = {},
   ) {
     super(auth, 'member', options);
+  }
+
+  getMembers(
+    queryArgs?: {
+      fields?: ArgumentGroup<MemberEveryField>,
+      limit?: number,
+    } = {},
+  ): Promise<*> {
+    return this.httpGet('/', queryArgs);
   }
 
   getMember(
@@ -275,7 +364,7 @@ export default class Member extends BaseResource {
       notificationSince?: ?string,
       tokens?: AllOrNone,
       paidAccount?: boolean,
-      boardBackgrounds?: ArgumentGroup<BoardBackgroundField>,
+      boardBackgrounds?: ArgumentGroup<BoardBackgroundFilter>,
       customBoardBackgrounds?: AllOrNone,
       customStickers?: AllOrNone,
       customEmoji?: AllOrNone,
@@ -283,15 +372,6 @@ export default class Member extends BaseResource {
     } | {
       // This is the only option if calling from a different resource.
       fields?: ArgumentGroup<MemberEveryField>,
-    } = {},
-  ): Promise<*> {
-    return this.httpGet('/', queryArgs);
-  }
-
-  getMembers(
-    queryArgs?: {
-      fields?: ArgumentGroup<MemberEveryField>,
-      limit?: number,
     } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
@@ -314,12 +394,8 @@ export default class Member extends BaseResource {
       this.auth, this.getOptionsForChild(boardBackgroundId));
   }
 
-  getBoardStars(): Promise<*> {
-    return this.httpGet('/boardStars');
-  }
-
-  getBoardStar(idBoardStar: string): Promise<*> {
-    return this.httpGet(`/boardStars/${idBoardStar}`);
+  boardStars(boardStarId?: string = '') {
+    return new BoardStar(this.auth, this.getOptionsForChild(boardStarId));
   }
 
   boards() {
@@ -398,50 +474,12 @@ export default class Member extends BaseResource {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
 
-  /**
-   * Updates the members associated with a parent card.
-   * PUT /1/cards/:cardId/idMembers
-   * @param {Array} value Array of member IDs to add to the card.
-   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idmembers}
-   */
-  updateAssociations(value: Array<string>): Promise<*> {
-    return this.httpPut('/', { value });
-  }
-
   updateAvatarSource(value: AvatarSourceField): Promise<*> {
     return this.httpPut('/avatarSource', { value });
   }
 
   updateBio(value: string): Promise<*> {
     return this.httpPut('/bio', { value });
-  }
-
-  updateBoardStar(
-    idBoardStar: string,
-    queryArgs?: {
-      idBoard?: string,
-      pos?: PositionNumbered,
-    } = {},
-  ): Promise<*> {
-    return this.httpPut(`/boardStars/${idBoardStar}`, queryArgs);
-  }
-
-  updateBoardStarBoard(
-    idBoardStar: string,
-    value: string,
-  ): Promise<*> {
-    return this.httpPut(`/boardStars/${idBoardStar}/idBoard`, { value });
-  }
-
-  updateBoardStarPosition(
-    idBoardStar: string,
-    value: PositionNumbered,
-  ): Promise<*> {
-    return this.httpPut(`/boardStars/${idBoardStar}/pos`, { value });
-  }
-
-  updateDeactivatedStatus(value: boolean): Promise<*> {
-    return this.httpPut('/deactivated', { value });
   }
 
   updateFullName(value: string): Promise<*> {
@@ -452,14 +490,52 @@ export default class Member extends BaseResource {
     return this.httpPut('/initials', { value });
   }
 
-  updateMemberType(type: MemberType): Promise<*> {
-    return this.httpPut('/', { type });
+  prefs() {
+    return new Pref(this.auth, this.instanceId);
   }
 
   updateUsername(value: string): Promise<*> {
     return this.httpPut('/username', { value });
   }
 
+  /**
+   * Updates the members associated with a parent Card.
+   * @memberOf Card
+   * @example PUT /1/cards/:cardId/idMembers
+   * @param {Array} value Array of member IDs to add to the card.
+   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idmembers}
+   */
+  associateMembers(value: Array<string>): Promise<*> {
+    return this.httpPut('/', { value });
+  }
+
+  /**
+   * Updates the deactivated status for a member associated with an
+   *    Organization.
+   * @memberOf Organization
+   * @example PUT /1/organizations/:organizationId/members/:memberId
+   * @see {@link https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember-deactivated}
+   */
+  updateDeactivatedStatus(value: boolean): Promise<*> {
+    return this.httpPut('/deactivated', { value });
+  }
+
+  /**
+   * Updates the member type for a member associated with an Organization.
+   * @memberOf Organization
+   * @example PUT /1/organizations/:organizationId/members/:memberId
+   * @see {@link https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember}
+   */
+  updateMemberType(type: MemberType): Promise<*> {
+    return this.httpPut('/', { type });
+  }
+
+  /**
+   * Adds a member to an Organization.
+   * @memberOf Organization
+   * @example PUT /1/organizations/:organizationId/members
+   * @see {@link https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members}
+   */
   addMember(
     queryArgs: {
       email: string,
@@ -470,30 +546,25 @@ export default class Member extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  addAvatar(file: Object): Promise<*> {
+  uploadAvatar(file: Object): Promise<*> {
     return this.httpPost('/avatar', {}, file);
   }
 
   /**
-   * Associates a member with a parent or child resource.  The resource path is
-   *    overriden to remove the ID number from the endpoint.
-   *
-   * @example
-   * POST > .../cards/[cardId]/idMembers?value=[memberId]?key=...
+   * Associates a member with a Card.
+   * @example POST /1/cards/:cardId/idMembers
+   * @memberOf Card
    * @see {@link https://developers.trello.com/advanced-reference/card#post-1-cards-card-id-or-shortlink-idmembers}
    */
   associateMember(): Promise<*> {
-    this.resourcePath = this.resourcePath.split('/')[1];
-    return this.httpPost('/', { value: this.instanceId });
-  }
-
-  starBoard(
-    queryArgs: {
-      idBoard: string,
-      pos: PositionNumbered,
-    },
-  ): Promise<*> {
-    return this.httpPost('/boardStars', queryArgs);
+    // An ID number is specified when the Member instance is created, so the
+    // default resource path would be /idMembers/[memberId].  If a member is
+    // being associated with a card, the /[memberId] must be removed and passed
+    // in as a query arg, so the resource path would be
+    // /idMembers?value=[memberId]...
+    const memberId = this.instanceId;
+    this.instanceId = '';
+    return this.httpPost('/', { value: memberId });
   }
 
   dismissOneTimeMessages(value: string): Promise<*> {
@@ -501,16 +572,22 @@ export default class Member extends BaseResource {
   }
 
   /**
-   * Removes a member's association with a resource, doesn't actually delete it.
-   *
-   * @example
-   * DELETE > .../cards/[cardId]/idMembers/[memberId]?key=...
+   * Removes a member's association with a Card, doesn't actually delete it.
+   * @memberOf Card
+   * @example DELETE /1/cards/:cardId/idMembers/:memberId
    * @see {@link https://developers.trello.com/advanced-reference/card#post-1-cards-card-id-or-shortlink-idmembers}
    */
   dissociateMember(): Promise<*> {
     return this.httpDelete('/');
   }
 
+  /**
+   * This will remove a member from your organization AND remove the member
+   *    from all organization boards.
+   * @memberOf Organization
+   * @example DELETE /1/organizations/:organizationId/members/:memberId/all
+   * @see {@link https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember-all}
+   */
   dissociateMemberFromAll(): Promise<*> {
     return this.httpDelete('/all');
   }

@@ -21,6 +21,9 @@ export type ListField = 'closed' | 'idBoard' | 'name' | 'pos' | 'subscribed';
 
 export type ListFilter = 'all' | 'closed' | 'none' | 'open';
 
+/**
+ * @namespace List
+ */
 export default class List extends BaseResource {
   constructor(
     auth: Auth,
@@ -64,8 +67,9 @@ export default class List extends BaseResource {
     return new Action(this.auth, this.getOptionsForChild());
   }
 
-  board() {
-    return new Board(this.auth, this.getOptionsForChild('', '/board'));
+  board(boardId?: string = '') {
+    const resourcePath = boardId ? '/idBoard' : 'board';
+    return new Board(this.auth, this.getOptionsForChild(boardId, resourcePath));
   }
 
   cards() {
@@ -88,20 +92,6 @@ export default class List extends BaseResource {
     return this.httpPut('/closed', { value });
   }
 
-  /**
-   * @example
-   * PUT > .../lists/[listId]/idBoard?value=[boardId]&pos=1&key=...
-   * @see {@link https://developers.trello.com/advanced-reference/list#put-1-lists-idlist-idboard}
-   */
-  moveToBoard(
-    idBoard: string,
-    queryArgs: {
-      pos?: PositionNumbered,
-    },
-  ): Promise<*> {
-    return this.httpPut('/idBoard', { ...queryArgs, value: idBoard });
-  }
-
   updateName(value: string): Promise<*> {
     return this.httpPut('/name', { value });
   }
@@ -112,6 +102,19 @@ export default class List extends BaseResource {
 
   updatedSubscribed(value: boolean): Promise<*> {
     return this.httpPut('/subscribed', { value });
+  }
+
+  /**
+   * Associates a list with a Card.
+   * @example PUT /1/cards/:cardId/idList
+   * @memberOf Card
+   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idlist}
+   */
+  associateList(): Promise<*> {
+    // See associateMember in the Member class for explanation:
+    const listId = this.instanceId;
+    this.instanceId = '';
+    return this.httpPut('/', { value: listId });
   }
 
   addList(
