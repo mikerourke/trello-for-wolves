@@ -60,6 +60,7 @@ const getKeyForQueryString = (key: string): string => {
     case 'customBoardBackgrounds':
     case 'customEmoji':
     case 'customStickers':
+    case 'fullName':
     case 'modelTypes':
     case 'myPrefs':
     case 'savedSearches':
@@ -82,10 +83,8 @@ const getKeyForQueryString = (key: string): string => {
   // changed.
   if (recasedKey.includes('member_creator')) {
     recasedKey = recasedKey.replace('_creator', 'Creator');
-
   } else if (recasedKey.includes('plugin_data')) {
     recasedKey = recasedKey.replace('_data', 'Data');
-
   } else if (recasedKey.includes('_invited')) {
     recasedKey = recasedKey.replace('_invited', 'Invited');
   }
@@ -106,7 +105,7 @@ const stringifyQueryArgs = (
   Object.entries(queryArgs).forEach(([key, value]) => {
     // If the value of the entry is an object (rather than a value), the
     // corresponding child properties need to be combined for the URL string.
-    if (typeof value === 'object' && !Array.isArray(value)) {
+    if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
       const childName = (key: string);
       const nestedString = getQueryStringForNestedArgs(childName, queryArgs);
       queryArgsString = `${queryArgsString}${nestedString}&`;

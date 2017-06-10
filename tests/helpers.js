@@ -18,6 +18,8 @@ export const resourceIds = {
   labelId: '5927718cced82109ffc85150',
   memberId: '56c266ee58b06885bc4e54e3',
   membershipId: '5927718c7a9e8015ddbedcfe',
+  orgId: '592f0c5a637c4ec4515afd3d',
+  orgActionId: '592f0c5a637c4ec4515afd3f',
 };
 
 /**
@@ -100,7 +102,7 @@ export class Logger {
     const filePath = `./tests/results/${resourceName}.json`;
     const dataToWrite = this.testResults || {};
     return new Promise((resolve, reject) => {
-      jsonFile.writeFile(filePath, dataToWrite, { spaces: 2}, (error) => {
+      jsonFile.writeFile(filePath, dataToWrite, { spaces: 2 }, (error) => {
         if (error) {
           reject(new Error(error));
         }
@@ -136,7 +138,7 @@ export class Logger {
       if (this.dataFromApiCall) {
         this._logToConsoleIfRequired();
         this._appendToTestResults();
-        resolve();
+        resolve(response);
       } else {
         reject(new Error('Error processing response through Logger.'));
       }

@@ -327,9 +327,10 @@ export default class Board extends BaseResource {
     return new MyPref(this.auth, this.instanceId);
   }
 
-  organization() {
+  organization(organizationId?: string = '') {
+    const resourcePath = organizationId ? '/idOrganization' : '/organization';
     return new Organization(
-      this.auth, this.getOptionsForChild('', '/organization'));
+      this.auth, this.getOptionsForChild(organizationId, resourcePath));
   }
 
   getPluginData(): Promise<*> {
@@ -413,10 +414,9 @@ export default class Board extends BaseResource {
       pos?: PositionNumbered,
     } = {},
   ): Promise<*> {
-    // See associateMember in the Member class for explanation:
-    const boardId = this.instanceId;
-    this.instanceId = '';
-    return this.httpPut('/', { ...queryArgs, value: boardId });
+    // See associateMember() in the Member class for explanation:
+    this.resourcePath = this.resourcePath.split('/')[1];
+    return this.httpPut('/', { ...queryArgs, value: this.instanceId });
   }
 
   addBoard(

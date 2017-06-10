@@ -240,7 +240,7 @@ export default class Card extends BaseResource {
   }
 
   /**
-   * Update the ID of the image attachment of this card to use as its cover.
+   * Update the Id of the image attachment of this card to use as its cover.
    * @example PUT /1/cards/:cardId/idAttachmentCover
    * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idattachmentcover}
    */
@@ -271,7 +271,7 @@ export default class Card extends BaseResource {
       idMembers?: Array<string>,
       idLabels?: Array<string>,
       urlSource?: ?string,
-      fileSource?: Object,
+      fileSource?: ?Object,
       idCardSource?: string,
       keepFromSource?: KeepFromSourceField | Array<KeepFromSourceField>,
     } | {
@@ -283,8 +283,13 @@ export default class Card extends BaseResource {
       due?: ?Date,
     },
   ): Promise<*> {
-    const { fileSource, ...otherArgs } = queryArgs;
-    return this.httpPost('/', otherArgs, fileSource);
+    const queryArgsToUse = (queryArgs: Object);
+    let fileToUpload = {};
+    if (queryArgsToUse.fileSource) {
+      fileToUpload = (queryArgsToUse.fileSource: Object);
+      queryArgsToUse.fileSource = null;
+    }
+    return this.httpPost('/', queryArgsToUse, fileToUpload);
   }
 
   addIdLabel(value: string): Promise<*> {

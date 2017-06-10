@@ -3,9 +3,18 @@ import Trello from '../../src/index';
 import { auth, resourceIds, Logger } from '../helpers';
 
 describe('BRD | Board Resource', () => {
-  const { boardId, cardId, labelId, memberId, membershipId } = resourceIds;
+  const {
+    boardId,
+    cardId,
+    labelId,
+    memberId,
+    membershipId,
+    orgId,
+  } = resourceIds;
+
   let trello;
   let logger;
+  let newMemberId = '';
 
   before(function(done) {
     trello = new Trello(auth);
@@ -30,14 +39,14 @@ describe('BRD | Board Resource', () => {
       setTimeout(() => { done(); }, 3000);
     });
 
-    it('BRD-G-01-T01 | gets a board', (done) => {
+    it('BRD-G-01-T01 | gets a Board', (done) => {
       trello.boards(boardId).getBoard()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-01-T02 | gets a board with some arguments', (done) => {
+    it('BRD-G-01-T02 | gets a Board with some arguments', (done) => {
       trello.boards(boardId).getBoard({
         actions: 'none',
         cards: 'all',
@@ -48,7 +57,7 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-01-T03 | gets a board with all arguments', (done) => {
+    it('BRD-G-01-T03 | gets a Board with all arguments', (done) => {
       trello.boards(boardId).getBoard({
         actions: 'none',
         actionsEntities: true,
@@ -97,21 +106,21 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-02-T01 | gets the value of the name field for the board', (done) => {
+    it('BRD-G-02-T01 | gets the value of the name field for the Board', (done) => {
       trello.boards(boardId).getFieldValue('name')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-03-T01 | gets the associated actions', (done) => {
+    it('BRD-G-03-T01 | gets the associated Actions', (done) => {
       trello.boards(boardId).actions().getActions()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-03-T02 | gets up to 10 actions that are of type createBoard with filter applied', (done) => {
+    it('BRD-G-03-T02 | gets up to 10 Actions that are of type createBoard with filter applied', (done) => {
       trello.boards(boardId).actions().getActions({
         filter: 'createBoard',
         limit: 10,
@@ -121,14 +130,14 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-04-T01 | gets all the board stars', (done) => {
+    it('BRD-G-04-T01 | gets all the Board Stars', (done) => {
       trello.boards(boardId).getBoardStars()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-04-T02 | gets only my board stars with filter applied', (done) => {
+    it('BRD-G-04-T02 | gets only my Board Stars with filter applied', (done) => {
       trello.boards(boardId).getBoardStars({
         filter: 'mine',
       })
@@ -137,14 +146,14 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-05-T01 | gets the associated cards', (done) => {
+    it('BRD-G-05-T01 | gets the associated Cards', (done) => {
       trello.boards(boardId).cards().getCards()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-05-T02 | gets only the specified fields for the associated cards', (done) => {
+    it('BRD-G-05-T02 | gets only the specified fields for the associated Cards', (done) => {
       trello.boards(boardId).cards().getCards({
         fields: ['checkItemStates', 'name', 'idList'],
       })
@@ -153,7 +162,7 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-06-T01 | gets only the closed cards with filter applied', (done) => {
+    it('BRD-G-06-T01 | gets only the closed Cards with filter applied', (done) => {
       trello.boards(boardId).cards().getCards({
         filter: 'closed',
       })
@@ -162,21 +171,21 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-07-T01 | gets the associated card with the specified ID', (done) => {
+    it('BRD-G-07-T01 | gets the associated Card with the specified Id', (done) => {
       trello.boards(boardId).cards(cardId).getCards()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-08-T01 | gets the associated checklists', (done) => {
+    it('BRD-G-08-T01 | gets the associated Checklists', (done) => {
       trello.boards(boardId).checklists().getChecklists()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-08-T02 | gets only the specified fields for the associated checklists', (done) => {
+    it('BRD-G-08-T02 | gets only the specified fields for the associated Checklists', (done) => {
       trello.boards(boardId).checklists().getChecklists({
         fields: ['idBoard', 'name', 'pos'],
       })
@@ -185,8 +194,8 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    // TODO: Find out how to get this working.
-    it.skip('BRD-G-09-T01 | gets the associated deltas', (done) => {
+    // In order to get this to work, a Business Class account is required.
+    it.skip('BRD-G-09-T01 | gets the associated Deltas', (done) => {
       trello.boards(boardId).getDeltas({
         tags: 'tag?',
         ixLastUpdate: 1,
@@ -196,22 +205,22 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    // TODO: Find out how to get this working.
-    it.skip('BRD-G-10-T01 | gets the associated tags', (done) => {
+    // In order to get this to work, a Business Class account is required.
+    it.skip('BRD-G-10-T01 | gets the associated Tags', (done) => {
       trello.boards(boardId).getTags()
         .then(logResponse)
         .should.eventually.be.rejected
         .notify(done);
     });
 
-    it('BRD-G-11-T01 | gets the associated labels', (done) => {
+    it('BRD-G-11-T01 | gets the associated Labels', (done) => {
       trello.boards(boardId).labels().getLabels()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-11-T02 | gets only the specified fields for the associated labels', (done) => {
+    it('BRD-G-11-T02 | gets only the specified fields for the associated Labels', (done) => {
       trello.boards(boardId).labels().getLabels({
         fields: ['color', 'name'],
       })
@@ -220,21 +229,21 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-12-T01 | gets the associated label with the specified ID', (done) => {
+    it('BRD-G-12-T01 | gets the associated Label with the specified Id', (done) => {
       trello.boards(boardId).labels(labelId).getLabel()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-13-T01 | gets the associated lists', (done) => {
+    it('BRD-G-13-T01 | gets the associated Lists', (done) => {
       trello.boards(boardId).lists().getLists()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-13-T02 | gets the specified fields for the associated lists', (done) => {
+    it('BRD-G-13-T02 | gets the specified fields for the associated Lists', (done) => {
       trello.boards(boardId).lists().getLists({
         fields: ['name', 'pos'],
       })
@@ -243,21 +252,21 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-14-T01 | gets only the open lists with filter applied', (done) => {
+    it('BRD-G-14-T01 | gets only the open Lists with filter applied', (done) => {
       trello.boards(boardId).lists().getFilteredLists('open')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-15-T01 | gets the associated members', (done) => {
+    it('BRD-G-15-T01 | gets the associated Members', (done) => {
       trello.boards(boardId).members().getMembers()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-15-T02 | gets the specified fields for the associated members', (done) => {
+    it('BRD-G-15-T02 | gets the specified fields for the associated Members', (done) => {
       trello.boards(boardId).members().getMembers({
         fields: ['fullName', 'initials'],
       })
@@ -266,28 +275,28 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-16-T01 | gets only the normal members with filter applied', (done) => {
+    it('BRD-G-16-T01 | gets only the normal Members with filter applied', (done) => {
       trello.boards(boardId).members().getFilteredMembers('normal')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-17-T01 | gets the associated cards for the specified member', (done) => {
+    it('BRD-G-17-T01 | gets the associated cards for the specified Member', (done) => {
       trello.boards(boardId).members(memberId).cards().getCards()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-18-T01 | gets the associated members invited', (done) => {
+    it('BRD-G-18-T01 | gets the associated Members Invited', (done) => {
       trello.boards(boardId).membersInvited().getMembers()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-18-T02 | gets the specified fields for the associated members invited', (done) => {
+    it('BRD-G-18-T02 | gets the specified fields for the associated Members Invited', (done) => {
       trello.boards(boardId).membersInvited().getMembers({
         fields: ['email', 'fullName', 'username'],
       })
@@ -296,21 +305,21 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-19-T01 | gets the value of the fullName field for the associated members invited', (done) => {
+    it('BRD-G-19-T01 | gets the value of the fullName field for the associated Members Invited', (done) => {
       trello.boards(boardId).membersInvited().getFieldValue('fullName')
         .then(logResponse)
         .should.eventually.be.rejected
         .notify(done);
     });
 
-    it('BRD-G-20-T01 | gets the associated memberships', (done) => {
+    it('BRD-G-20-T01 | gets the associated Memberships', (done) => {
       trello.boards(boardId).memberships().getMemberships()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-20-T02 | gets only the specified member fields for the associated memberships', (done) => {
+    it('BRD-G-20-T02 | gets only the specified Member fields for the associated Memberships', (done) => {
       trello.boards(boardId).memberships().getMemberships({
         memberFields: ['status', 'username'],
       })
@@ -319,14 +328,14 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-21-T01 | gets the associated membership with the specified ID', (done) => {
+    it('BRD-G-21-T01 | gets the associated Membership with the specified Id', (done) => {
       trello.boards(boardId).memberships(membershipId).getMembership()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-21-T02 | gets the only the specified member fields for the associated membership with the specified ID', (done) => {
+    it('BRD-G-21-T02 | gets the only the specified Member fields for the associated Membership with the specified Id', (done) => {
       trello.boards(boardId).memberships(membershipId).getMembership({
         memberFields: ['status', 'username'],
       })
@@ -342,14 +351,14 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-23-T01 | gets the associated organization', (done) => {
+    it('BRD-G-23-T01 | gets the associated Organization', (done) => {
       trello.boards(boardId).organization().getOrganization()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-23-T02 | gets only the specified fields for the associated organization', (done) => {
+    it('BRD-G-23-T02 | gets only the specified fields for the associated Organization', (done) => {
       trello.boards(boardId).organization().getOrganization({
         fields: ['displayName', 'name', 'url']
       })
@@ -358,14 +367,14 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-24-T01 | gets the value of the name field for the associated organization', (done) => {
+    it('BRD-G-24-T01 | gets the value of the name field for the associated Organization', (done) => {
       trello.boards(boardId).organization().getFieldValue('name')
         .then(logResponse)
-        .should.eventually.be.rejected
+        .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-G-25-T01 | gets the associated plugin data', (done) => {
+    it('BRD-G-25-T01 | gets the associated Plugin Data', (done) => {
       trello.boards(boardId).getPluginData()
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -378,7 +387,7 @@ describe('BRD | Board Resource', () => {
       setTimeout(() => { done(); }, 3000);
     });
 
-    it('BRD-U-01-T01 | updates a board', (done) => {
+    it('BRD-U-01-T01 | updates a Board', (done) => {
       trello.boards(boardId).updateBoard({
         name: 'Test Board',
       })
@@ -401,8 +410,8 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it.skip('BRD-U-04-T01 | updates the organization', (done) => {
-      trello.boards(boardId).organization().updateOrganization()
+    it('BRD-U-04-T01 | updates the Organization association', (done) => {
+      trello.boards(boardId).organization(orgId).associateOrganization()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
@@ -450,30 +459,56 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it.skip('BRD-U-11-T01 | adds an associated member', (done) => {
+    // This works, I just don't want to keep creating and deleting unconfirmed members.
+    it.skip('BRD-U-11-T01 | adds an associated Member', (done) => {
       trello.boards(boardId).members().addMember({
         email: 'dude@website.com',
         fullName: 'Bobby Memberton',
       })
         .then(logResponse)
+        .then((response) => {
+          const boardMembers = response.data.members;
+          const newMember = boardMembers.find(
+            boardMember => boardMember.memberType === 'ghost');
+          if (newMember) {
+            newMemberId = newMember.id;
+            return Promise.resolve();
+          } else {
+            return Promise.reject(new Error('Could not get new member.'))
+          }
+        })
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it.skip('BRD-U-12-T01 | updates the type for an associated member with specified ID', (done) => {
-      trello.boards(boardId).members('[NEED ID]').updateMemberType('normal')
+    // This works, I just don't want to keep creating and deleting unconfirmed members.
+    it.skip('BRD-U-12-T01 | updates the type for an associated Member with specified Id', (done) => {
+      if (!newMemberId) {
+        done(new Error('New member Id not found.'))
+      }
+      trello.boards(boardId).members(newMemberId).updateMemberType('normal')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it.skip('BRD-U-13-T01 | updates the associated membership with the specified ID', (done) => {
-      trello.boards(boardId).memberships('[NEED ID]').updateMembership({
-        type: 'normal',
-      })
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+    // This works, I just don't want to keep creating and deleting unconfirmed members.
+    it.skip('BRD-U-13-T01 | updates the associated Membership with the specified Id', (done) => {
+      const boardMemberships = trello.boards(boardId).memberships();
+      boardMemberships.getMemberships()
+        .then((results) => {
+          const membershipToUse = results.data.find(
+            membership => memberships.memberType === 'normal');
+          if (membershipToUse) {
+            boardMemberships.updateMembership({ type: 'normal' })
+              .then(logResponse)
+              .should.eventually.be.fulfilled
+              .notify(done);
+          } else {
+            done(new Error('Membership not found when attempting update.'))
+          }
+        })
+        .catch(error => done(error));
     });
 
     it('BRD-U-14-T01 | updates the emailPosition myPref', (done) => {
@@ -483,6 +518,7 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
+    // TODO: Figure out what the requirements are for this.
     it.skip('BRD-U-15-T01 | updates the idEmailList myPref', (done) => {
       trello.boards(boardId).myPrefs().moveToEmailList(null)
         .then(logResponse)
@@ -532,8 +568,8 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it.skip('BRD-U-22-T01 | updates the background preference', (done) => {
-      trello.boards(boardId).prefs().updateBackground('[NEED ID]')
+    it('BRD-U-22-T01 | updates the background preference', (done) => {
+      trello.boards(boardId).prefs().updateBackground('orange')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
@@ -603,8 +639,8 @@ describe('BRD | Board Resource', () => {
     });
   });
 
-  describe.skip('Board POST requests', () => {
-    it.skip('BRD-P-01-T01 | creates a new board', (done) => {
+  describe('BRD-P | Board POST requests', () => {
+    it.skip('BRD-P-01-T01 | creates a new Board', (done) => {
       const boardName = 'Test Board 2';
       trello.boards().addBoard(boardName)
         .then(logResponse)
@@ -612,8 +648,18 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-P-02-T01 | adds a new checklist', (done) => {
-      trello.boards().checklists().addChecklist({
+    // This works, I didn't want to go buck wild with generating keys.
+    it.skip('BRD-P-02-T01 | generates a calendar key', (done) => {
+      trello.boards(boardId).generateCalendarKey()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    // TODO: Figure out why this isn't working.
+    it.only('BRD-P-03-T01 | adds a new Checklist', (done) => {
+      trello.boards(boardId).checklists().addChecklist({
+        idCard: cardId,
         name: 'Test Checklist',
       })
         .then(logResponse)
@@ -621,15 +667,70 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-P-03-T01 | generates a calendar key', (done) => {
-      trello.boards().generateCalendarKey()
+    // This works, I didn't want to go buck wild with generating keys.
+    it.skip('BRD-P-04-T01 | generates an email key', (done) => {
+      trello.boards(boardId).generateEmailKey()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('BRD-P-04-T01 | generates an email key', (done) => {
-      trello.boards().generateEmailKey()
+    // In order to get this to work, a Business Class account is required.
+    it.skip('BRD-P-05-T01 | adds Tags to a board', (done) => {
+      trello.boards(boardId).addTags('[tag]')
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('BRD-P-06-T01 | adds a new Label', (done) => {
+      trello.boards(boardId).labels().addLabel({
+        name: 'Label for Blue',
+        color: 'blue',
+      })
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('BRD-P-07-T01 | adds a new List', (done) => {
+      trello.boards(boardId).lists().addList({
+        name: 'Testing a List',
+      })
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('BRD-P-08-T01 | marks a board as viewed', (done) => {
+      trello.boards(boardId).markAsViewed()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('BRD-P-09-T01 | adds a PowerUp', (done) => {
+      trello.boards(boardId).addPowerUp('cardAging')
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+  });
+
+  describe('BRD-D | Board DELETE requests', () => {
+    // This works, I just don't want to keep creating and deleting unconfirmed members.
+    it.skip('BRD-D-01-T01 | deletes a member', (done) => {
+      if (!newMemberId) {
+        done(new Error('New member Id not found.'))
+      }
+      trello.boards(boardId).members(newMemberId).deleteMember()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('BRD-D-02-T01 | deletes a PowerUp', (done) => {
+      trello.boards(boardId).deletePowerUp('cardAging')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);

@@ -237,6 +237,19 @@ export default class Organization extends BaseResource {
     return this.httpPut('/website', { value });
   }
 
+  /**
+   * Associates an organization with a Board.
+   * @example PUT /1/boards/:boardId/idOrganization
+   * @memberOf Board
+   * @see {@link https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-idorganization}
+   */
+  associateOrganization(): Promise<*> {
+    // Remove the Id portion of the resource path and use only the portion
+    // containing the resource name:
+    this.resourcePath = this.resourcePath.split('/')[1];
+    return this.httpPut('/', { value: this.instanceId });
+  }
+
   addOrganization(
     queryArgs?: {
       name?: string,
@@ -254,19 +267,6 @@ export default class Organization extends BaseResource {
 
   addTags(value: string): Promise<*> {
     return this.httpPost('/tags', { value });
-  }
-
-  /**
-   * Associates an organization with a parent or child resource.  The resource
-   *    path is overriden to remove the ID number from the endpoint.
-   *
-   * @example
-   * POST > .../boards/[boardId]/idOrganization?value=[organizationId]&key=...
-   * @see {@link https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-idorganization}
-   */
-  addAssociation(): Promise<*> {
-    this.resourcePath = this.resourcePath.split('/')[1];
-    return this.httpPost('/', { value: this.instanceId });
   }
 
   deleteOrganization(): Promise<*> {

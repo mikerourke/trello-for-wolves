@@ -499,17 +499,6 @@ export default class Member extends BaseResource {
   }
 
   /**
-   * Updates the members associated with a parent Card.
-   * @memberOf Card
-   * @example PUT /1/cards/:cardId/idMembers
-   * @param {Array} value Array of member IDs to add to the card.
-   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idmembers}
-   */
-  associateMembers(value: Array<string>): Promise<*> {
-    return this.httpPut('/', { value });
-  }
-
-  /**
    * Updates the deactivated status for a member associated with an
    *    Organization.
    * @memberOf Organization
@@ -521,7 +510,12 @@ export default class Member extends BaseResource {
   }
 
   /**
-   * Updates the member type for a member associated with an Organization.
+   * Updates the member type for a member associated with a Board or
+   *    Organization.
+   * @memberOf Board
+   * @example PUT /1/boards/:boardId/members/:memberId
+   * @see {@link https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-members-idmember}
+   *
    * @memberOf Organization
    * @example PUT /1/organizations/:organizationId/members/:memberId
    * @see {@link https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember}
@@ -551,24 +545,47 @@ export default class Member extends BaseResource {
   }
 
   /**
-   * Associates a member with a Card.
-   * @example POST /1/cards/:cardId/idMembers
+   * Associates a member or updates the members associated with a Card,
+   *    depending on whether the calling function passes an array of Member
+   *    Ids.
    * @memberOf Card
+   * @example POST /1/cards/:cardId/idMembers
    * @see {@link https://developers.trello.com/advanced-reference/card#post-1-cards-card-id-or-shortlink-idmembers}
+   *
+   * @memberOf Card
+   * @example PUT /1/cards/:cardId/idMembers
+   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idmembers}
    */
-  associateMember(): Promise<*> {
-    // An ID number is specified when the Member instance is created, so the
+  associateMember(memberIds?: Array<string>): Promise<*> {
+    // An Id number is specified when the Member instance is created, so the
     // default resource path would be /idMembers/[memberId].  If a member is
     // being associated with a card, the /[memberId] must be removed and passed
     // in as a query arg, so the resource path would be
     // /idMembers?value=[memberId]...
-    const memberId = this.instanceId;
-    this.instanceId = '';
-    return this.httpPost('/', { value: memberId });
+    this.resourcePath = this.resourcePath.split('/')[1];
+
+    // If an array of Member Ids was passed in as an argument, a PUT request
+    // is made to perform a bulk update.
+    if (memberIds) {
+      return this.httpPut('/', { value: memberIds });
+    }
+    // If no argument was passed in, a POST request is made with the updated
+    // member Id.
+    return this.httpPost('/', { value: this.instanceId });
   }
 
   dismissOneTimeMessages(value: string): Promise<*> {
     return this.httpPost('/oneTimeMessagesDismissed', { value });
+  }
+
+  /**
+   * Deletes a member created for a Board.
+   * @memberOf Board
+   * @example DELETE /1/boards/:boardId/members/:memberId
+   * @see {@link https://developers.trello.com/advanced-reference/board#delete-1-boards-board-id-members-idmember}
+   */
+  deleteMember(): Promise<*> {
+    return this.httpDelete('/');
   }
 
   /**
@@ -582,8 +599,8 @@ export default class Member extends BaseResource {
   }
 
   /**
-   * This will remove a member from your organization AND remove the member
-   *    from all organization boards.
+   * This will remove a member from your Organization AND remove the member
+   *    from all Boards associated with an Organization.
    * @memberOf Organization
    * @example DELETE /1/organizations/:organizationId/members/:memberId/all
    * @see {@link https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember-all}

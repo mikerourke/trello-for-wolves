@@ -20,7 +20,7 @@ export type AttachmentField =
   // The hex color that is used as the background when the attachment is made
   // the card cover.
   | 'edgeColor'
-  // ID of the user who added the attachment.
+  // Id of the user who added the attachment.
   | 'idMember'
   // A boolean indicating whether this was uploaded by a user on the
   // web/mobile client or whether it was added via the API.

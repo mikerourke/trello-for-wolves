@@ -17,7 +17,12 @@ export type LabelColor =
   | 'orange'
   | 'purple'
   | 'red'
-  | 'yellow';
+  | 'yellow'
+  // These colors are also available, they're just not documented:
+  | 'sky'
+  | 'lime'
+  | 'pink'
+  | 'black';
 
 export type LabelField = 'color' | 'idBoard' | 'name' | 'uses';
 

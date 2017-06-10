@@ -111,20 +111,23 @@ export default class List extends BaseResource {
    * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idlist}
    */
   associateList(): Promise<*> {
-    // See associateMember in the Member class for explanation:
-    const listId = this.instanceId;
-    this.instanceId = '';
-    return this.httpPut('/', { value: listId });
+    // See associateMember() in the Member class for explanation:
+    this.resourcePath = this.resourcePath.split('/')[1];
+    return this.httpPut('/', { value: this.instanceId });
   }
 
   addList(
     queryArgs: {
       name: string,
-      idBoard: string,
+      idBoard?: string,
       idListSource?: string,
       pos?: PositionNumbered,
     },
   ): Promise<*> {
+    const { parentName, parentId } = this.getParent();
+    if (parentName === 'boards') {
+      queryArgs.idBoard = parentId;
+    }
     return this.httpPost('/', queryArgs);
   }
 

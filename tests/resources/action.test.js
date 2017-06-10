@@ -3,7 +3,12 @@ import Trello from '../../src/index';
 import { auth, resourceIds, Logger } from '../helpers';
 
 describe('ACT | Action Resource', function() {
-  const { actionId, commentId } = resourceIds;
+  const {
+    actionId,
+    commentId,
+    orgActionId,
+  } = resourceIds;
+
   let trello;
   let logger;
 
@@ -25,14 +30,14 @@ describe('ACT | Action Resource', function() {
   const logResponse = (response) => logger.processResponse(response);
 
   describe('ACT-G | Action GET Requests', () => {
-    it('ACT-G-01-T01 | gets an action', (done) => {
+    it('ACT-G-01-T01 | gets an Action', (done) => {
       trello.actions(actionId).getAction()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('ACT-G-01-T02 | gets an action with some arguments', (done) => {
+    it('ACT-G-01-T02 | gets an Action with some arguments', (done) => {
       trello.actions(actionId).getAction({
         display: true,
         fields: 'all',
@@ -42,7 +47,7 @@ describe('ACT | Action Resource', function() {
         .notify(done);
     });
 
-    it('ACT-G-01-T03 | gets an action with all arguments', (done) => {
+    it('ACT-G-01-T03 | gets an Action with all arguments', (done) => {
       trello.actions(actionId).getAction({
         display: true,
         entities: true,
@@ -57,42 +62,42 @@ describe('ACT | Action Resource', function() {
         .notify(done);
     });
 
-    it('ACT-G-02-T01 | gets an action field value for data', (done) => {
+    it('ACT-G-02-T01 | gets an Action field value for data', (done) => {
       trello.actions(actionId).getFieldValue('data')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('ACT-G-02-T02 | gets an action field value for date', (done) => {
+    it('ACT-G-02-T02 | gets an Action field value for date', (done) => {
       trello.actions(actionId).getFieldValue('date')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('ACT-G-02-T03 | gets an action field value for idMemberCreator', (done) => {
+    it('ACT-G-02-T03 | gets an Action field value for idMemberCreator', (done) => {
       trello.actions(actionId).getFieldValue('idMemberCreator')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('ACT-G-02-T04 | gets an action field value for type', (done) => {
+    it('ACT-G-02-T04 | gets an Action field value for type', (done) => {
       trello.actions(actionId).getFieldValue('type')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('ACT-G-03-T01 | gets the associated board', (done) => {
+    it('ACT-G-03-T01 | gets the associated Board', (done) => {
       trello.actions(actionId).board().getBoard()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('ACT-G-03-T02 | gets only the specified fields for the associated board', (done) => {
+    it('ACT-G-03-T02 | gets only the specified fields for the associated Board', (done) => {
       trello.actions(actionId).board().getBoard({
         fields: ['closed', 'dateLastActivity'],
       })
@@ -101,21 +106,21 @@ describe('ACT | Action Resource', function() {
         .notify(done);
     });
 
-    it('ACT-G-04-T01 | gets a field value for the associated board', (done) => {
+    it('ACT-G-04-T01 | gets a field value for the associated Board', (done) => {
       trello.actions(actionId).board().getFieldValue('name')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('ACT-G-05-T01 | gets the associated card', (done) => {
+    it('ACT-G-05-T01 | gets the associated Card', (done) => {
       trello.actions(actionId).card().getCard()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('ACT-G-05-T02 | gets only the specified fields for the associated card', (done) => {
+    it('ACT-G-05-T02 | gets only the specified fields for the associated Card', (done) => {
       trello.actions(actionId).card().getCard({
         fields: ['badges', 'closed', 'desc'],
       })
@@ -124,35 +129,35 @@ describe('ACT | Action Resource', function() {
         .notify(done);
     });
 
-    it('ACT-G-06-T01 | gets a field value for the associated card', (done) => {
+    it('ACT-G-06-T01 | gets a field value for the associated Card', (done) => {
       trello.actions(actionId).card().getFieldValue('name')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('ACT-G-07-T01 | gets the display data', (done) => {
+    it('ACT-G-07-T01 | gets the Display data', (done) => {
       trello.actions(actionId).getDisplay()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('ACT-G-08-T01 | gets the entities data', (done) => {
+    it('ACT-G-08-T01 | gets the Entities data', (done) => {
       trello.actions(actionId).getEntities()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('ACT-G-09-T01 | gets the associated list', (done) => {
+    it('ACT-G-09-T01 | gets the associated List', (done) => {
       trello.actions(actionId).list().getList()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('ACT-G-09-T02 | gets only the specified fields for the associated list', (done) => {
+    it('ACT-G-09-T02 | gets only the specified fields for the associated List', (done) => {
       trello.actions(actionId).list().getList({
         fields: ['name', 'pos'],
       })
@@ -161,21 +166,21 @@ describe('ACT | Action Resource', function() {
         .notify(done);
     });
 
-    it('ACT-G-10-T01 | gets a field value for the associated list', (done) => {
+    it('ACT-G-10-T01 | gets a field value for the associated List', (done) => {
       trello.actions(actionId).list().getFieldValue('name')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('ACT-G-11-T01 | gets the associated member', (done) => {
+    it('ACT-G-11-T01 | gets the associated Member', (done) => {
       trello.actions(actionId).member().getMember()
         .then(logResponse)
         .should.eventually.be.rejected
         .notify(done);
     });
 
-    it('ACT-G-11-T01 | gets only the specified fields for the associated member', (done) => {
+    it('ACT-G-11-T01 | gets only the specified fields for the associated Member', (done) => {
       trello.actions(actionId).member().getMember({
         fields: ['email', 'fullName'],
       })
@@ -184,21 +189,21 @@ describe('ACT | Action Resource', function() {
         .notify(done);
     });
 
-    it('ACT-G-12-T01 | gets a field value for the associated member', (done) => {
+    it('ACT-G-12-T01 | gets a field value for the associated Member', (done) => {
       trello.actions(actionId).member().getFieldValue('fullName')
         .then(logResponse)
         .should.eventually.be.rejected
         .notify(done);
     });
 
-    it('ACT-G-13-T01 | gets the associated member creator', (done) => {
+    it('ACT-G-13-T01 | gets the associated Member Creator', (done) => {
       trello.actions(actionId).memberCreator().getMember()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('ACT-G-13-T02 | gets only the specified fields for the associated member creator', (done) => {
+    it('ACT-G-13-T02 | gets only the specified fields for the associated Member Creator', (done) => {
       trello.actions(actionId).memberCreator().getMember({
         fields: ['avatarSource', 'bio', 'bioData', 'confirmed', 'idBoards'],
       })
@@ -207,32 +212,30 @@ describe('ACT | Action Resource', function() {
         .notify(done);
     });
 
-    it('ACT-G-14-T01 | gets a field value for the associated member creator', (done) => {
+    it('ACT-G-14-T01 | gets a field value for the associated Member Creator', (done) => {
       trello.actions(actionId).memberCreator().getFieldValue('avatarHash')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    // TODO: Find board with an organization to get actions for.
-    it('ACT-G-15-T01 | gets the associated organization', (done) => {
-      trello.actions(actionId).organization().getOrganization()
+    it('ACT-G-15-T01 | gets the associated Organization', (done) => {
+      trello.actions(orgActionId).organization().getOrganization()
         .then(logResponse)
-        .should.eventually.be.rejected
+        .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    // TODO: Find board with an organization to get actions for.
-    it('ACT-G-16-T01 | gets a field value for the associated organization', (done) => {
-      trello.actions(actionId).organization().getFieldValue('logoHash')
+    it('ACT-G-16-T01 | gets a field value for the associated Organization', (done) => {
+      trello.actions(orgActionId).organization().getFieldValue('name')
         .then(logResponse)
-        .should.eventually.be.rejected
+        .should.eventually.be.fulfilled
         .notify(done);
     });
   });
 
   describe('ACT-U | Action PUT Requests', () => {
-    it('ACT-U-01-T01 | updates an action', (done) => {
+    it('ACT-U-01-T01 | updates an Action', (done) => {
       trello.actions(commentId).updateAction({
         text: 'This is updated text.',
       })
@@ -241,7 +244,7 @@ describe('ACT | Action Resource', function() {
         .notify(done);
     });
 
-    it('ACT-U-02-T01 | updates the text for an action', (done) => {
+    it('ACT-U-02-T01 | updates the text for an Action', (done) => {
       trello.actions(commentId).updateText('This is more updated text.')
         .then(logResponse)
         .should.eventually.be.fulfilled

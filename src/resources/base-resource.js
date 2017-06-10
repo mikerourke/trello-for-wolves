@@ -54,6 +54,24 @@ export default class BaseResource {
     this._parentPath = parentPath;
   }
 
+  getParent(): Object {
+    if (!this._parentPath) {
+      return {
+        parentName: '',
+        parentId: '',
+      };
+    }
+    const pathElements = this._parentPath.split('/');
+
+    // Ensure that the first element in the array has a length greater than
+    // zero:
+    const elementIndex = pathElements[0].length ? 0 : 1;
+    return {
+      parentName: pathElements[elementIndex],
+      parentId: pathElements[elementIndex + 1],
+    };
+  }
+
   /**
    * Returns the constructor options object for passing to the constructor
    *    of a child resource (e.g. creating an "actions" instance in a "board").
@@ -88,7 +106,7 @@ export default class BaseResource {
    */
   getRoutePath() {
     // If the resource path was manually specified, use that, otherwise
-    // construct it based on the resource name and ID.
+    // construct it based on the resource name and Id.
     let resourcePathToUse = this.resourcePath;
     if (resourcePathToUse === '') {
       resourcePathToUse = `${this._resourceName}s`;
@@ -102,10 +120,7 @@ export default class BaseResource {
     const pathSeparator = this._parentPath && '/';
 
     // Combine the parent and resource paths to form the route path.
-    const fullPath = `${this._parentPath}${pathSeparator}${resourcePathToUse}`;
-
-    // Ensure there are no double slashes in the final path.
-    return fullPath.replace('//', '/');
+    return `${this._parentPath}${pathSeparator}${resourcePathToUse}`;
   }
 
   /**
@@ -122,11 +137,10 @@ export default class BaseResource {
     const routePath = this.getRoutePath();
     const basePath = `${routePath}${pathVariables}`;
 
-    // By default, the path '/' is provided if the endpoint uses the base
-    // path (for reference purposes).  Remove the slash prior to building
-    // the endpoint.
-    const lastChar = basePath.slice(-1);
-    const fullPath = (lastChar === '/') ? basePath.slice(0, -1) : basePath;
+    // Remove any consecutive and trailing slashes.
+    const sanitizedPath = basePath
+      .replace(/\/+/g, '/')
+      .replace(/\/+$/, '');
 
     // If queryArgs were provided, build the corresponding querystring to
     // include the specified arguments.
@@ -134,7 +148,7 @@ export default class BaseResource {
 
     // Ensure the key and token is appended to the end of the querystring.
     const authSuffix = stringify(this.auth);
-    return `${fullPath}?${queryArgsString}${authSuffix}`;
+    return `${sanitizedPath}?${queryArgsString}${authSuffix}`;
   }
 
   /**
@@ -153,11 +167,15 @@ export default class BaseResource {
     data?: Object = {},
   ): Promise<*> {
     const endpoint = this.getEndpoint(pathVariables, queryArgs);
+
+    // One more check is done to ensure there are no consecutive slashes.
+    const sanitizedUrl = `api.trello.com/1/${endpoint}`.replace(/\/+/g, '/');
+
     return new Promise((resolve, reject) => {
       axios({
         data,
         method: httpMethod,
-        url: `https://api.trello.com/1/${endpoint}`,
+        url: `https://${sanitizedUrl}`,
       })
         .then((result) => {
           resolve(result);

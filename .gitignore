@@ -32,4 +32,6 @@ dictionaries
 # Other
 output/
 docs/
-results.json
+tests/results/
+
+.env
