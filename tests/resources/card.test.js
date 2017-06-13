@@ -1,13 +1,15 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import { auth, resourceIds, Logger } from '../helpers';
+import { auth, getTimeForTest, resourceIds, Logger } from '../helpers';
 
 describe('CAR | Card Resource', function() {
   const {
     attachmentId,
     cardId,
     checkItemId,
+    checklistId,
     commentId,
+    stickerId,
   } = resourceIds;
   let trello;
   let logger;
@@ -29,7 +31,7 @@ describe('CAR | Card Resource', function() {
 
   const logResponse = (response) => logger.processResponse(response);
 
-  describe.only('CAR-G | Card GET Requests', () => {
+  describe('CAR-G | Card GET Requests', () => {
     before(function(done) {
       setTimeout(() => { done(); }, 3000);
     });
@@ -116,7 +118,7 @@ describe('CAR | Card Resource', function() {
     });
 
     it('CAR-G-05-T01 | gets the associated Attachment with the specified Id', (done) => {
-      trello.cards(cardId).attachments().getAttachment(attachmentId)
+      trello.cards(cardId).attachments(attachmentId).getAttachment()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
@@ -210,6 +212,76 @@ describe('CAR | Card Resource', function() {
       trello.cards(cardId).members().getMembers({
         fields: ['fullName', 'initials'],
       })
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-G-14-T01 | gets the associated Members Voted', (done) => {
+      trello.cards(cardId).membersVoted().getMembers()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-G-15-T01 | gets the associated Plugin Data', (done) => {
+      trello.cards(cardId).getPluginData()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-G-16-T01 | gets the associated Stickers', (done) => {
+      trello.cards(cardId).stickers().getStickers()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-G-16-T02 | gets the specified fields for the associated Stickers', (done) => {
+      trello.cards(cardId).stickers().getStickers({
+        fields: ['left', 'top'],
+      })
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-G-17-T01 | gets the associated Sticker with the specified Id', (done) => {
+      trello.cards(cardId).stickers(stickerId).getSticker()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+  });
+
+  describe('CAR-U | Card PUT requests', () => {
+    before(function(done) {
+      setTimeout(() => { done(); }, 3000);
+    });
+
+    it('CAR-U-01-T01 | updates a Card', (done) => {
+      trello.cards(cardId).updateCard({
+        desc: 'This is the updated description.',
+      })
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-U-02-T01 | updates an associated Comment', (done) => {
+      const commentText = `Updated text from test ran on ${getTimeForTest()}`;
+      trello.cards(cardId).comments(commentId).updateComment(commentText)
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it.only('CAR-U-03-T01 | updates the name of an associated Checklist Item on a Checklist with the specified Id', (done) => {
+      trello
+        .cards(cardId)
+        .checklist(checklistId)
+        .checkItem(checkItemId).updateName('Test Item Update')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);

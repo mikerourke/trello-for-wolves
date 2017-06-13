@@ -1,6 +1,7 @@
 /* External dependencies */
 import chalk from 'chalk';
 import jsonFile from 'jsonfile';
+import moment from 'moment';
 
 const key = process.env.TRELLO_API_KEY || '';
 const token = process.env.TRELLO_AUTH_TOKEN || '';
@@ -16,13 +17,17 @@ export const resourceIds = {
   boardId: 'bJDPVV1A',
   cardId: '592b4b6716732423b99d7f99',
   checkItemId: '593f4613b90814702fe03f39',
+  checklistId: '593f4610637b0c70455e8f84',
   commentId: '59370991f5bdf80363e086ad',
   labelId: '5927718cced82109ffc85150',
   memberId: '56c266ee58b06885bc4e54e3',
   membershipId: '5927718c7a9e8015ddbedcfe',
   orgActionId: '592f0c5a637c4ec4515afd3f',
   orgId: '592f0c5a637c4ec4515afd3d',
+  stickerId: '594032c2b50001911daf1ac5',
 };
+
+export const getTimeForTest = () => moment().format('YY.MM.D HH:mm:ss');
 
 /**
  * Logger used to log test data to the console and save results of tests to

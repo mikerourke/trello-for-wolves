@@ -68,6 +68,11 @@ export default class Checklist extends BaseResource {
     return new Card(this.auth, this.getOptionsForChild());
   }
 
+  checkItem(checkItemId: string) {
+    return new CheckItem(
+      this.auth, this.getOptionsForChild(checkItemId, '/checkItem'));
+  }
+
   checkItems(checkItemId?: string = '') {
     return new CheckItem(this.auth, this.getOptionsForChild(checkItemId));
   }
