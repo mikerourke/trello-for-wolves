@@ -2,6 +2,14 @@
 
 The table below contains all of the available Trello routes and their status in terms of project coverage.
 
+### Icon Details
+👍: Task is complete/ready to test.
+📝: Indicates that there is a note associated with the item.
+🔒: Test passed the first time it was ran, but I don't want to keep running the tests.  These usually entail things like generating keys or creating users.
+📌: Test was skipped, need to come back to it.
+💰: Premium feature that I'm not able to test (e.g. Business Class).
+🛑: Test is failing and is being worked on.
+
 | Id       | Resource     | Method | Path                                                      | Coded | Tested        | Documented |
 |:---------|:-------------|:-------|:----------------------------------------------------------|:-----:|:-------------:|:----------:|
 | ACT-G-01 | action       | get    | /actions/:id                                              | 👍     | 👍          | 👍         |
@@ -18,8 +26,8 @@ The table below contains all of the available Trello routes and their status in 
 | ACT-G-12 | action       | get    | /actions/:id/member/:field                                | 👍     | 👍          | 👍         |
 | ACT-G-13 | action       | get    | /actions/:id/memberCreator                                | 👍     | 👍          | 👍         |
 | ACT-G-14 | action       | get    | /actions/:id/memberCreator/:field                         | 👍     | 👍          | 👍         |
-| ACT-G-15 | action       | get    | /actions/:id/organization                                 | 👍     | [📌](#I1)   | 👍         |
-| ACT-G-16 | action       | get    | /actions/:id/organization/:field                          | 👍     | [📌](#I1)   | 👍         |
+| ACT-G-15 | action       | get    | /actions/:id/organization                                 | 👍     | 👍          | 👍         |
+| ACT-G-16 | action       | get    | /actions/:id/organization/:field                          | 👍     | 👍          | 👍         |
 | ACT-U-01 | action       | put    | /actions/:id                                              | 👍     | 👍          | 👍         |
 | ACT-U-02 | action       | put    | /actions/:id/text                                         | 👍     | 👍          | 👍         |
 | ACT-D-01 | action       | delete | /actions/:id                                              | 👍     | [📝](#N1)   | 👍         |
@@ -80,30 +88,30 @@ The table below contains all of the available Trello routes and their status in 
 | BRD-U-29 | board        | put    | /boards/:id/prefs/selfJoin                                | 👍     | 👍          |            |
 | BRD-U-30 | board        | put    | /boards/:id/prefs/voting                                  | 👍     | 👍          |            |
 | BRD-U-31 | board        | put    | /boards/:id/subscribed                                    | 👍     | 👍          |            |
-| BRD-P-01 | board        | post   | /boards                                                   | 👍     | 📌          |            |
+| BRD-P-01 | board        | post   | /boards                                                   | 👍     | 🔒          |            |
 | BRD-P-02 | board        | post   | /boards/:id/calendarKey/generate                          | 👍     | 🔒          |            |
-| BRD-P-03 | board        | post   | /boards/:id/checklists                                    | 👍     | 👍          |            |
+| BRD-P-03 | board        | post   | /boards/:id/checklists                                    | 👍     | 🛑          |            |
 | BRD-P-04 | board        | post   | /boards/:id/emailKey/generate                             | 👍     | 🔒          |            |
 | BRD-P-05 | board        | post   | /boards/:id/idTags                                        | 👍     | 💰          |            |
-| BRD-P-06 | board        | post   | /boards/:id/labels                                        | 👍     |            |            |
-| BRD-P-07 | board        | post   | /boards/:id/lists                                         | 👍     |            |            |
-| BRD-P-08 | board        | post   | /boards/:id/markAsViewed                                  | 👍     |            |            |
-| BRD-P-09 | board        | post   | /boards/:id/powerUps                                      | 👍     |            |            |
+| BRD-P-06 | board        | post   | /boards/:id/labels                                        | 👍     | 👍          |            |
+| BRD-P-07 | board        | post   | /boards/:id/lists                                         | 👍     | 👍          |            |
+| BRD-P-08 | board        | post   | /boards/:id/markAsViewed                                  | 👍     | 👍          |            |
+| BRD-P-09 | board        | post   | /boards/:id/powerUps                                      | 👍     | 🛑          |            |
 | BRD-D-01 | board        | delete | /boards/:id/members/:idMember                             | 👍     | 🔒          |            |
-| BRD-D-02 | board        | delete | /boards/:id/powerUps/:powerUp                             | 👍     |            |            |
-| CAR-G-01 | card         | get    | /cards/:id                                                | 👍     |            |            |
-| CAR-G-02 | card         | get    | /cards/:id/:field                                         | 👍     |            |            |
-| CAR-G-03 | card         | get    | /cards/:id/actions                                        | 👍     |            |            |
-| CAR-G-04 | card         | get    | /cards/:id/attachments                                    | 👍     |            |            |
-| CAR-G-05 | card         | get    | /cards/:id/attachments/:idAttachment                      | 👍     |            |            |
-| CAR-G-06 | card         | get    | /cards/:id/board                                          | 👍     |            |            |
-| CAR-G-07 | card         | get    | /cards/:id/board/:field                                   | 👍     |            |            |
-| CAR-G-08 | card         | get    | /cards/:id/checkItemStates                                | 👍     |            |            |
-| CAR-G-09 | card         | get    | /cards/:id/checklists                                     | 👍     |            |            |
-| CAR-G-10 | card         | get    | /cards/:id/checkItem/:idCheckItem                         | 👍     |            |            |
-| CAR-G-11 | card         | get    | /cards/:id/list                                           | 👍     |            |            |
-| CAR-G-12 | card         | get    | /cards/:id/list/:field                                    | 👍     |            |            |
-| CAR-G-13 | card         | get    | /cards/:id/members                                        | 👍     |            |            |
+| BRD-D-02 | board        | delete | /boards/:id/powerUps/:powerUp                             | 👍     | 👍          |            |
+| CAR-G-01 | card         | get    | /cards/:id                                                | 👍     | 👍          |            |
+| CAR-G-02 | card         | get    | /cards/:id/:field                                         | 👍     | 👍          |            |
+| CAR-G-03 | card         | get    | /cards/:id/actions                                        | 👍     | 👍          |            |
+| CAR-G-04 | card         | get    | /cards/:id/attachments                                    | 👍     | 👍          |            |
+| CAR-G-05 | card         | get    | /cards/:id/attachments/:idAttachment                      | 👍     | 👍          |            |
+| CAR-G-06 | card         | get    | /cards/:id/board                                          | 👍     | 👍          |            |
+| CAR-G-07 | card         | get    | /cards/:id/board/:field                                   | 👍     | 👍          |            |
+| CAR-G-08 | card         | get    | /cards/:id/checkItemStates                                | 👍     | 👍          |            |
+| CAR-G-09 | card         | get    | /cards/:id/checklists                                     | 👍     | 👍          |            |
+| CAR-G-10 | card         | get    | /cards/:id/checkItem/:idCheckItem                         | 👍     |             |            |
+| CAR-G-11 | card         | get    | /cards/:id/list                                           | 👍     | 👍          |            |
+| CAR-G-12 | card         | get    | /cards/:id/list/:field                                    | 👍     | 👍          |            |
+| CAR-G-13 | card         | get    | /cards/:id/members                                        | 👍     | 👍          |            |
 | CAR-G-14 | card         | get    | /cards/:id/membersVoted                                   | 👍     |            |            |
 | CAR-G-15 | card         | get    | /cards/:id/pluginData                                     | 👍     |            |            |
 | CAR-G-16 | card         | get    | /cards/:id/stickers                                       | 👍     |            |            |

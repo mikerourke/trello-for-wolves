@@ -45,7 +45,7 @@ export default class Attachment extends BaseResource {
     auth: Auth,
     options?: ResourceConstructorOptions = {},
   ) {
-    super(auth, 'attachments', options);
+    super(auth, 'attachment', options);
   }
 
   getAttachments(
