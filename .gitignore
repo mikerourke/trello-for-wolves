@@ -35,3 +35,4 @@ docs/
 tests/results/
 
 .env
+ids.db

@@ -1,4 +1,5 @@
 /* External dependencies */
+import fs from 'fs';
 import chalk from 'chalk';
 import jsonFile from 'jsonfile';
 import moment from 'moment';
@@ -40,6 +41,10 @@ export class Logger {
     this.testResults = {};
     this.endpoint = '';
     this.dataFromApiCall = {};
+    this.outputFolder = './tests/results';
+    if (!fs.existsSync(this.outputFolder)) {
+      fs.mkdirSync(this.outputFolder);
+    }
   }
 
   /**
@@ -96,7 +101,7 @@ export class Logger {
    */
   writeResultsToFile(resourceName) {
     // Don't write the results if the environment variable isn't set.
-    if (!process.env.LOG_TEST_RESULTS) {
+    if (!process.env.SAVE_TEST_RESULTS) {
       return Promise.resolve();
     }
 
@@ -107,9 +112,9 @@ export class Logger {
     // The test results are stored in a file named "[resourceName].json",
     // where "resourceName" was passed as an argument.  The results file is
     // located in the results folder.
-    const filePath = `./tests/results/${resourceName}.json`;
-    const dataToWrite = this.testResults || {};
     return new Promise((resolve, reject) => {
+      const filePath = `${this.outputFolder}/${resourceName}.json`;
+      const dataToWrite = this.testResults || {};
       jsonFile.writeFile(filePath, dataToWrite, { spaces: 2 }, (error) => {
         if (error) {
           reject(new Error(error));

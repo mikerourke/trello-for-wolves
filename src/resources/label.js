@@ -67,9 +67,12 @@ export default class Label extends BaseResource {
     queryArgs: {
       name: string,
       color: ?LabelColor,
-      idBoard: string,
+      idBoard?: string,
     },
   ): Promise<*> {
+    if (this.routePathElements[0] === 'boards') {
+      queryArgs.idBoard = this.routePathElements[1];
+    }
     return this.httpPost('/', queryArgs);
   }
 

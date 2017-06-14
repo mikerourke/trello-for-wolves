@@ -117,6 +117,7 @@ export default class Organization extends BaseResource {
       memberActivity?: boolean,
       membersInvited?: MemberFilter,
       membersInvitedFields?: ArgumentGroup<MemberField>,
+      pluginData?: boolean,
       boards?: ArgumentGroup<BoardFilter>,
       boardFields?: ArgumentGroup<BoardField>,
       boardActions?: ArgumentGroup<ActionFilter>,

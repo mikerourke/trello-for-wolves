@@ -2,7 +2,7 @@
 import Trello from '../../src/index';
 import { auth, Logger } from '../helpers';
 
-describe('MBR | Member Resource', () => {
+describe('LBL | Label Resource', () => {
   let trello;
   let logger;
 
@@ -17,26 +17,26 @@ describe('MBR | Member Resource', () => {
   });
 
   after(function(done) {
-    logger.writeResultsToFile('member')
+    logger.writeResultsToFile('label')
       .then(() => done())
       .catch(error => done(error));
   });
 
   const logResponse = (response) => logger.processResponse(response);
 
-  describe('MBR-G | Member GET requests', () => {
+  describe('LBL-G | Label GET requests', () => {
 
   });
 
-  describe('MBR-U | Member PUT requests', () => {
+  describe('LBL-U | Label PUT requests', () => {
 
   });
 
-  describe('MBR-P | Member POST requests', () => {
+  describe('LBL-P | Label POST requests', () => {
 
   });
 
-  describe('MBR-D | Member DELETE requests', () => {
+  describe('LBL-D | Label DELETE requests', () => {
 
   });
 });

@@ -19,7 +19,6 @@ import type {
   ArgumentGroup,
   AttachmentField,
   AttachmentFilter,
-  Auth,
   CardAging,
   CardField,
   CardFilter,

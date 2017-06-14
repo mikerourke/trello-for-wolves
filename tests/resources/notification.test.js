@@ -2,7 +2,7 @@
 import Trello from '../../src/index';
 import { auth, Logger } from '../helpers';
 
-describe('MBR | Member Resource', () => {
+describe('NTF | Notification Resource', () => {
   let trello;
   let logger;
 
@@ -17,26 +17,22 @@ describe('MBR | Member Resource', () => {
   });
 
   after(function(done) {
-    logger.writeResultsToFile('member')
+    logger.writeResultsToFile('notification')
       .then(() => done())
       .catch(error => done(error));
   });
 
   const logResponse = (response) => logger.processResponse(response);
 
-  describe('MBR-G | Member GET requests', () => {
+  describe('NTF-G | Notification GET requests', () => {
 
   });
 
-  describe('MBR-U | Member PUT requests', () => {
+  describe('NTF-U | Notification PUT requests', () => {
 
   });
 
-  describe('MBR-P | Member POST requests', () => {
-
-  });
-
-  describe('MBR-D | Member DELETE requests', () => {
+  describe('NTF-P | Notification POST requests', () => {
 
   });
 });

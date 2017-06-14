@@ -60,6 +60,7 @@ const getKeyForQueryString = (key: string): string => {
     case 'customBoardBackgrounds':
     case 'customEmoji':
     case 'customStickers':
+    case 'displayName':
     case 'fullName':
     case 'modelTypes':
     case 'myPrefs':

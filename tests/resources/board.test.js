@@ -1,3 +1,6 @@
+/* External dependencies */
+import dirty from 'dirty';
+
 /* Internal dependencies */
 import Trello from '../../src/index';
 import { auth, resourceIds, Logger } from '../helpers';
@@ -14,12 +17,15 @@ describe('BRD | Board Resource', () => {
 
   let trello;
   let logger;
+  let db;
   let newMemberId = '';
 
   before(function(done) {
     trello = new Trello(auth);
     logger = new Logger();
-    setTimeout(() => { done(); }, 3000);
+    db = dirty('./ids.db').on('load', () => {
+      setTimeout(() => { done(); }, 3000);
+    });
   });
 
   beforeEach(function() {
@@ -33,6 +39,47 @@ describe('BRD | Board Resource', () => {
   });
 
   const logResponse = (response) => logger.processResponse(response);
+
+  describe.only('BRD-SETUP | Board Setup', () => {
+    before((done) => {
+      trello.members('me').boards().getBoards()
+        .then((response) => {
+          const boards = response.data;
+          boards.forEach((board) => {
+            if (board.name === 'Board A') {
+              db.set('boardAId', board.id);
+            }
+
+            if (board.name === 'Board B') {
+              db.set('boardBId', board.id);
+            }
+          });
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    // @todo: Finish writing this test.
+    it('BRD-P-01-T01 | creates a Board', (done) => {
+      const idOrganization = db.get('orgId');
+      let createBoardFns = [];
+      if (!db.get('boardAId')) {
+        createBoardFns.push(
+          trello.boards().addBoard({ idOrganization, name: 'Board A' }));
+      }
+      Promise.all([
+        trello.boards().addBoard({ idOrganization, name: 'Board A' }),
+        trello.boards().addBoard({ idOrganization, name: 'Board B' }),
+      ])
+        .then((responses) => {
+          db.set('boardAId', responses[0].data.id);
+          db.set('boardBId', responses[1].data.id);
+          done();
+        })
+       .catch(error => done(error));
+
+    });
+  });
 
   describe('BRD-G | Board GET requests', () => {
     before(function(done) {
@@ -71,28 +118,28 @@ describe('BRD | Board Resource', () => {
         actionMemberCreator: true,
         actionMemberCreatorFields: 'username',
         cards: 'all',
-        cardFields: 'name',
+        cardFields: 'all',
         cardAttachments: false,
         cardAttachmentFields: 'name',
         cardChecklists: 'all',
         cardPluginData: true,
         cardStickers: true,
-        boardStars: 'none',
+        boardStars: 'mine',
         labels: 'all',
-        labelFields: 'name',
-        labelsLimit: 5,
+        labelFields: 'all',
+        labelsLimit: 50,
         lists: 'all',
-        listFields: ['name', 'pos'],
+        listFields: 'all',
         memberships: 'all',
         membershipsMember: true,
-        membershipsMemberFields: 'username',
+        membershipsMemberFields: ['fullName', 'username'],
         members: 'all',
-        memberFields: 'username',
-        membersInvited: 'none',
-        membersInvitedFields: 'username',
+        memberFields: ['fullName', 'username'],
+        membersInvited: 'all',
+        membersInvitedFields: ['fullName', 'username'],
         pluginData: true,
         checklists: 'all',
-        checklistFields: ['name', 'pos', 'idBoard'],
+        checklistFields: 'all',
         organization: true,
         organizationFields: 'name',
         organizationMemberships: 'none',

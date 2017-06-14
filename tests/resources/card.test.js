@@ -15,6 +15,7 @@ describe('CAR | Card Resource', function() {
   } = resourceIds;
   let trello;
   let logger;
+  let cardInstance;
 
   before(function() {
     trello = new Trello(auth);
