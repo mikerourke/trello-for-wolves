@@ -59,7 +59,7 @@ export default class Checklist extends BaseResource {
     return new Card(this.auth, `${this.routePath}/cards`);
   }
 
-  checkItem(checkItemId: string) {
+  checkItem(checkItemId?: string = '') {
     return new CheckItem(
       this.auth, `${this.routePath}/checkItem/${checkItemId}`);
   }
@@ -88,13 +88,17 @@ export default class Checklist extends BaseResource {
 
   addChecklist(
     queryArgs: {
-      idCard: string,
+      idCard?: string,
       name?: string,
       pos?: PositionNumbered,
       idChecklistSource?: string,
     },
   ): Promise<*> {
-    return this.httpPost('/', queryArgs);
+    let updatedArgs = queryArgs;
+    if (this.routePathElements[0] === 'cards') {
+      updatedArgs = { ...queryArgs, idCard: this.routePathElements[1] };
+    }
+    return this.httpPost('/', updatedArgs);
   }
 
   deleteChecklist(): Promise<*> {

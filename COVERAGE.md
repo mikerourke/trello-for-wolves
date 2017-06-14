@@ -130,23 +130,23 @@ The table below contains all of the available Trello routes and their status in 
 | CAR-U-12 | card         | put    | /cards/:id/idAttachmentCover                              | 👍     | 📌          |            |
 | CAR-U-13 | card         | put    | /cards/:id/idBoard                                        | 👍     | 🔒          |            |
 | CAR-U-14 | card         | put    | /cards/:id/idList                                         | 👍     | 🔒          |            |
-| CAR-U-15 | card         | put    | /cards/:id/idMembers                                      | 👍     |            |            |
+| CAR-U-15 | card         | put    | /cards/:id/idMembers                                      | 👍     | 📌          |            |
 | CAR-U-16 | card         | put    | /cards/:id/name                                           | 👍     | 👍          |            |
 | CAR-U-17 | card         | put    | /cards/:id/pos                                            | 👍     | 👍          |            |
-| CAR-U-18 | card         | put    | /cards/:id/stickers/:idSticker                            | 👍     |            |            |
-| CAR-U-19 | card         | put    | /cards/:id/subscribed                                     | 👍     |            |            |
-| CAR-P-01 | card         | post   | /cards                                                    | 👍     |            |            |
-| CAR-P-02 | card         | post   | /cards/:id/actions/comments                               | 👍     |            |            |
-| CAR-P-03 | card         | post   | /cards/:id/attachments                                    | 👍     |            |            |
-| CAR-P-04 | card         | post   | /cards/:id/checklist/:id/checkItem                        | 👍     |            |            |
-| CAR-P-05 | card         | post   | /cards/:id/checklist/:id/checkItem/:id/convertToCard      | 👍     |            |            |
-| CAR-P-06 | card         | post   | /cards/:id/checklists                                     | 👍     |            |            |
-| CAR-P-07 | card         | post   | /cards/:id/idLabels                                       | 👍     |            |            |
-| CAR-P-08 | card         | post   | /cards/:id/idMembers                                      | 👍     |            |            |
-| CAR-P-09 | card         | post   | /cards/:id/labels                                         | 👍     |            |            |
-| CAR-P-10 | card         | post   | /cards/:id/markAssociatedNotificationsRead                | 👍     |            |            |
-| CAR-P-11 | card         | post   | /cards/:id/membersVoted                                   | 👍     |            |            |
-| CAR-P-12 | card         | post   | /cards/:id/stickers                                       | 👍     |            |            |
+| CAR-U-18 | card         | put    | /cards/:id/stickers/:idSticker                            | 👍     | 👍          |            |
+| CAR-U-19 | card         | put    | /cards/:id/subscribed                                     | 👍     | 👍          |            |
+| CAR-P-01 | card         | post   | /cards                                                    | 👍     | 🔒          |            |
+| CAR-P-02 | card         | post   | /cards/:id/actions/comments                               | 👍     | 🔒          |            |
+| CAR-P-03 | card         | post   | /cards/:id/attachments                                    | 👍     | 📌          |            |
+| CAR-P-04 | card         | post   | /cards/:id/checklist/:id/checkItem                        | 👍     | 🔒          |            |
+| CAR-P-05 | card         | post   | /cards/:id/checklist/:id/checkItem/:id/convertToCard      | 👍     | 🔒          |            |
+| CAR-P-06 | card         | post   | /cards/:id/checklists                                     | 👍     | 🔒          |            |
+| CAR-P-07 | card         | post   | /cards/:id/idLabels                                       | 👍     | 👍          |            |
+| CAR-P-08 | card         | post   | /cards/:id/idMembers                                      | 👍     | 📌          |            |
+| CAR-P-09 | card         | post   | /cards/:id/labels                                         | 👍     | 🔒          |            |
+| CAR-P-10 | card         | post   | /cards/:id/markAssociatedNotificationsRead                | 👍     | 👍          |            |
+| CAR-P-11 | card         | post   | /cards/:id/membersVoted                                   | 👍     | 📌          |            |
+| CAR-P-12 | card         | post   | /cards/:id/stickers                                       | 👍     | 🔒          |            |
 | CAR-D-01 | card         | delete | /cards/:id                                                | 👍     |            |            |
 | CAR-D-02 | card         | delete | /cards/:id/actions/:id/comments                           | 👍     |            |            |
 | CAR-D-03 | card         | delete | /cards/:id/attachments/:idAttachment                      | 👍     |            |            |
@@ -345,7 +345,3 @@ The table below contains all of the available Trello routes and their status in 
 ### Notes
 
 <a name="N1">Note 1:</a>  Test is covered by creating and deleting Comment in Card.  See `CAR-P-02` and `CAR-D-02`.
-
-### Issues
-
-<a name="I1">Issue 1:</a>  I don't want to roll the dice on the organization stuff.

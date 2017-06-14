@@ -502,29 +502,22 @@ export default class Member extends BaseResource {
   }
 
   /**
-   * Associates a member or updates the members associated with a Card,
-   *    depending on whether the calling function passes an array of Member
-   *    Ids.
-   * @memberOf Card
-   * @example POST /1/cards/:cardId/idMembers
-   * @see {@link https://developers.trello.com/advanced-reference/card#post-1-cards-card-id-or-shortlink-idmembers}
-   *
+   * Updates the members associated with a Card.
    * @memberOf Card
    * @example PUT /1/cards/:cardId/idMembers
    * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idmembers}
    */
-  associateMember(memberIds?: Array<string>): Promise<*> {
-    // The Member Id to associate with the parent card was passed into the
-    // constructor of this Member instance.  The resulting path will be:
-    // /idMembers?value=[associationId]...
+  associateMembers(memberIds?: Array<string>): Promise<*> {
+    return this.httpPut('/', { value: memberIds });
+  }
 
-    // If an array of Member Ids was passed in as an argument, a PUT request
-    // is made to perform a bulk update.
-    if (memberIds) {
-      return this.httpPut('/', { value: memberIds });
-    }
-    // If no argument was passed in, a POST request is made with the updated
-    // member Id.
+  /**
+   * Associates a member with a Card.
+   * @memberOf Card
+   * @example POST /1/cards/:cardId/idMembers
+   * @see {@link https://developers.trello.com/advanced-reference/card#post-1-cards-card-id-or-shortlink-idmembers}
+   */
+  associateMember(): Promise<*> {
     return this.httpPost('/', { value: this.associationId });
   }
 

@@ -73,6 +73,16 @@ export default class Label extends BaseResource {
     return this.httpPost('/', queryArgs);
   }
 
+  /**
+   * Associates a label with a Card.
+   * @memberOf Card
+   * @example POST /1/cards/:cardId/idLabels
+   * @see {@link https://developers.trello.com/advanced-reference/card#post-1-cards-card-id-or-shortlink-idlabels}
+   */
+  associateLabel(): Promise<*> {
+    return this.httpPost('/', { value: this.associationId });
+  }
+
   deleteLabel(): Promise<*> {
     return this.httpDelete('/');
   }

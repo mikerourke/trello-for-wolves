@@ -64,6 +64,7 @@ const getKeyForQueryString = (key: string): string => {
     case 'modelTypes':
     case 'myPrefs':
     case 'savedSearches':
+    case 'zIndex':
       return key;
 
     default:

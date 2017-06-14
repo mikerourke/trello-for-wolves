@@ -9,6 +9,8 @@ describe('CAR | Card Resource', function() {
     checkItemId,
     checklistId,
     commentId,
+    labelId,
+    listId,
     stickerId,
   } = resourceIds;
   let trello;
@@ -394,15 +396,197 @@ describe('CAR | Card Resource', function() {
         .notify(done);
     });
 
-    it('CAR-U-14-T01 | updates the name', (done) => {
+    // @todo: Figure out how to get this working.
+    it.skip('CAR-U-15-T01 | updates the member associations', (done) => {
+      trello.cards(cardId).members().associateMembers([
+        'Member Id 1',
+        'Member Id 2',
+      ])
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-U-16-T01 | updates the name', (done) => {
       trello.cards(cardId).updateName('Test Card 2')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it('CAR-U-15-T01 | updates the position', (done) => {
+    it('CAR-U-17-T01 | updates the position', (done) => {
       trello.cards(cardId).updatePosition('top')
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-U-18-T01 | updates an associated Sticker', (done) => {
+      trello.cards(cardId).stickers(stickerId).updateSticker({
+        top: 12,
+        left: 12,
+      })
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-U-19-T01 | updates the subscribed status', (done) => {
+      trello.cards(cardId).updateSubscribed(true)
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+  });
+
+  describe('CAR-P | Card POST Requests', () => {
+    before(function (done) {
+      setTimeout(() => { done(); }, 3000);
+    });
+
+    /**
+     * @skip CAR-P-01
+     * @reason Excessive Data
+     * @passed 06.13.17
+     */
+    it.skip('CAR-P-01-T01 | creates a new Card', (done) => {
+      trello.cards().addCard({
+        idList: listId,
+        name: 'Test Card from Test',
+        desc: 'This is a test description',
+        pos: 'top',
+      })
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    /**
+     * @skip CAR-P-02
+     * @reason Excessive Data
+     * @passed 06.13.17
+     */
+    it.skip('CAR-P-02-T01 | adds a Comment', (done) => {
+      trello.cards(cardId).comments().addComment('This is a new comment.')
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    // @todo: Figure out how to get this working.
+    it.skip('CAR-P-03-T01 | uploads an Attachment', (done) => {
+      trello.cards(cardId).attachments().uploadAttachment()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    /**
+     * @skip CAR-P-04
+     * @reason Excessive Data
+     * @passed 06.13.17
+     */
+    it.skip('CAR-P-04-T01 | adds a Checklist Item to a Checklist', (done) => {
+      trello
+        .cards(cardId)
+        .checklist(checklistId)
+        .checkItem().addCheckItem({
+          name: 'New Checklist Item',
+          pos: 2,
+        })
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    /**
+     * @skip CAR-P-05
+     * @reason Excessive Data
+     * @passed 06.13.17
+     */
+    it.skip('CAR-P-05-T01 | converts a Checklist Item to a Card', (done) => {
+      const newCheckItemId = '5940a390fa03d31e7f6d509b';
+      trello
+        .cards(cardId)
+        .checklist(checklistId)
+        .checkItem(newCheckItemId).convertToCard()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    /**
+     * @skip CAR-P-06
+     * @reason Excessive Data
+     * @passed 06.13.17
+     */
+    it.skip('CAR-P-06-T01 | creates a new Checklist on a Card', (done) => {
+      trello.cards(cardId).checklists().addChecklist({
+        name: 'New Checklsit',
+        pos: 'top',
+      })
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-P-07-T01 | associates a Label with a Card', (done) => {
+      trello.cards(cardId).labels(labelId).associateLabel()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    // @todo: Get another Member ID to test this.
+    it.skip('CAR-P-08-T01 | associates a Member with a Card', (done) => {
+      trello.cards(cardId).members().associateMember()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    /**
+     * @skip CAR-P-09
+     * @reason Excessive Data
+     * @passed 06.13.17
+     */
+    it.skip('CAR-P-09-T01 | adds a Label to a Card', (done) => {
+      trello.cards(cardId).labels().addLabel({
+        name: 'Test Label',
+        color: 'blue',
+      })
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-P-10-T01 | marks associated Notifications as read', (done) => {
+      trello.cards(cardId).markAssociatedNotificationsRead()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    // @todo: Need member ID to vote on card.
+    it.skip('CAR-P-11-T01 | updates the Members Voted on a Card', (done) => {
+      trello.cards(cardId).membersVoted('[NEED ID]').associateMember()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    /**
+     * @skip CAR-P-12
+     * @reason Excessive Data
+     * @passed 06.13.17
+     */
+    it.skip('CAR-P-12-T01 | adds a Sticker to a Card', (done) => {
+      trello.cards(cardId).stickers().addSticker({
+        image: 'check',
+        top: 0,
+        left: 0,
+        zIndex: 3,
+      })
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);

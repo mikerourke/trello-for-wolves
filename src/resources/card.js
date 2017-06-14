@@ -286,14 +286,6 @@ export default class Card extends BaseResource {
     return this.httpPost('/', queryArgsToUse, fileToUpload);
   }
 
-  addIdLabel(value: string): Promise<*> {
-    return this.httpPost('/idLabels', { value });
-  }
-
-  addIdMember(value: string): Promise<*> {
-    return this.httpPost('/idMembers', { value });
-  }
-
   markAssociatedNotificationsRead(): Promise<*> {
     return this.httpPost('/markAssociatedNotificationsRead');
   }
