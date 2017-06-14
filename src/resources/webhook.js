@@ -3,12 +3,6 @@
 /* Internal dependencies */
 import BaseResource from './base-resource';
 
-/* Types */
-import type {
-  Auth,
-  ResourceConstructorOptions,
-} from '../types';
-
 type WehookField =
   'active'
   | 'callbackURL'
@@ -19,13 +13,6 @@ type WehookField =
  * @namespace Webhook
  */
 export default class Webhook extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'webhook', options);
-  }
-
   getWebhooks(): Promise<*> {
     return this.httpGet('/');
   }
@@ -49,7 +36,7 @@ export default class Webhook extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  // TODO: Find out how this is different from the POST request.
+  // @todo: Find out how this is different from the POST request.
   updateWebhooks(
     queryArgs: {
       description?: string,

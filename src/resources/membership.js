@@ -6,11 +6,9 @@ import BaseResource from './base-resource';
 /* Types */
 import type {
   ArgumentGroup,
-  Auth,
   BoardMemberType,
   MemberField,
   MemberType,
-  ResourceConstructorOptions,
 } from '../types';
 
 export type MembershipFilter =
@@ -25,13 +23,6 @@ export type MembershipFilter =
  * @namespace Membership
  */
 export default class Membership extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'membership', options);
-  }
-
   getMemberships(
     queryArgs?: {
       filter?: ArgumentGroup<MembershipFilter>,

@@ -1,22 +1,6 @@
 /* @flow */
 
 /* Internal dependencies */
-//import {
-//  Action,
-//  Batch,
-//  Board,
-//  Card,
-//  Checklist,
-//  Label,
-//  List,
-//  Member,
-//  Notification,
-//  Organization,
-//  Search,
-//  Token,
-//  Type,
-//  Webhook,
-//} from './resources';
 import Action from './resources/action';
 import Batch from './resources/batch';
 import Board from './resources/board';
@@ -43,58 +27,58 @@ export default class Trello {
   }
 
   actions(actionId?: string = ''): Object {
-    return new Action(this.auth, { instanceId: actionId });
+    return new Action(this.auth, `/actions/${actionId}`);
   }
 
   batch(): Object {
-    return new Batch(this.auth);
+    return new Batch(this.auth, '/batch');
   }
 
   boards(boardId?: string = ''): Object {
-    return new Board(this.auth, { instanceId: boardId });
+    return new Board(this.auth, `/boards/${boardId}`);
   }
 
   cards(cardId?: string = ''): Object {
-    return new Card(this.auth, { instanceId: cardId });
+    return new Card(this.auth, `/cards/${cardId}`);
   }
 
   checklists(checklistId?: string = ''): Object {
-    return new Checklist(this.auth, { instanceId: checklistId });
+    return new Checklist(this.auth, `/checklists/${checklistId}`);
   }
 
   labels(labelId?: string = ''): Object {
-    return new Label(this.auth, { instanceId: labelId });
+    return new Label(this.auth, `/labels/${labelId}`);
   }
 
   lists(listId?: string = ''): Object {
-    return new List(this.auth, { instanceId: listId });
+    return new List(this.auth, `/lists/${listId}`);
   }
 
   members(memberIdOrUsername?: string = ''): Object {
-    return new Member(this.auth, { instanceId: memberIdOrUsername });
+    return new Member(this.auth, `/members/${memberIdOrUsername}`);
   }
 
   notifications(notificationId?: string = ''): Object {
-    return new Notification(this.auth, { instanceId: notificationId });
+    return new Notification(this.auth, `/notifications/${notificationId}`);
   }
 
   organizations(orgIdOrName?: string = ''): Object {
-    return new Organization(this.auth, { instanceId: orgIdOrName });
+    return new Organization(this.auth, `/organizations/${orgIdOrName}`);
   }
 
   search(): Object {
-    return new Search(this.auth);
+    return new Search(this.auth, '/search');
   }
 
   tokens(tokenName?: string = ''): Object {
-    return new Token(this.auth, { instanceId: tokenName });
+    return new Token(this.auth, `/tokens/${tokenName}`);
   }
 
   types(teamOrUserId?: string = ''): Object {
-    return new Type(this.auth, { instanceId: teamOrUserId });
+    return new Type(this.auth, `/types/${teamOrUserId}`);
   }
 
   webhooks(webhookId?: string = ''): Object {
-    return new Webhook(this.auth, { instanceId: webhookId });
+    return new Webhook(this.auth, `/webhooks/${webhookId}`);
   }
 }

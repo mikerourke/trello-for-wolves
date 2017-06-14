@@ -194,7 +194,10 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    // In order to get this to work, a Business Class account is required.
+    /**
+     * @skip BRD-G-09
+     * @reason Business Class account required
+     */
     it.skip('BRD-G-09-T01 | gets the associated Deltas', (done) => {
       trello.boards(boardId).getDeltas({
         tags: 'tag?',
@@ -205,7 +208,10 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    // In order to get this to work, a Business Class account is required.
+    /**
+     * @skip BRD-G-10
+     * @reason Business Class account required
+     */
     it.skip('BRD-G-10-T01 | gets the associated Tags', (done) => {
       trello.boards(boardId).getTags()
         .then(logResponse)
@@ -459,7 +465,11 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    // This works, I just don't want to keep creating and deleting unconfirmed members.
+    /**
+     * @skip BRD-U-11
+     * @reason Excessive Data
+     * @passed 06.09.17
+     */
     it.skip('BRD-U-11-T01 | adds an associated Member', (done) => {
       trello.boards(boardId).members().addMember({
         email: 'dude@website.com',
@@ -481,7 +491,11 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    // This works, I just don't want to keep creating and deleting unconfirmed members.
+    /**
+     * @skip BRD-U-12
+     * @reason Excessive Data
+     * @passed 06.09.17
+     */
     it.skip('BRD-U-12-T01 | updates the type for an associated Member with specified Id', (done) => {
       if (!newMemberId) {
         done(new Error('New member Id not found.'))
@@ -492,7 +506,11 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    // This works, I just don't want to keep creating and deleting unconfirmed members.
+    /**
+     * @skip BRD-U-13
+     * @reason Excessive Data
+     * @passed 06.09.17
+     */
     it.skip('BRD-U-13-T01 | updates the associated Membership with the specified Id', (done) => {
       const boardMemberships = trello.boards(boardId).memberships();
       boardMemberships.getMemberships()
@@ -518,7 +536,7 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    // TODO: Figure out what the requirements are for this.
+    // @todo: Figure out what the requirements are for this.
     it.skip('BRD-U-15-T01 | updates the idEmailList myPref', (done) => {
       trello.boards(boardId).myPrefs().moveToEmailList(null)
         .then(logResponse)
@@ -561,7 +579,7 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-U-21-T01 | updates the name of the board', (done) => {
+    it('BRD-U-21-T01 | updates the name of the Board', (done) => {
       trello.boards(boardId).updateName('Test Board')
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -640,7 +658,11 @@ describe('BRD | Board Resource', () => {
   });
 
   describe('BRD-P | Board POST requests', () => {
-    // This works, I don't want to keep creating new boards.
+    /**
+     * @skip BRD-P-01
+     * @reason Excessive Data
+     * @passed 06.09.17
+     */
     it.skip('BRD-P-01-T01 | creates a new Board', (done) => {
       const boardName = 'Test Board 2';
       trello.boards().addBoard(boardName)
@@ -649,7 +671,11 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    // This works, I didn't want to go buck wild with generating keys.
+    /**
+     * @skip BRD-P-02
+     * @reason Excessive Data
+     * @passed 06.09.17
+     */
     it.skip('BRD-P-02-T01 | generates a calendar key', (done) => {
       trello.boards(boardId).generateCalendarKey()
         .then(logResponse)
@@ -657,7 +683,7 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    // TODO: Figure out why this isn't working.
+    // @fix: Figure out why this isn't working.
     it.skip('BRD-P-03-T01 | adds a new Checklist', (done) => {
       trello.boards(boardId).checklists().addChecklist({
         idCard: 'GATVPdJ6',
@@ -668,7 +694,11 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    // This works, I didn't want to go buck wild with generating keys.
+    /**
+     * @skip BRD-P-04
+     * @reason Excessive Data
+     * @passed 06.09.17
+     */
     it.skip('BRD-P-04-T01 | generates an email key', (done) => {
       trello.boards(boardId).generateEmailKey()
         .then(logResponse)
@@ -676,7 +706,10 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    // In order to get this to work, a Business Class account is required.
+    /**
+     * @skip BRD-P-05
+     * @reason Business Class account required
+     */
     it.skip('BRD-P-05-T01 | adds Tags to a board', (done) => {
       trello.boards(boardId).addTags('[tag]')
         .then(logResponse)
@@ -684,7 +717,12 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-P-06-T01 | adds a new Label', (done) => {
+    /**
+     * @skip BRD-P-06
+     * @reason Excessive Data
+     * @passed 06.09.17
+     */
+    it.skip('BRD-P-06-T01 | adds a new Label', (done) => {
       trello.boards(boardId).labels().addLabel({
         name: 'Label for Blue',
         color: 'blue',
@@ -694,7 +732,12 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-P-07-T01 | adds a new List', (done) => {
+    /**
+     * @skip BRD-P-07
+     * @reason Excessive Data
+     * @passed 06.09.17
+     */
+    it.skip('BRD-P-07-T01 | adds a new List', (done) => {
       trello.boards(boardId).lists().addList({
         name: 'Testing a List',
       })
@@ -710,7 +753,7 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    // TODO: Figure out why this isn't working.
+    // @fix: Figure out why this isn't working.
     it.skip('BRD-P-09-T01 | adds a PowerUp', (done) => {
       trello.boards(boardId).addPowerUp('cardAging')
         .then(logResponse)
@@ -720,7 +763,11 @@ describe('BRD | Board Resource', () => {
   });
 
   describe('BRD-D | Board DELETE requests', () => {
-    // This works, I just don't want to keep creating and deleting unconfirmed members.
+    /**
+     * @skip BRD-D-04
+     * @reason Excessive Data
+     * @passed 06.09.17
+     */
     it.skip('BRD-D-01-T01 | deletes a member', (done) => {
       if (!newMemberId) {
         done(new Error('New member Id not found.'))

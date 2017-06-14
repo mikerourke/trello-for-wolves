@@ -11,12 +11,10 @@ import Organization from './organization';
 /* Types */
 import type {
   ArgumentGroup,
-  Auth,
   BoardField,
   CardField,
   MemberField,
   OrganizationField,
-  ResourceConstructorOptions,
 } from '../types';
 
 export type NotificationField =
@@ -61,13 +59,6 @@ type ReadFilter = 'all' | 'read' | 'unread';
  * @namespace Notification
  */
 export default class Notification extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'notification', options);
-  }
-
   getNotifications(
     queryArgs?: {
       entities?: boolean,
@@ -112,11 +103,11 @@ export default class Notification extends BaseResource {
   }
 
   board() {
-    return new Board(this.auth, this.getOptionsForChild('', '/board'));
+    return new Board(this.auth, `${this.routePath}/board`);
   }
 
   card() {
-    return new Card(this.auth, this.getOptionsForChild('', '/card'));
+    return new Card(this.auth, `${this.routePath}/card`);
   }
 
   getDisplay(): Promise<*> {
@@ -128,21 +119,19 @@ export default class Notification extends BaseResource {
   }
 
   list() {
-    return new List(this.auth, this.getOptionsForChild('', '/list'));
+    return new List(this.auth, `${this.routePath}/list`);
   }
 
   member() {
-    return new Member(this.auth, this.getOptionsForChild('', '/member'));
+    return new Member(this.auth, `${this.routePath}/member`);
   }
 
   memberCreator() {
-    return new Member(
-      this.auth, this.getOptionsForChild('', '/memberCreator'));
+    return new Member(this.auth, `${this.routePath}/memberCreator`);
   }
 
   organization() {
-    return new Organization(
-      this.auth, this.getOptionsForChild('', '/organization'));
+    return new Organization(this.auth, `${this.routePath}/organization`);
   }
 
   updateNotification(

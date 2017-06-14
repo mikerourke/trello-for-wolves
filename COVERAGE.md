@@ -90,11 +90,11 @@ The table below contains all of the available Trello routes and their status in 
 | BRD-U-31 | board        | put    | /boards/:id/subscribed                                    | 👍     | 👍          |            |
 | BRD-P-01 | board        | post   | /boards                                                   | 👍     | 🔒          |            |
 | BRD-P-02 | board        | post   | /boards/:id/calendarKey/generate                          | 👍     | 🔒          |            |
-| BRD-P-03 | board        | post   | /boards/:id/checklists                                    | 👍     | ⚠          |            |
+| BRD-P-03 | board        | post   | /boards/:id/checklists                                    | 👍     | 👍          |            |
 | BRD-P-04 | board        | post   | /boards/:id/emailKey/generate                             | 👍     | 🔒          |            |
 | BRD-P-05 | board        | post   | /boards/:id/idTags                                        | 👍     | 💰          |            |
-| BRD-P-06 | board        | post   | /boards/:id/labels                                        | 👍     | 👍          |            |
-| BRD-P-07 | board        | post   | /boards/:id/lists                                         | 👍     | 👍          |            |
+| BRD-P-06 | board        | post   | /boards/:id/labels                                        | 👍     | 🔒          |            |
+| BRD-P-07 | board        | post   | /boards/:id/lists                                         | 👍     | 🔒          |            |
 | BRD-P-08 | board        | post   | /boards/:id/markAsViewed                                  | 👍     | 👍          |            |
 | BRD-P-09 | board        | post   | /boards/:id/powerUps                                      | 👍     | ⚠          |            |
 | BRD-D-01 | board        | delete | /boards/:id/members/:idMember                             | 👍     | 🔒          |            |
@@ -108,7 +108,7 @@ The table below contains all of the available Trello routes and their status in 
 | CAR-G-07 | card         | get    | /cards/:id/board/:field                                   | 👍     | 👍          |            |
 | CAR-G-08 | card         | get    | /cards/:id/checkItemStates                                | 👍     | 👍          |            |
 | CAR-G-09 | card         | get    | /cards/:id/checklists                                     | 👍     | 👍          |            |
-| CAR-G-10 | card         | get    | /cards/:id/checkItem/:idCheckItem                         | 👍     | ⚠          |            |
+| CAR-G-10 | card         | get    | /cards/:id/checkItem/:idCheckItem                         | 👍     | 👍          |            |
 | CAR-G-11 | card         | get    | /cards/:id/list                                           | 👍     | 👍          |            |
 | CAR-G-12 | card         | get    | /cards/:id/list/:field                                    | 👍     | 👍          |            |
 | CAR-G-13 | card         | get    | /cards/:id/members                                        | 👍     | 👍          |            |
@@ -116,23 +116,23 @@ The table below contains all of the available Trello routes and their status in 
 | CAR-G-15 | card         | get    | /cards/:id/pluginData                                     | 👍     | 👍          |            |
 | CAR-G-16 | card         | get    | /cards/:id/stickers                                       | 👍     | 👍          |            |
 | CAR-G-17 | card         | get    | /cards/:id/stickers/:idSticker                            | 👍     | 👍          |            |
-| CAR-U-01 | card         | put    | /cards/:id                                                | 👍     |            |            |
+| CAR-U-01 | card         | put    | /cards/:id                                                | 👍     | 👍          |            |
 | CAR-U-02 | card         | put    | /cards/:id/actions/:id/comments                           | 👍     | 👍          |            |
-| CAR-U-03 | card         | put    | /cards/:id/checklist/:id/checkItem/:id/name               | 👍     |            |            |
-| CAR-U-04 | card         | put    | /cards/:id/checklist/:id/checkItem/:id/pos                | 👍     |            |            |
-| CAR-U-05 | card         | put    | /cards/:id/checklist/:id/checkItem/:id/state              | 👍     |            |            |
-| CAR-U-06 | card         | put    | /cards/:id/checklist/:id/checkItem/:id                    | 👍     |            |            |
-| CAR-U-07 | card         | put    | /cards/:id/checkItem/:idCheckItem                         | 👍     |            |            |
-| CAR-U-08 | card         | put    | /cards/:id/closed                                         | 👍     |            |            |
-| CAR-U-09 | card         | put    | /cards/:id/desc                                           | 👍     |            |            |
-| CAR-U-10 | card         | put    | /cards/:id/due                                            | 👍     |            |            |
-| CAR-U-11 | card         | put    | /cards/:id/dueComplete                                    | 👍     |            |            |
-| CAR-U-12 | card         | put    | /cards/:id/idAttachmentCover                              | 👍     |            |            |
-| CAR-U-13 | card         | put    | /cards/:id/idBoard                                        | 👍     |            |            |
-| CAR-U-14 | card         | put    | /cards/:id/idList                                         | 👍     |            |            |
+| CAR-U-03 | card         | put    | /cards/:id/checklist/:id/checkItem/:id/name               | 👍     | 👍          |            |
+| CAR-U-04 | card         | put    | /cards/:id/checklist/:id/checkItem/:id/pos                | 👍     | 👍          |            |
+| CAR-U-05 | card         | put    | /cards/:id/checklist/:id/checkItem/:id/state              | 👍     | 👍          |            |
+| CAR-U-06 | card         | put    | /cards/:id/checklist/:id/checkItem/:id                    | 👍     | 👍          |            |
+| CAR-U-07 | card         | put    | /cards/:id/checkItem/:idCheckItem                         | 👍     | 👍          |            |
+| CAR-U-08 | card         | put    | /cards/:id/closed                                         | 👍     | 👍          |            |
+| CAR-U-09 | card         | put    | /cards/:id/desc                                           | 👍     | 👍          |            |
+| CAR-U-10 | card         | put    | /cards/:id/due                                            | 👍     | 👍          |            |
+| CAR-U-11 | card         | put    | /cards/:id/dueComplete                                    | 👍     | 👍          |            |
+| CAR-U-12 | card         | put    | /cards/:id/idAttachmentCover                              | 👍     | 📌          |            |
+| CAR-U-13 | card         | put    | /cards/:id/idBoard                                        | 👍     | 🔒          |            |
+| CAR-U-14 | card         | put    | /cards/:id/idList                                         | 👍     | 🔒          |            |
 | CAR-U-15 | card         | put    | /cards/:id/idMembers                                      | 👍     |            |            |
-| CAR-U-16 | card         | put    | /cards/:id/name                                           | 👍     |            |            |
-| CAR-U-17 | card         | put    | /cards/:id/pos                                            | 👍     |            |            |
+| CAR-U-16 | card         | put    | /cards/:id/name                                           | 👍     | 👍          |            |
+| CAR-U-17 | card         | put    | /cards/:id/pos                                            | 👍     | 👍          |            |
 | CAR-U-18 | card         | put    | /cards/:id/stickers/:idSticker                            | 👍     |            |            |
 | CAR-U-19 | card         | put    | /cards/:id/subscribed                                     | 👍     |            |            |
 | CAR-P-01 | card         | post   | /cards                                                    | 👍     |            |            |

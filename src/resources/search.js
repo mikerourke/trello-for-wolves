@@ -6,7 +6,6 @@ import BaseResource from './base-resource';
 /* Types */
 import type {
   ArgumentGroup,
-  Auth,
   AttachmentFilter,
   BoardField,
   CardField,
@@ -25,10 +24,6 @@ export type ModelType =
  * @namespace Search
  */
 export default class Search extends BaseResource {
-  constructor(auth: Auth) {
-    super(auth, 'search');
-  }
-
   performSearch(
     queryArgs: {
       query: string,

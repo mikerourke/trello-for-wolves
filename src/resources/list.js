@@ -9,12 +9,10 @@ import Card from './card';
 /* Types */
 import type {
   ArgumentGroup,
-  Auth,
   BoardField,
   CardField,
   CardFilter,
   PositionNumbered,
-  ResourceConstructorOptions,
 } from '../types';
 
 export type ListField = 'closed' | 'idBoard' | 'name' | 'pos' | 'subscribed';
@@ -25,13 +23,6 @@ export type ListFilter = 'all' | 'closed' | 'none' | 'open';
  * @namespace List
  */
 export default class List extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'list', options);
-  }
-
   getLists(
     queryArgs?: {
       cards?: CardFilter,
@@ -64,16 +55,16 @@ export default class List extends BaseResource {
   }
 
   actions() {
-    return new Action(this.auth, this.getOptionsForChild());
+    return new Action(this.auth, `${this.routePath}/actions`);
   }
 
   board(boardId?: string = '') {
     const resourcePath = boardId ? '/idBoard' : 'board';
-    return new Board(this.auth, this.getOptionsForChild(boardId, resourcePath));
+    return new Board(this.auth, `${this.routePath}/${resourcePath}`, boardId);
   }
 
   cards() {
-    return new Card(this.auth, this.getOptionsForChild());
+    return new Card(this.auth, `${this.routePath}/cards`);
   }
 
   updateList(
@@ -112,8 +103,7 @@ export default class List extends BaseResource {
    */
   associateList(): Promise<*> {
     // See associateMember() in the Member class for explanation:
-    this.resourcePath = this.resourcePath.split('/')[1];
-    return this.httpPut('/', { value: this.instanceId });
+    return this.httpPut('/', { value: this.associationId });
   }
 
   addList(
@@ -124,9 +114,8 @@ export default class List extends BaseResource {
       pos?: PositionNumbered,
     },
   ): Promise<*> {
-    const { parentName, parentId } = this.getParent();
-    if (parentName === 'boards') {
-      queryArgs.idBoard = parentId;
+    if (this.routePathElements[0] === 'boards') {
+      queryArgs.idBoard = this.routePathElements[1];
     }
     return this.httpPost('/', queryArgs);
   }

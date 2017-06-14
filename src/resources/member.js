@@ -18,7 +18,6 @@ import type {
   ArgumentGroup,
   AttachmentField,
   AttachmentFilter,
-  Auth,
   BoardField,
   BoardFilter,
   CardField,
@@ -32,7 +31,6 @@ import type {
   OrganizationField,
   OrganizationFilter,
   PositionNumbered,
-  ResourceConstructorOptions,
 } from '../types';
 
 export type AvatarSourceField =
@@ -98,13 +96,6 @@ type CustomEmojiField = 'name' | 'url';
  *    when an instance is created in the Member class.
  */
 class BoardBackground extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'boardBackground', options);
-  }
-
   getBoardBackgrounds(
     queryArgs?: {
       // boardBackgrounds:
@@ -144,13 +135,6 @@ class BoardBackground extends BaseResource {
 }
 
 class BoardStar extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'boardStar', options);
-  }
-
   getBoardStars(): Promise<*> {
     return this.httpGet('/');
   }
@@ -190,13 +174,6 @@ class BoardStar extends BaseResource {
 }
 
 class CustomEmoji extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'customEmoji', options);
-  }
-
   getCustomEmojis(
     queryArgs?: {
       filter?: AllOrNone,
@@ -222,13 +199,6 @@ class CustomEmoji extends BaseResource {
 }
 
 class Pref extends BaseResource {
-  constructor(
-    auth: Auth,
-    memberId: string,
-  ) {
-    super(auth, 'pref', { parentPath: `members/${memberId}` });
-  }
-
   updateColorBlind(value: boolean): Promise<*> {
     return this.httpPut('/colorBlind', { value });
   }
@@ -243,13 +213,6 @@ class Pref extends BaseResource {
 }
 
 class SavedSearch extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'savedSearch', options);
-  }
-
   getSavedSearches(): Promise<*> {
     return this.httpGet('/');
   }
@@ -299,13 +262,6 @@ class SavedSearch extends BaseResource {
  * @namespace Member
  */
 export default class Member extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'member', options);
-  }
-
   getMembers(
     queryArgs?: {
       fields?: ArgumentGroup<MemberEveryField>,
@@ -386,45 +342,45 @@ export default class Member extends BaseResource {
   }
 
   actions() {
-    return new Action(this.auth, this.getOptionsForChild());
+    return new Action(this.auth, `${this.routePath}/actions`);
   }
 
   boardBackgrounds(boardBackgroundId?: string = '') {
     return new BoardBackground(
-      this.auth, this.getOptionsForChild(boardBackgroundId));
+      this.auth, `${this.routePath}/boardBackgrounds/${boardBackgroundId}`);
   }
 
   boardStars(boardStarId?: string = '') {
-    return new BoardStar(this.auth, this.getOptionsForChild(boardStarId));
+    return new BoardStar(
+      this.auth, `${this.routePath}/boardStars/${boardStarId}`);
   }
 
   boards() {
-    return new Board(this.auth, this.getOptionsForChild());
+    return new Board(this.auth, `${this.routePath}/boards`);
   }
 
   boardsInvited() {
-    return new Board(this.auth, this.getOptionsForChild('', '/boardsInvited'));
+    return new Board(this.auth, `${this.routePath}/boardsInvited`);
   }
 
   cards() {
-    return new Card(this.auth, this.getOptionsForChild());
+    return new Card(this.auth, `${this.routePath}/cards`);
   }
 
   customBoardBackgrounds(customBoardBackgroundId?: string = '') {
     return new BoardBackground(
       this.auth,
-      this.getOptionsForChild(
-        customBoardBackgroundId, '/customBoardBackgrounds'));
+      `${this.routePath}/customBoardBackgrounds/${customBoardBackgroundId}`);
   }
 
   customEmoji(customEmojiId?: string = '') {
     return new CustomEmoji(
-      this.auth, this.getOptionsForChild(customEmojiId, '/customEmoji'));
+      this.auth, `${this.routePath}/customEmojis/${customEmojiId}`);
   }
 
   customStickers(customStickerId?: string = '') {
     return new Sticker(
-      this.auth, this.getOptionsForChild(customStickerId, '/customStickers'));
+      this.auth, `${this.routePath}/customStickers/${customStickerId}`);
   }
 
   getDeltas(
@@ -437,24 +393,25 @@ export default class Member extends BaseResource {
   }
 
   notifications() {
-    return new Notification(this.auth, this.getOptionsForChild());
+    return new Notification(this.auth, `${this.routePath}/notifications`);
   }
 
   organizations() {
-    return new Organization(this.auth, this.getOptionsForChild());
+    return new Organization(this.auth, `${this.routePath}/organizations`);
   }
 
   organizationsInvited() {
     return new Organization(
-      this.auth, this.getOptionsForChild('', '/organizationsInvited'));
+      this.auth, `${this.routePath}/organizationsInvited`);
   }
 
   savedSearches(savedSearchId?: string = '') {
-    return new SavedSearch(this.auth, this.getOptionsForChild(savedSearchId));
+    return new SavedSearch(
+      this.auth, `${this.routePath}/savedSearches/${savedSearchId}`);
   }
 
   tokens() {
-    return new Token(this.auth, this.getOptionsForChild());
+    return new Token(this.auth, `${this.routePath}/tokens`);
   }
 
   updateMember(
@@ -491,7 +448,7 @@ export default class Member extends BaseResource {
   }
 
   prefs() {
-    return new Pref(this.auth, this.instanceId);
+    return new Pref(this.auth, `${this.routePath}/prefs`);
   }
 
   updateUsername(value: string): Promise<*> {
@@ -557,12 +514,9 @@ export default class Member extends BaseResource {
    * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idmembers}
    */
   associateMember(memberIds?: Array<string>): Promise<*> {
-    // An Id number is specified when the Member instance is created, so the
-    // default resource path would be /idMembers/[memberId].  If a member is
-    // being associated with a card, the /[memberId] must be removed and passed
-    // in as a query arg, so the resource path would be
-    // /idMembers?value=[memberId]...
-    this.resourcePath = this.resourcePath.split('/')[1];
+    // The Member Id to associate with the parent card was passed into the
+    // constructor of this Member instance.  The resulting path will be:
+    // /idMembers?value=[associationId]...
 
     // If an array of Member Ids was passed in as an argument, a PUT request
     // is made to perform a bulk update.
@@ -571,7 +525,7 @@ export default class Member extends BaseResource {
     }
     // If no argument was passed in, a POST request is made with the updated
     // member Id.
-    return this.httpPost('/', { value: this.instanceId });
+    return this.httpPost('/', { value: this.associationId });
   }
 
   dismissOneTimeMessages(value: string): Promise<*> {

@@ -4,11 +4,7 @@
 import BaseResource from './base-resource';
 
 /* Types */
-import type {
-  ArgumentGroup,
-  Auth,
-  ResourceConstructorOptions,
-} from '../types';
+import type { ArgumentGroup } from '../types';
 
 export type AttachmentFilter = boolean | 'cover';
 
@@ -41,13 +37,6 @@ export type AttachmentField =
  * @namespace Attachment
  */
 export default class Attachment extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'attachment', options);
-  }
-
   getAttachments(
     queryArgs?: {
       fields?: ArgumentGroup<AttachmentField>,
@@ -65,7 +54,7 @@ export default class Attachment extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  // TODO: Make sure this works for a file.
+  // @todo: Make sure this works for a file.
   uploadAttachment(
     file?: Object,
     queryArgs?: {

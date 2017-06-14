@@ -170,7 +170,6 @@ describe('CAR | Card Resource', function() {
         .notify(done);
     });
 
-    // TODO: Find out why this isn't working.
     it('CAR-G-10-T01 | gets the associated Checklist Item with the specified Id', (done) => {
       trello.cards(cardId).checkItem(checkItemId).getCheckItem()
         .then(logResponse)
@@ -277,11 +276,133 @@ describe('CAR | Card Resource', function() {
         .notify(done);
     });
 
-    it.only('CAR-U-03-T01 | updates the name of an associated Checklist Item on a Checklist with the specified Id', (done) => {
+    it('CAR-U-03-T01 | updates the name of an associated Checklist Item on a Checklist with the specified Id', (done) => {
       trello
         .cards(cardId)
         .checklist(checklistId)
         .checkItem(checkItemId).updateName('Test Item Update')
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-U-04-T01 | updates the position of an associated Checklist Item on a Checklist with the specified Id', (done) => {
+      trello
+        .cards(cardId)
+        .checklist(checklistId)
+        .checkItem(checkItemId).updatePosition('top')
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-U-05-T01 | updates the state of an associated Checklist Item on a Checklist with the specified Id', (done) => {
+      trello
+        .cards(cardId)
+        .checklist(checklistId)
+        .checkItem(checkItemId).updateState('complete')
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-U-06-T01 | updates a Checklist Item on a Checklist with the specified Id', (done) => {
+      trello
+        .cards(cardId)
+        .checklist(checklistId)
+        .checkItem(checkItemId).updateCheckItem({
+          name: 'Test Check Item',
+          pos: 'top',
+        })
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-U-07-T01 | updates a Checklist Item with the specified Id', (done) => {
+      trello.cards(cardId).checkItem(checkItemId).updateCheckItem({
+        name: 'Test Check Item 2',
+        pos: 'top',
+        idChecklistCurrent: checklistId,
+      })
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-U-08-T01 | updates the closed status', (done) => {
+      trello.cards(cardId).updateClosedStatus(false)
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-U-09-T01 | updates the description', (done) => {
+      trello.cards(cardId).updateDescription('Test Card 1')
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-U-10-T01 | updates the due date', (done) => {
+      trello.cards(cardId).updateDueDate(null)
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-U-11-T01 | updates the due complete status', (done) => {
+      trello.cards(cardId).updateDueComplete(false)
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    // @todo: Get an Attachment Id for testing.
+    it.skip('CAR-U-12-T01 | updates the Attachment cover image', (done) => {
+      trello.cards(cardId).updateAttachmentCoverImage('[NEED ID]')
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    /**
+     * @skip CAR-U-13
+     * @reason Excessive Data
+     * @passed 06.13.17
+     */
+    it.skip('CAR-U-13-T01 | moves the Card to a different Board', (done) => {
+      const testCardId = 'cVrYQADi';
+      const targetBoardId = '594076087cb178df0a589fda';
+      trello.cards(testCardId).board(targetBoardId).associateBoard()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    /**
+     * @skip CAR-U-14
+     * @reason Excessive Data
+     * @passed 06.13.17
+     */
+    it.skip('CAR-U-14-T01 | moves the Card to a different List', (done) => {
+      const testCardId = 'cVrYQADi';
+      const targetListId = '594083ce2f460a14d5845dd8';
+      trello.cards(testCardId).list(targetListId).associateList()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-U-14-T01 | updates the name', (done) => {
+      trello.cards(cardId).updateName('Test Card 2')
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-U-15-T01 | updates the position', (done) => {
+      trello.cards(cardId).updatePosition('top')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);

@@ -7,8 +7,6 @@ import BaseResource from './base-resource';
 import type {
   AllOrNone,
   ArgumentGroup,
-  Auth,
-  ResourceConstructorOptions,
 } from '../types';
 
 export type StickerField =
@@ -26,13 +24,6 @@ type CustomStickerField = 'scaled' | 'url';
  * @namespace Sticker
  */
 export default class Sticker extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'sticker', options);
-  }
-
   getStickers(
     queryArgs?: {
       // Arguments for "/stickers":

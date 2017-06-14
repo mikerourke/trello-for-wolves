@@ -7,9 +7,7 @@ import BaseResource from './base-resource';
 import type {
   AllOrNone,
   ArgumentGroup,
-  Auth,
   PositionNumbered,
-  ResourceConstructorOptions,
 } from '../types';
 
 export type CheckItemField = 'name' | 'nameData' | 'pos' | 'state';
@@ -22,13 +20,6 @@ export type CheckItemStateField = 'idCheckItem' | 'state';
  * @namespace CheckItem
  */
 export default class CheckItem extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'checkItem', options);
-  }
-
   getCheckItems(
     queryArgs?: {
       filter?: AllOrNone,
@@ -58,11 +49,19 @@ export default class CheckItem extends BaseResource {
     queryArgs?: {
       name?: string,
       state?: CheckItemState,
-      idChecklist?: ?string,
       pos?: PositionNumbered,
+      idChecklistCurrent?: ?string,
+      idChecklist?: ?string,
     } = {},
   ): Promise<*> {
-    return this.httpPut('/', queryArgs);
+    let updatedArgs = queryArgs;
+    if (this.routePathElements[0] === 'checklists') {
+      updatedArgs = {
+        ...queryArgs,
+        idChecklistCurrent: this.routePathElements[1],
+      };
+    }
+    return this.httpPut('/', updatedArgs);
   }
 
   updateName(value: string): Promise<*> {

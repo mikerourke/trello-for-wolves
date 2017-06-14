@@ -38,7 +38,6 @@ import type {
   PermissionLevel,
   Position,
   PositionNumbered,
-  ResourceConstructorOptions,
 } from '../types';
 
 export type BoardField =
@@ -90,13 +89,6 @@ type Invitation = 'admins' | 'members';
 type PowerUp = 'calendar' | 'cardAging' | 'recap' | 'voting';
 
 class MyPref extends BaseResource {
-  constructor(
-    auth: Auth,
-    boardId: string,
-  ) {
-    super(auth, 'myPref', { parentPath: `boards/${boardId}` });
-  }
-
   getMyPrefs(): Promise<*> {
     return this.httpGet('/');
   }
@@ -136,13 +128,6 @@ class MyPref extends BaseResource {
 }
 
 class Pref extends BaseResource {
-  constructor(
-    auth: Auth,
-    boardId: string,
-  ) {
-    super(auth, 'pref', { parentPath: `boards/${boardId}` });
-  }
-
   updateBackground(value: string): Promise<*> {
     return this.httpPut('/background', { value });
   }
@@ -184,13 +169,6 @@ class Pref extends BaseResource {
  * @namespace Board
  */
 export default class Board extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'board', options);
-  }
-
   getBoards(
     queryArgs?: {
       filter?: ArgumentGroup<BoardFilter>,
@@ -270,7 +248,7 @@ export default class Board extends BaseResource {
   }
 
   actions() {
-    return new Action(this.auth, this.getOptionsForChild());
+    return new Action(this.auth, `${this.routePath}/actions`);
   }
 
   getBoardStars(
@@ -282,11 +260,11 @@ export default class Board extends BaseResource {
   }
 
   cards(cardId?: string = '') {
-    return new Card(this.auth, this.getOptionsForChild(cardId));
+    return new Card(this.auth, `${this.routePath}/cards/${cardId}`);
   }
 
   checklists() {
-    return new Checklist(this.auth, this.getOptionsForChild());
+    return new Checklist(this.auth, `${this.routePath}/checklists`);
   }
 
   getDeltas(
@@ -303,34 +281,35 @@ export default class Board extends BaseResource {
   }
 
   labels(labelId?: string = '') {
-    return new Label(this.auth, this.getOptionsForChild(labelId));
+    return new Label(this.auth, `${this.routePath}/labels/${labelId}`);
   }
 
   lists() {
-    return new List(this.auth, this.getOptionsForChild());
+    return new List(this.auth, `${this.routePath}/lists`);
   }
 
   members(memberId?: string = '') {
-    return new Member(this.auth, this.getOptionsForChild(memberId));
+    return new Member(
+      this.auth, `${this.routePath}/members/${memberId}`);
   }
 
   membersInvited() {
-    return new Member(
-      this.auth, this.getOptionsForChild('', '/membersInvited'));
+    return new Member(this.auth, `${this.routePath}/membersInvited`);
   }
 
   memberships(membershipId?: string = '') {
-    return new Membership(this.auth, this.getOptionsForChild(membershipId));
+    return new Membership(
+      this.auth, `${this.routePath}/memberships/${membershipId}`);
   }
 
   myPrefs() {
-    return new MyPref(this.auth, this.instanceId);
+    return new MyPref(this.auth, `${this.routePath}/myPrefs`);
   }
 
   organization(organizationId?: string = '') {
     const resourcePath = organizationId ? '/idOrganization' : '/organization';
     return new Organization(
-      this.auth, this.getOptionsForChild(organizationId, resourcePath));
+      this.auth, `${this.routePath}${resourcePath}`, organizationId);
   }
 
   getPluginData(): Promise<*> {
@@ -388,7 +367,7 @@ export default class Board extends BaseResource {
   }
 
   prefs() {
-    return new Pref(this.auth, this.instanceId);
+    return new Pref(this.auth, `${this.routePath}/prefs`);
   }
 
   updateSubscribed(value: boolean): Promise<*> {
@@ -415,8 +394,7 @@ export default class Board extends BaseResource {
     } = {},
   ): Promise<*> {
     // See associateMember() in the Member class for explanation:
-    this.resourcePath = this.resourcePath.split('/')[1];
-    return this.httpPut('/', { ...queryArgs, value: this.instanceId });
+    return this.httpPut('/', { ...queryArgs, value: this.associationId });
   }
 
   addBoard(

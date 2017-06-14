@@ -23,7 +23,7 @@
  *    array of field names.
  */
 
-// TODO: Add missing parameter information.
+// @todo: Add missing parameter information.
 /**
  * @api {get} /search performSearch
  * @apiVersion 1.0.0

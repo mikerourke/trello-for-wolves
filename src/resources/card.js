@@ -21,7 +21,6 @@ import type {
   ArgumentGroup,
   AttachmentField,
   AttachmentFilter,
-  Auth,
   BoardField,
   CheckItemStateField,
   ChecklistField,
@@ -30,7 +29,6 @@ import type {
   ListField,
   MemberField,
   PositionNumbered,
-  ResourceConstructorOptions,
   StickerField,
 } from '../types';
 
@@ -74,13 +72,6 @@ export type CardFilter = 'all' | 'closed' | 'none' | 'open' | 'visible';
  * @namespace Card
  */
 export default class Card extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'card', options);
-  }
-
   getCards(
     queryArgs?: {
       actions?: ArgumentGroup<ActionFilter>,
@@ -141,55 +132,56 @@ export default class Card extends BaseResource {
   }
 
   actions() {
-    return new Action(this.auth, this.getOptionsForChild());
+    return new Action(this.auth, `${this.routePath}/actions`);
   }
 
   attachments(attachmentId?: string = '') {
-    return new Attachment(this.auth, this.getOptionsForChild(attachmentId));
+    return new Attachment(
+      this.auth, `${this.routePath}/attachments/${attachmentId}`);
   }
 
   board(boardId?: string = '') {
-    const resourcePath = boardId ? '/idBoard' : 'board';
-    return new Board(this.auth, this.getOptionsForChild(boardId, resourcePath));
+    const resourcePath = boardId ? '/idBoard' : '/board';
+    return new Board(
+      this.auth, `${this.routePath}${resourcePath}`, boardId);
   }
 
   checkItemStates() {
-    return new CheckItem(
-      this.auth, this.getOptionsForChild('', '/checkItemStates'));
+    return new CheckItem(this.auth, `${this.routePath}/checkItemStates`);
   }
 
   checklist(checklistId: string) {
     return new Checklist(
-      this.auth, this.getOptionsForChild(checklistId, '/checklist'));
+      this.auth, `${this.routePath}/checklist/${checklistId}`);
   }
 
   checklists() {
-    return new Checklist(this.auth, this.getOptionsForChild());
+    return new Checklist(this.auth, `${this.routePath}/checklists`);
   }
 
   checkItem(checkItemId: string) {
     return new CheckItem(
-      this.auth, this.getOptionsForChild(checkItemId, '/checkItem'));
+      this.auth, `${this.routePath}/checkItem/${checkItemId}`);
   }
 
   labels(labelId?: string = '') {
-    const resourcePath = labelId && '/idLabels';
-    return new Label(this.auth, this.getOptionsForChild(labelId, resourcePath));
+    const resourcePath = labelId ? '/idLabels' : '/labels';
+    return new Label(this.auth, `${this.routePath}${resourcePath}`, labelId);
   }
 
   list(listId?: string = '') {
     const resourcePath = listId ? '/idList' : '/list';
-    return new List(this.auth, this.getOptionsForChild(listId, resourcePath));
+    return new List(this.auth, `${this.routePath}${resourcePath}`, listId);
   }
 
   members(memberId?: string = '') {
-    const resourcePath = memberId && '/idMembers';
+    const resourcePath = memberId ? '/idMembers' : '/members';
     return new Member(
-      this.auth, this.getOptionsForChild(memberId, resourcePath));
+      this.auth, `${this.routePath}${resourcePath}`, memberId);
   }
 
   membersVoted() {
-    return new Member(this.auth, this.getOptionsForChild('', '/membersVoted'));
+    return new Member(this.auth, `${this.routePath}/membersVoted`);
   }
 
   getPluginData(): Promise<*> {
@@ -197,7 +189,8 @@ export default class Card extends BaseResource {
   }
 
   stickers(stickerId?: string = '') {
-    return new Sticker(this.auth, this.getOptionsForChild(stickerId));
+    return new Sticker(
+      this.auth, `${this.routePath}/stickers/${stickerId}`);
   }
 
   updateCard(
@@ -220,7 +213,8 @@ export default class Card extends BaseResource {
   }
 
   comments(commentId?: string = '') {
-    return new Comment(this.auth, this.getOptionsForChild(commentId));
+    return new Comment(
+      this.auth, `${this.routePath}/actions/${commentId}/comments`);
   }
 
   updateClosedStatus(value: boolean): Promise<*> {

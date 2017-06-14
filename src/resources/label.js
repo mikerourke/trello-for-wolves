@@ -5,11 +5,7 @@ import BaseResource from './base-resource';
 import Board from './board';
 
 /* Types */
-import type {
-  ArgumentGroup,
-  Auth,
-  ResourceConstructorOptions,
-} from '../types';
+import type { ArgumentGroup } from '../types';
 
 export type LabelColor =
   'blue'
@@ -30,13 +26,6 @@ export type LabelField = 'color' | 'idBoard' | 'name' | 'uses';
  * @namespace Label
  */
 export default class Label extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'label', options);
-  }
-
   getLabels(
     queryArgs?: {
       fields?: ArgumentGroup<LabelField>,
@@ -54,7 +43,7 @@ export default class Label extends BaseResource {
   }
 
   board() {
-    return new Board(this.auth, this.getOptionsForChild('', '/board'));
+    return new Board(this.auth, `${this.routePath}/board`);
   }
 
   updateLabel(

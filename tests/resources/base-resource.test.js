@@ -11,14 +11,12 @@ describe('BASE | Base Resource', () => {
   describe('BASE-EB | Endpoint Builder', () => {
     describe('BASE-EB-PN | No Parent', () => {
       before(() => {
-        baseEntity = new BaseResource(auth, 'card', {
-          instanceId: cardId,
-        });
+        baseEntity = new BaseResource(auth, `/cards/${cardId}`);
       });
 
       it('BASE-EB-PN-T01 | builds an endpoint with the root path', () => {
         const actualValue = baseEntity.getEndpoint('/');
-        const expectedValue = `cards/${cardId}?${authSuffix}`;
+        const expectedValue = `/cards/${cardId}?${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -27,7 +25,7 @@ describe('BASE | Base Resource', () => {
           actionsFormat: 'count',
         });
         const expectedValue =
-          `cards/${cardId}?actions_format=count&${authSuffix}`;
+          `/cards/${cardId}?actions_format=count&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -36,7 +34,7 @@ describe('BASE | Base Resource', () => {
           actionsEntities: true,
         });
         const expectedValue =
-          `cards/${cardId}?actions_entities=true&${authSuffix}`;
+          `/cards/${cardId}?actions_entities=true&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -45,7 +43,7 @@ describe('BASE | Base Resource', () => {
           actions: ['copyBoard', 'copyCard'],
         });
         const expectedValue =
-          `cards/${cardId}?actions=copyBoard,copyCard&${authSuffix}`;
+          `/cards/${cardId}?actions=copyBoard,copyCard&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -57,7 +55,7 @@ describe('BASE | Base Resource', () => {
           separator: '/',
         });
         const expectedValue =
-          `cards/${cardId}?prefs/selfJoin=true&${authSuffix}`;
+          `/cards/${cardId}?prefs/selfJoin=true&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -73,7 +71,7 @@ describe('BASE | Base Resource', () => {
           separator: '/',
         });
         const expectedValue =
-          `cards/${cardId}?actions=copyBoard,copyCard&actions_entities=true&` +
+          `/cards/${cardId}?actions=copyBoard,copyCard&actions_entities=true&` +
           `actions_format=count&prefs/selfJoin=true&prefs/invitations=admins&` +
           `${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
@@ -82,15 +80,13 @@ describe('BASE | Base Resource', () => {
 
     describe('BASE-EB-PY | With Parent', () => {
       before(() => {
-        baseEntity = new BaseResource(auth, 'card', {
-          instanceId: cardId,
-          parentPath: `boards/${boardId}`,
-        });
+        baseEntity = new BaseResource(
+          auth, `/boards/${boardId}/cards/${cardId}`);
       });
 
       it('BASE-EB-PY-T01 | builds an endpoint with the root path', () => {
         const actualValue = baseEntity.getEndpoint('/');
-        const expectedValue = `boards/${boardId}/cards/${cardId}?${authSuffix}`;
+        const expectedValue = `/boards/${boardId}/cards/${cardId}?${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -99,7 +95,7 @@ describe('BASE | Base Resource', () => {
           actionsFormat: 'count',
         });
         const expectedValue =
-          `boards/${boardId}/cards/${cardId}?actions_format=count&${authSuffix}`;
+          `/boards/${boardId}/cards/${cardId}?actions_format=count&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -108,7 +104,7 @@ describe('BASE | Base Resource', () => {
           actionsEntities: true,
         });
         const expectedValue =
-          `boards/${boardId}/cards/${cardId}?actions_entities=true&${authSuffix}`;
+          `/boards/${boardId}/cards/${cardId}?actions_entities=true&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -117,7 +113,7 @@ describe('BASE | Base Resource', () => {
           actions: ['copyBoard', 'copyCard'],
         });
         const expectedValue =
-          `boards/${boardId}/cards/${cardId}?actions=copyBoard,copyCard&${authSuffix}`;
+          `/boards/${boardId}/cards/${cardId}?actions=copyBoard,copyCard&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -129,7 +125,7 @@ describe('BASE | Base Resource', () => {
           separator: '/',
         });
         const expectedValue =
-          `boards/${boardId}/cards/${cardId}?prefs/selfJoin=true&${authSuffix}`;
+          `/boards/${boardId}/cards/${cardId}?prefs/selfJoin=true&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -145,7 +141,7 @@ describe('BASE | Base Resource', () => {
           separator: '/',
         });
         const expectedValue =
-          `boards/${boardId}/cards/${cardId}?actions=copyBoard,copyCard&` +
+          `/boards/${boardId}/cards/${cardId}?actions=copyBoard,copyCard&` +
           `actions_entities=true&actions_format=count&prefs/selfJoin=true&` +
           `prefs/invitations=admins&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);

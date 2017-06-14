@@ -12,12 +12,6 @@ import stringifyQueryArgs from '../utils/query-args-stringifier';
 /* Types */
 import type { Auth } from '../types';
 
-export type ResourceConstructorOptions = {
-  instanceId?: string,
-  parentPath?: string,
-  resourcePath?: string,
-};
-
 type HttpMethod = 'get' | 'put' | 'post' | 'delete';
 
 /**
@@ -25,102 +19,33 @@ type HttpMethod = 'get' | 'put' | 'post' | 'delete';
  */
 export default class BaseResource {
   auth: Auth;
-  instanceId: string;
-  resourcePath: string;
-  _resourceName: string;
-  _parentPath: string;
+  routePath: string;
+  routePathElements: Array<string>;
+  associationId: string;
 
   /**
    * @param {Auth} auth Auth object containing Trello API key and token.
-   * @param {string} resourceName Name of resource.
-   * @param {Object} options Options for performing requests on the resource.
-   * @param {string} [options.instanceId=''] Id of the resource instance.
-   * @param {string} [options.parentPath=''] Parent path for constructing the
-   *    route path.
-   * @param {string} [options.resourcePath=''] Resource path override for
-   *    performing requests.
+   * @param {string} routePath Route path for performing the request.
+   * @param {string} associationId Id number of the associated resource to
+   *    update.
    * @constructor
    */
   constructor(
     auth: Auth,
-    resourceName: string,
-    options?: ResourceConstructorOptions = {},
+    routePath: string,
+    associationId?: string = '',
   ) {
-    const { instanceId = '', parentPath = '', resourcePath = '' } = options;
     this.auth = auth;
-    this.instanceId = instanceId;
-    this.resourcePath = resourcePath;
-    this._resourceName = resourceName;
-    this._parentPath = parentPath;
-  }
-
-  getParent(): Object {
-    if (!this._parentPath) {
-      return {
-        parentName: '',
-        parentId: '',
-      };
-    }
-    const pathElements = this._parentPath.split('/');
+    this.routePath = routePath;
+    this.associationId = associationId;
 
     // Ensure that the first element in the array has a length greater than
     // zero:
-    const elementIndex = pathElements[0].length ? 0 : 1;
-    return {
-      parentName: pathElements[elementIndex],
-      parentId: pathElements[elementIndex + 1],
-    };
-  }
+    this.routePathElements = this.routePath.split('/');
 
-  /**
-   * Returns the constructor options object for passing to the constructor
-   *    of a child resource (e.g. creating an "actions" instance in a "board").
-   * @param {string} [childId=''] Id of the child resource.
-   * @param {string} [resourcePath=''] Resource path to use in the child
-   *    resource instance.
-   * @returns {Object}
-   */
-  getOptionsForChild(
-    childId?: string = '',
-    resourcePath?: string = '',
-  ): ResourceConstructorOptions {
-    // If there was a parent path present for the parent resource, make sure
-    // this is included in the parent path for the child resource.
-    // An example of a path that meets these conditions is:
-    // /boards/:boardId/members/:memberId/cards
-    let parentPathToUse = `/${this._resourceName}s/${this.instanceId}`;
-    if (this._parentPath) {
-      parentPathToUse = `${this._parentPath}${parentPathToUse}`;
+    if (!this.routePathElements[0].length) {
+      this.routePathElements.shift();
     }
-    return {
-      instanceId: childId,
-      resourcePath,
-      parentPath: parentPathToUse,
-    };
-  }
-
-  /**
-   * Constructs the full route path based on the parent and resource
-   *    path values.
-   * @returns {string}
-   */
-  getRoutePath() {
-    // If the resource path was manually specified, use that, otherwise
-    // construct it based on the resource name and Id.
-    let resourcePathToUse = this.resourcePath;
-    if (resourcePathToUse === '') {
-      resourcePathToUse = `${this._resourceName}s`;
-      if (this.instanceId) {
-        resourcePathToUse = `${resourcePathToUse}/${this.instanceId}`;
-      }
-    }
-
-    // Ensure there is a slash between the parent and resource path if the
-    // parent path was specified.
-    const pathSeparator = this._parentPath && '/';
-
-    // Combine the parent and resource paths to form the route path.
-    return `${this._parentPath}${pathSeparator}${resourcePathToUse}`;
   }
 
   /**
@@ -134,8 +59,7 @@ export default class BaseResource {
     pathVariables: string,
     queryArgs?: Object = {},
   ): string {
-    const routePath = this.getRoutePath();
-    const basePath = `${routePath}${pathVariables}`;
+    const basePath = `${this.routePath}${pathVariables}`;
 
     // Remove any consecutive and trailing slashes.
     const sanitizedPath = basePath
@@ -184,10 +108,10 @@ export default class BaseResource {
           if (error.response) {
             reject(new ApiCallResponseError(error.response));
           } else if (error.request) {
-            // TODO: Create custom error for API Request errors.
+            // @todo: Create custom error for API Request errors.
             reject(error);
           } else {
-            // TODO: Create custom error for other API errors.
+            // @todo: Create custom error for other API errors.
             reject(error);
           }
         });

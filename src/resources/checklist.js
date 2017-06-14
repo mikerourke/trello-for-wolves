@@ -10,12 +10,10 @@ import CheckItem from './check-item';
 import type {
   AllOrNone,
   ArgumentGroup,
-  Auth,
   CardField,
   CardFilter,
   CheckItemField,
   PositionNumbered,
-  ResourceConstructorOptions,
 } from '../types';
 
 export type ChecklistField = 'idBoard' | 'idCard' | 'name' | 'pos';
@@ -24,13 +22,6 @@ export type ChecklistField = 'idBoard' | 'idCard' | 'name' | 'pos';
  * @namespace Checklist
  */
 export default class Checklist extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'checklist', options);
-  }
-
   getChecklists(
     queryArgs?: {
       cards?: CardFilter,
@@ -61,20 +52,21 @@ export default class Checklist extends BaseResource {
   }
 
   board() {
-    return new Board(this.auth, this.getOptionsForChild('', '/board'));
+    return new Board(this.auth, `${this.routePath}/board`);
   }
 
   cards() {
-    return new Card(this.auth, this.getOptionsForChild());
+    return new Card(this.auth, `${this.routePath}/cards`);
   }
 
   checkItem(checkItemId: string) {
     return new CheckItem(
-      this.auth, this.getOptionsForChild(checkItemId, '/checkItem'));
+      this.auth, `${this.routePath}/checkItem/${checkItemId}`);
   }
 
   checkItems(checkItemId?: string = '') {
-    return new CheckItem(this.auth, this.getOptionsForChild(checkItemId));
+    return new CheckItem(
+      this.auth, `${this.routePath}/checkItems/${checkItemId}`);
   }
 
   updateChecklist(

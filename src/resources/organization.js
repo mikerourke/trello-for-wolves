@@ -12,7 +12,6 @@ import type {
   ActionField,
   ActionFilter,
   ArgumentGroup,
-  Auth,
   BoardField,
   BoardFilter,
   FilterDate,
@@ -22,7 +21,6 @@ import type {
   MemberFilter,
   MembershipFilter,
   PermissionLevel,
-  ResourceConstructorOptions,
 } from '../types';
 
 export type OrganizationField =
@@ -54,13 +52,6 @@ type BoardVisibilityFilter = 'admin' | 'none' | 'org';
 type BoardVisibilityRestrictionLevel = 'org' | 'private' | 'public';
 
 class Pref extends BaseResource {
-  constructor(
-    auth: Auth,
-    organizationId: string,
-  ) {
-    super(auth, 'pref', { parentPath: `organizations/${organizationId}` });
-  }
-
   updateAssociatedDomain(value: string): Promise<*> {
     return this.httpPut('/associatedDomain', { value });
   }
@@ -101,13 +92,6 @@ class Pref extends BaseResource {
  * @namespace Organization
  */
 export default class Organization extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'organization', options);
-  }
-
   getOrganizations(
     queryArgs?: {
       filter?: ArgumentGroup<OrganizationFilter>,
@@ -156,11 +140,11 @@ export default class Organization extends BaseResource {
   }
 
   actions() {
-    return new Action(this.auth, this.getOptionsForChild());
+    return new Action(this.auth, `${this.routePath}/actions`);
   }
 
   boards() {
-    return new Board(this.auth, this.getOptionsForChild());
+    return new Board(this.auth, `${this.routePath}/boards`);
   }
 
   getDeltas(
@@ -173,16 +157,16 @@ export default class Organization extends BaseResource {
   }
 
   members(memberId?: string = '') {
-    return new Member(this.auth, this.getOptionsForChild(memberId));
+    return new Member(this.auth, `${this.routePath}/members/${memberId}`);
   }
 
   membersInvited() {
-    return new Member(
-      this.auth, this.getOptionsForChild('', '/membersInvited'));
+    return new Member(this.auth, `${this.routePath}/membersInvited`);
   }
 
   memberships(membershipId?: string = '') {
-    return new Membership(this.auth, this.getOptionsForChild(membershipId));
+    return new Membership(
+      this.auth, `${this.routePath}/memberships/${membershipId}`);
   }
 
   getPluginData(): Promise<*> {
@@ -213,7 +197,7 @@ export default class Organization extends BaseResource {
       website?: ?string,
     } = {},
   ): Promise<*> {
-    // TODO: Write handler for nested prefs.
+    // @todo: Write handler for nested prefs.
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
 
@@ -230,7 +214,7 @@ export default class Organization extends BaseResource {
   }
 
   prefs() {
-    return new Pref(this.auth, this.instanceId);
+    return new Pref(this.auth, `${this.routePath}/prefs`);
   }
 
   updateWebsite(value: ?string): Promise<*> {
@@ -246,8 +230,7 @@ export default class Organization extends BaseResource {
   associateOrganization(): Promise<*> {
     // Remove the Id portion of the resource path and use only the portion
     // containing the resource name:
-    this.resourcePath = this.resourcePath.split('/')[1];
-    return this.httpPut('/', { value: this.instanceId });
+    return this.httpPut('/', { value: this.associationId });
   }
 
   addOrganization(

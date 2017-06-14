@@ -9,8 +9,6 @@ import Webhook from './webhook';
 import type {
   AllOrNone,
   ArgumentGroup,
-  Auth,
-  ResourceConstructorOptions,
 } from '../types';
 
 type TokenField =
@@ -24,13 +22,6 @@ type TokenField =
  * @namespace Token
  */
 export default class Token extends BaseResource {
-  constructor(
-    auth: Auth,
-    options?: ResourceConstructorOptions = {},
-  ) {
-    super(auth, 'token', options);
-  }
-
   getTokens(
     queryArgs?: {
       filter?: AllOrNone,
@@ -54,11 +45,11 @@ export default class Token extends BaseResource {
   }
 
   member() {
-    return new Member(this.auth, this.getOptionsForChild('', '/member'));
+    return new Member(this.auth, `${this.routePath}/member`);
   }
 
   webhook(webhookId?: string = '') {
-    return new Webhook(this.auth, this.getOptionsForChild(webhookId));
+    return new Webhook(this.auth, `${this.routePath}/webhook/${webhookId}`);
   }
 
   deleteToken(): Promise<*> {
