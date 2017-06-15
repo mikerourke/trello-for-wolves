@@ -418,6 +418,9 @@ export default class Board extends BaseResource {
       },
     },
   ): Promise<*> {
+    if (this.routePathElements[0] === 'organizations') {
+      queryArgs.idOrganization = this.routePathElements[1];
+    }
     return this.httpPost('/', { ...queryArgs, separator: '_' });
   }
 

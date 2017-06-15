@@ -929,10 +929,6 @@ diff@3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.2.0.tgz#c9ce393a4b7cbd0b058a725c93df299027868ff9"
 
-dirty@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/dirty/-/dirty-1.1.0.tgz#70edd2b999541dc9974fd3a8cbd0c670fe236078"
-
 doctrine@1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-1.5.0.tgz#379dce730f6166f76cefa4e6707a159b02c5a6fa"
@@ -2009,11 +2005,15 @@ minimist@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
 
-mkdirp@0.5.1, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1:
+mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   dependencies:
     minimist "0.0.8"
+
+mocha-assume@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/mocha-assume/-/mocha-assume-1.0.0.tgz#4e24b6a5d2d64976566345b453ba2c662bc6f675"
 
 mocha@^3.4.2:
   version "3.4.2"
@@ -2062,6 +2062,12 @@ nan@^2.3.0:
 natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
+
+node-json-db@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/node-json-db/-/node-json-db-0.7.3.tgz#bf631ff4d4cf4211cbdffe6cae6aaafe6ee54cdf"
+  dependencies:
+    mkdirp "0.5.x"
 
 node-pre-gyp@^0.6.36:
   version "0.6.36"

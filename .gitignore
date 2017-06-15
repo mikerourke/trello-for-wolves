@@ -35,4 +35,4 @@ docs/
 tests/results/
 
 .env
-ids.db
+ids.json

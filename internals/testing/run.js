@@ -9,13 +9,10 @@ require('babel-core/register')({
 });
 
 /* External dependencies */
-const fs = require('fs');
-const path = require('path');
-const Mocha = require('mocha');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const dirty = require('dirty');
 const chalk = require('chalk');
+const Mocha = require('mocha');
 const shell = require('shelljs');
 
 chai.should();
@@ -38,25 +35,15 @@ const stageFilesForTesting = () => new Promise((resolve) => {
   });
 
   // These files contain tests that can be ran in any order.
-  mocha.addFile('./tests/resources/base-resource.test.js');
   mocha.addFile('./tests/utils/query-args-stringifier.test.js');
+  mocha.addFile('./tests/setup.test.js');
 
-  // In order to ensure the tests run correctly, the tests need to be
-  // ran in order of resource creation.
-  const orderedResources = [
-    'organization',
-    'board',
-    'label',
-    'list',
-    'card',
-    'checklist',
-  ];
+  const resourceTestFiles = shell
+    .find('./tests/resources')
+    .filter(file => file.match(/\.test.js$/));
 
-  orderedResources.forEach(orderedResource => {
-    const fileName = `./tests/resources/${orderedResource}.test.js`;
-    if (shell.test('-f', fileName)) {
-      mocha.addFile(fileName);
-    }
+  resourceTestFiles.forEach(resourceTestFile => {
+      mocha.addFile(resourceTestFile);
   });
   resolve(mocha);
 });
@@ -101,9 +88,5 @@ const validateTestEnvironment = () => {
 };
 
 if (validateTestEnvironment()) {
-  // Setup Dirty database for storing Ids.
-  const dbPath = './tests/resources/ids.db';
-  shell.rm(dbPath);
-  const db = new dirty.Dirty(dbPath);
   runTests();
 }

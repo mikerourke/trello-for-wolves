@@ -123,7 +123,7 @@ const createLists = (idBoard) => new Promise((resolve, reject) => {
   ])
     .then((responses) => {
       resourceIds.listAId = responses[0].data.id || '0';
-      resourceIds.listAId = responses[1].data.id || '0';
+      resourceIds.listBId = responses[1].data.id || '0';
       resourceIds.listCId = responses[2].data.id || '0';
       logDetails(1, creationMessage('list'));
       resolve(resourceIds.listAId);

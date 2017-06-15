@@ -31,41 +31,6 @@ describe('ORG | Organization Resource', () => {
 
   const logResponse = (response) => logger.processResponse(response);
 
-  describe.only('ORG-SETUP | Organization Setup', () => {
-    before((done) => {
-      trello.members('me').organizations().getOrganizations()
-        .then((response) => {
-          const orgs = response.data;
-          orgs.forEach((org) => {
-            if (org.displayName === 'TFW Testing') {
-              db.set('orgId', org.id);
-            }
-          });
-          done();
-        })
-        .catch(error => done(error));
-    });
-
-    it('ORG-P-01-T01 | creates an Organization', (done) => {
-      if (!db.get('orgId')) {
-        trello.organizations().addOrganization({
-          displayName: 'TFW Testing',
-          desc: 'This is for testing',
-        })
-          .then((response) => {
-            orgId = response.data.id;
-            db.set('orgId', orgId);
-            assert.isDefined(orgId);
-            done();
-          })
-          .catch(error => done(error));
-      } else {
-        assert.isTrue(true);
-        done();
-      }
-    });
-  });
-
   describe('ORG-G | Organization GET requests', () => {
 
   });
