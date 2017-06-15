@@ -1,6 +1,3 @@
-/* External dependencies */
-import dirty from 'dirty';
-
 /* Internal dependencies */
 import Trello from '../../src/index';
 import { auth, Logger } from '../helpers';
@@ -8,15 +5,11 @@ import { auth, Logger } from '../helpers';
 describe('ORG | Organization Resource', () => {
   let trello;
   let logger;
-  let orgId;
-  let db;
 
   before((done) => {
     trello = new Trello(auth);
     logger = new Logger();
-    db = dirty('./ids.db').on('load', () => {
-      setTimeout(() => { done(); }, 3000);
-    });
+    setTimeout(() => { done(); }, 3000);
   });
 
   beforeEach(function() {

@@ -18,6 +18,12 @@ const shell = require('shelljs');
 chai.should();
 chai.use(chaiAsPromised);
 
+const auth = {
+  key: process.env.TRELLO_API_KEY || '',
+  token: process.env.TRELLO_AUTH_TOKEN || '',
+};
+
+global.auth = auth;
 global.chai = chai;
 global.AssertionError = chai.AssertionError;
 global.expect = chai.expect;

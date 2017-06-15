@@ -74,22 +74,53 @@ export class Logger {
   }
 
   /**
+   * Removes the key and token suffix from the route path prior to assigning
+   *    it to the value of endpoint.
+   * @param {Object} response Response object from the API call.
+   * @returns {string}
+   * @private
+   */
+  _extrapolateEndpoint(response) {
+    if (response.request) {
+      const keySeparator = 'key=';
+      const path = response.request.path || keySeparator;
+      return path.split(keySeparator)[0].slice(0, -1);
+    }
+    return '';
+  }
+
+  /**
    * Extrapolates the endpoint and data from the API response.
    * @param {Object} response Response object from the API call.
    * @private
    */
   _parseResponse(response) {
-    if (response.data) {
-      this.dataFromApiCall = response.data;
+    let responseData = {};
+    let endpoint = {};
+
+    // If the response is in the form of multiple requests (using Promise.all),
+    // loop through each response and create an object for the endpoint and
+    // response data with the key being the index of the response.
+    if (Array.isArray(response)) {
+      response.forEach((responseItem, index) => {
+        endpoint[index] = this._extrapolateEndpoint(responseItem);
+        if (responseItem.data) {
+          responseData[index] = responseItem.data;
+        }
+      });
+    } else {
+      // If the response was for a single request, extrapolate the endpoint and
+      // assign the resulting data to the responseData variable.
+      if (response.data) {
+        responseData = response.data;
+      }
+      endpoint = this._extrapolateEndpoint(response);
     }
 
-    // Removes the key and token suffix from the route path prior to assigning
-    // it to the value of endpoint.
-    if (response.request) {
-      const keySeparator = 'key=';
-      const path = response.request.path || keySeparator;
-      this.endpoint = path.split(keySeparator)[0].slice(0, -1);
-    }
+    // This will end up a looking a little weird for multiple responses, but
+    // it'll still work.
+    this.endpoint = endpoint;
+    this.dataFromApiCall = responseData;
   }
 
   /**
