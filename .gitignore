@@ -36,3 +36,4 @@ tests/results/
 
 .env
 ids.json
+resources.json
