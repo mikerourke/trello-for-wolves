@@ -545,6 +545,10 @@ export default class Member extends BaseResource {
     return this.httpDelete('/');
   }
 
+  rescindVote(): Promise<*> {
+    return this.httpDelete('/');
+  }
+
   /**
    * This will remove a member from your Organization AND remove the member
    *    from all Boards associated with an Organization.

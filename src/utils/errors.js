@@ -58,9 +58,18 @@ export class ApiCallResponseError extends BaseError {
   ) {
     const { data, status, config: { method, url } } = response;
     const cleanUrl = getCleanUrl(url);
-    const includedMessage = (data.includes('Cannot '))
-      ? ''
-      : ` with an error message of "${data}"`;
+    let includedMessage = '';
+    if (data) {
+      let dataContent = '';
+      if (typeof data === 'object') {
+        dataContent = JSON.stringify(data);
+      } else {
+        dataContent = data.toString();
+      }
+      if (!dataContent.includes('Cannot ')) {
+        includedMessage = ` with an error message of "${dataContent}"`;
+      }
+    }
     const message =
       `The server returned status code ${status}${includedMessage} when ` +
       `attempting to perform a ${method} request to ${cleanUrl}. (Note: The ` +

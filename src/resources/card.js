@@ -155,13 +155,19 @@ export default class Card extends BaseResource {
       this.auth, `${this.routePath}/checklist/${checklistId}`);
   }
 
-  checklists() {
-    return new Checklist(this.auth, `${this.routePath}/checklists`);
+  checklists(checklistId?: string = '') {
+    return new Checklist(
+      this.auth, `${this.routePath}/checklists/${checklistId}`);
   }
 
   checkItem(checkItemId: string) {
     return new CheckItem(
       this.auth, `${this.routePath}/checkItem/${checkItemId}`);
+  }
+
+  comments(commentId?: string = '') {
+    return new Comment(
+      this.auth, `${this.routePath}/actions/${commentId}`);
   }
 
   labels(labelId?: string = '') {
@@ -210,11 +216,6 @@ export default class Card extends BaseResource {
     } = {},
   ): Promise<*> {
     return this.httpPut('/', queryArgs);
-  }
-
-  comments(commentId?: string = '') {
-    return new Comment(
-      this.auth, `${this.routePath}/actions/${commentId}/comments`);
   }
 
   updateClosedStatus(value: boolean): Promise<*> {

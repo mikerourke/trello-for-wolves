@@ -1,25 +1,20 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import { auth, getTimeForTest, resourceIds, Logger } from '../helpers';
+import { Logger } from '../helpers';
+const resources = require('./resources.json');
 
-describe('CAR | Card Resource', function() {
-  const {
-    attachmentId,
-    cardId,
-    checkItemId,
-    checklistId,
-    commentId,
-    labelId,
-    listId,
-    stickerId,
-  } = resourceIds;
+describe.only('CAR | Card Resource', function() {
   let trello;
   let logger;
-  let cardInstance;
 
-  before(function() {
+  let testCard = {};
+  let attachmentId = '';
+  let cardId = '';
+
+  before(function(done) {
     trello = new Trello(auth);
     logger = new Logger();
+    setTimeout(() => { done(); }, 3000);
   });
 
   beforeEach(function() {
@@ -34,9 +29,214 @@ describe('CAR | Card Resource', function() {
 
   const logResponse = (response) => logger.processResponse(response);
 
+  const getFirstCheckItem = (hasChecklist) => {
+    let trelloChecklist = trello.cards(cardId);
+    const { checklist } = testCard;
+    if (hasChecklist) {
+      if (!checklist) {
+        return { error: 'Checklist not found.' };
+      }
+      trelloChecklist = trelloChecklist.checklist(checklist.id);
+    }
+    const { checkItems } = checklist;
+    if (!checkItems.length) {
+      return { error: 'Check Items not found.' };
+    }
+    return trelloChecklist.checkItem(checkItems[0].id);
+  };
+
+  describe('CAR-P | Card POST Requests', () => {
+    before(function (done) {
+      setTimeout(() => { done(); }, 1000);
+    });
+
+    it('CAR-P-01-T01 | adds a Card to a List', (done) => {
+      const { tfwListA } = resources;
+      if (!tfwListA) {
+        done(new Error('List A not found.'));
+      }
+      trello.cards().addCard({
+        idList: tfwListA.id,
+        name: 'tfwTestCard',
+        desc: 'This is a test description',
+        pos: 'top',
+      })
+        .then(logResponse)
+        .then((response) => {
+          testCard = response.data || {};
+          cardId = testCard.id;
+          assert.isDefined(response.data);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    it('CAR-P-02-T01 | adds a Comment to a Card', (done) => {
+      if (!testCard) {
+        done(new Error('Test Card not found.'));
+      }
+      trello.cards(cardId).comments().addComment('This is a test comment')
+        .then(logResponse)
+        .then((response) => {
+          testCard.comment = response.data || {};
+          assert.isDefined(response.data);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    // @todo: Figure out how to get this working.
+    it.skip('CAR-P-03-T01 | uploads an Attachment', (done) => {
+      trello.cards(cardId).attachments().uploadAttachment()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-P-06-T01 | adds a Checklist to a Card', (done) => {
+      if (!testCard) {
+        done(new Error('Test Card not found.'));
+      }
+      trello.cards(cardId).checklists().addChecklist({
+        name: 'tfwTestChecklist',
+      })
+        .then(logResponse)
+        .then((response) => {
+          testCard.checklist = response.data || {};
+          assert.isDefined(response.data);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    it('CAR-P-04-T01 | adds a Checklist Item to a Checklist', (done) => {
+      if (!testCard) {
+        done(new Error('Test Card not found.'));
+      }
+      if (!testCard.checklist) {
+        done(new Error('Test Checklist not found.'));
+      }
+      const trelloCheckItem = trello
+        .cards(cardId)
+        .checklist(testCard.checklist.id)
+        .checkItem();
+      Promise.all([
+        trelloCheckItem.addCheckItem({ name: 'Check Item 1' }),
+        trelloCheckItem.addCheckItem({ name: 'Check Item 2' }),
+      ])
+        .then(logResponse)
+        .then((responses) => {
+          responses.forEach((response) => {
+            testCard.checklist.checkItems.push(response.data || {});
+          });
+          expect(testCard.checklist.checkItems).to.have.length.above(1);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    it('CAR-P-05-T01 | converts a Checklist Item to a Card', (done) => {
+      if (!testCard) {
+        done(new Error('Test Card not found.'));
+      }
+      if (!testCard.checklist) {
+        done(new Error('Test Checklist not found.'));
+      }
+      const trelloChecklist = trello
+        .cards(cardId)
+        .checklist(testCard.checklist.id);
+      trelloChecklist.checkItem().addCheckItem({
+        name: 'tfwTestCheckItem',
+      })
+        .then(logResponse)
+        .then((response) => {
+          trelloChecklist.checkItem(response.data.id).convertToCard()
+            .should.eventually.be.fulfilled
+            .notify(done);
+        })
+        .catch(error => done(error));
+    });
+
+    it('CAR-P-07-T01 | associates a Label with a Card', (done) => {
+      const { tfwLabelA } = resources;
+      if (!testCard) {
+        done(new Error('Test Card not found.'));
+      }
+      if (!tfwLabelA) {
+        done(new Error('Test Label not found.'));
+      }
+      trello.cards(cardId).labels(tfwLabelA.id).associateLabel()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    // @todo: Get another Member ID to test this.
+    it.skip('CAR-P-08-T01 | associates a Member with a Card', (done) => {
+      trello.cards(cardId).members().associateMember()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-P-09-T01 | adds a Label to a Card', (done) => {
+      if (!testCard) {
+        done(new Error('Test Card not found.'));
+      }
+      trello.cards(cardId).labels().addLabel({
+        name: 'tfwTestLabel',
+        color: 'blue',
+      })
+        .then(logResponse)
+        .then((response) => {
+          testCard.label = response.data || {};
+          assert.isDefined(response.data);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    it('CAR-P-10-T01 | marks associated Notifications as read', (done) => {
+      trello.cards(cardId).markAssociatedNotificationsRead()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    // @todo: Need member ID to vote on card.
+    it.skip('CAR-P-11-T01 | updates the Members Voted on a Card', (done) => {
+      trello.cards(cardId).membersVoted('[NEED ID]').associateMember()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-P-12-T01 | adds a Sticker to a Card', (done) => {
+      if (!testCard) {
+        done(new Error('Test Card not found.'));
+      }
+      trello.cards(cardId).stickers().addSticker({
+        image: 'check',
+        top: 0,
+        left: 0,
+        zIndex: 3,
+      })
+        .then(logResponse)
+        .then((response) => {
+          testCard.sticker = response.data || {};
+          assert.isDefined(response.data);
+          done();
+        })
+        .catch(error => done(error));
+    });
+  });
+
   describe('CAR-G | Card GET Requests', () => {
     before(function(done) {
-      setTimeout(() => { done(); }, 3000);
+      if (!testCard) {
+        done(new Error('Test Card not found.'));
+      }
+      done();
     });
 
     it('CAR-G-01-T01 | gets a Card', (done) => {
@@ -174,7 +374,8 @@ describe('CAR | Card Resource', function() {
     });
 
     it('CAR-G-10-T01 | gets the associated Checklist Item with the specified Id', (done) => {
-      trello.cards(cardId).checkItem(checkItemId).getCheckItem()
+      const trelloCheckItem = getFirstCheckItem(false);
+      trelloCheckItem.getCheckItem()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
@@ -250,7 +451,11 @@ describe('CAR | Card Resource', function() {
     });
 
     it('CAR-G-17-T01 | gets the associated Sticker with the specified Id', (done) => {
-      trello.cards(cardId).stickers(stickerId).getSticker()
+      const { sticker } = testCard;
+      if (!sticker) {
+        done(new Error('Test Sticker not found.'));
+      }
+      trello.cards(cardId).stickers(sticker.id).getSticker()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
@@ -259,7 +464,10 @@ describe('CAR | Card Resource', function() {
 
   describe('CAR-U | Card PUT requests', () => {
     before(function(done) {
-      setTimeout(() => { done(); }, 3000);
+      if (!testCard) {
+        done(new Error('Test Card not found.'));
+      }
+      done();
     });
 
     it('CAR-U-01-T01 | updates a Card', (done) => {
@@ -272,61 +480,59 @@ describe('CAR | Card Resource', function() {
     });
 
     it('CAR-U-02-T01 | updates an associated Comment', (done) => {
-      const commentText = `Updated text from test ran on ${getTimeForTest()}`;
-      trello.cards(cardId).comments(commentId).updateComment(commentText)
+      const { comment } = testCard;
+      if (!comment) {
+        done(new Error('Comment not found.'));
+      }
+      trello.cards(cardId).comments(comment.id).updateComment('Updated text.')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('CAR-U-03-T01 | updates the name of an associated Checklist Item on a Checklist with the specified Id', (done) => {
-      trello
-        .cards(cardId)
-        .checklist(checklistId)
-        .checkItem(checkItemId).updateName('Test Item Update')
+      const trelloCheckItem = getFirstCheckItem(true);
+      if (trelloCheckItem.error) {
+        done(new Error(trelloCheckItem.error));
+      }
+      trelloCheckItem.updateName('Test Item Update')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('CAR-U-04-T01 | updates the position of an associated Checklist Item on a Checklist with the specified Id', (done) => {
-      trello
-        .cards(cardId)
-        .checklist(checklistId)
-        .checkItem(checkItemId).updatePosition('top')
+      const trelloCheckItem = getFirstCheckItem(true);
+      trelloCheckItem.updatePosition('top')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('CAR-U-05-T01 | updates the state of an associated Checklist Item on a Checklist with the specified Id', (done) => {
-      trello
-        .cards(cardId)
-        .checklist(checklistId)
-        .checkItem(checkItemId).updateState('complete')
+      const trelloCheckItem = getFirstCheckItem(true);
+      trelloCheckItem.updateState('complete')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('CAR-U-06-T01 | updates a Checklist Item on a Checklist with the specified Id', (done) => {
-      trello
-        .cards(cardId)
-        .checklist(checklistId)
-        .checkItem(checkItemId).updateCheckItem({
-          name: 'Test Check Item',
-          pos: 'top',
-        })
+      const trelloCheckItem = getFirstCheckItem(true);
+      trelloCheckItem.updateCheckItem({
+        name: 'Test Check Item',
+        pos: 'top',
+      })
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('CAR-U-07-T01 | updates a Checklist Item with the specified Id', (done) => {
-      trello.cards(cardId).checkItem(checkItemId).updateCheckItem({
+      const trelloCheckItem = getFirstCheckItem(false);
+      trelloCheckItem.updateCheckItem({
         name: 'Test Check Item 2',
         pos: 'top',
-        idChecklistCurrent: checklistId,
       })
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -369,29 +575,24 @@ describe('CAR | Card Resource', function() {
         .notify(done);
     });
 
-    /**
-     * @skip CAR-U-13
-     * @reason Excessive Data
-     * @passed 06.13.17
-     */
-    it.skip('CAR-U-13-T01 | moves the Card to a different Board', (done) => {
-      const testCardId = 'cVrYQADi';
-      const targetBoardId = '594076087cb178df0a589fda';
-      trello.cards(testCardId).board(targetBoardId).associateBoard()
+    it('CAR-U-13-T01 | moves the Card to a different Board', (done) => {
+      const { tfwBoardB } = resources;
+      if (!tfwBoardB) {
+        done(new Error('Board B not found.'))
+      }
+      trello.cards(cardId).board(tfwBoardB.id).associateBoard()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    /**
-     * @skip CAR-U-14
-     * @reason Excessive Data
-     * @passed 06.13.17
-     */
+    // @fix: This test isn't working.
     it.skip('CAR-U-14-T01 | moves the Card to a different List', (done) => {
-      const testCardId = 'cVrYQADi';
-      const targetListId = '594083ce2f460a14d5845dd8';
-      trello.cards(testCardId).list(targetListId).associateList()
+      const { tfwListB } = resources;
+      if (!tfwListB) {
+        done(new Error('List B not found.'))
+      }
+      trello.cards(cardId).list(tfwListB.id).associateList()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
@@ -423,7 +624,11 @@ describe('CAR | Card Resource', function() {
     });
 
     it('CAR-U-18-T01 | updates an associated Sticker', (done) => {
-      trello.cards(cardId).stickers(stickerId).updateSticker({
+      const { sticker } = testCard;
+      if (!sticker) {
+        done(new Error('Test Sticker not found.'));
+      }
+      trello.cards(cardId).stickers(sticker.id).updateSticker({
         top: 12,
         left: 12,
       })
@@ -440,155 +645,87 @@ describe('CAR | Card Resource', function() {
     });
   });
 
-  describe('CAR-P | Card POST Requests', () => {
-    before(function (done) {
-      setTimeout(() => { done(); }, 3000);
+  describe('CAR-D | Card DELETE requests', () => {
+    before(function(done) {
+      setTimeout(() => { done(); }, 1000);
     });
 
-    /**
-     * @skip CAR-P-01
-     * @reason Excessive Data
-     * @passed 06.13.17
-     */
-    it.skip('CAR-P-01-T01 | creates a new Card', (done) => {
-      trello.cards().addCard({
-        idList: listId,
-        name: 'Test Card from Test',
-        desc: 'This is a test description',
-        pos: 'top',
-      })
-        .then(logResponse)
+    it('CAR-D-02-T01 | deletes a Comment on a Card', (done) => {
+      const { comment } = testCard;
+      if (!comment) {
+        done(new Error('Comment not found.'));
+      }
+      trello.cards(cardId).comments(comment.id).deleteComment()
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    /**
-     * @skip CAR-P-02
-     * @reason Excessive Data
-     * @passed 06.13.17
-     */
-    it.skip('CAR-P-02-T01 | adds a Comment', (done) => {
-      trello.cards(cardId).comments().addComment('This is a new comment.')
-        .then(logResponse)
+    it('CAR-D-04-T01 | deletes a Check Item on a Checklist on a Card', (done) => {
+      const trelloCheckItem = getFirstCheckItem(true);
+      if (trelloCheckItem.error) {
+        done(new Error(trelloCheckItem.error));
+      }
+      trelloCheckItem.deleteCheckItem()
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-D-05-T01 | deletes a Check Item on a Card', (done) => {
+      const trelloCheckItem = getFirstCheckItem(false);
+      if (trelloCheckItem.error) {
+        done(new Error(trelloCheckItem.error));
+      }
+      trelloCheckItem.deleteCheckItem()
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-D-06-T01 | deletes a Checklist on a Card', (done) => {
+      const { checklist } = testCard;
+      if (!checklist) {
+        done(new Error('Test Checklist not found.'));
+      }
+      trello.cards(cardId).checklists(checklist.id).deleteChecklist()
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-D-07-T01 | deletes a Label on a Card', (done) => {
+      const { label } = testCard;
+      if (!label) {
+        done(new Error('Test Label not found.'));
+      }
+      trello.cards(cardId).labels(label.id).deleteLabel()
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     // @todo: Figure out how to get this working.
-    it.skip('CAR-P-03-T01 | uploads an Attachment', (done) => {
-      trello.cards(cardId).attachments().uploadAttachment()
-        .then(logResponse)
+    it.skip('CAR-D-08-T01 | deletes a Member on a Card', (done) => {
+      trello.cards(cardId).members('[NEED ID]').deleteMember()
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    /**
-     * @skip CAR-P-04
-     * @reason Excessive Data
-     * @passed 06.13.17
-     */
-    it.skip('CAR-P-04-T01 | adds a Checklist Item to a Checklist', (done) => {
-      trello
-        .cards(cardId)
-        .checklist(checklistId)
-        .checkItem().addCheckItem({
-          name: 'New Checklist Item',
-          pos: 2,
-        })
-        .then(logResponse)
+    // @todo: Figure out how to get this working.
+    it.skip('CAR-D-09-T01 | changes the Voting status for a Member', (done) => {
+      trello.cards(cardId).membersVoted('[NEED ID]').rescindVote()
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    /**
-     * @skip CAR-P-05
-     * @reason Excessive Data
-     * @passed 06.13.17
-     */
-    it.skip('CAR-P-05-T01 | converts a Checklist Item to a Card', (done) => {
-      const newCheckItemId = '5940a390fa03d31e7f6d509b';
-      trello
-        .cards(cardId)
-        .checklist(checklistId)
-        .checkItem(newCheckItemId).convertToCard()
-        .then(logResponse)
+    it('CAR-D-10-T01 | deletes a Sticker', (done) => {
+      const { sticker } = testCard;
+      if (!sticker) {
+        done(new Error('Test Sticker not found.'));
+      }
+      trello.cards(cardId).stickers(sticker.id).deleteSticker()
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    /**
-     * @skip CAR-P-06
-     * @reason Excessive Data
-     * @passed 06.13.17
-     */
-    it.skip('CAR-P-06-T01 | creates a new Checklist on a Card', (done) => {
-      trello.cards(cardId).checklists().addChecklist({
-        name: 'New Checklsit',
-        pos: 'top',
-      })
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
-    });
-
-    it('CAR-P-07-T01 | associates a Label with a Card', (done) => {
-      trello.cards(cardId).labels(labelId).associateLabel()
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
-    });
-
-    // @todo: Get another Member ID to test this.
-    it.skip('CAR-P-08-T01 | associates a Member with a Card', (done) => {
-      trello.cards(cardId).members().associateMember()
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
-    });
-
-    /**
-     * @skip CAR-P-09
-     * @reason Excessive Data
-     * @passed 06.13.17
-     */
-    it.skip('CAR-P-09-T01 | adds a Label to a Card', (done) => {
-      trello.cards(cardId).labels().addLabel({
-        name: 'Test Label',
-        color: 'blue',
-      })
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
-    });
-
-    it('CAR-P-10-T01 | marks associated Notifications as read', (done) => {
-      trello.cards(cardId).markAssociatedNotificationsRead()
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
-    });
-
-    // @todo: Need member ID to vote on card.
-    it.skip('CAR-P-11-T01 | updates the Members Voted on a Card', (done) => {
-      trello.cards(cardId).membersVoted('[NEED ID]').associateMember()
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
-    });
-
-    /**
-     * @skip CAR-P-12
-     * @reason Excessive Data
-     * @passed 06.13.17
-     */
-    it.skip('CAR-P-12-T01 | adds a Sticker to a Card', (done) => {
-      trello.cards(cardId).stickers().addSticker({
-        image: 'check',
-        top: 0,
-        left: 0,
-        zIndex: 3,
-      })
-        .then(logResponse)
+    it('CAR-D-01-T01 | deletes a Card', (done) => {
+      trello.cards(cardId).deleteCard()
         .should.eventually.be.fulfilled
         .notify(done);
     });

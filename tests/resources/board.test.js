@@ -1,24 +1,41 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import { auth, resourceIds, Logger } from '../helpers';
+import { Logger } from '../helpers';
+const resources = require('./resources.json');
 
-describe('BRD | Board Resource', () => {
-  const {
-    boardId,
-    cardId,
-    labelId,
-    memberId,
-    membershipId,
-    orgId,
-  } = resourceIds;
-
+describe('BRD | Board Resource', function() {
   let trello;
   let logger;
+
+  let boardId = '';
+  let cardId = '';
+  let labelId = '';
+  let memberId = '';
+  let membershipId = '';
+  let orgId = '';
   let newMemberId = '';
+
+  const getIds = () => {
+    const { tfwBoardA, tfwCardA, tfwLabelA } = resources;
+    if (tfwBoardA) {
+      const { memberships } = tfwBoardA;
+      boardId = tfwBoardA.id;
+      orgId = tfwBoardA.idOrganization;
+      memberId = memberships[0].idMember;
+      membershipId = memberships[0].id;
+    }
+    if (tfwCardA) {
+      cardId = tfwCardA.id;
+    }
+    if (tfwLabelA) {
+      labelId = tfwLabelA.id;
+    }
+  };
 
   before(function(done) {
     trello = new Trello(auth);
     logger = new Logger();
+    getIds();
     setTimeout(() => { done(); }, 3000);
   });
 
@@ -36,7 +53,7 @@ describe('BRD | Board Resource', () => {
 
   describe('BRD-G | Board GET requests', () => {
     before(function(done) {
-      setTimeout(() => { done(); }, 3000);
+      setTimeout(() => { done(); }, 1000);
     });
 
     it('BRD-G-01-T01 | gets a Board', (done) => {
@@ -146,21 +163,9 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-05-T01 | gets the associated Cards', (done) => {
-      trello.boards(boardId).cards().getCards()
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
-    });
-
-    it('BRD-G-05-T02 | gets only the specified fields for the associated Cards', (done) => {
-      trello.boards(boardId).cards().getCards({
-        fields: ['checkItemStates', 'name', 'idList'],
-      })
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
-    });
+    /**
+     * BRD-G-05 | gets the Cards for a Board is part of SETUP.
+     */
 
     it('BRD-G-06-T01 | gets only the closed Cards with filter applied', (done) => {
       trello.boards(boardId).cards().getCards({
@@ -219,12 +224,9 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    it('BRD-G-11-T01 | gets the associated Labels', (done) => {
-      trello.boards(boardId).labels().getLabels()
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
-    });
+    /**
+     * BRD-G-11 | gets the Labels for a Board is part of SETUP.
+     */
 
     it('BRD-G-11-T02 | gets only the specified fields for the associated Labels', (done) => {
       trello.boards(boardId).labels().getLabels({
@@ -390,12 +392,12 @@ describe('BRD | Board Resource', () => {
 
   describe('BRD-U | Board PUT requests', () => {
     before(function(done) {
-      setTimeout(() => { done(); }, 3000);
+      setTimeout(() => { done(); }, 1000);
     });
 
     it('BRD-U-01-T01 | updates a Board', (done) => {
       trello.boards(boardId).updateBoard({
-        name: 'Test Board',
+        name: 'tfwBoardA',
       })
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -424,42 +426,42 @@ describe('BRD | Board Resource', () => {
     });
 
     it('BRD-U-05-T01 | updates the name of the Blue label', (done) => {
-      trello.boards(boardId).updateLabelNameForColor('blue', 'Blue Label')
+      trello.boards(boardId).updateLabelNameForColor('blue', 'tfwLabelBlue')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('BRD-U-06-T01 | updates the name of the Green label', (done) => {
-      trello.boards(boardId).updateLabelNameForColor('green', 'Green Label')
+      trello.boards(boardId).updateLabelNameForColor('green', 'tfwLabelGreen')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('BRD-U-07-T01 | updates the name of the Orange label', (done) => {
-      trello.boards(boardId).updateLabelNameForColor('orange', 'Orange Label')
+      trello.boards(boardId).updateLabelNameForColor('orange', 'tfwLabelOrange')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('BRD-U-08-T01 | updates the name of the Purple label', (done) => {
-      trello.boards(boardId).updateLabelNameForColor('purple', 'Purple Label')
+      trello.boards(boardId).updateLabelNameForColor('purple', 'tfwLabelPurple')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('BRD-U-09-T01 | updates the name of the Red label', (done) => {
-      trello.boards(boardId).updateLabelNameForColor('red', 'Red Label')
+      trello.boards(boardId).updateLabelNameForColor('red', 'tfwLabelRed')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('BRD-U-10-T01 | updates the name of the Yellow label', (done) => {
-      trello.boards(boardId).updateLabelNameForColor('yellow', 'Yellow Label')
+      trello.boards(boardId).updateLabelNameForColor('yellow', 'tfwLabelYellow')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
@@ -658,18 +660,13 @@ describe('BRD | Board Resource', () => {
   });
 
   describe('BRD-P | Board POST requests', () => {
-    /**
-     * @skip BRD-P-01
-     * @reason Excessive Data
-     * @passed 06.09.17
-     */
-    it.skip('BRD-P-01-T01 | creates a new Board', (done) => {
-      const boardName = 'Test Board 2';
-      trello.boards().addBoard(boardName)
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+    before(function(done) {
+      setTimeout(() => { done(); }, 1000);
     });
+
+    /**
+     * BRD-P-01 | adds a Board is part of SETUP.
+     */
 
     /**
      * @skip BRD-P-02
@@ -683,16 +680,9 @@ describe('BRD | Board Resource', () => {
         .notify(done);
     });
 
-    // @fix: Figure out why this isn't working.
-    it.skip('BRD-P-03-T01 | adds a new Checklist', (done) => {
-      trello.boards(boardId).checklists().addChecklist({
-        idCard: 'GATVPdJ6',
-        name: 'Test Checklist',
-      })
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
-    });
+    /**
+     * BRD-P-03 | adds a Checklist to a Board is part of SETUP.
+     */
 
     /**
      * @skip BRD-P-04
@@ -718,33 +708,12 @@ describe('BRD | Board Resource', () => {
     });
 
     /**
-     * @skip BRD-P-06
-     * @reason Excessive Data
-     * @passed 06.09.17
+     * BRD-P-06 | adds a Label to a Board is part of SETUP.
      */
-    it.skip('BRD-P-06-T01 | adds a new Label', (done) => {
-      trello.boards(boardId).labels().addLabel({
-        name: 'Label for Blue',
-        color: 'blue',
-      })
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
-    });
 
     /**
-     * @skip BRD-P-07
-     * @reason Excessive Data
-     * @passed 06.09.17
+     * BRD-P-07 | adds a List to a Board is part of SETUP.
      */
-    it.skip('BRD-P-07-T01 | adds a new List', (done) => {
-      trello.boards(boardId).lists().addList({
-        name: 'Testing a List',
-      })
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
-    });
 
     it('BRD-P-08-T01 | marks a board as viewed', (done) => {
       trello.boards(boardId).markAsViewed()
@@ -763,6 +732,10 @@ describe('BRD | Board Resource', () => {
   });
 
   describe('BRD-D | Board DELETE requests', () => {
+    before(function(done) {
+      setTimeout(() => { done(); }, 1000);
+    });
+
     /**
      * @skip BRD-D-04
      * @reason Excessive Data

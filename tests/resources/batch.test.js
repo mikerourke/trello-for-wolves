@@ -1,8 +1,8 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import { auth, Logger } from '../helpers';
+import { Logger } from '../helpers';
 
-describe('BTC | Batch Resource', () => {
+describe('BTC | Batch Resource', function() {
   let trello;
   let logger;
 

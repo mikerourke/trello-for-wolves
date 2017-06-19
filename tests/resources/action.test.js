@@ -1,20 +1,33 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import { auth, resourceIds, Logger } from '../helpers';
+import { Logger } from '../helpers';
+const resources = require('./resources.json');
 
 describe('ACT | Action Resource', function() {
-  const {
-    actionId,
-    commentId,
-    orgActionId,
-  } = resourceIds;
-
   let trello;
   let logger;
+
+  let actionId = '';
+  let commentId = '';
+  let orgActionId = '';
+
+  const getIds = () => {
+    const { tfwActions } = resources;
+    actionId = tfwActions[0].id;
+    tfwActions.forEach((action) => {
+      if (action.type === 'commentCard' && !commentId) {
+        commentId = action.id;
+      }
+      if (action.type === 'createOrganization' && !orgActionId) {
+        orgActionId = action.id;
+      }
+    });
+  };
 
   before(function() {
     trello = new Trello(auth);
     logger = new Logger();
+    getIds();
   });
 
   beforeEach(function() {
@@ -235,9 +248,11 @@ describe('ACT | Action Resource', function() {
   });
 
   describe('ACT-U | Action PUT Requests', () => {
+    const commentText = 'This is a test comment';
+
     it('ACT-U-01-T01 | updates an Action', (done) => {
       trello.actions(commentId).updateAction({
-        text: 'This is updated text.',
+        text: commentText,
       })
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -245,7 +260,7 @@ describe('ACT | Action Resource', function() {
     });
 
     it('ACT-U-02-T01 | updates the text for an Action', (done) => {
-      trello.actions(commentId).updateText('This is more updated text.')
+      trello.actions(commentId).updateText(commentText)
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);

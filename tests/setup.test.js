@@ -59,6 +59,25 @@ describe.only('SETUP | Test Preparation and Setup', () => {
     const schemaOption = { idAttribute: 'name' };
 
     /**
+     * Extrapolates the individual resources from the normalized data and
+     *    returns an object with the appropriate resources to append to the
+     *    "resources" object.  If the resource doesn't have "tfw" in the key,
+     *    don't add it.
+     * @param {Object} entities Normalized entity data.
+     * @param {string} groupName Name of the group to pull data from.
+     * @returns {Object}
+     */
+    const getResourcesToAppend = (entities, groupName) => {
+      let appendedResources = {};
+      Object.keys(entities[groupName]).forEach((key) => {
+        if (key.toString().includes('tfw')) {
+          appendedResources[key] = entities[groupName][key];
+        }
+      });
+      return appendedResources;
+    };
+
+    /**
      * Normalizes the data from the API response and appends it to the
      *    "resources" object.
      * @param {Object} dataToNormalize API response data to normalize.
@@ -86,8 +105,8 @@ describe.only('SETUP | Test Preparation and Setup', () => {
       // object with the group name as the key.
       resources = {
         ...resources,
-        [parentName]: entities[parentName],
-        [childName]: entities[childName],
+        ...getResourcesToAppend(entities, parentName),
+        ...getResourcesToAppend(entities, childName),
       }
     };
 
@@ -96,10 +115,8 @@ describe.only('SETUP | Test Preparation and Setup', () => {
      * Determines if the organization named "tfwOrg" exists.  If it does, it's
      *    added to the "resources" object.
      */
-    it('MBR-G-01-T01 | gets a Member', function(done) {
-      trello.members('me').organizations().getOrganizations({
-        fields: 'displayName',
-      })
+    it('MBR-G-01-T01 | gets the associated Organizations for a Member', function(done) {
+      trello.members('me').organizations().getOrganizations()
         .then(logResponse)
         .then((response) => {
           const { data } = response;
@@ -123,13 +140,14 @@ describe.only('SETUP | Test Preparation and Setup', () => {
     it('ORG-G-01-T01 | gets an Organization', function(done) {
       // If the testing Organization hasn't been created yet, there's no point
       // in trying to find the associated Boards and Lists.
-      if (!resources.tfwOrg) {
+      const { tfwOrg } = resources;
+      if (!tfwOrg) {
         this.skip();
       }
-      trello.organizations(resources.tfwOrg.id).getOrganization({
+      trello.organizations(tfwOrg.id).getOrganization({
         boards: 'all',
-        boardFields: ['labelNames', 'name', 'starred'],
         boardLists: 'all',
+        memberships: 'me',
       })
         .then(logResponse)
         .then((response) => {
@@ -165,6 +183,19 @@ describe.only('SETUP | Test Preparation and Setup', () => {
         .then((responses) => {
           const data = [...responses[0].data, ...responses[1].data];
           appendDataToResources(data, 'cards', 'checklists');
+
+          const { tfwChecklistA, tfwChecklistB, tfwChecklistC } = resources;
+          const checkItems = [
+            ...tfwChecklistA.checkItems,
+            ...tfwChecklistB.checkItems,
+            ...tfwChecklistC.checkItems,
+          ];
+          checkItems.forEach((checkItem) => {
+            const checkItemName = checkItem.name.toString();
+            if (checkItemName.includes('tfwCheckItem')) {
+              resources[checkItemName] = checkItem;
+            }
+          });
           assert.isDefined(data);
           done();
         })
@@ -193,10 +224,36 @@ describe.only('SETUP | Test Preparation and Setup', () => {
         .then(logResponse)
         .then((responses) => {
           const data = [...responses[0].data, ...responses[1].data];
+          const labelData = data.filter(label => label.name.toString().includes('tfw'));
           const labelSchema = new schema.Entity('labels', {}, schemaOption);
-          const { entities: { labels = {} } } = normalize(data, [labelSchema]);
-          resources = { ...resources, labels };
+          const { entities: { labels = {} } } = normalize(labelData, [labelSchema]);
+          resources = { ...resources, ...labels };
           assert.isDefined(data);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    /**
+     * Step 5: Get Existing Card Comments
+     * Get the Comments associated with the existing Card. The resulting data
+     *    is then added to the "resources" object.
+     */
+    it('CAR-G-03-T01 | gets the Comments for a Card', function(done) {
+      const { tfwCardA } = resources;
+      if (!tfwCardA) {
+        this.skip();
+      }
+      trello.cards(tfwCardA.id).comments().getComments()
+        .then(logResponse)
+        .then((response) => {
+          let commentData = [];
+          response.data.forEach((comment) => {
+            const { id, type, date, data: { text } } = comment;
+            commentData.push({ id, type, date, text });
+          });
+          resources.tfwCardA.comments = commentData;
+          assert.isDefined(response.data);
           done();
         })
         .catch(error => done(error));
@@ -208,11 +265,28 @@ describe.only('SETUP | Test Preparation and Setup', () => {
    *    tests.  Any resources that were not found in the previous test suite
    *    are created with a specific name used for referencing tests.
    */
-  describe.skip('SETUP-02 | Create Required Resources', () => {
+  describe('SETUP-02 | Create Required Resources', () => {
     /**
-     * Step 5: Create the Testing Organization
-     * If the Organization wasn't found in Step 1, create it and add it to
-     *    the "resources" object.
+     * Updates the "resources" object with the results of the multiple
+     *    API calls.
+     * @param {Array} responses Array of responses received from API call.
+     */
+    const appendResponsesToResources = (responses) => {
+      responses.forEach((response) => {
+        const { data } = response;
+        if (data) {
+          const itemName = data.name.toString() || '';
+          if (itemName) {
+            resources[itemName] = data || {};
+          }
+        }
+      });
+    };
+
+    /**
+     * Step 1: Create the Testing Organization
+     * If the Organization wasn't found in Step 1 of the previous test suite,
+     *    create it and add it to the "resources" object.
      */
     it('ORG-P-01-T01 | creates an Organization', function(done) {
       // Don't create the Organization if it already exists.
@@ -233,8 +307,8 @@ describe.only('SETUP | Test Preparation and Setup', () => {
     });
 
     /**
-     * Step 6: Add Boards to Organization
-     * If the Organization was successfully created in Step 5, create (2) new
+     * Step 2: Add Boards to Organization
+     * If the Organization was successfully created in Step 1, create (2) new
      *    Boards and add them to the "resources" object.
      */
     it('BRD-P-01-T01 | creates a Board', function(done) {
@@ -246,12 +320,10 @@ describe.only('SETUP | Test Preparation and Setup', () => {
       const trelloBoards = trello.boards();
       let createFns = [];
       if (!tfwBoardA) {
-        createFns.push(
-          trelloBoards.addBoard({ name: 'tfwBoardA', idOrganization }));
+        createFns.push(trelloBoards.addBoard({ name: 'tfwBoardA', idOrganization }));
       }
       if (!tfwBoardB) {
-        createFns.push(
-          trelloBoards.addBoard({ name: 'tfwBoardB', idOrganization }));
+        createFns.push(trelloBoards.addBoard({ name: 'tfwBoardB', idOrganization }));
       }
       if (!createFns.length) {
         this.skip();
@@ -259,17 +331,16 @@ describe.only('SETUP | Test Preparation and Setup', () => {
       Promise.all(createFns)
         .then(logResponse)
         .then((responses) => {
-          resources.tfwBoardA = responses[0].data || {};
-          resources.tfwBoardB = responses[1].data || {};
-          expect(responses.length).to.equal(2);
+          appendResponsesToResources(responses);
+          expect(responses.length).to.equal(createFns.length);
           done();
         })
         .catch(error => done(error));
     });
 
     /**
-     * Step 7: Add Labels to Board A
-     * If the Boards were successfully created in Step 6, create (2) new
+     * Step 3: Add Labels to Board A
+     * If the Boards were successfully created in Step 2, create (2) new
      *    Labels and add them to the "resources" object.
      */
     it('BRD-P-06-T01 | adds a Label to a Board', function(done) {
@@ -280,12 +351,10 @@ describe.only('SETUP | Test Preparation and Setup', () => {
       const trelloLabels = trello.boards(tfwBoardA.id).labels();
       let createFns = [];
       if (!tfwLabelA) {
-        createFns.push(
-          trelloLabels.addLabel({ name: 'tfwLabelA', color: 'blue' }));
+        createFns.push(trelloLabels.addLabel({ name: 'tfwLabelBlue', color: 'blue' }));
       }
       if (!tfwLabelB) {
-        createFns.push(
-          trelloLabels.addLabel({ name: 'tfwLabelB', color: 'red' }));
+        createFns.push(trelloLabels.addLabel({ name: 'tfwLabelRed', color: 'red' }));
       }
       if (!createFns.length) {
         this.skip();
@@ -293,17 +362,16 @@ describe.only('SETUP | Test Preparation and Setup', () => {
       Promise.all(createFns)
         .then(logResponse)
         .then((responses) => {
-          resources.tfwLabelA = responses[0].data || {};
-          resources.tfwLabelB = responses[1].data || {};
-          expect(responses.length).to.equal(2);
+          appendResponsesToResources(responses);
+          expect(responses.length).to.equal(createFns.length);
           done();
         })
         .catch(error => done(error));
     });
 
     /**
-     * Step 8: Add Lists to Board A
-     * If the Boards were successfully created in Step 6, create (3) new
+     * Step 4: Add Lists to Board A
+     * If the Boards were successfully created in Step 2, create (3) new
      *    Labels and add them to the "resources" object.
      */
     it('BRD-P-07-T01 | adds a List to a Board', function(done) {
@@ -328,22 +396,20 @@ describe.only('SETUP | Test Preparation and Setup', () => {
       Promise.all(createFns)
         .then(logResponse)
         .then((responses) => {
-          resources.tfwListA = responses[0].data || {};
-          resources.tfwListB = responses[1].data || {};
-          resources.tfwListC = responses[2].data || {};
-          expect(responses.length).to.equal(3);
+          appendResponsesToResources(responses);
+          expect(responses.length).to.equal(createFns.length);
           done();
         })
         .catch(error => done(error));
     });
 
     /**
-     * Step 9: Add Cards to List A
-     * If the Lists were successfully created in Step 8, create (3) new
+     * Step 5A: Add (2) Cards to List A
+     * If the Lists were successfully created in Step 4, create (2) new
      *    Cards and add them to the "resources" object.
      */
     it('LST-P-03-T01 | adds a Card to a List', function(done) {
-      const { tfwListA, tfwCardA, tfwCardB, tfwCardC } = resources;
+      const { tfwListA, tfwCardA, tfwCardB } = resources;
       if (!tfwListA) {
         done(new Error('List A not found.'));
       }
@@ -355,31 +421,51 @@ describe.only('SETUP | Test Preparation and Setup', () => {
       if (!tfwCardB) {
         createFns.push(trelloCards.addCard({ name: 'tfwCardB' }));
       }
-      if (!tfwCardC) {
-        createFns.push(trelloCards.addCard({ name: 'tfwCardC' }));
-      }
       if (!createFns.length) {
         this.skip();
       }
       Promise.all(createFns)
         .then(logResponse)
         .then((responses) => {
-          resources.tfwCardA = responses[0].data || {};
-          resources.tfwCardB = responses[1].data || {};
-          resources.tfwCardC = responses[2].data || {};
-          expect(responses.length).to.equal(3);
+          appendResponsesToResources(responses);
+          expect(responses.length).to.equal(createFns.length);
           done();
         })
         .catch(error => done(error));
     });
 
     /**
-     * Step 10: Add Checklists to Card A
-     * If the Cards were successfully created in Step 9, create (3) new
+     * Step 5B: Add (1) Card to List A
+     * This is essentially the same as Step 5A, the method for adding the Card
+     *    uses a different API call.
+     */
+    it('CAR-P-01-T01 | adds a Card to a List', function(done) {
+      const { tfwListA, tfwCardC } = resources;
+      if (!tfwListA) {
+        done(new Error('List A not found.'));
+      }
+      trello.cards().addCard({
+        idList: tfwListA.id,
+        name: 'tfwCardC',
+        desc: 'This is a test description',
+        pos: 'top',
+      })
+        .then(logResponse)
+        .then((response) => {
+          resources.tfwCardC = response.data || {};
+          assert.isDefined(response.data);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    /**
+     * Step 6A: Add (2) Checklists to Card A
+     * If the Cards were successfully created in Step 5, create (2) new
      *    Checklists and add them to the "resources" object.
      */
     it('CAR-P-06-T01 | adds a Checklist to a Card', function(done) {
-      const { tfwCardA, tfwChecklistA, tfwChecklistB, tfwChecklistC } = resources;
+      const { tfwCardA, tfwChecklistA, tfwChecklistB } = resources;
       if (!tfwCardA) {
         done(new Error('Card A not found.'));
       }
@@ -391,8 +477,68 @@ describe.only('SETUP | Test Preparation and Setup', () => {
       if (!tfwChecklistB) {
         createFns.push(trelloChecklists.addChecklist({ name: 'tfwChecklistB' }));
       }
-      if (!tfwChecklistC) {
-        createFns.push(trelloChecklists.addChecklist({ name: 'tfwChecklistC' }));
+      if (!createFns.length) {
+        this.skip();
+      }
+      Promise.all(createFns)
+        .then(logResponse)
+        .then((responses) => {
+          appendResponsesToResources(responses);
+          expect(responses.length).to.equal(createFns.length);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    /**
+     * Step 6B: Add (1) Checklist to Card A on Board A
+     * This is essentially the same as the previous step, it just uses a
+     *    different API call to perform the action.
+     */
+    it('BRD-P-03-T01 | adds a Checklist to a Board', function(done) {
+      const { tfwBoardA, tfwCardA, tfwChecklistC } = resources;
+      if (!tfwCardA) {
+        done(new Error('Card A not found.'));
+      }
+      if (tfwChecklistC) {
+        this.skip();
+      }
+      trello.boards(tfwBoardA.id).checklists().addChecklist({
+        idCard: tfwCardA.id,
+        name: 'tfwChecklistC',
+      })
+        .then(logResponse)
+        .then((response) => {
+          resources.tfwChecklistC = response.data || {};
+          assert.isDefined(response.data);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    /**
+     * Step 7: Add (3) Check Items to Checklist A
+     * If the Checklists were successfully created in Step 6, create (3) new
+     *    Check Items and add them to the "resources" object.
+     */
+    it('CAR-P-04-T01 | adds a Check Item to a Checklist on a Card', function(done) {
+      const { tfwCardA, tfwChecklistA,  tfwCheckItemA, tfwCheckItemB, tfwCheckItemC } = resources;
+      if (!tfwChecklistA) {
+        done(new Error('Checklist A not found.'));
+      }
+      const trelloCheckItems = trello
+        .cards(tfwCardA.id)
+        .checklist(tfwChecklistA.id)
+        .checkItem();
+      let createFns = [];
+      if (!tfwCheckItemA) {
+        createFns.push(trelloCheckItems.addCheckItem({ name: 'tfwCheckItemA' }));
+      }
+      if (!tfwCheckItemB) {
+        createFns.push(trelloCheckItems.addCheckItem({ name: 'tfwCheckItemB' }));
+      }
+      if (!tfwCheckItemC) {
+        createFns.push(trelloCheckItems.addCheckItem({ name: 'tfwCheckItemC' }));
       }
       if (!createFns.length) {
         this.skip();
@@ -400,10 +546,60 @@ describe.only('SETUP | Test Preparation and Setup', () => {
       Promise.all(createFns)
         .then(logResponse)
         .then((responses) => {
-          resources.tfwChecklistA = responses[0].data || {};
-          resources.tfwChecklistB = responses[1].data || {};
-          resources.tfwChecklistC = responses[2].data || {};
-          expect(responses.length).to.equal(3);
+          appendResponsesToResources(responses);
+          expect(responses.length).to.equal(createFns.length);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    /**
+     * Step 8: Add Comment to Card A
+     * If the Cards were successfully created in Step 5, create (1) new
+     *    Comment action on Card A.
+     */
+    it('CAR-P-02-T01 | adds a Comment to a Card', function(done) {
+      const { tfwCardA } = resources;
+      if (!tfwCardA) {
+        done(new Error('Card A not found.'));
+      }
+      const commentText = 'This is a test comment';
+
+      // If a comment already exists with the predefined text, don't
+      // create a new one.
+      if (tfwCardA.comments) {
+        tfwCardA.comments.forEach((comment) => {
+          if (comment.text === commentText) {
+            this.skip();
+          }
+        });
+      }
+      trello.cards(tfwCardA.id).comments().addComment(commentText)
+        .then(logResponse)
+        .then((response) => {
+          resources.tfwCardA.comments.push(response.data);
+          assert.isDefined(response.data);
+          done();
+        })
+        .catch(error => done(error));
+    });
+  });
+
+  /**
+   * This is the final step of the setup process prior to performing the other
+   *    tests.  Pertinent actions are pulled from each resource and saved to
+   *    the resources.json file for testing purposes.
+   */
+  describe('SETUP-03 | Saves Action information to Resources file', () => {
+    it('MBR-G-03-T01 | gets the Actions for a Member', (done) => {
+      trello.members('me').actions().getActions({
+        filter: ['commentCard', 'createBoard', 'createCard', 'createList', 'createOrganization'],
+        memberCreator: false,
+      })
+        .then(logResponse)
+        .then((response) => {
+          resources.tfwActions = response.data;
+          assert.isDefined(response.data);
           done();
         })
         .catch(error => done(error));

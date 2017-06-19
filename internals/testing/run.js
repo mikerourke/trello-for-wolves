@@ -35,7 +35,7 @@ const printError = (errorMessage) => {
 
 const stageFilesForTesting = () => new Promise((resolve) => {
   const mocha = new Mocha({
-    bail: true, // We want to exit the tests if a required resource wasn't created.
+    // bail: true, // We want to exit the tests if a required resource wasn't created.
     useColors: true,
     timeout: 10000,
   });

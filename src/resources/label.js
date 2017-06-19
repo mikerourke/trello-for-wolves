@@ -87,6 +87,10 @@ export default class Label extends BaseResource {
   }
 
   deleteLabel(): Promise<*> {
-    return this.httpDelete('/');
+    let path = '/';
+    if (this.routePathElements[2] === 'idLabels') {
+      path = `/${this.associationId}`;
+    }
+    return this.httpDelete(path);
   }
 }
