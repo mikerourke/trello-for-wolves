@@ -2,40 +2,12 @@
 import fs from 'fs';
 import chalk from 'chalk';
 import jsonFile from 'jsonfile';
-import moment from 'moment';
-
-const key = process.env.TRELLO_API_KEY || '';
-const token = process.env.TRELLO_AUTH_TOKEN || '';
-
-export const auth = {
-  key,
-  token,
-};
-
-export const resourceIds = {
-  actionId: '592b4b6716732423b99d7f9a',
-  attachmentId: '593f436fc7a003f68d0abaf8',
-  boardId: 'bJDPVV1A',
-  cardId: '592b4b6716732423b99d7f99',
-  checkItemId: '593f4613b90814702fe03f39',
-  checklistId: '593f4610637b0c70455e8f84',
-  commentId: '59370991f5bdf80363e086ad',
-  labelId: '5927718cced82109ffc85150',
-  listId: '59277195029939eb776c07c4',
-  memberId: '56c266ee58b06885bc4e54e3',
-  membershipId: '5927718c7a9e8015ddbedcfe',
-  orgActionId: '592f0c5a637c4ec4515afd3f',
-  orgId: '592f0c5a637c4ec4515afd3d',
-  stickerId: '594032c2b50001911daf1ac5',
-};
-
-export const getTimeForTest = () => moment().format('YY.MM.D HH:mm:ss');
 
 /**
  * Logger used to log test data to the console and save results of tests to
  *    a file for review.
  */
-export class Logger {
+export default class Logger {
   constructor() {
     this.testName = '';
     this.testResults = {};
@@ -126,25 +98,24 @@ export class Logger {
   /**
    * If the SAVE_TEST_RESULTS environment variable is "true", save the test
    *    results to a JSON file in the results directory.
-   * @param {string} resourceName Name of the resource, this will be used to
-   *    name the results JSON file.
+   * @param {string} fileName Name of the file to write data to.
    * @returns {Promise}
    */
-  writeResultsToFile(resourceName) {
+  writeResultsToFile(fileName) {
     // Don't write the results if the environment variable isn't set.
     if (!process.env.SAVE_TEST_RESULTS) {
       return Promise.resolve();
     }
 
-    if (!resourceName) {
-      return Promise.reject(new Error('No resource name was specified.'));
+    if (!fileName) {
+      return Promise.reject(new Error('No file name was specified.'));
     }
 
     // The test results are stored in a file named "[resourceName].json",
     // where "resourceName" was passed as an argument.  The results file is
     // located in the results folder.
     return new Promise((resolve, reject) => {
-      const filePath = `${this.outputFolder}/${resourceName}.json`;
+      const filePath = `${this.outputFolder}/${fileName}.json`;
       const dataToWrite = this.testResults || {};
       jsonFile.writeFile(filePath, dataToWrite, { spaces: 2 }, (error) => {
         if (error) {

@@ -1,12 +1,12 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import { auth, Logger } from '../helpers';
+import Logger from '../logger';
 
-describe('TYP | Type Resource', () => {
+describe('TYP | Type Resource', function() {
   let trello;
   let logger;
 
-  before((done) => {
+  before(function(done) {
     trello = new Trello(auth);
     logger = new Logger();
     setTimeout(() => { done(); }, 3000);

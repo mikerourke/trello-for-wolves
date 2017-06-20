@@ -1,12 +1,12 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import { auth, Logger } from '../helpers';
+import Logger from '../logger';
 
-describe('WEB | Webhook Resource', () => {
+describe('WEB | Webhook Resource', function() {
   let trello;
   let logger;
 
-  before((done) => {
+  before(function(done) {
     trello = new Trello(auth);
     logger = new Logger();
     setTimeout(() => { done(); }, 3000);
@@ -24,19 +24,19 @@ describe('WEB | Webhook Resource', () => {
 
   const logResponse = (response) => logger.processResponse(response);
 
-  describe('WEB-G | Webhook GET requests', () => {
+  describe('WEB-G | Webhook GET requests', function() {
 
   });
 
-  describe('WEB-U | Webhook PUT requests', () => {
+  describe('WEB-U | Webhook PUT requests', function() {
 
   });
 
-  describe('WEB-P | Webhook POST requests', () => {
+  describe('WEB-P | Webhook POST requests', function() {
 
   });
 
-  describe('WEB-D | Webhook DELETE requests', () => {
+  describe('WEB-D | Webhook DELETE requests', function() {
 
   });
 });

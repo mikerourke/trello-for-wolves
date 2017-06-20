@@ -40,7 +40,7 @@ const stageFilesForTesting = () => new Promise((resolve) => {
     timeout: 10000,
   });
 
-  // These files contain tests that can be ran in any order.
+  // Ensure the Setup tests are ran before any of the Resource tests.
   mocha.addFile('./tests/utils/query-args-stringifier.test.js');
   mocha.addFile('./tests/setup.test.js');
 
@@ -51,6 +51,10 @@ const stageFilesForTesting = () => new Promise((resolve) => {
   resourceTestFiles.forEach(resourceTestFile => {
       mocha.addFile(resourceTestFile);
   });
+
+  // Ensure the Teardown tests are ran after all of the Resource tests.
+  mocha.addFile('./tests/teardown.test.js');
+
   resolve(mocha);
 });
 

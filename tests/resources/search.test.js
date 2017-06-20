@@ -1,8 +1,8 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import { auth, Logger } from '../helpers';
+import Logger from '../logger';
 
-describe('SRC | Search Resource', () => {
+describe('SRC | Search Resource', function() {
   let trello;
   let logger;
 

@@ -305,10 +305,8 @@ export default class Board extends BaseResource {
     return new MyPref(this.auth, `${this.routePath}/myPrefs`);
   }
 
-  organization(organizationId?: string = '') {
-    const resourcePath = organizationId ? '/idOrganization' : '/organization';
-    return new Organization(
-      this.auth, `${this.routePath}${resourcePath}`, organizationId);
+  organization() {
+    return new Organization(this.auth, `${this.routePath}/organization`);
   }
 
   getPluginData(): Promise<*> {
@@ -354,6 +352,10 @@ export default class Board extends BaseResource {
     return this.httpPut('/desc', { value });
   }
 
+  moveToOrganization(organizationId: string): Promise<*> {
+    return this.httpPut('/idOrganization', { value: organizationId });
+  }
+
   updateLabelNameForColor(
     labelColor: LabelColor,
     value: string,
@@ -371,29 +373,6 @@ export default class Board extends BaseResource {
 
   updateSubscribed(value: boolean): Promise<*> {
     return this.httpPut('/subscribed', { value });
-  }
-
-  /**
-   * Associates a board with a Card or List.
-   * @example PUT /1/cards/:cardId/idBoard
-   * @memberOf Card
-   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idboard}
-   *
-   * @example PUT /1/lists/:listId/idBoard
-   * @memberOf List
-   * @see {@link https://developers.trello.com/advanced-reference/list#put-1-lists-idlist-idboard}
-   */
-  associateBoard(
-    queryArgs?: {
-      // When associating a Card:
-      idList?: string,
-    } | {
-      // When associating a List:
-      pos?: PositionNumbered,
-    } = {},
-  ): Promise<*> {
-    // See associateMember() in the Member class for explanation:
-    return this.httpPut('/', { ...queryArgs, value: this.associationId });
   }
 
   addBoard(

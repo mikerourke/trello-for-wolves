@@ -58,9 +58,8 @@ export default class List extends BaseResource {
     return new Action(this.auth, `${this.routePath}/actions`);
   }
 
-  board(boardId?: string = '') {
-    const resourcePath = boardId ? '/idBoard' : 'board';
-    return new Board(this.auth, `${this.routePath}/${resourcePath}`, boardId);
+  board() {
+    return new Board(this.auth, `${this.routePath}/board`);
   }
 
   cards() {
@@ -83,6 +82,15 @@ export default class List extends BaseResource {
     return this.httpPut('/closed', { value });
   }
 
+  moveToBoard(
+    boardId: string,
+    queryArgs?: {
+      pos?: PositionNumbered,
+    } = {},
+  ): Promise<*> {
+    return this.httpPut('/', { value: boardId, ...queryArgs });
+  }
+
   updateName(value: string): Promise<*> {
     return this.httpPut('/name', { value });
   }
@@ -93,17 +101,6 @@ export default class List extends BaseResource {
 
   updatedSubscribed(value: boolean): Promise<*> {
     return this.httpPut('/subscribed', { value });
-  }
-
-  /**
-   * Associates a list with a Card.
-   * @example PUT /1/cards/:cardId/idList
-   * @memberOf Card
-   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idlist}
-   */
-  associateList(): Promise<*> {
-    // See associateMember() in the Member class for explanation:
-    return this.httpPut('/', { value: this.associationId });
   }
 
   addList(

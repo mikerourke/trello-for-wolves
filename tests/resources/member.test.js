@@ -1,6 +1,6 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import { auth, Logger } from '../helpers';
+import Logger from '../logger';
 
 describe('MBR | Member Resource', () => {
   let trello;

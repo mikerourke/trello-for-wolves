@@ -140,10 +140,8 @@ export default class Card extends BaseResource {
       this.auth, `${this.routePath}/attachments/${attachmentId}`);
   }
 
-  board(boardId?: string = '') {
-    const resourcePath = boardId ? '/idBoard' : '/board';
-    return new Board(
-      this.auth, `${this.routePath}${resourcePath}`, boardId);
+  board() {
+    return new Board(this.auth, `${this.routePath}/board`);
   }
 
   checkItemStates() {
@@ -170,20 +168,16 @@ export default class Card extends BaseResource {
       this.auth, `${this.routePath}/actions/${commentId}`);
   }
 
-  labels(labelId?: string = '') {
-    const resourcePath = labelId ? '/idLabels' : '/labels';
-    return new Label(this.auth, `${this.routePath}${resourcePath}`, labelId);
+  labels() {
+    return new Label(this.auth, `${this.routePath}/labels`);
   }
 
-  list(listId?: string = '') {
-    const resourcePath = listId ? '/idList' : '/list';
-    return new List(this.auth, `${this.routePath}${resourcePath}`, listId);
+  list() {
+    return new List(this.auth, `${this.routePath}/list`);
   }
 
-  members(memberId?: string = '') {
-    const resourcePath = memberId ? '/idMembers' : '/members';
-    return new Member(
-      this.auth, `${this.routePath}${resourcePath}`, memberId);
+  members() {
+    return new Member(this.auth, `${this.routePath}/members`);
   }
 
   membersVoted() {
@@ -243,6 +237,23 @@ export default class Card extends BaseResource {
     return this.httpPut('/idAttachmentCover', { value: idAttachmentCover });
   }
 
+  moveToBoard(
+    boardId: string,
+    queryArgs?: {
+      idList?: string,
+    } = {},
+  ): Promise<*> {
+    return this.httpPut('/idBoard', { value: boardId, ...queryArgs });
+  }
+
+  moveToList(listId: string): Promise<*> {
+    return this.httpPut('/idList', { value: listId });
+  }
+
+  associateMembers(memberIds: Array<string>): Promise<*> {
+    return this.httpPut('/idMembers', { value: memberIds });
+  }
+
   updateName(value: string): Promise<*> {
     return this.httpPut('/name', { value });
   }
@@ -287,11 +298,23 @@ export default class Card extends BaseResource {
     return this.httpPost('/', queryArgsToUse, fileToUpload);
   }
 
+  associateLabel(labelId: string): Promise<*> {
+    return this.httpPost('/idLabels', { value: labelId });
+  }
+
+  associateMember(memberId: string): Promise<*> {
+    return this.httpPost('/idMembers', { value: memberId });
+  }
+
   markAssociatedNotificationsRead(): Promise<*> {
     return this.httpPost('/markAssociatedNotificationsRead');
   }
 
   deleteCard(): Promise<*> {
     return this.httpDelete('/');
+  }
+
+  dissociateMember(memberId: string): Promise<*> {
+    return this.httpDelete(`/idMembers/${memberId}`);
   }
 }

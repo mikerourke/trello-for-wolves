@@ -1,15 +1,15 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import { auth, Logger } from '../helpers';
+import Logger from '../logger';
+const resources = require('./resources.json');
 
-describe('NTF | Notification Resource', () => {
+describe('NTF | Notification Resource', function() {
   let trello;
   let logger;
 
-  before((done) => {
+  before(function() {
     trello = new Trello(auth);
     logger = new Logger();
-    setTimeout(() => { done(); }, 3000);
   });
 
   beforeEach(function() {
@@ -24,15 +24,15 @@ describe('NTF | Notification Resource', () => {
 
   const logResponse = (response) => logger.processResponse(response);
 
-  describe('NTF-G | Notification GET requests', () => {
-
+  describe('NTF-G | Notification GET requests', function() {
+    before(function(done) {
+      setTimeout(() => { done(); }, 1000);
+    });
   });
 
-  describe('NTF-U | Notification PUT requests', () => {
-
-  });
-
-  describe('NTF-P | Notification POST requests', () => {
-
+  describe('NTF-U | Notification PUT requests', function() {
+    before(function(done) {
+      setTimeout(() => { done(); }, 1000);
+    });
   });
 });

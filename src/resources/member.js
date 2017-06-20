@@ -501,26 +501,6 @@ export default class Member extends BaseResource {
     return this.httpPost('/avatar', {}, file);
   }
 
-  /**
-   * Updates the members associated with a Card.
-   * @memberOf Card
-   * @example PUT /1/cards/:cardId/idMembers
-   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idmembers}
-   */
-  associateMembers(memberIds?: Array<string>): Promise<*> {
-    return this.httpPut('/', { value: memberIds });
-  }
-
-  /**
-   * Associates a member with a Card.
-   * @memberOf Card
-   * @example POST /1/cards/:cardId/idMembers
-   * @see {@link https://developers.trello.com/advanced-reference/card#post-1-cards-card-id-or-shortlink-idmembers}
-   */
-  associateMember(): Promise<*> {
-    return this.httpPost('/', { value: this.associationId });
-  }
-
   dismissOneTimeMessages(value: string): Promise<*> {
     return this.httpPost('/oneTimeMessagesDismissed', { value });
   }
@@ -536,10 +516,11 @@ export default class Member extends BaseResource {
   }
 
   /**
-   * Removes a member's association with a Card, doesn't actually delete it.
-   * @memberOf Card
-   * @example DELETE /1/cards/:cardId/idMembers/:memberId
-   * @see {@link https://developers.trello.com/advanced-reference/card#post-1-cards-card-id-or-shortlink-idmembers}
+   * Removes a member's association with a Card or Organization, doesn't
+   *    actually delete it.
+   * @memberOf Organization
+   * @example DELETE /1/organizations/:organizationId/members/:memberId
+   * @see {@link https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember}
    */
   dissociateMember(): Promise<*> {
     return this.httpDelete('/');
