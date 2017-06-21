@@ -1,12 +1,26 @@
 {
   "name": "trello-for-wolves",
   "version": "1.0.0",
-  "description": "Node.js wrapper for Trello API.",
-  "main": "index.js",
-  "repository": "https://github.com/mikerourke/trello-for-wolves",
+  "description": "Node.js wrapper for Trello API...for wolves.",
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikerourke/trello-for-wolves"
+  },
   "author": "Mike Rourke <mike.w.rourke@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mikerourke/trello-for-wolves/issues"
+  },
+  "homepage": "https://github.com/mikerourke/trello-for-wolves#readme",
   "scripts": {
+    "build:clean": "rimraf lib",
+    "build:lib": "babel -d lib src --ignore src/types.js",
+    "build:flow": "flow-copy-source -v src lib",
+    "build": "yarn run build:clean && yarn run build:lib && yarn run build:flow",
     "predoc": "rimraf docs/",
     "doc": "apidoc -i internals/api-docs/ -o docs/",
     "flow": "flow check || exit 0",
@@ -17,16 +31,21 @@
     "test:log": "cross-env LOG_TEST_RESULTS=true yarn test",
     "test:save": "cross-env SAVE_TEST_RESULTS=true yarn test"
   },
+  "files": [
+    "src",
+    "lib",
+    "README.md",
+    "LICENSE"
+  ],
   "dependencies": {
     "axios": "^0.16.1",
-    "bluebird": "^3.5.0",
-    "form-data": "^2.2.0",
     "lodash.snakecase": "^4.1.1"
   },
   "devDependencies": {
     "apidoc": "^0.17.6",
     "babel-cli": "^6.24.1",
     "babel-eslint": "^7.2.3",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-flow": "^6.23.0",
@@ -41,6 +60,7 @@
     "eslint-plugin-flowtype": "^2.33.0",
     "eslint-plugin-import": "^2.2.0",
     "flow-bin": "^0.48.0",
+    "flow-copy-source": "^1.1.0",
     "jsonfile": "^3.0.0",
     "mocha": "^3.4.2",
     "moment": "^2.18.1",

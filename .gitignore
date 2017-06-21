@@ -32,6 +32,7 @@ dictionaries
 # Other
 output/
 docs/
+lib/
 tests/results/
 
 .env
