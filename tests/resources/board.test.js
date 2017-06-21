@@ -1,7 +1,6 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
 import Logger from '../logger';
-const resources = require('./resources.json');
 
 describe('BRD | Board Resource', function() {
   let trello;
@@ -34,7 +33,7 @@ describe('BRD | Board Resource', function() {
 
   describe('BRD-G | Board GET requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1000);
+      setTimeout(() => { done(); }, 1500);
     });
 
     it('BRD-G-01-T01 | gets a Board', function(done) {
@@ -151,7 +150,7 @@ describe('BRD | Board Resource', function() {
     it('BRD-G-05-T01 | gets the associated Cards', function(done) {
       trello.boards(boardId).cards().getCards()
         .then(logResponse)
-        .should.eventually.be.rejected
+        .should.eventually.be.fulfilled
         .notify(done);
     });
 
@@ -165,10 +164,10 @@ describe('BRD | Board Resource', function() {
     });
 
     it('BRD-G-07-T01 | gets the associated Card with the specified Id', function(done) {
-      const cardId = boardData.cards[0].id;
-      if (!cardId) {
-        done(new Error('Card Id not found.'));
+      if (!boardData.cards.length) {
+        done(new Error('Cards not found.'));
       }
+      const cardId = boardData.cards[0].id;
       trello.boards(boardId).cards(cardId).getCard()
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -219,7 +218,7 @@ describe('BRD | Board Resource', function() {
     it('BRD-G-11-T01 | gets the associated Labels', function(done) {
       trello.boards(boardId).labels().getLabels()
         .then(logResponse)
-        .should.eventually.be.rejected
+        .should.eventually.be.fulfilled
         .notify(done);
     });
 
@@ -233,10 +232,10 @@ describe('BRD | Board Resource', function() {
     });
 
     it('BRD-G-12-T01 | gets the associated Label with the specified Id', function(done) {
-      const labelId = boardData.labels[0].id;
-      if (!labelId) {
-        done(new Error('Label Id not found.'))
+      if (!boardData.labels.length) {
+        done(new Error('Labels not found.'))
       }
+      const labelId = boardData.labels[0].id;
       trello.boards(boardId).labels(labelId).getLabel()
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -260,7 +259,7 @@ describe('BRD | Board Resource', function() {
     });
 
     it('BRD-G-14-T01 | gets only the open Lists with filter applied', function(done) {
-      trello.boards(boardId).lists().getFilteredLists('open')
+      trello.boards(boardId).lists().getListsFilteredBy('open')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
@@ -283,17 +282,17 @@ describe('BRD | Board Resource', function() {
     });
 
     it('BRD-G-16-T01 | gets only the normal Members with filter applied', function(done) {
-      trello.boards(boardId).members().getFilteredMembers('normal')
+      trello.boards(boardId).members().getMembersFilteredBy('normal')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('BRD-G-17-T01 | gets the associated cards for the specified Member', function(done) {
-      const memberId = boardData.members[0].id;
-      if (!memberId) {
-        done(new Error('Member Id not found.'));
+      if (!boardData.members.length) {
+        done(new Error('Members not found.'));
       }
+      const memberId = boardData.members[0].id;
       trello.boards(boardId).members(memberId).cards().getCards()
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -342,10 +341,10 @@ describe('BRD | Board Resource', function() {
     });
 
     it('BRD-G-21-T01 | gets the associated Membership with the specified Id', function(done) {
-      const membershipId = boardData.memberships[0].id;
-      if (!membershipId) {
-        done(new Error('Membership Id not found.'));
+      if (!boardData.memberships.length) {
+        done(new Error('Memberships not found.'));
       }
+      const membershipId = boardData.memberships[0].id;
       trello.boards(boardId).memberships(membershipId).getMembership()
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -353,10 +352,10 @@ describe('BRD | Board Resource', function() {
     });
 
     it('BRD-G-21-T02 | gets the only the specified Member fields for the associated Membership with the specified Id', function(done) {
-      const membershipId = boardData.memberships[0].id;
-      if (!membershipId) {
-        done(new Error('Membership Id not found.'));
+      if (!boardData.memberships.length) {
+        done(new Error('Memberships not found.'));
       }
+      const membershipId = boardData.memberships[0].id;
       trello.boards(boardId).memberships(membershipId).getMembership({
         memberFields: ['status', 'username'],
       })
@@ -407,7 +406,7 @@ describe('BRD | Board Resource', function() {
     let newMemberId = '';
 
     before(function(done) {
-      setTimeout(() => { done(); }, 1000);
+      setTimeout(() => { done(); }, 1500);
     });
 
     it('BRD-U-01-T01 | updates a Board', function(done) {
@@ -493,7 +492,7 @@ describe('BRD | Board Resource', function() {
      */
     it.skip('BRD-U-11-T01 | adds an associated Member', function(done) {
       trello.boards(boardId).members().addMember({
-        email: 'dude@website.com',
+        email: 'test@tfw.com',
         fullName: 'BRD-U-11-T01',
       })
         .then(logResponse)
@@ -510,10 +509,11 @@ describe('BRD | Board Resource', function() {
     });
 
     it('BRD-U-12-T01 | updates the type for an associated Member with specified Id', function(done) {
-      if (!newMemberId) {
-        done(new Error('New Member Id not found.'))
+      if (!resources.member) {
+        done(new Error('Member not found.'))
       }
-      trello.boards(boardId).members(newMemberId).updateMemberType('normal')
+      const memberId = resources.member.id;
+      trello.boards(boardId).members(memberId).updateMemberType('normal')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
@@ -525,10 +525,10 @@ describe('BRD | Board Resource', function() {
      * @passed 06.09.17
      */
     it.skip('BRD-U-13-T01 | updates the associated Membership with the specified Id', function(done) {
-      const membershipId = boardData.memberships[0].id;
-      if (!membershipId) {
-        done(new Error('Membership Id not found.'));
+      if (!boardData.memberships.length) {
+        done(new Error('Memberships not found.'));
       }
+      const membershipId = boardData.memberships[0].id;
       trello.boards(boardId).memberships(membershipId).updateMembership({
         type: 'admin',
       })
@@ -588,7 +588,7 @@ describe('BRD | Board Resource', function() {
     });
 
     it('BRD-U-21-T01 | updates the name of the Board', function(done) {
-      trello.boards(boardId).updateName('tfwTestBoard')
+      trello.boards(boardId).updateName('BRD-U-21-T01')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);

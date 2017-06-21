@@ -174,9 +174,9 @@
  */
 
 /**
- * @api {get} /boards/:boardId/cards/:filter getFilteredCardsInBoard
+ * @api {get} /boards/:boardId/cards/:filter getCardsFilteredByInBoard
  * @apiVersion 1.0.0
- * @apiName getFilteredCardsForBoard
+ * @apiName getCardsFilteredByInBoard
  * @apiDescription Gets the cards associated with the specified board that
  *    match the filter criteria.
  * @apiGroup board
@@ -184,7 +184,7 @@
  *
  * @apiUse CardFilterQueryArg
  * @apiExample {js} Example:
- trello.boards('BoArDId').cards().getFilteredCards('all');
+ trello.boards('BoArDId').cards().getCardsFilteredBy('all');
  */
 
 /**
@@ -298,9 +298,9 @@
  */
 
 /**
- * @api {get} /boards/:boardId/list/:filter getFilteredListsInBoard
+ * @api {get} /boards/:boardId/list/:filter getListsFilteredByInBoard
  * @apiVersion 1.0.0
- * @apiName getFilteredListsInBoard
+ * @apiName getListsFilteredByInBoard
  * @apiDescription Gets the lists associated with the specified board that
  *    match the filter criteria.
  * @apiGroup board
@@ -308,7 +308,7 @@
  *
  * @apiUse ListFilterQueryArg
  * @apiExample {js} Example:
- trello.boards('BoArDId').lists().getFilteredLists('closed');
+ trello.boards('BoArDId').lists().getListsFilteredBy('closed');
  */
 
 /**
@@ -329,9 +329,9 @@
  */
 
 /**
- * @api {get} /boards/:boardId/member/:filter getFilteredMembersInBoard
+ * @api {get} /boards/:boardId/member/:filter getMembersFilteredByInBoard
  * @apiVersion 1.0.0
- * @apiName getFilteredMembersInBoard
+ * @apiName getMembersFilteredByInBoard
  * @apiDescription Gets the members associated with the specified board that
  *    match the filter criteria.
  * @apiGroup board
@@ -339,7 +339,7 @@
  *
  * @apiUse MemberFilterQueryArg
  * @apiExample {js} Example:
- trello.boards('BoArDId').members().getFilteredMembers('normal');
+ trello.boards('BoArDId').members().getMembersFilteredBy('normal');
  */
 
 /**

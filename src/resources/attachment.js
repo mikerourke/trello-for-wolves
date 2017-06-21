@@ -4,7 +4,10 @@
 import BaseResource from './base-resource';
 
 /* Types */
-import type { ArgumentGroup } from '../types';
+import type {
+  ArgumentGroup,
+  FileProperties,
+} from '../types';
 
 export type AttachmentFilter = boolean | 'cover';
 
@@ -56,14 +59,14 @@ export default class Attachment extends BaseResource {
 
   // @todo: Make sure this works for a file.
   uploadAttachment(
-    file?: Object,
+    fileProperties: FileProperties,
     queryArgs?: {
       url?: string,
       name?: string,
       mimeType?: string,
     } = {},
   ): Promise<*> {
-    return this.httpPost('/', queryArgs, file);
+    return this.httpPost('/', queryArgs, fileProperties);
   }
 
   deleteAttachment(): Promise<*> {

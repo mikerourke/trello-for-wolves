@@ -24,6 +24,7 @@ const auth = {
 };
 
 global.auth = auth;
+global.resources = {};
 global.chai = chai;
 global.AssertionError = chai.AssertionError;
 global.expect = chai.expect;

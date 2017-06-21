@@ -1,7 +1,6 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
 import Logger from '../logger';
-const resources = require('./resources.json');
 
 describe('CAR | Card Resource', function() {
   let trello;
@@ -34,7 +33,7 @@ describe('CAR | Card Resource', function() {
 
   describe('CAR-G | Card GET Requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1000);
+      setTimeout(() => { done(); }, 1500);
     });
 
     it('CAR-G-01-T01 | gets a Card', (done) => {
@@ -121,10 +120,10 @@ describe('CAR | Card Resource', function() {
     });
 
     it('CAR-G-05-T01 | gets the associated Attachment with the specified Id', function(done) {
-      const attachmentId = cardData.attachments[0].id || '';
-      if (!attachmentId) {
+      if (!cardData.attachments.length) {
         done(new Error('Attachment not found on Card.'));
       }
+      const attachmentId = cardData.attachments[0].id;
       trello.cards(cardId).attachments(attachmentId).getAttachment()
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -178,10 +177,10 @@ describe('CAR | Card Resource', function() {
     });
 
     it('CAR-G-10-T01 | gets the associated Check Item with the specified Id', function(done) {
-      const checkItemId = resources.card.checkItems[0].id;
-      if (!checkItemId) {
-        done(new Error('Check Item not on Card.'));
+      if (!resources.card.checkItems.length) {
+        done(new Error('Check Items not on Card.'));
       }
+      const checkItemId = resources.card.checkItems[0].id;
       trello.cards(cardId).checkItem(checkItemId).getCheckItem()
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -258,10 +257,10 @@ describe('CAR | Card Resource', function() {
     });
 
     it('CAR-G-17-T01 | gets the associated Sticker with the specified Id', function(done) {
-      const stickerId = cardData.stickers[0].id || '';
-      if (!stickerId) {
+      if (!cardData.stickers.length) {
         done(new Error('Sticker not found on Card.'));
       }
+      const stickerId = cardData.stickers[0].id;
       trello.cards(cardId).stickers(stickerId).getSticker()
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -271,12 +270,18 @@ describe('CAR | Card Resource', function() {
 
   describe('CAR-U | Card PUT requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1000);
+      setTimeout(() => { done(); }, 1500);
     });
 
-    const firstCheckItem = resources.card.checkItems[0] || {};
+    const getFirstCheckItem = () => {
+      if (resources.card.checkItems.length) {
+        return resources.card.checkItems[0] || {};
+      }
+      return {};
+    };
 
     const getTrelloChecklistCheckItem = () => {
+      const firstCheckItem = getFirstCheckItem();
       if (!firstCheckItem) {
         return ;
       }
@@ -287,6 +292,7 @@ describe('CAR | Card Resource', function() {
 
     it('CAR-U-01-T01 | updates a Card', function(done) {
       trello.cards(cardId).updateCard({
+        name: 'CAR-U-01-T01',
         desc: 'This is the updated description.',
       })
         .then(logResponse)
@@ -295,10 +301,10 @@ describe('CAR | Card Resource', function() {
     });
 
     it('CAR-U-02-T01 | updates an associated Comment', function(done) {
-      const commentId = resources.card.comment.id;
-      if (!commentId) {
+      if (!resources.card.comment) {
         done(new Error('Comment not found.'));
       }
+      const commentId = resources.card.comment.id;
       trello.cards(cardId).comments(commentId).updateComment('CAR-U-02-T01')
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -307,7 +313,7 @@ describe('CAR | Card Resource', function() {
 
     it('CAR-U-03-T01 | updates the name of an associated Check Item on a Checklist with the specified Id', function(done) {
       const trelloCheckItem = getTrelloChecklistCheckItem();
-      if (trelloCheckItem) {
+      if (!trelloCheckItem) {
         done(new Error('Check Item not on Card.'))
       }
       trelloCheckItem.updateName('CAR-U-03-T01')
@@ -318,7 +324,7 @@ describe('CAR | Card Resource', function() {
 
     it('CAR-U-04-T01 | updates the position of an associated Check Item on a Checklist with the specified Id', function(done) {
       const trelloCheckItem = getTrelloChecklistCheckItem();
-      if (trelloCheckItem) {
+      if (!trelloCheckItem) {
         done(new Error('Check Item not on Card.'))
       }
       trelloCheckItem.updatePosition('top')
@@ -329,7 +335,7 @@ describe('CAR | Card Resource', function() {
 
     it('CAR-U-05-T01 | updates the state of an associated Check Item on a Checklist with the specified Id', function(done) {
       const trelloCheckItem = getTrelloChecklistCheckItem();
-      if (trelloCheckItem) {
+      if (!trelloCheckItem) {
         done(new Error('Check Item not on Card.'))
       }
       trelloCheckItem.updateState('complete')
@@ -340,7 +346,7 @@ describe('CAR | Card Resource', function() {
 
     it('CAR-U-06-T01 | updates a Check Item on a Checklist with the specified Id', function(done) {
       const trelloCheckItem = getTrelloChecklistCheckItem();
-      if (trelloCheckItem) {
+      if (!trelloCheckItem) {
         done(new Error('Check Item not on Card.'))
       }
       trelloCheckItem.updateCheckItem({
@@ -353,6 +359,7 @@ describe('CAR | Card Resource', function() {
     });
 
     it('CAR-U-07-T01 | updates a Check Item with the specified Id', function(done) {
+      const firstCheckItem = getFirstCheckItem();
       if (!firstCheckItem) {
         done(new Error('Check Item not on Card.'));
       }
@@ -403,34 +410,33 @@ describe('CAR | Card Resource', function() {
     });
 
     it('CAR-U-13-T01 | moves the Card to a different Board', function(done) {
-      const boardId = resources.board.id || '';
-      if (!boardId) {
+      if (!resources.board) {
         done(new Error('Board not found.'))
       }
+      const boardId = resources.board.id;
       trello.cards(cardId).moveToBoard(boardId)
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    // @fix: This test isn't working.
-    it.skip('CAR-U-14-T01 | moves the Card to a different List', function(done) {
-      const listId = resources.list.id || '';
-      if (!listId) {
+    it('CAR-U-14-T01 | moves the Card to a different List', function(done) {
+      if (!resources.list) {
         done(new Error('List not found.'))
       }
+      const listId = resources.list.id;
       trello.cards(cardId).moveToList(listId)
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    // @todo: Figure out how to get this working.
-    it.skip('CAR-U-15-T01 | updates the member associations', function(done) {
-      trello.cards(cardId).members().associateMembers([
-        'Member Id 1',
-        'Member Id 2',
-      ])
+    it('CAR-U-15-T01 | updates the member associations', function(done) {
+      if (!resources.member) {
+        done(new Error('Member not found.'));
+      }
+      const memberId = resources.member.id;
+      trello.cards(cardId).associateMembers([ memberId ])
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
@@ -451,10 +457,10 @@ describe('CAR | Card Resource', function() {
     });
 
     it('CAR-U-18-T01 | updates an associated Sticker', function(done) {
-      const stickerId = resources.card.stickers[0].id || '';
-      if (!stickerId) {
-        done(new Error('Sticker not on Card.'));
+      if (!resources.card.stickers.length) {
+        done(new Error('Stickers not on Card.'));
       }
+      const stickerId = resources.card.stickers[0].id;
       trello.cards(cardId).stickers(stickerId).updateSticker({
         top: 12,
         left: 12,

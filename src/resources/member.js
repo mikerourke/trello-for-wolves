@@ -22,6 +22,7 @@ import type {
   BoardFilter,
   CardField,
   CardFilter,
+  FileProperties,
   FilterDate,
   Format,
   ListFilter,
@@ -125,8 +126,8 @@ class BoardBackground extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  uploadBoardBackground(file: Object): Promise<*> {
-    return this.httpPost('/', {}, file);
+  uploadBoardBackground(fileProperties: FileProperties): Promise<*> {
+    return this.httpPost('/', {}, fileProperties);
   }
 
   deleteBoardBackground(): Promise<*> {
@@ -191,10 +192,10 @@ class CustomEmoji extends BaseResource {
   }
 
   uploadCustomEmoji(
-    file: Object,
     name: string,
+    fileProperties: FileProperties,
   ): Promise<*> {
-    return this.httpPost('/', { name }, file);
+    return this.httpPost('/', { name }, fileProperties);
   }
 }
 
@@ -333,12 +334,12 @@ export default class Member extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  getFieldValue(field: MemberEveryField): Promise<*> {
-    return this.httpGet(`/${field}`);
+  getMembersFilteredBy(filter: MemberFilter): Promise<*> {
+    return this.httpGet('/', { filter });
   }
 
-  getFilteredMembers(filter: MemberFilter): Promise<*> {
-    return this.httpGet('/', { filter });
+  getFieldValue(field: MemberEveryField): Promise<*> {
+    return this.httpGet(`/${field}`);
   }
 
   actions() {
@@ -375,7 +376,7 @@ export default class Member extends BaseResource {
 
   customEmoji(customEmojiId?: string = '') {
     return new CustomEmoji(
-      this.auth, `${this.routePath}/customEmojis/${customEmojiId}`);
+      this.auth, `${this.routePath}/customEmoji/${customEmojiId}`);
   }
 
   customStickers(customStickerId?: string = '') {
@@ -497,8 +498,8 @@ export default class Member extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  uploadAvatar(file: Object): Promise<*> {
-    return this.httpPost('/avatar', {}, file);
+  uploadAvatar(fileProperties: FileProperties): Promise<*> {
+    return this.httpPost('/avatar', {}, fileProperties);
   }
 
   dismissOneTimeMessages(value: string): Promise<*> {
@@ -516,17 +517,13 @@ export default class Member extends BaseResource {
   }
 
   /**
-   * Removes a member's association with a Card or Organization, doesn't
+   * Removes a member's association with an Organization, doesn't
    *    actually delete it.
    * @memberOf Organization
    * @example DELETE /1/organizations/:organizationId/members/:memberId
    * @see {@link https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember}
    */
   dissociateMember(): Promise<*> {
-    return this.httpDelete('/');
-  }
-
-  rescindVote(): Promise<*> {
     return this.httpDelete('/');
   }
 
@@ -539,5 +536,12 @@ export default class Member extends BaseResource {
    */
   dissociateMemberFromAll(): Promise<*> {
     return this.httpDelete('/all');
+  }
+
+  updateVote(isVoting: boolean): Promise<*> {
+    if (isVoting) {
+      return this.httpPost('/', { value: this.associationId });
+    }
+    return this.httpDelete(`/${this.associationId}`);
   }
 }

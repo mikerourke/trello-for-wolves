@@ -20,6 +20,7 @@
   "dependencies": {
     "axios": "^0.16.1",
     "bluebird": "^3.5.0",
+    "form-data": "^2.2.0",
     "lodash.snakecase": "^4.1.1"
   },
   "devDependencies": {

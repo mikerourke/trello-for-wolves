@@ -3,7 +3,6 @@
 /* External dependencies */
 import { stringify } from 'querystring';
 import axios from 'axios';
-import Promise from 'bluebird';
 
 /* Internal dependencies */
 import { ApiCallResponseError } from '../utils/errors';
@@ -68,11 +67,46 @@ export default class BaseResource {
 
     // If queryArgs were provided, build the corresponding querystring to
     // include the specified arguments.
-    const queryArgsString = (queryArgs) ? stringifyQueryArgs(queryArgs) : '';
+    const queryString = (queryArgs) ? stringifyQueryArgs(queryArgs) : '';
 
     // Ensure the key and token is appended to the end of the querystring.
     const authSuffix = stringify(this.auth);
-    return `${sanitizedPath}?${queryArgsString}${authSuffix}`;
+    return `${sanitizedPath}?${queryString}${authSuffix}`;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _handleRequestError(
+    error: Object,
+    reject: Function,
+  ) {
+    if (error.response) {
+      reject(new ApiCallResponseError(error.response));
+    } else if (error.request) {
+      // @todo: Create custom error for API Request errors.
+      reject(error);
+    } else {
+      // @todo: Create custom error for other API errors.
+      reject(error);
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _attemptRequest(
+    httpMethod: HttpMethod,
+    cleanUrl: string,
+  ): Promise<*> {
+    return new Promise((resolve, reject) => {
+      axios({
+        method: httpMethod,
+        url: `https://${cleanUrl}`,
+      })
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   }
 
   /**
@@ -80,7 +114,7 @@ export default class BaseResource {
    * @param {HttpMethod} httpMethod Method associated with the request.
    * @param {string} pathVariables Path to append to the route path.
    * @param {Object} [queryArgs={}] Arguments for building the querystring.
-   * @param {Object} [data={}] Data to include in the body of the request.
+   * @param {Object} [fileProperties={}] Properties of the file to send.
    * @returns {Promise}
    * @private
    */
@@ -88,31 +122,31 @@ export default class BaseResource {
     httpMethod: HttpMethod,
     pathVariables: string,
     queryArgs?: Object = {},
-    data?: Object = {},
+    fileProperties?: Object = {},
   ): Promise<*> {
-    const endpoint = this.getEndpoint(pathVariables, queryArgs);
-
-    // One more check is done to ensure there are no consecutive slashes.
-    const sanitizedUrl = `api.trello.com/1/${endpoint}`.replace(/\/+/g, '/');
-
     return new Promise((resolve, reject) => {
-      axios({
-        data,
-        method: httpMethod,
-        url: `https://${sanitizedUrl}`,
-      })
-        .then((result) => {
-          resolve(result);
+      const endpoint = this.getEndpoint(pathVariables, queryArgs);
+
+      // One more check is done to ensure there are no consecutive slashes.
+      const cleanUrl = `api.trello.com/1/${endpoint}`.replace(/\/+/g, '/');
+
+      this._attemptRequest(httpMethod, cleanUrl)
+        .then((firstResponse) => {
+          resolve(firstResponse);
         })
-        .catch((error) => {
-          if (error.response) {
-            reject(new ApiCallResponseError(error.response));
-          } else if (error.request) {
-            // @todo: Create custom error for API Request errors.
-            reject(error);
+        .catch((firstError) => {
+          if (firstError.response.status === 429) {
+            setTimeout(() => {
+              this._attemptRequest(httpMethod, cleanUrl)
+                .then((secondResponse) => {
+                  resolve(secondResponse);
+                })
+                .catch((secondError) => {
+                  this._handleRequestError(secondError, reject);
+                });
+            }, 1000);
           } else {
-            // @todo: Create custom error for other API errors.
-            reject(error);
+            this._handleRequestError(firstError, reject);
           }
         });
     });
@@ -136,9 +170,10 @@ export default class BaseResource {
   httpPost(
     pathVariables: string,
     queryArgs?: Object = {},
-    data?: Object = {},
+    fileProperties?: Object = {},
   ): Promise<Object> {
-    return this._performRequest('post', pathVariables, queryArgs, data);
+    return this._performRequest(
+      'post', pathVariables, queryArgs, fileProperties);
   }
 
   httpDelete(

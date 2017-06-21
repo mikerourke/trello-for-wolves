@@ -1,7 +1,6 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
 import Logger from '../logger';
-const resources = require('./resources.json');
 
 describe('CHK | Checklist Resource', function() {
   let trello;
@@ -34,7 +33,7 @@ describe('CHK | Checklist Resource', function() {
 
   describe('CHK-G | Checklist GET requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1000);
+      setTimeout(() => { done(); }, 1500);
     });
 
     it('CHK-G-01-T01 | gets a Checklist', (done) => {
@@ -129,15 +128,15 @@ describe('CHK | Checklist Resource', function() {
     it('CHK-G-07-T01 | gets the associated Check Items', function(done) {
       trello.checklists(checklistId).checkItems().getCheckItems()
         .then(logResponse)
-        .should.eventually.be.rejected
+        .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('CHK-G-08-T01 | gets the associated Check Item with the specified Id', function(done) {
-      const checkItemId = checklistData.checkItems[0].id;
-      if (!checkItemId) {
-        done(new Error('Check Item not found.'));
+      if (!checklistData.checkItems) {
+        done(new Error('Check Items not found.'));
       }
+      const checkItemId = checklistData.checkItems[0].id;
       trello.checklists(checklistId).checkItems(checkItemId).getCheckItem()
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -147,7 +146,7 @@ describe('CHK | Checklist Resource', function() {
 
   describe('CHK-U | Checklist PUT requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1000);
+      setTimeout(() => { done(); }, 1500);
     });
 
     it('CHK-U-01-T01 | updates a Checklist', function(done) {

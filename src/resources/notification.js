@@ -98,6 +98,12 @@ export default class Notification extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
+  getNotificationsFilteredBy(
+    filter: ArgumentGroup<NotificationFilter>,
+  ): Promise<*> {
+    return this.httpGet('/', { filter });
+  }
+
   getFieldValue(field: NotificationField): Promise<*> {
     return this.httpGet(`/${field}`);
   }

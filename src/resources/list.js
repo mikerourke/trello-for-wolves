@@ -46,12 +46,12 @@ export default class List extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  getFieldValue(field: ListField): Promise<*> {
-    return this.httpGet(`/${field}`);
+  getListsFilteredBy(filter: ListFilter): Promise<*> {
+    return this.httpGet('/', { filter });
   }
 
-  getFilteredLists(filter: ListFilter): Promise<*> {
-    return this.httpGet('/', { filter });
+  getFieldValue(field: ListField): Promise<*> {
+    return this.httpGet(`/${field}`);
   }
 
   actions() {
@@ -99,7 +99,7 @@ export default class List extends BaseResource {
     return this.httpPut('/pos', { value });
   }
 
-  updatedSubscribed(value: boolean): Promise<*> {
+  updateSubscribed(value: boolean): Promise<*> {
     return this.httpPut('/subscribed', { value });
   }
 

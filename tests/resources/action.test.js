@@ -1,31 +1,37 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
 import Logger from '../logger';
-const resources = require('./resources.json');
 
 describe('ACT | Action Resource', function() {
-  const { tfwActions } = resources;
-
   let trello;
   let logger;
 
-  let actionId = '';
-  let commentId = '';
+  let commentActionId = '';
+  let cardActionId = '';
+  let orgActionId = '';
 
+  /**
+   * Gets the Ids of Actions required to perform tests.
+   */
   const getIds = () => new Promise((resolve, reject) => {
     trello.members('me').actions().getActions({
-      filter: ['commentCard', 'createOrganization'],
+      filter: ['commentCard', 'createCard', 'unconfirmedOrganizationInvitation'],
     })
       .then((response) => {
         const { data: actions } = response;
         actions.forEach((action) => {
-          if (action.type === 'commentCard' && !commentId) {
-            commentId = action.id;
+          const { id, type } = action;
+          if (type === 'commentCard' && !commentActionId) {
+            commentActionId = id;
           }
-          if (action.type === 'createOrganization' && !actionId) {
-            actionId = action.id;
+          if (type === 'createCard' && !cardActionId) {
+            cardActionId = id;
           }
-        })
+          if (type === 'unconfirmedOrganizationInvitation' && !orgActionId) {
+            orgActionId = id;
+          }
+        });
+        resolve();
       })
       .catch((error) => { reject(new Error(`Error getting Ids: ${error}`)); });
   });
@@ -52,18 +58,18 @@ describe('ACT | Action Resource', function() {
 
   describe('ACT-G | Action GET Requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1000);
+      setTimeout(() => { done(); }, 1500);
     });
 
     it('ACT-G-01-T01 | gets an Action', function(done) {
-      trello.actions(actionId).getAction()
+      trello.actions(cardActionId).getAction()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('ACT-G-01-T02 | gets an Action with some arguments', function(done) {
-      trello.actions(actionId).getAction({
+      trello.actions(cardActionId).getAction({
         display: true,
         fields: 'all',
       })
@@ -73,7 +79,7 @@ describe('ACT | Action Resource', function() {
     });
 
     it('ACT-G-01-T03 | gets an Action with all arguments', function(done) {
-      trello.actions(actionId).getAction({
+      trello.actions(cardActionId).getAction({
         display: true,
         entities: true,
         fields: 'all',
@@ -88,42 +94,42 @@ describe('ACT | Action Resource', function() {
     });
 
     it('ACT-G-02-T01 | gets an Action field value for data', function(done) {
-      trello.actions(actionId).getFieldValue('data')
+      trello.actions(cardActionId).getFieldValue('data')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('ACT-G-02-T02 | gets an Action field value for date', function(done) {
-      trello.actions(actionId).getFieldValue('date')
+      trello.actions(cardActionId).getFieldValue('date')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('ACT-G-02-T03 | gets an Action field value for idMemberCreator', function(done) {
-      trello.actions(actionId).getFieldValue('idMemberCreator')
+      trello.actions(cardActionId).getFieldValue('idMemberCreator')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('ACT-G-02-T04 | gets an Action field value for type', function(done) {
-      trello.actions(actionId).getFieldValue('type')
+      trello.actions(cardActionId).getFieldValue('type')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('ACT-G-03-T01 | gets the associated Board', function(done) {
-      trello.actions(actionId).board().getBoard()
+      trello.actions(cardActionId).board().getBoard()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('ACT-G-03-T02 | gets only the specified fields for the associated Board', function(done) {
-      trello.actions(actionId).board().getBoard({
+      trello.actions(cardActionId).board().getBoard({
         fields: ['closed', 'dateLastActivity'],
       })
         .then(logResponse)
@@ -132,21 +138,21 @@ describe('ACT | Action Resource', function() {
     });
 
     it('ACT-G-04-T01 | gets a field value for the associated Board', function(done) {
-      trello.actions(actionId).board().getFieldValue('name')
+      trello.actions(cardActionId).board().getFieldValue('name')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('ACT-G-05-T01 | gets the associated Card', function(done) {
-      trello.actions(actionId).card().getCard()
+      trello.actions(cardActionId).card().getCard()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('ACT-G-05-T02 | gets only the specified fields for the associated Card', function(done) {
-      trello.actions(actionId).card().getCard({
+      trello.actions(cardActionId).card().getCard({
         fields: ['badges', 'closed', 'desc'],
       })
         .then(logResponse)
@@ -155,35 +161,35 @@ describe('ACT | Action Resource', function() {
     });
 
     it('ACT-G-06-T01 | gets a field value for the associated Card', function(done) {
-      trello.actions(actionId).card().getFieldValue('name')
+      trello.actions(cardActionId).card().getFieldValue('name')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('ACT-G-07-T01 | gets the Display data', function(done) {
-      trello.actions(actionId).getDisplay()
+      trello.actions(cardActionId).getDisplay()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('ACT-G-08-T01 | gets the Entities data', function(done) {
-      trello.actions(actionId).getEntities()
+      trello.actions(cardActionId).getEntities()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('ACT-G-09-T01 | gets the associated List', function(done) {
-      trello.actions(actionId).list().getList()
+      trello.actions(cardActionId).list().getList()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('ACT-G-09-T02 | gets only the specified fields for the associated List', function(done) {
-      trello.actions(actionId).list().getList({
+      trello.actions(cardActionId).list().getList({
         fields: ['name', 'pos'],
       })
         .then(logResponse)
@@ -192,21 +198,21 @@ describe('ACT | Action Resource', function() {
     });
 
     it('ACT-G-10-T01 | gets a field value for the associated List', function(done) {
-      trello.actions(actionId).list().getFieldValue('name')
+      trello.actions(cardActionId).list().getFieldValue('name')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('ACT-G-11-T01 | gets the associated Member', function(done) {
-      trello.actions(actionId).member().getMember()
+      trello.actions(cardActionId).member().getMember()
         .then(logResponse)
         .should.eventually.be.rejected
         .notify(done);
     });
 
     it('ACT-G-11-T01 | gets only the specified fields for the associated Member', function(done) {
-      trello.actions(actionId).member().getMember({
+      trello.actions(orgActionId).member().getMember({
         fields: ['email', 'fullName'],
       })
         .then(logResponse)
@@ -215,21 +221,21 @@ describe('ACT | Action Resource', function() {
     });
 
     it('ACT-G-12-T01 | gets a field value for the associated Member', function(done) {
-      trello.actions(actionId).member().getFieldValue('fullName')
+      trello.actions(orgActionId).member().getFieldValue('fullName')
         .then(logResponse)
         .should.eventually.be.rejected
         .notify(done);
     });
 
     it('ACT-G-13-T01 | gets the associated Member Creator', function(done) {
-      trello.actions(actionId).memberCreator().getMember()
+      trello.actions(cardActionId).memberCreator().getMember()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('ACT-G-13-T02 | gets only the specified fields for the associated Member Creator', function(done) {
-      trello.actions(actionId).memberCreator().getMember({
+      trello.actions(cardActionId).memberCreator().getMember({
         fields: ['avatarSource', 'bio', 'bioData', 'confirmed', 'idBoards'],
       })
         .then(logResponse)
@@ -238,7 +244,7 @@ describe('ACT | Action Resource', function() {
     });
 
     it('ACT-G-14-T01 | gets a field value for the associated Member Creator', function(done) {
-      trello.actions(actionId).memberCreator().getFieldValue('avatarHash')
+      trello.actions(cardActionId).memberCreator().getFieldValue('avatarHash')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
@@ -263,11 +269,11 @@ describe('ACT | Action Resource', function() {
     const commentText = 'This is a test comment';
 
     before(function(done) {
-      setTimeout(() => { done(); }, 1000);
+      setTimeout(() => { done(); }, 1500);
     });
 
     it('ACT-U-01-T01 | updates an Action', function(done) {
-      trello.actions(commentId).updateAction({
+      trello.actions(commentActionId).updateAction({
         text: commentText,
       })
         .then(logResponse)
@@ -276,7 +282,7 @@ describe('ACT | Action Resource', function() {
     });
 
     it('ACT-U-02-T01 | updates the text for an Action', function(done) {
-      trello.actions(commentId).updateText(commentText)
+      trello.actions(commentActionId).updateText(commentText)
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
@@ -285,11 +291,11 @@ describe('ACT | Action Resource', function() {
 
   describe('ACT-D | Action DELETE Requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1000);
+      setTimeout(() => { done(); }, 1500);
     });
 
     it('ACT-D-01-T01 | deletes an Action', function(done) {
-      trello.actions(commentId).deleteAction()
+      trello.actions(commentActionId).deleteAction()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);

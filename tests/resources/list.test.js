@@ -1,7 +1,6 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
 import Logger from '../logger';
-const resources = require('./resources.json');
 
 describe('LST | List Resource', function() {
   let trello;
@@ -34,7 +33,7 @@ describe('LST | List Resource', function() {
 
   describe('LST-G | List GET requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1000);
+      setTimeout(() => { done(); }, 1500);
     });
 
     it('LST-G-01-T01 | gets a List', (done) => {
@@ -147,7 +146,7 @@ describe('LST | List Resource', function() {
 
   describe('LST-U | List PUT requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1000);
+      setTimeout(() => { done(); }, 1500);
     });
 
     it('LST-U-01-T01 | updates a List', function(done) {
@@ -169,10 +168,10 @@ describe('LST | List Resource', function() {
     });
 
     it('LST-U-03-T01 | moves the List to a different Board', function(done) {
-      const boardId = resources.board.id || '';
-      if (!boardId) {
+      if (!resources.board) {
         done(new Error('Board not found for List.'));
       }
+      const boardId = resources.board.id;
       trello.lists(listId).moveToBoard(boardId)
         .then(logResponse)
         .should.eventually.be.fulfilled

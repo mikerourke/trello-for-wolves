@@ -33,7 +33,7 @@ describe('LBL | Label Resource', function() {
 
   describe('LBL-G | Label GET requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1000);
+      setTimeout(() => { done(); }, 1500);
     });
 
     it('LBL-G-01-T01 | gets a Label', (done) => {
@@ -82,7 +82,7 @@ describe('LBL | Label Resource', function() {
 
   describe('LBL-U | Label PUT requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1000);
+      setTimeout(() => { done(); }, 1500);
     });
 
     it('LBL-U-01-T01 | updates a Label', function(done) {

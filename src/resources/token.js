@@ -48,8 +48,8 @@ export default class Token extends BaseResource {
     return new Member(this.auth, `${this.routePath}/member`);
   }
 
-  webhook(webhookId?: string = '') {
-    return new Webhook(this.auth, `${this.routePath}/webhook/${webhookId}`);
+  webhooks(webhookId?: string = '') {
+    return new Webhook(this.auth, `${this.routePath}/webhooks/${webhookId}`);
   }
 
   deleteToken(): Promise<*> {

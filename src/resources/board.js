@@ -238,12 +238,12 @@ export default class Board extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  getFieldValue(field: BoardField): Promise<*> {
-    return this.httpGet(`/${field}`);
+  getBoardsFilteredBy(filter: ArgumentGroup<BoardFilter>): Promise<*> {
+    return this.httpGet('/', { filter });
   }
 
-  getFilteredBoards(filter: ArgumentGroup<BoardFilter>): Promise<*> {
-    return this.httpGet('/', { filter });
+  getFieldValue(field: BoardField): Promise<*> {
+    return this.httpGet(`/${field}`);
   }
 
   actions() {

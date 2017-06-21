@@ -14,6 +14,7 @@ import type {
   ArgumentGroup,
   BoardField,
   BoardFilter,
+  FileProperties,
   FilterDate,
   Format,
   ListFilter,
@@ -83,8 +84,8 @@ class Pref extends BaseResource {
     return this.httpDelete('/associatedDomain');
   }
 
-  deleteOrgInviteRestrict(): Promise<*> {
-    return this.httpDelete('/orgInviteRestrict');
+  deleteOrgInviteRestrict(emailAddress: string): Promise<*> {
+    return this.httpDelete('/orgInviteRestrict', { value: emailAddress });
   }
 }
 
@@ -134,6 +135,12 @@ export default class Organization extends BaseResource {
     } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
+  }
+
+  getOrganizationsFilteredBy(
+    filter: ArgumentGroup<OrganizationFilter>,
+  ): Promise<*> {
+    return this.httpGet('/', { filter });
   }
 
   getFieldValue(field: OrganizationField): Promise<*> {
@@ -233,8 +240,9 @@ export default class Organization extends BaseResource {
     return this.httpPost('/', queryArgs);
   }
 
-  uploadLogo(file: Object): Promise<*> {
-    return this.httpPost('/logo', {}, file);
+  // @todo: Figure out how to get file upload working.
+  uploadLogo(fileProperties: FileProperties): Promise<*> {
+    return this.httpPost('/logo', {}, fileProperties);
   }
 
   addTags(name: string): Promise<*> {

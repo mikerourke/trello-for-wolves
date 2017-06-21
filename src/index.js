@@ -74,8 +74,8 @@ export default class Trello {
     return new Token(this.auth, `/tokens/${tokenName}`);
   }
 
-  types(teamOrUserId?: string = ''): Object {
-    return new Type(this.auth, `/types/${teamOrUserId}`);
+  types(): Object {
+    return new Type(this.auth, '/types');
   }
 
   webhooks(webhookId?: string = ''): Object {

@@ -36,17 +36,6 @@ export default class Webhook extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  // @todo: Find out how this is different from the POST request.
-  updateWebhooks(
-    queryArgs: {
-      description?: string,
-      callbackURL: string,
-      idModel: string,
-    },
-  ): Promise<*> {
-    return this.httpPut('/', queryArgs);
-  }
-
   updateActiveStatus(value: boolean): Promise<*> {
     return this.httpPut('/active', { value });
   }
@@ -59,7 +48,7 @@ export default class Webhook extends BaseResource {
     return this.httpPut('/description', { value });
   }
 
-  updateIdModel(value: string): Promise<*> {
+  associateWithModel(value: string): Promise<*> {
     return this.httpPut('/idModel', { value });
   }
 
