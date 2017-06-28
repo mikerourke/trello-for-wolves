@@ -18,13 +18,18 @@ const shell = require('shelljs');
 chai.should();
 chai.use(chaiAsPromised);
 
+// This is used by all the tests, so it's much easier to set it here.
 const auth = {
   key: process.env.TRELLO_API_KEY || '',
   token: process.env.TRELLO_AUTH_TOKEN || '',
 };
-
 global.auth = auth;
+
+// Stores the resource information for newly created instances.  This
+// prvents the need to read and write to a JSON file.
 global.resources = {};
+
+// All the good testing stuff.
 global.chai = chai;
 global.AssertionError = chai.AssertionError;
 global.expect = chai.expect;
