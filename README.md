@@ -87,11 +87,11 @@ Below are some examples of the fun stuff you can do with the library.  The route
 are built based on how you chain the function call, so you're limited only by
 your imagination and what routes actually exist.
 
-#### Get the Boards associated with your account
+#### Example: Get the Boards associated with your account
 
-**Trello Endpoint**:
+Trello Endpoint:
 
-`GET /1/members/me/boards&fields=desc,name,pinned&filter=closed,open,public&...`
+`GET /1/members/me/boards&fields=desc,name,pinned&filter=closed,...`
 
 [Trello API Link](https://developers.trello.com/advanced-reference/member#get-1-members-idmember-or-username-boards)
 
@@ -109,9 +109,9 @@ trello.members('me').boards().getBoards({
   .catch(error => console.log(`Oh no!, this happened: ${error}`));
 ```
 
-#### Update a Board
+#### Example: Update a Board
 
-**Trello Endpoint**:
+Trello Endpoint:
 
 `PUT /1/boards/bOaRdId?name=Hooray&prefs/cardCovers=false&...`
 
@@ -139,9 +139,9 @@ trello.boards('bOaRdId').updateBoard({
 .catch(error => console.log(`Oh no!, not again!: ${error}`));
 ```
 
-#### Batch some requests
+#### Example: Batch some requests
 
-**Trello Endpoint**:
+Trello Endpoint:
 
 `GET /1/batch/?urls=/boards/bOaRdId/lists,/cards/cArDiD&key=...`
 
