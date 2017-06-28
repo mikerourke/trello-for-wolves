@@ -47,7 +47,7 @@ I created this library because I wanted to cover all of the Trello routes and
 make it freakishly easy to figure out how to utilize the API by simply reading
 the Trello documentation.  It uses chaining to build a "route" so to speak.
 
-I used [Axios](https://github.com/mzabriskie/axios) for performing requests, so 
+I used [axios](https://github.com/mzabriskie/axios) for performing requests, so 
 if you're not familiar with Promises, you're going to have a bad time.  
 
 This library is typed using [Flow](https://flow.org/), so if you use Flow plugins,
@@ -76,7 +76,7 @@ const trello = new Trello({
 
 ### A Note about Argument Casing
 
-The Trello docs used [snake case](https://en.wikipedia.org/wiki/Snake_case) 
+The Trello API uses [snake case](https://en.wikipedia.org/wiki/Snake_case) 
 for their arguments.  I am not a big fan of snake case and JavaScript is all
 about the camel case, so anywhere in the docs where you see an argument with
 a `_`, camel case-ify it.
