@@ -34,6 +34,8 @@ output/
 docs/
 lib/
 tests/results/
+coverage/
+.nyc_output/
 
 .env
 ids.json

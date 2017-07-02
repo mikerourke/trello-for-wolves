@@ -33,7 +33,8 @@
     "lint": "eslint src --color || exit 0",
     "presetup": "node internals/scripts/pre-setup.js",
     "setup": "yarn cache clean && yarn install",
-    "test": "cross-env NODE_ENV=test node internals/testing/run.js",
+    "test": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha tests/setup.test.js tests/utils tests/resources tests/teardown.test.js --opts ./mocha.opts || exit 0",
+    "coverage": "cross-env NODE_ENV=test nyc report --reporter=text-lcov | coveralls",
     "test:log": "cross-env LOG_TEST_RESULTS=true yarn test",
     "test:save": "cross-env SAVE_TEST_RESULTS=true yarn test"
   },
@@ -51,6 +52,7 @@
     "babel-cli": "^6.24.1",
     "babel-eslint": "^7.2.3",
     "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
@@ -59,6 +61,7 @@
     "chai": "^4.0.2",
     "chai-as-promised": "^7.0.0",
     "chalk": "^1.1.3",
+    "coveralls": "^2.13.1",
     "cross-env": "^5.0.0",
     "dotenv": "^4.0.0",
     "eslint": "^4.0.0",
@@ -69,9 +72,23 @@
     "flow-copy-source": "^1.1.0",
     "jsonfile": "^3.0.0",
     "mocha": "^3.4.2",
+    "mocha-lcov-reporter": "^1.3.0",
     "moment": "^2.18.1",
     "normalizr": "^3.2.3",
+    "nyc": "^11.0.3",
     "rimraf": "^2.6.1",
     "shelljs": "^0.7.8"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "include": [
+      "src"
+    ],
+    "require": [
+      "babel-register",
+      "dotenv/config"
+    ],
+    "sourceMap": false,
+    "instrument": false
   }
 }

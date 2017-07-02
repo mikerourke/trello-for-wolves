@@ -1,5 +1,7 @@
 # Trello for Wolves
 
+[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url]
+
 Node.js wrapper around Trello API...for wolves.  Don't read too much in to the
 name, I just love wolves and everything else on npm with the word
 *Trello* is taken.
@@ -215,3 +217,8 @@ update accordingly.
 ## LICENSE
 
 MIT license. See the [LICENSE](./LICENSE.md) file for details.
+
+[travis-image]: https://travis-ci.org/mikerourke/trello-for-wolves.svg?branch=master
+[travis-url]: https://travis-ci.org/mikerourke/trello-for-wolves
+[coveralls-image]: https://coveralls.io/repos/mikerourke/trello-for-wolves/badge.svg?branch=master&service=github
+[coveralls-url]: https://coveralls.io/github/mikerourke/trello-for-wolves?branch=master
