@@ -84,11 +84,16 @@
   "nyc": {
     "check-coverage": true,
     "include": [
-      "src"
+      "src/**/*.js"
     ],
     "exclude": [
       "src/utils/errors.js",
-      "internals"
+      "src/resources/notification.js",
+      "src/resources/webhook.js",
+      "internals",
+      "internals/testing/logger.js",
+      "internals/testing/setup.js",
+      "tests"
     ],
     "require": [
       "babel-register",

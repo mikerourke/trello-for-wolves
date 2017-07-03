@@ -52,6 +52,7 @@ export default class Token extends BaseResource {
     return new Webhook(this.auth, `${this.routePath}/webhooks/${webhookId}`);
   }
 
+  /* istanbul ignore next: This should pass, but if I delete my token, I can't keep testing. */
   deleteToken(): Promise<*> {
     return this.httpDelete('/');
   }

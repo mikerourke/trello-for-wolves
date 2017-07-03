@@ -178,8 +178,7 @@ export default class Organization extends BaseResource {
   }
 
   memberships(membershipId?: string = '') {
-    return new Membership(
-      this.auth, `${this.routePath}/memberships/${membershipId}`);
+    return new Membership(this.auth, `${this.routePath}/memberships/${membershipId}`);
   }
 
   getPluginData(): Promise<*> {
@@ -249,6 +248,7 @@ export default class Organization extends BaseResource {
     return this.httpPost('/logo', { file });
   }
 
+  /* istanbul ignore next: Requires Business Class subscription */
   addTags(name: string): Promise<*> {
     return this.httpPost('/tags', { name });
   }

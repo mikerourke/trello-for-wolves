@@ -58,7 +58,7 @@ export default class BaseResource {
     queryArgs?: Object = {},
   ): string {
     // We don't want to attempt to stringify the 'file' query arg.
-    const { file = {}, ...otherArgs } = queryArgs; // eslint-disable-line
+    const { file, ...otherArgs } = queryArgs; // eslint-disable-line
 
     // Build the base path based on the current path.  This ensures that the path can
     // continue to be appended without being overwritten.
@@ -69,7 +69,8 @@ export default class BaseResource {
 
     // If queryArgs were provided, build the corresponding querystring to
     // include the specified arguments.
-    const queryString = (otherArgs) ? stringifyQueryArgs(otherArgs) : '';
+    const hasQueryArgs = (Object.keys(otherArgs).length !== 0);
+    const queryString = hasQueryArgs ? stringifyQueryArgs(otherArgs) : '';
 
     // Ensure the key and token is appended to the end of the querystring.
     const authSuffix = stringify(this.auth);

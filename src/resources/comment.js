@@ -16,6 +16,10 @@ import type {
  * @namespace Comment
  */
 export default class Comment extends BaseResource {
+  /**
+   * This is the same as calling ...cards('cardId').actions().getActions({ filter: 'commentCard' }).
+   *    It's just a nice shortcut if you only need Comment actions.
+   */
   getComments(
     queryArgs?: {
       entities?: boolean,

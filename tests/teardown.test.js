@@ -1,6 +1,7 @@
 /* Internal dependencies */
 import Trello from '../src/index';
 import Logger from '../internals/testing/logger';
+const resourcesFile = require('./resources/resources.json');
 
 describe('TEARDOWN | Test Cleanup', function() {
   let logger;
@@ -9,6 +10,9 @@ describe('TEARDOWN | Test Cleanup', function() {
   before(function() {
     trello = new Trello(auth);
     logger = new Logger();
+    if (Object.keys(resources).length === 0) {
+      resources = resourcesFile;
+    }
   });
 
   beforeEach(function() {
@@ -123,7 +127,7 @@ describe('TEARDOWN | Test Cleanup', function() {
         .notify(done);
     });
 
-    it.skip('CAR-D-05-T01 | deletes a Check Item on a Card', function(done) {
+    it('CAR-D-05-T01 | deletes a Check Item on a Card', function(done) {
       if (!resources.card.checkItems.length) {
         this.skip();
       }
@@ -134,7 +138,7 @@ describe('TEARDOWN | Test Cleanup', function() {
         .notify(done);
     });
 
-    it.skip('CAR-D-04-T01 | deletes a Check Item on a Checklist on a Card', function(done) {
+    it('CAR-D-04-T01 | deletes a Check Item on a Checklist on a Card', function(done) {
       if (!resources.card.checklist) {
         this.skip();
       }
@@ -149,11 +153,22 @@ describe('TEARDOWN | Test Cleanup', function() {
         .notify(done);
     });
 
-    it('CAR-D-02-T01 | deletes a Comment on a Card', function(done) {
-      if (!resources.comment) {
+    it('CAR-D-03-T01 | deletes an Attachment on a Card', function(done) {
+      if (!resources.card.attachmentFile) {
         this.skip();
       }
-      const commentId = resources.comment.id;
+      const attachmentId = resources.card.attachmentFile.id;
+      trello.cards(cardId).attachments(attachmentId).deleteAttachment()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-D-02-T01 | deletes a Comment on a Card', function(done) {
+      if (!resources.card.comment) {
+        this.skip();
+      }
+      const commentId = resources.card.comment.id;
       trello.cards(cardId).comments(commentId).deleteComment()
         .then(logResponse)
         .should.eventually.be.fulfilled

@@ -455,14 +455,18 @@ describe('SETUP | Test Preparation and Setup', function() {
     });
 
     it('CAR-P-03-T01 | uploads an Attachment to a Card', function(done) {
-      const attachmentFile = fs.createReadStream(`${assetsPath}/attachment.jpg`);
+      const attachmentFile = fs.createReadStream(`${assetsDir}/attachment.jpg`);
       trello.cards(cardId).attachments().uploadAttachment({
         file: attachmentFile,
         name: 'wolf-one.jpg',
       })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .then((response) => {
+          resources.card.attachmentFile = response.data;
+          assert.isDefined(response.data);
+          done();
+        })
+        .catch(error => done(error));
     });
 
     it('CAR-P-03-T02 | uploads an Attachment as a URL to a Card', function(done) {
@@ -471,8 +475,12 @@ describe('SETUP | Test Preparation and Setup', function() {
         name: 'wolf-two.jpg',
       })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .then((response) => {
+          resources.card.attachmentUrl = response.data;
+          assert.isDefined(response.data);
+          done();
+        })
+        .catch(error => done(error));
     });
 
     it('CAR-P-06-T01 | adds a Checklist to a Card', function(done) {

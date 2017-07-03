@@ -58,6 +58,7 @@ export default class Trello {
     return new Member(this.auth, `/members/${memberIdOrUsername}`);
   }
 
+  /* istanbul ignore next: Need to figure out how to trigger Notifications. */
   notifications(notificationId?: string = ''): Object {
     return new Notification(this.auth, `/notifications/${notificationId}`);
   }
@@ -78,6 +79,7 @@ export default class Trello {
     return new Type(this.auth, '/types');
   }
 
+  /* istanbul ignore next: Need a valid callback URL to create Webhooks. */
   webhooks(webhookId?: string = ''): Object {
     return new Webhook(this.auth, `/webhooks/${webhookId}`);
   }

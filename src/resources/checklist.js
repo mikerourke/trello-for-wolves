@@ -60,13 +60,11 @@ export default class Checklist extends BaseResource {
   }
 
   checkItem(checkItemId?: string = '') {
-    return new CheckItem(
-      this.auth, `${this.routePath}/checkItem/${checkItemId}`);
+    return new CheckItem(this.auth, `${this.routePath}/checkItem/${checkItemId}`);
   }
 
   checkItems(checkItemId?: string = '') {
-    return new CheckItem(
-      this.auth, `${this.routePath}/checkItems/${checkItemId}`);
+    return new CheckItem(this.auth, `${this.routePath}/checkItems/${checkItemId}`);
   }
 
   updateChecklist(

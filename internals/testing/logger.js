@@ -15,6 +15,7 @@ export default class Logger {
     this.dataFromApiCall = {};
     this.outputFolder = './tests/results';
     if (process.env.SAVE_TEST_RESULTS) {
+      /* istanbul ignore if */
       if (!fs.existsSync(this.outputFolder)) {
         fs.mkdirSync(this.outputFolder);
       }
@@ -39,6 +40,7 @@ export default class Logger {
    * @private
    */
   _logToConsoleIfRequired() {
+    /* istanbul ignore if */
     if (process.env.LOG_TEST_RESULTS) {
       console.log(chalk.magenta('ENDPOINT:'));
       console.log(chalk.magenta(`${this.endpoint}\n`));
@@ -54,6 +56,7 @@ export default class Logger {
    * @returns {string}
    * @private
    */
+  /* istanbul ignore next */
   _extrapolateEndpoint(response) {
     if (response.request) {
       const keySeparator = 'key=';
@@ -68,6 +71,7 @@ export default class Logger {
    * @param {Object} response Response object from the API call.
    * @private
    */
+  /* istanbul ignore next */
   _parseResponse(response) {
     let responseData = {};
     let endpoint = {};
@@ -103,6 +107,7 @@ export default class Logger {
    * @param {string} fileName Name of the file to write data to.
    * @returns {Promise}
    */
+  /* istanbul ignore next */
   writeResultsToFile(fileName) {
     // Don't write the results if the environment variable isn't set.
     if (!process.env.SAVE_TEST_RESULTS) {
@@ -136,6 +141,7 @@ export default class Logger {
    *    <code>ACTG01-01 | gets an action</code>
    */
   setTestName(testTitle) {
+    /* istanbul ignore next */
     if (testTitle.includes(' | ')) {
       this.testName = testTitle.split(' | ')[0];
     } else {
@@ -152,6 +158,7 @@ export default class Logger {
   processResponse(response) {
     return new Promise((resolve, reject) => {
       this._parseResponse(response);
+      /* istanbul ignore next */
       if (this.dataFromApiCall) {
         this._logToConsoleIfRequired();
         this._appendToTestResults();

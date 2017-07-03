@@ -112,6 +112,13 @@ describe('CAR | Card Resource', function() {
         .notify(done);
     });
 
+    it('CAR-G-03-T03 | gets the associated Comments', function(done) {
+      trello.cards(cardId).comments().getComments()
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
     it('CAR-G-04-T01 | gets all the Attachments', function(done) {
       trello.cards(cardId).attachments().getAttachments()
         .then(logResponse)

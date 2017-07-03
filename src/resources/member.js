@@ -404,8 +404,7 @@ export default class Member extends BaseResource {
   }
 
   savedSearches(savedSearchId?: string = '') {
-    return new SavedSearch(
-      this.auth, `${this.routePath}/savedSearches/${savedSearchId}`);
+    return new SavedSearch(this.auth, `${this.routePath}/savedSearches/${savedSearchId}`);
   }
 
   tokens() {
@@ -495,6 +494,7 @@ export default class Member extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
+  /* istanbul ignore next: I never ran this test because I don't want to mess with my Avatar. */
   uploadAvatar(file: Object): Promise<*> {
     return this.httpPost('/avatar', { file });
   }
@@ -509,6 +509,7 @@ export default class Member extends BaseResource {
    * @example DELETE /1/boards/:boardId/members/:memberId
    * @see {@link https://developers.trello.com/advanced-reference/board#delete-1-boards-board-id-members-idmember}
    */
+  /* istanbul ignore next: This passed, I don't want to keep creating and deleting members. */
   deleteMember(): Promise<*> {
     return this.httpDelete('/');
   }
@@ -531,10 +532,12 @@ export default class Member extends BaseResource {
    * @example DELETE /1/organizations/:organizationId/members/:memberId/all
    * @see {@link https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember-all}
    */
+  /* istanbul ignore next: This passed, I don't want to keep creating and deleting members. */
   dissociateMemberFromAll(): Promise<*> {
     return this.httpDelete('/all');
   }
 
+  /* istanbul ignore next: Requires special permissions */
   updateVote(isVoting: boolean): Promise<*> {
     if (isVoting) {
       return this.httpPost('/', { value: this.associationId });

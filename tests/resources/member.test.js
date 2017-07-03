@@ -498,8 +498,10 @@ describe('MBR | Member Resource', function() {
     });
 
     it('MBR-G-28-T01 | gets the associated Saved Search with the specified Id', function(done) {
-      const { savedSearches = [] } = memberData;
-      if (!savedSearches.length) {
+      if (!memberData.savedSearches) {
+        done(new Error('Saved Searches key not in Member data.'));
+      }
+      if (!memberData.savedSearches.length) {
         done(new Error('Saved Searches not found.'));
       }
       const savedSearchId = memberData.savedSearches[0].id;
@@ -662,7 +664,7 @@ describe('MBR | Member Resource', function() {
         .notify(done);
     });
 
-    it.skip('MBR-U-14-T01 | updates an associated Saved Search', function(done) {
+    it('MBR-U-14-T01 | updates an associated Saved Search', function(done) {
       if (!testSavedSearch) {
         done(new Error('Saved Search not found.'))
       }
@@ -711,11 +713,11 @@ describe('MBR | Member Resource', function() {
       if (!testSavedSearch) {
         done(new Error('Saved Search not found.'))
       }
-      const { id, query } = testSavedSearch;
-      if (typeof id === 'undefined' || typeof query === 'undefined') {
+      const { id } = testSavedSearch;
+      if (typeof id === 'undefined') {
         done(new Error('Saved Search fields not found.'))
       }
-      trello.members(myMemberId).savedSearches(id).updateQuery(query)
+      trello.members(myMemberId).savedSearches(id).updateQuery(`check-${Date.now()}`)
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
