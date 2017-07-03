@@ -1,7 +1,6 @@
 /* Internal dependencies */
 import Trello from '../src/index';
 import Logger from '../internals/testing/logger';
-const resourcesFile = require('./resources/resources.json');
 
 describe('TEARDOWN | Test Cleanup', function() {
   let logger;
@@ -10,9 +9,6 @@ describe('TEARDOWN | Test Cleanup', function() {
   before(function() {
     trello = new Trello(auth);
     logger = new Logger();
-    if (Object.keys(resources).length === 0) {
-      resources = resourcesFile;
-    }
   });
 
   beforeEach(function() {
