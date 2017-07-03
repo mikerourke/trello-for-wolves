@@ -182,6 +182,30 @@ trello.batch().makeRequests([
   .catch(error => console.log(`Seriously!?: ${error}`));
 ```
 
+#### Example: Add an Attachment to a Card
+
+Trello Endpoint:
+
+`POST /1/cards/cArDiD/attachments`
+
+[Trello API Link](https://developers.trello.com/advanced-reference/card#post-1-cards-card-id-or-shortlink-attachments)
+
+```javascript
+  const fs = require('fs');
+  const path = require('path');
+
+  const attachPath = path.resolve(__dirname, 'bubblegum.jpg');
+  const attachFile = fs.createReadStream(attachPath);
+  trello.cards('cArDiD').attachments().uploadAttachment({
+    file: attachFile,
+    name: 'bubblegum.jpg',
+  })
+  .then((response) => {
+    console.log(response.data); // <- Hooray!  Attachment details!
+  })
+  .catch(error => console.log(`Something went awry: ${error}`));
+```
+
 ## Contributing
 
 ### Development
