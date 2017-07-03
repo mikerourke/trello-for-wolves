@@ -50,15 +50,10 @@ export default class CheckItem extends BaseResource {
       name?: string,
       state?: CheckItemState,
       pos?: PositionNumbered,
-      idChecklistCurrent?: ?string,
       idChecklist?: ?string,
     } = {},
   ): Promise<*> {
-    let updatedArgs = queryArgs;
-    if (this.routePathElements[0] === 'checklists') {
-      updatedArgs = { ...queryArgs, idChecklistCurrent: this.routePathElements[1] };
-    }
-    return this.httpPut('/', updatedArgs);
+    return this.httpPut('/', queryArgs);
   }
 
   updateName(value: string): Promise<*> {

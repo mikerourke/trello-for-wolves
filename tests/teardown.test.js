@@ -1,6 +1,6 @@
 /* Internal dependencies */
 import Trello from '../src/index';
-import Logger from './logger';
+import Logger from '../internals/testing/logger';
 
 describe('TEARDOWN | Test Cleanup', function() {
   let logger;

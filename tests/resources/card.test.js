@@ -1,6 +1,6 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import Logger from '../logger';
+import Logger from '../../internals/testing/logger';
 
 describe('CAR | Card Resource', function() {
   let trello;
@@ -401,9 +401,8 @@ describe('CAR | Card Resource', function() {
         .notify(done);
     });
 
-    // @todo: Get an Attachment Id for testing.
-    it.skip('CAR-U-12-T01 | updates the Attachment cover image', function(done) {
-      trello.cards(cardId).updateAttachmentCoverImage('[NEED ID]')
+    it('CAR-U-12-T01 | updates the Attachment cover image', function(done) {
+      trello.cards(cardId).updateAttachmentCoverImage('')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);

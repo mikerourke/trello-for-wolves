@@ -33,6 +33,8 @@ export type FilterDate = ?Date | 'lastView';
 
 export type Format = 'count' | 'list' | 'minimal';
 
+export type HttpMethod = 'get' | 'put' | 'post' | 'delete';
+
 export type KeepFromSourceField =
   'attachments'
   | 'checklists'

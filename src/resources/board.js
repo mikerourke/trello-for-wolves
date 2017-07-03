@@ -100,6 +100,7 @@ class MyPref extends BaseResource {
    * PUT > .../boards/[boardId]/myPrefs/idEmailList?value=[emailListId]&key=...
    * @see {@link https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-myprefs-idemaillist}
    */
+  /* istanbul ignore next: Requires special permissions */
   moveToEmailList(emailListId: string): Promise<*> {
     return this.httpPut('/idEmailList', { value: emailListId });
   }
@@ -232,7 +233,7 @@ export default class Board extends BaseResource {
     } | {
       // This is the only option if calling from a different resource.
       fields?: ArgumentGroup<BoardField>,
-    }= {},
+    } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -265,7 +266,7 @@ export default class Board extends BaseResource {
     return new Checklist(this.auth, `${this.routePath}/checklists`);
   }
 
-  /* istanbul ignore next: Don't have Business Class subscription */
+  /* istanbul ignore next: Requires Business Class subscription */
   getDeltas(
     queryArgs: {
       tags: string,
@@ -275,7 +276,7 @@ export default class Board extends BaseResource {
     return this.httpGet('/deltas', queryArgs);
   }
 
-  /* istanbul ignore next: Don't have Business Class subscription */
+  /* istanbul ignore next: Requires Business Class subscription */
   getTags(): Promise<*> {
     return this.httpGet('/idTags');
   }
@@ -289,8 +290,7 @@ export default class Board extends BaseResource {
   }
 
   members(memberId?: string = '') {
-    return new Member(
-      this.auth, `${this.routePath}/members/${memberId}`);
+    return new Member(this.auth, `${this.routePath}/members/${memberId}`);
   }
 
   membersInvited() {
@@ -298,8 +298,7 @@ export default class Board extends BaseResource {
   }
 
   memberships(membershipId?: string = '') {
-    return new Membership(
-      this.auth, `${this.routePath}/memberships/${membershipId}`);
+    return new Membership(this.auth, `${this.routePath}/memberships/${membershipId}`);
   }
 
   myPrefs() {
@@ -409,14 +408,17 @@ export default class Board extends BaseResource {
     return this.httpPost('/', updatedArgs);
   }
 
+  /* istanbul ignore next: This works, I don't want to keep re-testing it. */
   generateCalendarKey(): Promise<*> {
     return this.httpPost('/calendarKey/generate');
   }
 
+  /* istanbul ignore next: This works, I don't want to keep re-testing it. */
   generateEmailKey(): Promise<*> {
     return this.httpPost('/emailKey/generate');
   }
 
+  /* istanbul ignore next: Requires Business Class subscription */
   addTags(value: string): Promise<*> {
     return this.httpPost('/tags', { value });
   }

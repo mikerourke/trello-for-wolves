@@ -52,10 +52,12 @@ type BoardVisibilityFilter = 'admin' | 'none' | 'org';
 type BoardVisibilityRestrictionLevel = 'org' | 'private' | 'public';
 
 class Pref extends BaseResource {
+  /* istanbul ignore next: Requires Business Class subscription */
   updateAssociatedDomain(value: string): Promise<*> {
     return this.httpPut('/associatedDomain', { value });
   }
 
+  /* istanbul ignore next: Requires special permissions */
   updateBoardVisibilityRestriction(
     level: BoardVisibilityRestrictionLevel,
     value: BoardVisibilityFilter,
@@ -63,14 +65,17 @@ class Pref extends BaseResource {
     return this.httpPut(`/boardVisibilityRestrict/${level}`, { value });
   }
 
+  /* istanbul ignore next: Requires special permissions */
   updateExternalMembersDisabled(value: boolean): Promise<*> {
     return this.httpPut('/externalMembersDisabled', { value });
   }
 
+  /* istanbul ignore next: Requires special permissions */
   updateGoogleAppsVersion(value: number): Promise<*> {
     return this.httpPut('/googleAppsVersion', { value });
   }
 
+  /* istanbul ignore next: Requires special permissions */
   updateOrgInviteRestrict(value: string): Promise<*> {
     return this.httpPut('/orgInviteRestrict', { value });
   }
@@ -79,10 +84,12 @@ class Pref extends BaseResource {
     return this.httpPut('/permissionLevel', { value });
   }
 
+  /* istanbul ignore next: Requires special permissions */
   deleteAssociatedDomain(): Promise<*> {
     return this.httpDelete('/associatedDomain');
   }
 
+  /* istanbul ignore next: Requires special permissions */
   deleteOrgInviteRestrict(emailAddress: string): Promise<*> {
     return this.httpDelete('/orgInviteRestrict', { value: emailAddress });
   }
@@ -136,9 +143,7 @@ export default class Organization extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  getOrganizationsFilteredBy(
-    filter: ArgumentGroup<OrganizationFilter>,
-  ): Promise<*> {
+  getOrganizationsFilteredBy(filter: ArgumentGroup<OrganizationFilter>): Promise<*> {
     return this.httpGet('/', { filter });
   }
 
@@ -154,7 +159,7 @@ export default class Organization extends BaseResource {
     return new Board(this.auth, `${this.routePath}/boards`);
   }
 
-  /* istanbul ignore next: Don't have Business Class subscription */
+  /* istanbul ignore next: Requires Business Class subscription */
   getDeltas(
     queryArgs: {
       tags: string,
@@ -181,7 +186,7 @@ export default class Organization extends BaseResource {
     return this.httpGet('/pluginData');
   }
 
-  /* istanbul ignore next: Don't have Business Class subscription */
+  /* istanbul ignore next: Requires Business Class subscription */
   getTags(): Promise<*> {
     return this.httpGet('/tags');
   }

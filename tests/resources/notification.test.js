@@ -1,6 +1,6 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import Logger from '../logger';
+import Logger from '../../internals/testing/logger';
 
 describe.skip('NTF | Notification Resource', function() {
   let trello;

@@ -103,7 +103,7 @@ class BoardBackground extends BaseResource {
     } | {
       // customBoardBackgrounds:
       filter?: AllOrNone
-    }= {},
+    } = {},
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -347,14 +347,12 @@ export default class Member extends BaseResource {
     return new Action(this.auth, `${this.routePath}/actions`);
   }
 
-  boardBackgrounds(boardBackgroundId?: string = '') {
-    return new BoardBackground(
-      this.auth, `${this.routePath}/boardBackgrounds/${boardBackgroundId}`);
+  boardBackgrounds(backgroundId?: string = '') {
+    return new BoardBackground(this.auth, `${this.routePath}/boardBackgrounds/${backgroundId}`);
   }
 
   boardStars(boardStarId?: string = '') {
-    return new BoardStar(
-      this.auth, `${this.routePath}/boardStars/${boardStarId}`);
+    return new BoardStar(this.auth, `${this.routePath}/boardStars/${boardStarId}`);
   }
 
   boards() {
@@ -369,23 +367,20 @@ export default class Member extends BaseResource {
     return new Card(this.auth, `${this.routePath}/cards`);
   }
 
-  customBoardBackgrounds(customBoardBackgroundId?: string = '') {
+  customBoardBackgrounds(backgroundId?: string = '') {
     return new BoardBackground(
-      this.auth,
-      `${this.routePath}/customBoardBackgrounds/${customBoardBackgroundId}`);
+      this.auth, `${this.routePath}/customBoardBackgrounds/${backgroundId}`);
   }
 
   customEmoji(customEmojiId?: string = '') {
-    return new CustomEmoji(
-      this.auth, `${this.routePath}/customEmoji/${customEmojiId}`);
+    return new CustomEmoji(this.auth, `${this.routePath}/customEmoji/${customEmojiId}`);
   }
 
   customStickers(customStickerId?: string = '') {
-    return new Sticker(
-      this.auth, `${this.routePath}/customStickers/${customStickerId}`);
+    return new Sticker(this.auth, `${this.routePath}/customStickers/${customStickerId}`);
   }
 
-  /* istanbul ignore next: Don't have Business Class subscription */
+  /* istanbul ignore next: Requires Business Class subscription */
   getDeltas(
     queryArgs: {
       tags: string,

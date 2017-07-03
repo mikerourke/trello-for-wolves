@@ -136,8 +136,7 @@ export default class Card extends BaseResource {
   }
 
   attachments(attachmentId?: string = '') {
-    return new Attachment(
-      this.auth, `${this.routePath}/attachments/${attachmentId}`);
+    return new Attachment(this.auth, `${this.routePath}/attachments/${attachmentId}`);
   }
 
   board() {
@@ -149,23 +148,19 @@ export default class Card extends BaseResource {
   }
 
   checklist(checklistId: string) {
-    return new Checklist(
-      this.auth, `${this.routePath}/checklist/${checklistId}`);
+    return new Checklist(this.auth, `${this.routePath}/checklist/${checklistId}`);
   }
 
   checklists(checklistId?: string = '') {
-    return new Checklist(
-      this.auth, `${this.routePath}/checklists/${checklistId}`);
+    return new Checklist(this.auth, `${this.routePath}/checklists/${checklistId}`);
   }
 
   checkItem(checkItemId: string) {
-    return new CheckItem(
-      this.auth, `${this.routePath}/checkItem/${checkItemId}`);
+    return new CheckItem(this.auth, `${this.routePath}/checkItem/${checkItemId}`);
   }
 
   comments(commentId?: string = '') {
-    return new Comment(
-      this.auth, `${this.routePath}/actions/${commentId}`);
+    return new Comment(this.auth, `${this.routePath}/actions/${commentId}`);
   }
 
   labels() {
@@ -189,8 +184,7 @@ export default class Card extends BaseResource {
   }
 
   stickers(stickerId?: string = '') {
-    return new Sticker(
-      this.auth, `${this.routePath}/stickers/${stickerId}`);
+    return new Sticker(this.auth, `${this.routePath}/stickers/${stickerId}`);
   }
 
   updateCard(

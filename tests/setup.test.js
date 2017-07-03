@@ -1,9 +1,10 @@
 /* External dependencies */
+import fs from 'fs';
 import jsonFile from 'jsonfile';
 
 /* Internal dependencies */
 import Trello from '../src/index';
-import Logger from './logger';
+import Logger from '../internals/testing/logger';
 
 const rootPath = `${process.cwd()}/tests/resources`;
 
@@ -56,7 +57,7 @@ describe('SETUP | Test Preparation and Setup', function() {
       }
     });
 
-    it.only('ORG-P-01-T01 | creates an Organization', function(done) {
+    it('ORG-P-01-T01 | creates an Organization', function(done) {
       const orgName = 'ORG-P-01-T01';
       trello.organizations().addOrganization({
         displayName: orgName,
@@ -64,7 +65,6 @@ describe('SETUP | Test Preparation and Setup', function() {
       })
         .then(logResponse)
         .then((response) => {
-          console.log(response);
           const { data: { id, name, displayName } } = response;
           resources.org = { id, name };
           orgId = id;
@@ -74,11 +74,9 @@ describe('SETUP | Test Preparation and Setup', function() {
         .catch(error => done(error));
     });
 
-    it.skip('ORG-P-02-T01 | uploads a Logo to an Organization', function(done) {
-      trello.organizations(orgId).uploadLogo({
-        filePath: 'Need path',
-        fileName: 'logo',
-      })
+    it('ORG-P-02-T01 | uploads a Logo to an Organization', function(done) {
+      const logoFile = fs.createReadStream(`${assetsDir}/logo.jpg`);
+      trello.organizations(orgId).uploadLogo(logoFile)
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
@@ -89,7 +87,7 @@ describe('SETUP | Test Preparation and Setup', function() {
      * @reason Business Class account required
      */
     it.skip('ORG-P-03-T01 | adds Tags to an Organization', function(done) {
-      trello.organizations(orgId).addTags('[NEED TAG]')
+      trello.organizations(orgId).addTags('')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
@@ -161,6 +159,7 @@ describe('SETUP | Test Preparation and Setup', function() {
         .notify(done);
     });
 
+    // @fix: Getting error with invalid idCard?
     it.skip('BRD-P-03-T01 | adds a Checklist to a Board', function(done) {
       const checklistName = 'BRD-P-03-T01';
       trello.boards(boardId).checklists().addChecklist({
@@ -455,9 +454,22 @@ describe('SETUP | Test Preparation and Setup', function() {
         .catch(error => done(error));
     });
 
-    // @todo: Figure out how to get this working.
-    it.skip('CAR-P-03-T01 | uploads an Attachment to a Card', function(done) {
-      trello.cards(cardId).attachments().uploadAttachment()
+    it('CAR-P-03-T01 | uploads an Attachment to a Card', function(done) {
+      const attachmentFile = fs.createReadStream(`${assetsPath}/attachment.jpg`);
+      trello.cards(cardId).attachments().uploadAttachment({
+        file: attachmentFile,
+        name: 'wolf-one.jpg',
+      })
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
+
+    it('CAR-P-03-T02 | uploads an Attachment as a URL to a Card', function(done) {
+      trello.cards(cardId).attachments().uploadAttachment({
+        url: 'http://www.spiritanimal.info/wp-content/uploads/Wolf-Spirit-Animal-2.jpg',
+        name: 'wolf-two.jpg',
+      })
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);

@@ -14,8 +14,10 @@ export default class Logger {
     this.endpoint = '';
     this.dataFromApiCall = {};
     this.outputFolder = './tests/results';
-    if (!fs.existsSync(this.outputFolder)) {
-      fs.mkdirSync(this.outputFolder);
+    if (process.env.SAVE_TEST_RESULTS) {
+      if (!fs.existsSync(this.outputFolder)) {
+        fs.mkdirSync(this.outputFolder);
+      }
     }
   }
 

@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const path = require('path');
 const chalk = require('chalk');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -19,6 +20,10 @@ global.auth = auth;
 // exceeded.
 const testDelay = process.env.TEST_DELAY || 1000;
 global.testDelay = testDelay;
+
+// Path to assets (used for uploading files).
+const assetsDir = path.resolve(process.cwd(), 'internals/testing/assets');
+global.assetsDir = assetsDir;
 
 // Stores the resource information for newly created instances.  This
 // prvents the need to read and write to a JSON file.

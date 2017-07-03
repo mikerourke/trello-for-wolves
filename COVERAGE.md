@@ -9,8 +9,8 @@ The table below contains all of the available Trello routes and their status in 
 📌: Test was skipped or is failing, need to come back to it.<br />
 🔒: Premium feature or special permission that I'm not able to test (e.g. Business Class).<br />
 
-| Id       | Resource     | Method | Path                                                      | Coded | Tested        | Documented |
-|:---------|:-------------|:-------|:----------------------------------------------------------|:-----:|:-------------:|:----------:|
+| Id       | Resource     | Method | Path                                                      | Coded  | Tested      | Documented |
+|:---------|:-------------|:-------|:----------------------------------------------------------|:------:|:-----------:|:----------:|
 | ACT-G-01 | action       | get    | /actions/:id                                              | ✅     | ✅          | ✅         |
 | ACT-G-02 | action       | get    | /actions/:id/:field                                       | ✅     | ✅          | ✅         |
 | ACT-G-03 | action       | get    | /actions/:id/board                                        | ✅     | ✅          | ✅         |
@@ -314,8 +314,8 @@ The table below contains all of the available Trello routes and their status in 
 | ORG-D-02 | organization | delete | /organizations/:id/logo                                   | ✅     | ✅          |            |
 | ORG-D-03 | organization | delete | /organizations/:id/members/:idMember                      | ✅     | ✅          |            |
 | ORG-D-04 | organization | delete | /organizations/:id/members/:idMember/all                  | ✅     | ✅          |            |
-| ORG-D-05 | organization | delete | /organizations/:id/prefs/associatedDomain                 | ✅     | ✅          |            |
-| ORG-D-06 | organization | delete | /organizations/:id/prefs/orgInviteRestrict                | ✅     | ✅          |            |
+| ORG-D-05 | organization | delete | /organizations/:id/prefs/associatedDomain                 | ✅     | 🔒          |            |
+| ORG-D-06 | organization | delete | /organizations/:id/prefs/orgInviteRestrict                | ✅     | 🔒          |            |
 | SRC-G-01 | search       | get    | /search                                                   | ✅     | ✅          |            |
 | SRC-G-02 | search       | get    | /search/members                                           | ✅     | ✅          |            |
 | TKN-G-01 | token        | get    | /tokens/:token                                            | ✅     | ✅          |            |

@@ -54,7 +54,6 @@ export default class Attachment extends BaseResource {
     return this.httpGet('/', queryArgs);
   }
 
-  // @todo: Make sure this works for a file.
   uploadAttachment(
     queryArgs?: {
       file?: Object,

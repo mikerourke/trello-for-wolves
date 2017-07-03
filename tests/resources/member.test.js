@@ -1,6 +1,9 @@
+/* External dependencies */
+import fs from 'fs';
+
 /* Internal dependencies */
 import Trello from '../../src/index';
-import Logger from '../logger';
+import Logger from '../../internals/testing/logger';
 
 describe('MBR | Member Resource', function() {
   let trello;
@@ -8,10 +11,10 @@ describe('MBR | Member Resource', function() {
 
   const myMemberId = process.env.TRELLO_MEMBER_ID || '';
   let memberData = {};
-
   let testBoardBackground = {};
   let testCustomBackground = {};
   let testBoardStar = {};
+  let testCustomEmoji = {};
   let testCustomSticker = {};
   let testSavedSearch = {};
 
@@ -38,23 +41,19 @@ describe('MBR | Member Resource', function() {
     });
 
     it.skip('MBR-P-01-T01 | uploads an Avatar', function(done) {
-      trello.members(myMemberId).uploadAvatar({
-        filePath: '',
-        fileName: '',
-      })
+      const avatarFile = fs.createReadStream(`${assetsDir}/avatar.jpg`);
+      trello.members(myMemberId).uploadAvatar(avatarFile)
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it.skip('MBR-P-02-T01 | uploads a Board Background', function(done) {
-      trello.members(myMemberId).boardBackgrounds().uploadBoardBackground({
-        filePath: '',
-        fileName: '',
-      })
+    it('MBR-P-02-T01 | uploads a Board Background', function(done) {
+      const backgroundFile = fs.createReadStream(`${assetsDir}/background.jpg`);
+      trello.members(myMemberId).boardBackgrounds().uploadBoardBackground(backgroundFile)
         .then(logResponse)
         .then((response) => {
-          testBoardBackground = response.data;
+          testBoardBackground = response.data || {};
           assert.isDefined(response.data);
           done();
         })
@@ -72,67 +71,73 @@ describe('MBR | Member Resource', function() {
       })
         .then(logResponse)
         .then((response) => {
-          testBoardStar = response.data;
+          testBoardStar = response.data || {};
           assert.isDefined(response.data);
           done();
         })
         .catch(error => done(error));
     });
 
-    it.skip('MBR-P-04-T01 | uploads a Custom Board Background', function(done) {
-      trello.members(myMemberId).customBoardBackgrounds().uploadBoardBackground({
-        filePath: '',
-        fileName: '',
-      })
+    it('MBR-P-04-T01 | uploads a Custom Board Background', function(done) {
+      const backgroundFile = fs.createReadStream(`${assetsDir}/background.jpg`);
+      trello.members(myMemberId).customBoardBackgrounds().uploadBoardBackground(backgroundFile)
         .then(logResponse)
         .then((response) => {
-          testCustomBackground = response.data;
+          testCustomBackground = response.data || {};
           assert.isDefined(response.data);
           done();
         })
         .catch(error => done(error));
     });
 
-    it.skip('MBR-P-05-T01 | uploads a Custom Emoji', function(done) {
-      trello.members(myMemberId).customEmoji().uploadCustomEmoji('test', {
-        filePath: '',
-        fileName: '',
+    it('MBR-P-05-T01 | uploads a Custom Emoji', function(done) {
+      const emojiFile = fs.createReadStream(`${assetsDir}/custom-emoji.png`);
+      trello.members(myMemberId).customEmoji().uploadCustomEmoji({
+        name: 'test',
+        file: emojiFile,
       })
-        .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .then((response) => {
+          testCustomEmoji = response.data || {};
+          assert.isDefined(response.data);
+          done();
+        })
+        .catch(error => done(error));
     });
 
-    it.skip('MBR-P-06-T01 | uploads a Custom Sticker', function(done) {
-      trello.members(myMemberId).customStickers().uploadSticker({
-        filePath: '',
-        fileName: '',
-      })
+    it('MBR-P-06-T01 | uploads a Custom Sticker', function(done) {
+      const stickerFile = fs.createReadStream(`${assetsDir}/custom-sticker.png`);
+      trello.members(myMemberId).customStickers().uploadSticker(stickerFile)
         .then(logResponse)
         .then((response) => {
-          testCustomSticker = response.data;
+          testCustomSticker = response.data || {};
           assert.isDefined(response.data);
           done();
         })
         .catch(error => done(error));
     });
 
+    /**
+     * @skip MBR-P-07
+     * @reason Need a message type
+     */
     it.skip('MBR-P-07-T01 | dismisses messages one time', function(done) {
-      trello.members(myMemberId).dismissOneTimeMessages('[NEED MESSAGE TYPE]')
+      trello.members(myMemberId).dismissOneTimeMessages('')
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
     it('MBR-P-08-T01 | adds a Saved Search', function(done) {
-      trello.members(myMemberId).savedSearches().addSavedSearch({
-        name: 'MBR-P-08-T01',
-        query: '@bobby',
+      const currentTime = Date.now();
+      const newSavedSearch = {
+        name: `test-${currentTime}`,
+        query: `find-${currentTime}`,
         pos: 'top',
-      })
+      }
+      trello.members(myMemberId).savedSearches().addSavedSearch(newSavedSearch)
         .then(logResponse)
         .then((response) => {
-          testSavedSearch = response.data;
+          testSavedSearch = response.data || {};
           assert.isDefined(response.data);
           done();
         })
@@ -199,7 +204,7 @@ describe('MBR | Member Resource', function() {
         boardsInvited: 'all',
         boardsInvitedFields: 'all',
         boardStars: true,
-        savedSearches: false,
+        savedSearches: true,
         organizations: 'all',
         organizationFields: 'all',
         organizationPaidAccount: false,
@@ -493,7 +498,8 @@ describe('MBR | Member Resource', function() {
     });
 
     it('MBR-G-28-T01 | gets the associated Saved Search with the specified Id', function(done) {
-      if (!memberData.savedSearches.length) {
+      const { savedSearches = [] } = memberData;
+      if (!savedSearches.length) {
         done(new Error('Saved Searches not found.'));
       }
       const savedSearchId = memberData.savedSearches[0].id;
@@ -513,21 +519,6 @@ describe('MBR | Member Resource', function() {
 
   describe('MBR-U | Member PUT requests', function() {
     before(function(done) {
-      if (!testBoardBackground) {
-        testBoardBackground = memberData.boardBackgrounds.slice(-1);
-      }
-      if (!testCustomBackground) {
-        testCustomBackground = memberData.customBoardBackgrounds.slice(-1);
-      }
-      if (!testBoardStar) {
-        testBoardStar = memberData.boardStars.slice(-1);
-      }
-      if (!testCustomSticker) {
-        testCustomSticker = memberData.customStickers.slice(-1);
-      }
-      if (!testSavedSearch) {
-        testSavedSearch = memberData.savedSearches.slice(-1);
-      }
       setTimeout(() => { done(); }, testDelay);
     });
 
@@ -562,7 +553,10 @@ describe('MBR | Member Resource', function() {
       if (!testBoardBackground) {
         done(new Error('Background not found.'))
       }
-      const { id, tile } = testBoardBackground;
+      const { id, tile = false } = testBoardBackground;
+      if (typeof id === 'undefined' || typeof tile === 'undefined') {
+        done(new Error('Board Background fields not found.'))
+      }
       trello.members(myMemberId).boardBackgrounds(id).updateBoardBackground({
         tile,
       })
@@ -576,6 +570,9 @@ describe('MBR | Member Resource', function() {
         done(new Error('Board Star not found.'))
       }
       const { id, pos } = testBoardStar;
+      if (typeof id === 'undefined' || typeof pos === 'undefined') {
+        done(new Error('Board Star fields not found.'))
+      }
       trello.members(myMemberId).boardStars(id).updateBoardStar({
         pos,
       })
@@ -589,6 +586,9 @@ describe('MBR | Member Resource', function() {
         done(new Error('Board Star not found.'))
       }
       const { id, idBoard } = testBoardStar;
+      if (typeof id === 'undefined' || typeof idBoard === 'undefined') {
+        done(new Error('Board Star fields not found.'))
+      }
       trello.members(myMemberId).boardStars(id).moveBoardStarToBoard(idBoard)
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -600,6 +600,9 @@ describe('MBR | Member Resource', function() {
         done(new Error('Board Star not found.'))
       }
       const { id, pos } = testBoardStar;
+      if (typeof id === 'undefined' || typeof pos === 'undefined') {
+        done(new Error('Board Star fields not found.'))
+      }
       trello.members(myMemberId).boardStars(id).updatePosition(pos)
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -611,6 +614,9 @@ describe('MBR | Member Resource', function() {
         done(new Error('Custom Background not found.'))
       }
       const { id, tile } = testCustomBackground;
+      if (typeof id === 'undefined' || typeof tile === 'undefined') {
+        done(new Error('Custom Background fields not found.'))
+      }
       trello.members(myMemberId).customBoardBackgrounds(id).updateBoardBackground({
         tile,
       })
@@ -661,9 +667,7 @@ describe('MBR | Member Resource', function() {
         done(new Error('Saved Search not found.'))
       }
       const { id, name, pos } = testSavedSearch;
-      if (typeof id === 'undefined'
-          || typeof name === 'undefined'
-          || typeof pos === 'undefined') {
+      if (typeof id === 'undefined' || typeof name === 'undefined' || typeof pos === 'undefined') {
         done(new Error('Saved Search fields not found.'))
       }
       trello.members(myMemberId).savedSearches(id).updateSavedSearch({
@@ -680,6 +684,9 @@ describe('MBR | Member Resource', function() {
         done(new Error('Saved Search not found.'))
       }
       const { id, name } = testSavedSearch;
+      if (typeof id === 'undefined' || typeof name === 'undefined') {
+        done(new Error('Saved Search fields not found.'))
+      }
       trello.members(myMemberId).savedSearches(id).updateName(name)
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -691,6 +698,9 @@ describe('MBR | Member Resource', function() {
         done(new Error('Saved Search not found.'))
       }
       const { id, pos } = testSavedSearch;
+      if (typeof id === 'undefined' || typeof pos === 'undefined') {
+        done(new Error('Saved Search fields not found.'))
+      }
       trello.members(myMemberId).savedSearches(id).updatePosition(pos)
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -702,6 +712,9 @@ describe('MBR | Member Resource', function() {
         done(new Error('Saved Search not found.'))
       }
       const { id, query } = testSavedSearch;
+      if (typeof id === 'undefined' || typeof query === 'undefined') {
+        done(new Error('Saved Search fields not found.'))
+      }
       trello.members(myMemberId).savedSearches(id).updateQuery(query)
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -725,11 +738,14 @@ describe('MBR | Member Resource', function() {
       setTimeout(() => { done(); }, testDelay);
     });
 
-    it.skip('MBR-D-01-T01 | deletes a Board Background', function(done) {
+    it('MBR-D-01-T01 | deletes a Board Background', function(done) {
       if (!testBoardBackground) {
         done(new Error('Board Background not found.'));
       }
       const { id } = testBoardBackground;
+      if (typeof id === 'undefined') {
+        done(new Error('Board Background Id is invalid.'))
+      }
       trello.members(myMemberId).boardBackgrounds(id).deleteBoardBackground()
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -741,39 +757,51 @@ describe('MBR | Member Resource', function() {
         done(new Error('Board Star not found.'));
       }
       const { id } = testBoardStar;
+      if (typeof id === 'undefined') {
+        done(new Error('Board Star Id is invalid.'))
+      }
       trello.members(myMemberId).boardStars(id).deleteBoardStar()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it.skip('MBR-D-03-T01 | deletes a Custom Board Background', function(done) {
+    it('MBR-D-03-T01 | deletes a Custom Board Background', function(done) {
       if (!testCustomBackground) {
         done(new Error('Custom Board Background not found.'));
       }
       const { id } = testCustomBackground;
+      if (typeof id === 'undefined') {
+        done(new Error('Custom Board Background Id is invalid.'))
+      }
       trello.members(myMemberId).customBoardBackgrounds(id).deleteBoardBackground()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it.skip('MBR-D-04-T01 | deletes a Custom Sticker', function(done) {
+    it('MBR-D-04-T01 | deletes a Custom Sticker', function(done) {
       if (!testCustomSticker) {
         done(new Error('Custom Sticker not found.'));
       }
       const { id } = testCustomSticker;
+      if (typeof id === 'undefined') {
+        done(new Error('Custom Sticker Id is invalid.'))
+      }
       trello.members(myMemberId).customStickers(id).deleteSticker()
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
     });
 
-    it.skip('MBR-D-05-T01 | deletes a Saved Search', function(done) {
+    it('MBR-D-05-T01 | deletes a Saved Search', function(done) {
       if (!testSavedSearch) {
         done(new Error('Saved Search not found.'));
       }
       const { id } = testSavedSearch;
+      if (typeof id === 'undefined') {
+        done(new Error('Saved Search Id is invalid.'))
+      }
       trello.members(myMemberId).savedSearches(id).deleteSavedSearch()
         .then(logResponse)
         .should.eventually.be.fulfilled

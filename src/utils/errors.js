@@ -50,16 +50,15 @@ const getCleanUrl = (url: string) => {
  */
 export class ApiCallResponseError extends BaseError {
   /* eslint-disable no-undef */
-  message: string;
-  status: string;
-  config: Object;
-  response: Object;
+  apiMessage: string;
+  apiStatus: string;
+  apiConfig: Object;
   /* eslint-enable no-undef */
 
   constructor(
     response: Object,
   ) {
-    const { data, status: statusCode, config: { method, uri: url } } = response;
+    const { data, status, config: { method, url } } = response;
     const cleanUrl = getCleanUrl(url);
     let includedMessage = '';
     if (data) {
@@ -73,16 +72,15 @@ export class ApiCallResponseError extends BaseError {
         includedMessage = ` with an error message of "${dataContent}"`;
       }
     }
-    const errorMessage =
-      `The server returned status code ${statusCode}${includedMessage} when ` +
+    const message =
+      `The server returned status code ${status}${includedMessage} when ` +
       `attempting to perform a ${method} request to ${cleanUrl}. (Note: The ` +
       'key and token have been removed from the displayed url.)';
-    super(errorMessage, 'ApiCallResponseError');
+    super(message, 'ApiCallResponseError');
 
-    this.message = data;
-    this.status = statusCode;
-    this.config = response.config;
-    this.response = response;
+    this.apiMessage = data;
+    this.apiStatus = status;
+    this.apiConfig = response.config;
   }
 }
 
