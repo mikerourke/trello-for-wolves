@@ -22,7 +22,6 @@ module.exports = {
       defaultParams: true,
       destructuring: true,
       forOf: true,
-      generators: true,
       modules: true,
       objectLiteralComputedProperties: true,
       objectLiteralDuplicateProperties: true,
@@ -44,7 +43,7 @@ module.exports = {
     mocha: true,
   },
   rules: {
-    'max-len': ['error', 80, 2, {
+    'max-len': ['error', 100, 2, {
       ignoreComments: true,
       ignoreRegExpLiterals: true,
       ignoreStrings: true,
@@ -52,34 +51,8 @@ module.exports = {
       ignoreTrailingComments: true,
       ignoreUrls: true,
     }],
-    // Since I develop on both Windows and Mac, I don't want to have to keep
-    // fixing this:
-    'linebreak-style': 'off',
-    /*
-     Airbnb Style Overrides:
-     */
-    'arrow-body-style': ['off', 'as-needed'],
-    'indent': ['warn', 2, { 'SwitchCase': 1 }],
-    'import/default': 'off',
-    'import/extensions': 'off',
-    'import/first': 'off',
-    'import/no-duplicates': 'warn',
-    'import/no-extraneous-dependencies': 'off',
-    'import/named': 'off',
-    'import/namespace': ['off', { 'allowComputed': true }],
-    'import/no-named-as-default': 'off',
-    'import/no-named-as-default-member': 'off',
-    'import/no-unresolved': 'off',
-    'import/prefer-default-export': 'off',
-    'no-console': 'warn',
-    'no-debugger': 'warn',
-    'no-param-reassign': 'off',
-    'semi': ['warn', 'always'],
-    'no-trailing-spaces': 'off',
-    'eol-last': 'off',
-    'no-unused-vars': 'warn',
-    'no-underscore-dangle': 'off',
-    'no-alert': 'off',
-    'no-lone-blocks': 'off'
+    'class-methods-use-this': 'off',
+    'flowtype/define-flow-type': 'warn',
+    'flowtype/use-flow-type': 'warn',
   }
 };

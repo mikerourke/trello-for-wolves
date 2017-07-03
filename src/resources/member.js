@@ -22,7 +22,6 @@ import type {
   BoardFilter,
   CardField,
   CardFilter,
-  FileProperties,
   FilterDate,
   Format,
   ListFilter,
@@ -126,8 +125,8 @@ class BoardBackground extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  uploadBoardBackground(fileProperties: FileProperties): Promise<*> {
-    return this.httpPost('/', {}, fileProperties);
+  uploadBoardBackground(file: Object): Promise<*> {
+    return this.httpPost('/', { file });
   }
 
   deleteBoardBackground(): Promise<*> {
@@ -192,10 +191,12 @@ class CustomEmoji extends BaseResource {
   }
 
   uploadCustomEmoji(
-    name: string,
-    fileProperties: FileProperties,
+    queryArgs: {
+      name: string,
+      file: Object,
+    },
   ): Promise<*> {
-    return this.httpPost('/', { name }, fileProperties);
+    return this.httpPost('/', queryArgs);
   }
 }
 
@@ -384,6 +385,7 @@ export default class Member extends BaseResource {
       this.auth, `${this.routePath}/customStickers/${customStickerId}`);
   }
 
+  /* istanbul ignore next: Don't have Business Class subscription */
   getDeltas(
     queryArgs: {
       tags: string,
@@ -498,8 +500,8 @@ export default class Member extends BaseResource {
     return this.httpPut('/', queryArgs);
   }
 
-  uploadAvatar(fileProperties: FileProperties): Promise<*> {
-    return this.httpPost('/avatar', {}, fileProperties);
+  uploadAvatar(file: Object): Promise<*> {
+    return this.httpPost('/avatar', { file });
   }
 
   dismissOneTimeMessages(value: string): Promise<*> {

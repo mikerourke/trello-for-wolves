@@ -33,7 +33,7 @@ describe('LST | List Resource', function() {
 
   describe('LST-G | List GET requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it('LST-G-01-T01 | gets a List', (done) => {
@@ -146,7 +146,7 @@ describe('LST | List Resource', function() {
 
   describe('LST-U | List PUT requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it('LST-U-01-T01 | updates a List', function(done) {

@@ -34,7 +34,7 @@ describe('MBR | Member Resource', function() {
 
   describe('MBR-P | Member POST requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it.skip('MBR-P-01-T01 | uploads an Avatar', function(done) {
@@ -142,7 +142,7 @@ describe('MBR | Member Resource', function() {
 
   describe('MBR-G | Member GET requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     // Add a delay between requests due to the large amount of tests and
@@ -528,7 +528,7 @@ describe('MBR | Member Resource', function() {
       if (!testSavedSearch) {
         testSavedSearch = memberData.savedSearches.slice(-1);
       }
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it('MBR-U-01-T01 | updates a Member', function(done) {
@@ -722,7 +722,7 @@ describe('MBR | Member Resource', function() {
 
   describe('MBR-D | Member DELETE requests', function() {
     before(function (done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it.skip('MBR-D-01-T01 | deletes a Board Background', function(done) {

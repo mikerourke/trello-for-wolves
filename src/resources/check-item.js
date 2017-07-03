@@ -56,10 +56,7 @@ export default class CheckItem extends BaseResource {
   ): Promise<*> {
     let updatedArgs = queryArgs;
     if (this.routePathElements[0] === 'checklists') {
-      updatedArgs = {
-        ...queryArgs,
-        idChecklistCurrent: this.routePathElements[1],
-      };
+      updatedArgs = { ...queryArgs, idChecklistCurrent: this.routePathElements[1] };
     }
     return this.httpPut('/', updatedArgs);
   }

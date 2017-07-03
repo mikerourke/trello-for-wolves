@@ -11,6 +11,7 @@ import Comment from './comment';
 import Label from './label';
 import List from './list';
 import Member from './member';
+import Sticker from './sticker';
 
 /* Types */
 import type {
@@ -23,15 +24,15 @@ import type {
   BoardField,
   CheckItemStateField,
   ChecklistField,
-  FileProperties,
   KeepFromSourceField,
   LabelColor,
   ListField,
   MemberField,
   PositionNumbered,
+  StickerField,
 } from '../types';
 
-export type CardAging = 'pirate' | 'regular';
+export type CardAging = 'pirate' | 'regular'; // eslint-disable-line no-undef
 
 export type CardField =
   'badges'
@@ -66,60 +67,6 @@ export type CardField =
   | 'url';
 
 export type CardFilter = 'all' | 'closed' | 'none' | 'open' | 'visible';
-
-type StickerField =
-  'image'
-  | 'imageScaled'
-  | 'imageUrl'
-  | 'left'
-  | 'rotate'
-  | 'top'
-  | 'zIndex';
-
-class Sticker extends BaseResource {
-  getStickers(
-    queryArgs?: {
-      fields?: ArgumentGroup<StickerField>,
-    } = {},
-  ): Promise<*> {
-    return this.httpGet('/', queryArgs);
-  }
-
-  getSticker(
-    queryArgs?: {
-      fields?: ArgumentGroup<StickerField>,
-    } = {},
-  ): Promise<*> {
-    return this.httpGet('/', queryArgs);
-  }
-
-  updateSticker(
-    queryArgs?: {
-      top?: number,
-      left?: number,
-      zIndex?: number,
-      rotate?: number,
-    } = {},
-  ): Promise<*> {
-    return this.httpPut('/', queryArgs);
-  }
-
-  addSticker(
-    queryArgs: {
-      image: string,
-      top: number,
-      left: number,
-      zIndex: number,
-      rotate?: number,
-    },
-  ): Promise<*> {
-    return this.httpPost('/', queryArgs);
-  }
-
-  deleteSticker(): Promise<*> {
-    return this.httpDelete('/');
-  }
-}
 
 /**
  * @namespace Card
@@ -330,7 +277,7 @@ export default class Card extends BaseResource {
       idMembers?: Array<string>,
       idLabels?: Array<string>,
       urlSource?: ?string,
-      fileSourceProperties?: FileProperties,
+      fileSource?: Object,
       idCardSource?: string,
       keepFromSource?: KeepFromSourceField | Array<KeepFromSourceField>,
     } | {
@@ -342,8 +289,7 @@ export default class Card extends BaseResource {
       due?: ?Date,
     },
   ): Promise<*> {
-    const { fileSourceProperties, ...otherArgs } = (queryArgs: Object);
-    return this.httpPost('/', otherArgs, fileSourceProperties);
+    return this.httpPost('/', queryArgs);
   }
 
   associateLabel(labelId: string): Promise<*> {

@@ -72,7 +72,7 @@ export default class Sticker extends BaseResource {
   }
 
   uploadSticker(file: Object): Promise<*> {
-    return this.httpPost('/', {}, file);
+    return this.httpPost('/', { file });
   }
 
   deleteSticker(): Promise<*> {

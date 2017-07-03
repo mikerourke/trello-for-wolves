@@ -42,11 +42,10 @@ describe('SETUP | Test Preparation and Setup', function() {
   describe('ORG-P | Organization POST requests', function() {
     let orgId = '';
 
-    before(function(done) {
+    before(function() {
       if (!resources.org) {
         resources.org = {};
       }
-      setTimeout(() => { done(); }, 1500);
     });
 
     beforeEach(function() {
@@ -57,7 +56,7 @@ describe('SETUP | Test Preparation and Setup', function() {
       }
     });
 
-    it('ORG-P-01-T01 | creates an Organization', function(done) {
+    it.only('ORG-P-01-T01 | creates an Organization', function(done) {
       const orgName = 'ORG-P-01-T01';
       trello.organizations().addOrganization({
         displayName: orgName,
@@ -65,6 +64,7 @@ describe('SETUP | Test Preparation and Setup', function() {
       })
         .then(logResponse)
         .then((response) => {
+          console.log(response);
           const { data: { id, name, displayName } } = response;
           resources.org = { id, name };
           orgId = id;
@@ -121,7 +121,7 @@ describe('SETUP | Test Preparation and Setup', function() {
       if (!resources.board) {
         resources.board = {};
       }
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     beforeEach(function() {
@@ -257,7 +257,7 @@ describe('SETUP | Test Preparation and Setup', function() {
       if (!resources.labels) {
         resources.labels = [];
       }
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it('LBL-P-01-T01 | creates a Green Label', function(done) {
@@ -302,7 +302,7 @@ describe('SETUP | Test Preparation and Setup', function() {
       if (!resources.list) {
         resources.list = {};
       }
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     beforeEach(function() {
@@ -397,7 +397,7 @@ describe('SETUP | Test Preparation and Setup', function() {
       if (!resources.card) {
         resources.card = {};
       }
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     beforeEach(function() {
@@ -687,7 +687,7 @@ describe('SETUP | Test Preparation and Setup', function() {
       if (!resources.checklist) {
         resources.checklist = {};
       }
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it('CHK-P-01-T01 | creates a Checklist', function(done) {

@@ -14,7 +14,6 @@ import type {
   ArgumentGroup,
   BoardField,
   BoardFilter,
-  FileProperties,
   FilterDate,
   Format,
   ListFilter,
@@ -155,6 +154,7 @@ export default class Organization extends BaseResource {
     return new Board(this.auth, `${this.routePath}/boards`);
   }
 
+  /* istanbul ignore next: Don't have Business Class subscription */
   getDeltas(
     queryArgs: {
       tags: string,
@@ -181,6 +181,7 @@ export default class Organization extends BaseResource {
     return this.httpGet('/pluginData');
   }
 
+  /* istanbul ignore next: Don't have Business Class subscription */
   getTags(): Promise<*> {
     return this.httpGet('/tags');
   }
@@ -205,7 +206,6 @@ export default class Organization extends BaseResource {
       website?: ?string,
     } = {},
   ): Promise<*> {
-    // @todo: Write handler for nested prefs.
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
 
@@ -240,9 +240,8 @@ export default class Organization extends BaseResource {
     return this.httpPost('/', queryArgs);
   }
 
-  // @todo: Figure out how to get file upload working.
-  uploadLogo(fileProperties: FileProperties): Promise<*> {
-    return this.httpPost('/logo', {}, fileProperties);
+  uploadLogo(file: Object): Promise<*> {
+    return this.httpPost('/logo', { file });
   }
 
   addTags(name: string): Promise<*> {

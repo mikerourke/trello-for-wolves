@@ -32,7 +32,7 @@ describe.skip('NTF | Notification Resource', function() {
 
   describe('NTF-G | Notification GET requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it('NTF-G-01-T01 | gets a Notification', function(done) {
@@ -255,7 +255,7 @@ describe.skip('NTF | Notification Resource', function() {
 
   describe('NTF-U | Notification PUT requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it('NTF-U-01-T01 | updates a Notification', function(done) {
@@ -277,7 +277,7 @@ describe.skip('NTF | Notification Resource', function() {
 
   describe('NTF-P | Notification POST requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it('NTF-P-01-T01 | marks all Notifications as read', function(done) {

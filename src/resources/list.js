@@ -111,10 +111,11 @@ export default class List extends BaseResource {
       pos?: PositionNumbered,
     },
   ): Promise<*> {
+    let updatedArgs = queryArgs;
     if (this.routePathElements[0] === 'boards') {
-      queryArgs.idBoard = this.routePathElements[1];
+      updatedArgs = { ...queryArgs, idBoard: this.routePathElements[1] };
     }
-    return this.httpPost('/', queryArgs);
+    return this.httpPost('/', updatedArgs);
   }
 
   archiveAllCards(): Promise<*> {

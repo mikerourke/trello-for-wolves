@@ -20,7 +20,7 @@ import Webhook from './resources/webhook';
 import type { Auth } from './types';
 
 export default class Trello {
-  auth: Auth;
+  auth: Auth; // eslint-disable-line no-undef
 
   constructor(auth: Auth) {
     this.auth = auth;

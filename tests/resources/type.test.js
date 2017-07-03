@@ -9,7 +9,7 @@ describe('TYP | Type Resource', function() {
   before(function(done) {
     trello = new Trello(auth);
     logger = new Logger();
-    setTimeout(() => { done(); }, 1500);
+    setTimeout(() => { done(); }, testDelay);
   });
 
   beforeEach(function() {

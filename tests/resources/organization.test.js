@@ -34,7 +34,7 @@ describe('ORG | Organization Resource', function() {
 
   describe('ORG-G | Organization GET requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it('ORG-G-01-T01 | gets an Organization', function(done) {
@@ -255,7 +255,7 @@ describe('ORG | Organization Resource', function() {
 
   describe('ORG-U | Organization PUT requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it('ORG-U-01-T01 | updates an Organization', function(done) {

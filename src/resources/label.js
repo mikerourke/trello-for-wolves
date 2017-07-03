@@ -70,10 +70,11 @@ export default class Label extends BaseResource {
       idBoard?: string,
     },
   ): Promise<*> {
+    let updatedArgs = queryArgs;
     if (this.routePathElements[0] === 'boards') {
-      queryArgs.idBoard = this.routePathElements[1];
+      updatedArgs = { ...queryArgs, idBoard: this.routePathElements[1] };
     }
-    return this.httpPost('/', queryArgs);
+    return this.httpPost('/', updatedArgs);
   }
 
   deleteLabel(): Promise<*> {

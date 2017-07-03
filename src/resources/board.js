@@ -36,7 +36,6 @@ import type {
   OrganizationField,
   PermissionLevel,
   Position,
-  PositionNumbered,
 } from '../types';
 
 export type BoardField =
@@ -70,7 +69,7 @@ export type BoardFilter =
   | 'starred'
   | 'unpinned'
 
-export type BoardMemberType = 'admin' | 'normal' | 'observer';
+export type BoardMemberType = 'admin' | 'normal' | 'observer'; // eslint-disable-line no-undef
 
 export type BoardStarsFilter = 'none' | 'mine';
 
@@ -266,6 +265,7 @@ export default class Board extends BaseResource {
     return new Checklist(this.auth, `${this.routePath}/checklists`);
   }
 
+  /* istanbul ignore next: Don't have Business Class subscription */
   getDeltas(
     queryArgs: {
       tags: string,
@@ -275,6 +275,7 @@ export default class Board extends BaseResource {
     return this.httpGet('/deltas', queryArgs);
   }
 
+  /* istanbul ignore next: Don't have Business Class subscription */
   getTags(): Promise<*> {
     return this.httpGet('/idTags');
   }
@@ -397,10 +398,15 @@ export default class Board extends BaseResource {
       },
     },
   ): Promise<*> {
+    let updatedArgs = queryArgs;
     if (this.routePathElements[0] === 'organizations') {
-      queryArgs.idOrganization = this.routePathElements[1];
+      updatedArgs = {
+        ...queryArgs,
+        idOrganization: this.routePathElements[1],
+        separator: '_',
+      };
     }
-    return this.httpPost('/', { ...queryArgs, separator: '_' });
+    return this.httpPost('/', updatedArgs);
   }
 
   generateCalendarKey(): Promise<*> {

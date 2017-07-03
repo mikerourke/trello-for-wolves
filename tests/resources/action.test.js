@@ -58,7 +58,7 @@ describe('ACT | Action Resource', function() {
 
   describe('ACT-G | Action GET Requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it('ACT-G-01-T01 | gets an Action', function(done) {
@@ -269,7 +269,7 @@ describe('ACT | Action Resource', function() {
     const commentText = 'This is a test comment';
 
     before(function(done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it('ACT-U-01-T01 | updates an Action', function(done) {
@@ -291,7 +291,7 @@ describe('ACT | Action Resource', function() {
 
   describe('ACT-D | Action DELETE Requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it('ACT-D-01-T01 | deletes an Action', function(done) {

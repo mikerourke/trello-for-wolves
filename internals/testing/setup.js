@@ -14,6 +14,12 @@ const auth = {
 };
 global.auth = auth;
 
+// Sets the time (in milliseconds) that is called in the before() function
+// of each test suite.  This is to ensure the Trello API rate limits aren't
+// exceeded.
+const testDelay = process.env.TEST_DELAY || 1000;
+global.testDelay = testDelay;
+
 // Stores the resource information for newly created instances.  This
 // prvents the need to read and write to a JSON file.
 global.resources = {};

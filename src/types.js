@@ -29,11 +29,6 @@ export type AllOrNone = 'all' | 'none';
 
 export type ArgumentGroup<T> = T | Array<T> | 'all';
 
-export type FileProperties = {
-  filePath: string,
-  fileName?: string,
-};
-
 export type FilterDate = ?Date | 'lastView';
 
 export type Format = 'count' | 'list' | 'minimal';

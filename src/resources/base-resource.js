@@ -3,6 +3,8 @@
 /* External dependencies */
 import { stringify } from 'querystring';
 import axios from 'axios';
+import FormData from 'form-data';
+import concat from 'concat-stream';
 
 /* Internal dependencies */
 import { ApiCallResponseError } from '../utils/errors';
@@ -74,8 +76,7 @@ export default class BaseResource {
     return `${sanitizedPath}?${queryString}${authSuffix}`;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  _handleRequestError(
+  handleRequestError(
     error: Object,
     reject: Function,
   ) {
@@ -90,21 +91,42 @@ export default class BaseResource {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  _attemptRequest(
+  getDataFromFile(file?: Object = {}): Promise<*> {
+    return new Promise((resolve, reject) => {
+      if (!file) {
+        resolve({ data: {}, headers: {} });
+      }
+      const form = new FormData();
+      form.append('file', file);
+      form
+        .on('error', error => reject(error))
+        .pipe(concat(
+          { encoding: 'buffer' },
+          data => resolve({ data, headers: form.getHeaders() })),
+        );
+    });
+  }
+
+  attemptRequest(
     httpMethod: HttpMethod,
     cleanUrl: string,
+    file?: Object,
   ): Promise<*> {
     return new Promise((resolve, reject) => {
-      axios({
-        method: httpMethod,
-        url: `https://${cleanUrl}`,
-      })
-        .then((response) => {
-          resolve(response);
-        })
-        .catch((error) => {
-          reject(error);
+      this.getDataFromFile(file)
+        .then(({ data, headers }) => {
+          axios({
+            method: httpMethod,
+            url: `https://${cleanUrl}`,
+            data,
+            headers,
+          })
+            .then((response) => {
+              resolve(response);
+            })
+            .catch((error) => {
+              reject(error);
+            });
         });
     });
   }
@@ -114,39 +136,38 @@ export default class BaseResource {
    * @param {HttpMethod} httpMethod Method associated with the request.
    * @param {string} pathVariables Path to append to the route path.
    * @param {Object} [queryArgs={}] Arguments for building the querystring.
-   * @param {Object} [fileProperties={}] Properties of the file to send.
    * @returns {Promise}
    * @private
    */
-  _performRequest(
+  performRequest(
     httpMethod: HttpMethod,
     pathVariables: string,
     queryArgs?: Object = {},
-    fileProperties?: Object = {},
   ): Promise<*> {
     return new Promise((resolve, reject) => {
-      const endpoint = this.getEndpoint(pathVariables, queryArgs);
+      const { file = {}, ...otherArgs } = queryArgs;
+      const endpoint = this.getEndpoint(pathVariables, otherArgs);
 
       // One more check is done to ensure there are no consecutive slashes.
       const cleanUrl = `api.trello.com/1/${endpoint}`.replace(/\/+/g, '/');
 
-      this._attemptRequest(httpMethod, cleanUrl)
+      this.attemptRequest(httpMethod, cleanUrl, file)
         .then((firstResponse) => {
           resolve(firstResponse);
         })
         .catch((firstError) => {
           if (firstError.response.status === 429) {
             setTimeout(() => {
-              this._attemptRequest(httpMethod, cleanUrl)
+              this.attemptRequest(httpMethod, cleanUrl, file)
                 .then((secondResponse) => {
                   resolve(secondResponse);
                 })
                 .catch((secondError) => {
-                  this._handleRequestError(secondError, reject);
+                  this.handleRequestError(secondError, reject);
                 });
             }, 1000);
           } else {
-            this._handleRequestError(firstError, reject);
+            this.handleRequestError(firstError, reject);
           }
         });
     });
@@ -156,30 +177,27 @@ export default class BaseResource {
     pathVariables: string,
     queryArgs?: Object = {},
   ): Promise<Object> {
-    return this._performRequest('get', pathVariables, queryArgs);
+    return this.performRequest('get', pathVariables, queryArgs);
   }
 
   httpPut(
     pathVariables: string,
     queryArgs?: Object = {},
-    data?: Object = {},
   ): Promise<Object> {
-    return this._performRequest('put', pathVariables, queryArgs, data);
+    return this.performRequest('put', pathVariables, queryArgs);
   }
 
   httpPost(
     pathVariables: string,
     queryArgs?: Object = {},
-    fileProperties?: Object = {},
   ): Promise<Object> {
-    return this._performRequest(
-      'post', pathVariables, queryArgs, fileProperties);
+    return this.performRequest('post', pathVariables, queryArgs);
   }
 
   httpDelete(
     pathVariables: string,
     queryArgs?: Object = {},
   ): Promise<Object> {
-    return this._performRequest('delete', pathVariables, queryArgs);
+    return this.performRequest('delete', pathVariables, queryArgs);
   }
 }

@@ -33,7 +33,7 @@ describe('CAR | Card Resource', function() {
 
   describe('CAR-G | Card GET Requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     it('CAR-G-01-T01 | gets a Card', (done) => {
@@ -270,7 +270,7 @@ describe('CAR | Card Resource', function() {
 
   describe('CAR-U | Card PUT requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, 1500);
+      setTimeout(() => { done(); }, testDelay);
     });
 
     const getFirstCheckItem = () => {
