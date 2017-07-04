@@ -1,14 +1,4 @@
 /**
- * @api {path} /types type
- * @apiVersion 1.0.0
- * @apiName type
- * @apiGroup overview
- * @apiDescription
- *    The type endpoint allows you to determine if the specified ID, team, or
- *    username is a member or an organization.
- */
-
-/**
  * @api {get} /types/:teamOrUserId getType
  * @apiVersion 1.0.0
  * @apiName getType

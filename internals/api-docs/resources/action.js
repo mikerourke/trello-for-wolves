@@ -1,29 +1,4 @@
 /**
- * @api {path} /actions action
- * @apiVersion 1.0.0
- * @apiName action
- * @apiGroup overview
- * @apiDescription
- *    Actions are generated whenever an action occurs in Trello.
- *    For instance, when a user deletes a card, a <code>deleteCard</code> action
- *    is generated and includes information about the deleted card, the list the
- *    card was in, the board the card was on, the user that deleted the card,
- *    and the <code>idObject</code> of the action. Actions for Trello objects
- *    can be listed from nested action endpoints - e.g. the resource
- *    <code>GET board/:boardId/actions</code> lists all of the actions for the
- *    given board.
- *    <br><br>
- *    Note: Due to the number of actions that occur in Trello, nested action
- *    resources filter out specific action types. For example, changing the
- *    name of a checklistItem will trigger a webhook on the board and will
- *    POST an action of type updateCheckItem with the old and new name of the
- *    checklistItem. However, no nested actions resource will return action
- *    types of updateCheckItem: /cards/idCard/actions/,
- *    /boards/idBoard/actions/. However you can get that specific action
- *    instance via GET /actions/idAction/.
- */
-
-/**
  * @api {get} /actions/:actionId getAction
  * @apiVersion 1.0.0
  * @apiName getAction

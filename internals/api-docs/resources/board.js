@@ -1,21 +1,4 @@
 /**
- * @api {path} /boards board
- * @apiVersion 1.0.0
- * @apiName board
- * @apiGroup overview
- * @apiDescription
- *    Boards are the highest level concept within the Trello workflow. The
- *    Boards API allows you to list, view, create, and edit Boards. Each Board
- *    has a name, description, a set of members attached, and an ordered array
- *    of Lists.
- *    <br><br>
- *    Boards can be open or closed, starred, and/or subscribed. Each
- *    Board belongs to an organization. Each board also has a set of preferences
- *    that affect its visual display, and additional features that may have been
- *    attached to the Board (such as Power-Ups).
- */
-
-/**
  * @api {get} /boards/:boardId getBoard
  * @apiVersion 1.0.0
  * @apiName getBoard
