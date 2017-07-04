@@ -31,7 +31,7 @@ export default class Webhook extends BaseResource {
       callbackURL?: string,
       idModel?: string,
       active?: boolean,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }

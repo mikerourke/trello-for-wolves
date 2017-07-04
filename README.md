@@ -1,6 +1,6 @@
 # Trello for Wolves
 
-[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url]
+[![Build Status](https://travis-ci.org/mikerourke/trello-for-wolves.svg?branch=master)](https://travis-ci.org/mikerourke/trello-for-wolves) [![Coverage Status](https://coveralls.io/repos/github/mikerourke/trello-for-wolves/badge.svg?branch=master)](https://coveralls.io/github/mikerourke/trello-for-wolves?branch=master)
 
 Node.js wrapper around Trello API...for wolves.  Don't read too much in to the
 name, I just love wolves and everything else on npm with the word
@@ -100,7 +100,7 @@ Trello Endpoint:
 ```javascript
 trello.members('me').boards().getBoards({
   fields: ['desc', 'name', 'pinned'], // If you don't like using an array, feel free to use a comma-separated string
-  filter: 'closed,open,public' // <- Like so
+  filter: 'closed,open,public', // <- Like so
   organization: true,
   organizationFields: 'all', // This is organization_fields in the docs
   lists: 'all'
@@ -241,8 +241,3 @@ update accordingly.
 ## LICENSE
 
 MIT license. See the [LICENSE](./LICENSE.md) file for details.
-
-[travis-image]: https://travis-ci.org/mikerourke/trello-for-wolves.svg?branch=master
-[travis-url]: https://travis-ci.org/mikerourke/trello-for-wolves
-[coveralls-image]: https://coveralls.io/repos/mikerourke/trello-for-wolves/badge.svg?branch=master&service=github
-[coveralls-url]: https://coveralls.io/github/mikerourke/trello-for-wolves?branch=master

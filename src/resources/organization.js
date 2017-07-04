@@ -104,7 +104,7 @@ export default class Organization extends BaseResource {
       filter?: ArgumentGroup<OrganizationFilter>,
       fields?: ArgumentGroup<OrganizationField>,
       paidAccount?: boolean,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -138,7 +138,7 @@ export default class Organization extends BaseResource {
       boardPluginData?: boolean,
       paidAccount?: boolean,
       fields?: ArgumentGroup<OrganizationField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -208,7 +208,7 @@ export default class Organization extends BaseResource {
       displayName?: string,
       desc?: string,
       website?: ?string,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
@@ -239,7 +239,7 @@ export default class Organization extends BaseResource {
       displayName?: string,
       desc?: string,
       website?: string,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPost('/', queryArgs);
   }

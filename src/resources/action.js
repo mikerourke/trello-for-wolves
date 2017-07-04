@@ -97,7 +97,7 @@ export default class Action extends BaseResource {
       memberFields?: ArgumentGroup<MemberField>,
       memberCreator?: boolean,
       memberCreatorFields?: ArgumentGroup<MemberField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -111,7 +111,7 @@ export default class Action extends BaseResource {
       memberFields?: ArgumentGroup<MemberField>,
       memberCreator?: boolean,
       memberCreatorFields?: ArgumentGroup<MemberField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -156,7 +156,7 @@ export default class Action extends BaseResource {
   updateAction(
     queryArgs?: {
       text?: string,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }

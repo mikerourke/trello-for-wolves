@@ -103,7 +103,7 @@ class BoardBackground extends BaseResource {
     } | {
       // customBoardBackgrounds:
       filter?: AllOrNone
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -111,7 +111,7 @@ class BoardBackground extends BaseResource {
   getBoardBackground(
     queryArgs?: {
       fields?: ArgumentGroup<BoardBackgroundField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -120,7 +120,7 @@ class BoardBackground extends BaseResource {
     queryArgs?: {
       tile?: boolean,
       brightness?: BoardBackgroundBrightness,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }
@@ -146,7 +146,7 @@ class BoardStar extends BaseResource {
   updateBoardStar(
     queryArgs?: {
       pos?: PositionNumbered,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }
@@ -177,7 +177,7 @@ class CustomEmoji extends BaseResource {
   getCustomEmojis(
     queryArgs?: {
       filter?: AllOrNone,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -185,7 +185,7 @@ class CustomEmoji extends BaseResource {
   getCustomEmoji(
     queryArgs?: {
       fields?: ArgumentGroup<CustomEmojiField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -228,7 +228,7 @@ class SavedSearch extends BaseResource {
       name?: string,
       query?: string,
       pos?: PositionNumbered,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }
@@ -268,7 +268,7 @@ export default class Member extends BaseResource {
     queryArgs?: {
       fields?: ArgumentGroup<MemberEveryField>,
       limit?: number,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -330,7 +330,7 @@ export default class Member extends BaseResource {
     } | {
       // This is the only option if calling from a different resource.
       fields?: ArgumentGroup<MemberEveryField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -423,7 +423,7 @@ export default class Member extends BaseResource {
         locale?: string,
         minutesBetweenSummaries?: number,
       },
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
@@ -499,6 +499,7 @@ export default class Member extends BaseResource {
     return this.httpPost('/avatar', { file });
   }
 
+  /* istanbul ignore next: I need to determine a message type for this. */
   dismissOneTimeMessages(value: string): Promise<*> {
     return this.httpPost('/oneTimeMessagesDismissed', { value });
   }

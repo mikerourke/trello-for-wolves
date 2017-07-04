@@ -29,7 +29,7 @@ export default class Label extends BaseResource {
   getLabels(
     queryArgs?: {
       fields?: ArgumentGroup<LabelField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -37,7 +37,7 @@ export default class Label extends BaseResource {
   getLabel(
     queryArgs?: {
       fields?: ArgumentGroup<LabelField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -50,7 +50,7 @@ export default class Label extends BaseResource {
     queryArgs?: {
       name?: string,
       color?: ?LabelColor,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }

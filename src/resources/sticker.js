@@ -31,7 +31,7 @@ export default class Sticker extends BaseResource {
     } | {
       // Arguments for "/customStickers":
       filter?: AllOrNone,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -43,7 +43,7 @@ export default class Sticker extends BaseResource {
     } | {
       // Arguments for "/customStickers":
       fields?: ArgumentGroup<CustomStickerField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -54,7 +54,7 @@ export default class Sticker extends BaseResource {
       left?: number,
       zIndex?: number,
       rotate?: number,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }

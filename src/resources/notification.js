@@ -72,7 +72,7 @@ export default class Notification extends BaseResource {
       since?: ?string,
       memberCreator?: boolean,
       memberCreatorFields?: ArgumentGroup<MemberField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -93,7 +93,7 @@ export default class Notification extends BaseResource {
       organizationFields?: ArgumentGroup<OrganizationField>,
       member?: boolean,
       memberFields?: ArgumentGroup<MemberField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -143,7 +143,7 @@ export default class Notification extends BaseResource {
   updateNotification(
     queryArgs?: {
       unread?: boolean,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }

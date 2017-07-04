@@ -26,7 +26,7 @@ export default class Token extends BaseResource {
     queryArgs?: {
       filter?: AllOrNone,
       webhooks?: boolean,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -35,7 +35,7 @@ export default class Token extends BaseResource {
     queryArgs?: {
       fields?: ArgumentGroup<TokenField>,
       webhooks?: boolean,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }

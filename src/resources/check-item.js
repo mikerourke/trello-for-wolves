@@ -24,7 +24,7 @@ export default class CheckItem extends BaseResource {
     queryArgs?: {
       filter?: AllOrNone,
       fields?: ArgumentGroup<CheckItemField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -32,7 +32,7 @@ export default class CheckItem extends BaseResource {
   getCheckItem(
     queryArgs?: {
       fields?: ArgumentGroup<CheckItemField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -40,7 +40,7 @@ export default class CheckItem extends BaseResource {
   getCheckItemStates(
     queryArgs?: {
       fields?: ArgumentGroup<CheckItemStateField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -51,7 +51,7 @@ export default class CheckItem extends BaseResource {
       state?: CheckItemState,
       pos?: PositionNumbered,
       idChecklist?: ?string,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }

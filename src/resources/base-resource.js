@@ -41,6 +41,7 @@ export default class BaseResource {
     // zero:
     this.routePathElements = this.routePath.split('/');
 
+    /* istanbul ignore if */
     if (!this.routePathElements[0].length) {
       this.routePathElements.shift();
     }
@@ -57,8 +58,16 @@ export default class BaseResource {
     pathVariables: string,
     queryArgs?: Object = {},
   ): string {
-    // We don't want to attempt to stringify the 'file' query arg.
-    const { file, ...otherArgs } = queryArgs; // eslint-disable-line
+    // Check if queryArgs were specified to ensure the stringify function is only called if
+    // necessary.
+    let argsToUse = queryArgs;
+    let hasQueryArgs = false;
+    if (Object.keys(argsToUse).length !== 0) {
+      // We don't want to attempt to stringify the 'file' query arg.
+      const { file, ...otherArgs } = queryArgs; // eslint-disable-line
+      argsToUse = otherArgs;
+      hasQueryArgs = true;
+    }
 
     // Build the base path based on the current path.  This ensures that the path can
     // continue to be appended without being overwritten.
@@ -69,8 +78,7 @@ export default class BaseResource {
 
     // If queryArgs were provided, build the corresponding querystring to
     // include the specified arguments.
-    const hasQueryArgs = (Object.keys(otherArgs).length !== 0);
-    const queryString = hasQueryArgs ? stringifyQueryArgs(otherArgs) : '';
+    const queryString = hasQueryArgs ? stringifyQueryArgs(argsToUse) : '';
 
     // Ensure the key and token is appended to the end of the querystring.
     const authSuffix = stringify(this.auth);
@@ -87,7 +95,7 @@ export default class BaseResource {
   performRequest(
     httpMethod: HttpMethod,
     pathVariables: string,
-    queryArgs?: Object = {},
+    queryArgs?: Object,
   ): Promise<*> {
     const endpoint = this.getEndpoint(pathVariables, queryArgs);
     return performApiRequest(httpMethod, endpoint, queryArgs);
@@ -95,28 +103,28 @@ export default class BaseResource {
 
   httpGet(
     pathVariables: string,
-    queryArgs?: Object = {},
+    queryArgs?: Object,
   ): Promise<Object> {
     return this.performRequest('get', pathVariables, queryArgs);
   }
 
   httpPut(
     pathVariables: string,
-    queryArgs?: Object = {},
+    queryArgs?: Object,
   ): Promise<Object> {
     return this.performRequest('put', pathVariables, queryArgs);
   }
 
   httpPost(
     pathVariables: string,
-    queryArgs?: Object = {},
+    queryArgs?: Object,
   ): Promise<Object> {
     return this.performRequest('post', pathVariables, queryArgs);
   }
 
   httpDelete(
     pathVariables: string,
-    queryArgs?: Object = {},
+    queryArgs?: Object,
   ): Promise<Object> {
     return this.performRequest('delete', pathVariables, queryArgs);
   }

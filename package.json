@@ -27,7 +27,7 @@
     "build:lib": "cross-env NODE_ENV=production babel -d lib src --ignore src/types.js",
     "build:flow": "flow-copy-source -v src lib",
     "build": "yarn run build:clean && yarn run build:lib && yarn run build:flow",
-    "cleanup": "rm -rf .nyc_output && rm -rf coverage && rm -rf lib",
+    "cleanup": "rimraf .nyc_output && rimraf coverage && rimraf lib",
     "predoc": "rimraf docs/",
     "doc": "apidoc -i internals/api-docs/ -o docs/",
     "flow": "flow check || exit 0",
@@ -35,7 +35,7 @@
     "presetup": "node internals/scripts/pre-setup.js",
     "setup": "yarn cache clean && yarn install",
     "test:setup": "cross-env NODE_ENV=test mocha tests/setup.test.js --opts ./mocha.opts || exit 0",
-    "test": "cross-env NODE_ENV=test nyc --reporter=text mocha tests/setup.test.js tests/utils tests/resources tests/teardown.test.js --opts ./mocha.opts || exit 0",
+    "test": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha tests/setup.test.js tests/utils tests/resources tests/teardown.test.js --opts ./mocha.opts || exit 0",
     "coverage": "cross-env NODE_ENV=test nyc report --reporter=text-lcov | coveralls",
     "coverage:local": "cross-env NODE_ENV=test nyc report --reporter=html ",
     "test:log": "cross-env LOG_TEST_RESULTS=true yarn test",
@@ -81,6 +81,83 @@
     "nyc": "^11.0.3",
     "rimraf": "^2.6.1"
   },
+  "apidoc": {
+    "name": "Trello for Wolves",
+    "version": "1.0.0",
+    "description": "Node.js wrapper for the Trello API",
+    "title": "Trello for Wolves",
+    "url" : "https://api.trello.com/1"
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "extends": [
+      "eslint-config-airbnb-base",
+      "plugin:flowtype/recommended"
+    ],
+    "plugins": [
+      "import",
+      "flowtype"
+    ],
+    "settings": {
+      "ecmascript": 6
+    },
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "arrowFunctions": true,
+        "binaryLiterals": true,
+        "blockBindings": true,
+        "classes": true,
+        "defaultParams": true,
+        "destructuring": true,
+        "forOf": true,
+        "modules": true,
+        "objectLiteralComputedProperties": true,
+        "objectLiteralDuplicateProperties": true,
+        "objectLiteralShorthandMethods": true,
+        "objectLiteralShorthandProperties": true,
+        "octalLiterals": true,
+        "regexUFlag": true,
+        "regexYFlag": true,
+        "spread": true,
+        "superInFunctions": true,
+        "templateStrings": true,
+        "unicodeCodePointEscapes": true,
+        "globalReturn": true
+      }
+    },
+    "env": {
+      "es6": true,
+      "node": true,
+      "mocha": true
+    },
+    "rules": {
+      "max-len": [
+        "error",
+        100,
+        2,
+        {
+          "ignoreComments": true,
+          "ignoreRegExpLiterals": true,
+          "ignoreStrings": true,
+          "ignoreTemplateLiterals": true,
+          "ignoreTrailingComments": true,
+          "ignoreUrls": true
+        }
+      ],
+      "class-methods-use-this": "off",
+      "flowtype/define-flow-type": "warn",
+      "flowtype/use-flow-type": "warn"
+    }
+  },
+  "eslintIgnore": [
+    "internals/",
+    "docs/",
+    "src/types.js",
+    "tests/",
+    "lib/"
+  ],
   "nyc": {
     "check-coverage": true,
     "include": [

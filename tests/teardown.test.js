@@ -251,6 +251,14 @@ describe('TEARDOWN | Test Cleanup', function() {
         .should.eventually.be.fulfilled
         .notify(done);
     });
+
+    // This is done to make it easier to delete the board after tests are run.
+    it('BRD-U-02-T02 | closes the board', function(done) {
+      trello.boards(boardId).updateClosedStatus(true)
+        .then(logResponse)
+        .should.eventually.be.fulfilled
+        .notify(done);
+    });
   });
 
   describe('ORG-D | Organization DELETE requests', function() {

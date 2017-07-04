@@ -16,13 +16,7 @@
       ]
     },
     "test": {
-      "plugins": [
-        ["istanbul", {
-          "exclude": [
-            "tests"
-          ]
-        }]
-      ]
+      "plugins": ["istanbul"]
     }
   }
 }

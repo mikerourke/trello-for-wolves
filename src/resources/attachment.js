@@ -41,7 +41,7 @@ export default class Attachment extends BaseResource {
     queryArgs?: {
       fields?: ArgumentGroup<AttachmentField>,
       filter?: ArgumentGroup<AttachmentFilter>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -49,7 +49,7 @@ export default class Attachment extends BaseResource {
   getAttachment(
     queryArgs?: {
       fields?: ArgumentGroup<AttachmentField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -60,7 +60,7 @@ export default class Attachment extends BaseResource {
       url?: string,
       name?: string,
       mimeType?: string,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPost('/', queryArgs);
   }

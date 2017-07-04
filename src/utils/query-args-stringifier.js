@@ -31,6 +31,7 @@ const getQueryStringForNestedArgs = (
 
   // Ensure the separator was specified for nested args.
   const { separator } = queryArgs;
+  /* istanbul ignore next: The separator isn't specified by the user, I don't need to test this. */
   if (!separator) {
     throw new Error('Separator must be specified for child args');
   }

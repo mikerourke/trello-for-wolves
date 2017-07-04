@@ -34,7 +34,7 @@ export default class Comment extends BaseResource {
       memberFields?: ArgumentGroup<MemberField>,
       memberCreator?: boolean,
       memberCreatorFields?: ArgumentGroup<MemberField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', { ...queryArgs, filter: 'commentCard' });
   }

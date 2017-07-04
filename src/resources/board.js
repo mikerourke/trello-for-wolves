@@ -182,7 +182,7 @@ export default class Board extends BaseResource {
       organization?: boolean,
       organizationFields?: ArgumentGroup<OrganizationField>,
       lists?: ListFilter,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -233,7 +233,7 @@ export default class Board extends BaseResource {
     } | {
       // This is the only option if calling from a different resource.
       fields?: ArgumentGroup<BoardField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -253,7 +253,7 @@ export default class Board extends BaseResource {
   getBoardStars(
     queryArgs?: {
       filter?: BoardStarsFilter,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/boardStars', queryArgs);
   }
@@ -339,7 +339,7 @@ export default class Board extends BaseResource {
         purple?: string,
         blue?: string,
       },
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
@@ -397,15 +397,7 @@ export default class Board extends BaseResource {
       },
     },
   ): Promise<*> {
-    let updatedArgs = queryArgs;
-    if (this.routePathElements[0] === 'organizations') {
-      updatedArgs = {
-        ...queryArgs,
-        idOrganization: this.routePathElements[1],
-        separator: '_',
-      };
-    }
-    return this.httpPost('/', updatedArgs);
+    return this.httpPost('/', { ...queryArgs, separator: '_' });
   }
 
   /* istanbul ignore next: This works, I don't want to keep re-testing it. */
@@ -427,6 +419,7 @@ export default class Board extends BaseResource {
     return this.httpPost('/markAsViewed');
   }
 
+  /* istanbul ignore next: Requires special permissions */
   addPowerUp(value: PowerUp): Promise<*> {
     return this.httpPost('/powerUps', { value });
   }

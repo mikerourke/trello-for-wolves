@@ -87,7 +87,7 @@ export default class Card extends BaseResource {
       before?: ?Date,
       filter?: CardFilter,
       fields?: ArgumentGroup<CardField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -118,7 +118,7 @@ export default class Card extends BaseResource {
       stickers?: boolean,
       stickerFields?: ArgumentGroup<StickerField>,
       fields?: ArgumentGroup<CardField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -201,7 +201,7 @@ export default class Card extends BaseResource {
       due?: ?Date,
       dueComplete?: boolean,
       subscribed?: boolean,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }
@@ -235,7 +235,7 @@ export default class Card extends BaseResource {
     boardId: string,
     queryArgs?: {
       idList?: string,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/idBoard', { value: boardId, ...queryArgs });
   }
@@ -290,6 +290,7 @@ export default class Card extends BaseResource {
     return this.httpPost('/idLabels', { value: labelId });
   }
 
+  /* istanbul ignore next: Requires special permissions */
   associateMember(memberId: string): Promise<*> {
     return this.httpPost('/idMembers', { value: memberId });
   }

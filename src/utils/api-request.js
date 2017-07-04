@@ -72,6 +72,7 @@ const getRequestConfig = (): Promise<*> =>
         .then((fileDetails) => {
           resolve({ ...baseConfig, ...fileDetails });
         })
+        // @todo: Write test to handle get file details error.
         .catch((error) => { reject(error); });
     } else {
       resolve(baseConfig);
@@ -94,6 +95,7 @@ const attemptRequest = (): Promise<*> =>
             reject(error);
           });
       })
+      /* istanbul ignore next: This inform the user of an error, no need to test. */
       .catch((error) => { reject(error); });
   });
 
@@ -126,7 +128,9 @@ const performApiRequest = (
       })
       .catch((firstError) => {
         // If the error was due to a timeout, wait 3 seconds and try again.
-        const firstErrorResponse = firstError.response || { status: 400 };
+        const firstErrorResponse = firstError.response
+          || /* istanbul ignore next */ { status: 400 };
+        /* istanbul ignore next: This can only be tested if the API rate limit is exceeded. */
         if (firstErrorResponse.status === 429) {
           setTimeout(() => {
             attemptRequest()

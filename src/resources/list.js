@@ -29,7 +29,7 @@ export default class List extends BaseResource {
       cardFields?: ArgumentGroup<CardField>,
       filter?: ListFilter,
       fields?: ArgumentGroup<ListField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -41,7 +41,7 @@ export default class List extends BaseResource {
       board?: boolean,
       boardFields?: ArgumentGroup<BoardField>,
       fields?: ArgumentGroup<ListField>,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpGet('/', queryArgs);
   }
@@ -73,7 +73,7 @@ export default class List extends BaseResource {
       idBoard?: string,
       pos?: PositionNumbered,
       subscribed?: boolean,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', queryArgs);
   }
@@ -86,7 +86,7 @@ export default class List extends BaseResource {
     boardId: string,
     queryArgs?: {
       pos?: PositionNumbered,
-    } = {},
+    },
   ): Promise<*> {
     return this.httpPut('/', { value: boardId, ...queryArgs });
   }
