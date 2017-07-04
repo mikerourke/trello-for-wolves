@@ -23,78 +23,6 @@
  *    instance via GET /actions/idAction/.
  */
 
-/* Definitions */
-
-/**
- * @apiDefine ActionFieldQueryArg
- * @apiParam {String="data","date","idMemberCreator","type"} field
- *    Action field value to return in the response.
- */
-
-/**
- * @apiDefine ActionFieldsQueryArg
- * @apiParam {String="all","data","date","idMemberCreator","type"} [fields='"all"']
- *    Action fields to include in the response, can either be <code>"all"</code>
- *    or an array of field names.
- */
-
-/**
- * @apiDefine ActionListFilterQueryArg
- * @apiParam {String="all","commentCard","convertToCardFromCheckItem","copyCard","createCard","createList","deleteCard","emailCard","updateCard","updateCard:closed","updateCard:desc","updateCard:idList","updateCard:name","updateList","updateList:closed","updateList:name"} [filter='"all"']
- *    Action types to include in the response, can either be <code>"all"</code>
- *    or an array of field names.
- */
-
-/**
- * @apiDefine ActionFilterQueryArg
- * @apiParam {String="all","addAttachmentToCard","addChecklistToCard","addMemberToBoard","addMemberToCard","addMemberToOrganization","addToOrganizationBoard","commentCard","convertToCardFromCheckItem","copyBoard","copyCard","copyCommentCard","createBoard","createCard","createList","createOrganization","deleteAttachmentFromCard","deleteBoardInvitation","deleteCard","deleteOrganizationInvitation","disablePowerUp","emailCard","enablePowerUp","makeAdminOfBoard","makeNormalMemberOfBoard","makeNormalMemberOfOrganization","makeObserverOfBoard","memberJoinedTrello","moveCardFromBoard","moveCardToBoard","moveListFromBoard","moveListToBoard","removeChecklistFromCard","removeFromOrganizationBoard","removeMemberFromCard","unconfirmedBoardInvitation","unconfirmedOrganizationInvitation","updateBoard","updateCard","updateCard:closed","updateCard:desc","updateCard:idList","updateCard:name","updateCheckItemStateOnCard","updateChecklist","updateList","updateList:closed","updateList:name","updateMember","updateOrganization"} [filter='"all"']
- *    Action types to include in the response, can either be <code>"all"</code>
- *    or an array of field names.
- */
-
-/**
- * @apiDefine ActionsFilterNamedQueryArg
- * @apiParam {String="all","addAttachmentToCard","addChecklistToCard","addMemberToBoard","addMemberToCard","addMemberToOrganization","addToOrganizationBoard","commentCard","convertToCardFromCheckItem","copyBoard","copyCard","copyCommentCard","createBoard","createCard","createList","createOrganization","deleteAttachmentFromCard","deleteBoardInvitation","deleteCard","deleteOrganizationInvitation","disablePowerUp","emailCard","enablePowerUp","makeAdminOfBoard","makeNormalMemberOfBoard","makeNormalMemberOfOrganization","makeObserverOfBoard","memberJoinedTrello","moveCardFromBoard","moveCardToBoard","moveListFromBoard","moveListToBoard","removeChecklistFromCard","removeFromOrganizationBoard","removeMemberFromCard","unconfirmedBoardInvitation","unconfirmedOrganizationInvitation","updateBoard","updateCard","updateCard:closed","updateCard:desc","updateCard:idList","updateCard:name","updateCheckItemStateOnCard","updateChecklist","updateList","updateList:closed","updateList:name","updateMember","updateOrganization"} [actions='"all"']
- *    Action types to include in the response, can either be <code>"all"</code>
- *    or an array of field names.
- */
-
-/**
- * @apiDefine ActionDisplayEntitiesQueryArgs
- * @apiParam {Boolean} [display=false] Include <code>display</code> data in the
- *    response.
- * @apiParam {Boolean} [entities=false] Include <code>entities</code> data in
- *    the response.
- */
-
-/**
- * @apiDefine ActionIdModelsQueryArg
- * @apiParam {String} [idModels] Only return actions related to these model
- *    ids.
- */
-
-/**
- * @apiDefine ActionInclusionQueryArgs
- * @apiParam {String="all","addAttachmentToCard","addChecklistToCard","addMemberToBoard","addMemberToCard","addMemberToOrganization","addToOrganizationBoard","commentCard","convertToCardFromCheckItem","copyBoard","copyCard","copyCommentCard","createBoard","createCard","createList","createOrganization","deleteAttachmentFromCard","deleteBoardInvitation","deleteCard","deleteOrganizationInvitation","disablePowerUp","emailCard","enablePowerUp","makeAdminOfBoard","makeNormalMemberOfBoard","makeNormalMemberOfOrganization","makeObserverOfBoard","memberJoinedTrello","moveCardFromBoard","moveCardToBoard","moveListFromBoard","moveListToBoard","removeChecklistFromCard","removeFromOrganizationBoard","removeMemberFromCard","unconfirmedBoardInvitation","unconfirmedOrganizationInvitation","updateBoard","updateCard","updateCard:closed","updateCard:desc","updateCard:idList","updateCard:name","updateCheckItemStateOnCard","updateChecklist","updateList","updateList:closed","updateList:name","updateMember","updateOrganization"} [actions='"all"']
- *    Action types to include in the response, can either be <code>"all"</code>
- *    or an array of field names.
- * @apiParam {String="all","data","date","idMemberCreator","type"} [actionFields='"all"']
- *    Action fields to include in the response, can either be <code>"all"</code>
- *    or an array of field names.
- */
-
-/**
- * @apiDefine ActionLimitsQueryArgs
- * @apiParam {Boolean} [actionsEntities=false] Include <code>entities</code>
- *    data in the response.
- * @apiParam {Boolean} [actionsDisplay=false] Include <code>display</code>
- *    data in the response.
- * @apiParam {number{0-1000}} [actionsLimit=50] Limit to impose on actions
- *    included in response.
- */
-
-/* Routes */
-
 /**
  * @api {get} /actions/:actionId getAction
  * @apiVersion 1.0.0
@@ -103,10 +31,23 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse ActionDisplayEntitiesQueryArgs
- * @apiUse ActionFieldsQueryArg
- * @apiUse MemberInclusionQueryArgs
- * @apiUse MemberCreatorInclusionQueryArgs
+ * @apiParam {Boolean} [display=false] Include <code>display</code> data in the
+ *    response.
+ * @apiParam {Boolean} [entities=false] Include <code>entities</code> data in
+ *    the response.
+ * @apiParam {String="all","data","date","idMemberCreator","type"} [fields='"all"']
+ *    Action fields to include in the response, can either be <code>"all"</code>
+ *    or an array of field names.
+ * @apiParam {Boolean} [member=true] Indicates if member fields should be
+ *    included in response.
+ * @apiParam {String="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [memberFields='"avatarHash,fullName,initials,username"']
+ *    Member fields to include in response, can either be <code>"all"</code>
+ *    or an array of field names.
+ * @apiParam {Boolean} [memberCreator=true] Indicates if member creator fields
+ *    should be included in response.
+ * @apiParam {String="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [memberCreatorFields='"avatarHash,fullName,initials,username"']
+ *    Member creator fields to include in response, can either be
+ *    <code>"all"</code> or an array of field names.
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').getAction({...});
 */
@@ -119,7 +60,8 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse ActionFieldQueryArg
+ * @apiParam {String="data","date","idMemberCreator","type"} field
+ *    Action field value to return in the response.
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').getFieldValue('date');
  */
@@ -132,7 +74,9 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse BoardFieldsQueryArg
+ * @apiParam {String="all","closed","dateLastActivity","dateLastView","desc","descData","idOrganization","invitations","invited","labelNames","memberships","name","pinned","powerUps","prefs","shortLink","shortUrl","starred","subscribed","url"} [fields='"all"']
+ *    Board fields to include in response, can either be <code>"all"</code> or
+ *    an array of field names.
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').board().getBoard({...});
  */
@@ -146,7 +90,8 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse BoardFieldQueryArg
+ * @apiParam {String="closed","dateLastActivity","dateLastView","desc","descData","idOrganization","invitations","invited","labelNames","memberships","name","pinned","powerUps","prefs","shortLink","shortUrl","starred","subscribed","url"} field
+ *    Board field to get value for.
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').board().getFieldValue('desc');
  */
@@ -159,7 +104,9 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse CardFieldsQueryArg
+ * @apiParam {String="all","badges","checkItemStates","closed","dateLastActivity","desc","descData","due","email","idAttachmentCover","idBoard","idChecklists","idLabels","idList","idMembers","idMembersVoted","idShort","labels","manualCoverAttachment","name","pos","shortLink","shortUrl","subscribed","url"} [fields='"all"']
+ *    Card fields to include in response, can either be <code>"all"</code> or
+ *    an array of field names.
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').card().getCard({...});
  */
@@ -173,7 +120,8 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse CardFieldQueryArg
+ * @apiParam {String="badges","checkItemStates","closed","dateLastActivity","desc","descData","due","email","idAttachmentCover","idBoard","idChecklists","idLabels","idList","idMembers","idMembersVoted","idShort","labels","manualCoverAttachment","name","pos","shortLink","shortUrl","subscribed","url"} field
+ *    Card field to get value for.
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').card().getFieldValue('desc');
  */
@@ -210,7 +158,9 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse ListFieldsQueryArg
+ * @apiParam {String="all","closed","idBoard","name","pos","subscribed"} [fields='"all"']
+ *    List fields to include in response, can either be <code>"all"</code> or
+ *    an array of field names.
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').list().getList({...});
  */
@@ -224,7 +174,8 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse ListFieldQueryArg
+ * @apiParam {String="closed","idBoard","name","pos","subscribed"} field
+ *    List field to get value for.
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').list().getFieldValue('name');
  */
@@ -237,7 +188,9 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse MemberEveryFieldsQueryArg
+ * @apiParam {String="all","avatarHash","avatarSource","bio","bioData","confirmed","email","fullName","gravatarHash","idBoards","idBoardsPinned","idOrganizations","idPremOrgsAdmin","initials","loginTypes","memberType","oneTimeMessagesDismissed","prefs","premiumFeatures","products","status","status","trophies","uploadedAvatarHash","url","username"} [fields='"all"']
+ *    Member fields to include in response, can either be <code>"all"</code> or
+ *    an array of field names.
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').member().getMember({...});
  */
@@ -251,7 +204,8 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse MemberEveryFieldQueryArg
+ * @apiParam {String="avatarHash","avatarSource","bio","bioData","confirmed","email","fullName","gravatarHash","idBoards","idBoardsPinned","idOrganizations","idPremOrgsAdmin","initials","loginTypes","memberType","oneTimeMessagesDismissed","prefs","premiumFeatures","products","status","status","trophies","uploadedAvatarHash","url","username"} field
+ *    Member field to get value for.
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').member().getFieldValue('fullName');
  */
@@ -265,7 +219,9 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse MemberEveryFieldsQueryArg
+ * @apiParam {String="all","avatarHash","avatarSource","bio","bioData","confirmed","email","fullName","gravatarHash","idBoards","idBoardsPinned","idOrganizations","idPremOrgsAdmin","initials","loginTypes","memberType","oneTimeMessagesDismissed","prefs","premiumFeatures","products","status","status","trophies","uploadedAvatarHash","url","username"} [fields='"all"']
+ *    Member fields to include in response, can either be <code>"all"</code> or
+ *    an array of field names.
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').memberCreator().getMember({...});
  */
@@ -279,7 +235,8 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse MemberEveryFieldQueryArg
+ * @apiParam {String="avatarHash","avatarSource","bio","bioData","confirmed","email","fullName","gravatarHash","idBoards","idBoardsPinned","idOrganizations","idPremOrgsAdmin","initials","loginTypes","memberType","oneTimeMessagesDismissed","prefs","premiumFeatures","products","status","status","trophies","uploadedAvatarHash","url","username"} field
+ *    Member field to get value for.
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').memberCreator().getFieldValue('fullName');
  */
@@ -292,7 +249,9 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse OrganizationFieldsQueryArg
+ * @apiParam {String="all","billableMemberCount","desc","descData","displayName","idBoards","invitations","invited","logoHash","memberships","name","powerUps","prefs","premiumFeatures","products","url","website"} [fields='"all"']
+ *    Organization fields to include in response, can either be
+ *    <code>"all"</code> or an array of field names.
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').organization().getOrganization({...});
  */
@@ -306,7 +265,8 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiUse OrganizationFieldQueryArg
+ * @apiParam {String="billableMemberCount","desc","descData","displayName","idBoards","invitations","invited","logoHash","memberships","name","powerUps","prefs","premiumFeatures","products","url","website"} field
+ *    Organization field to get value for.
  * @apiExample {js} Example:
  trello.actions('aCtIoNId').organization().getFieldValue('fullName');
  */

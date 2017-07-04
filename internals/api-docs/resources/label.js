@@ -13,18 +13,4 @@
  *    the card. Label names will only show on the back of the card.
  */
 
-/**
- * @apiDefine LabelFieldsQueryArg
- * @apiParam {String="all","color","idBoard","name","uses"} [fields='"all"']
- *    Label fields to include in response, can either be <code>"all"</code>
- *    or an array of field names.
- */
 
-/**
- * @apiDefine LabelInclusionQueryArgs
- * @apiParam {String="all","none"} [labels='"none"'] Labels to include in
- *    response.
- * @apiParam {String="all","color","idBoard","name","uses"} [labelFields='"all"']
- *    Label fields to include in response, can either be <code>"all"</code> or
- *    an array of field names.
- */

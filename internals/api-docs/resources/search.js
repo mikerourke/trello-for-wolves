@@ -16,13 +16,6 @@
  *    only contain <strong>Cards</strong>.
  */
 
-/**
- * @apiDefine ModelTypesQueryArg
- * @apiParam {String="all","actions","boards","cards","members","organizations"} [modelTypes='"all"']
- *    Model types to limit search to, can either be <code>"all"</code> or an
- *    array of field names.
- */
-
 // @todo: Add missing parameter information.
 /**
  * @api {get} /search performSearch
