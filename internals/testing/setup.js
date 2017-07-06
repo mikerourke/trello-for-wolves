@@ -18,7 +18,7 @@ global.auth = auth;
 // Sets the time (in milliseconds) that is called in the before() function
 // of each test suite.  This is to ensure the Trello API rate limits aren't
 // exceeded.
-const testDelay = process.env.TEST_DELAY || /* istanbul ignore next */ 1000;
+const testDelay = process.env.TEST_DELAY || /* istanbul ignore next */ 1500;
 global.testDelay = testDelay;
 
 // Path to assets (used for uploading files).
