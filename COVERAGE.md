@@ -30,32 +30,32 @@ The table below contains all of the available Trello routes and their status in 
 | ACT-U-01 | action       | put    | /actions/:id                                              | ✅     | ✅          | ✅         |
 | ACT-U-02 | action       | put    | /actions/:id/text                                         | ✅     | ✅          | ✅         |
 | ACT-D-01 | action       | delete | /actions/:id                                              | ✅     | [📝](#N1)   | ✅         |
-| BTC-G-01 | batch        | get    | /batch/                                                   | ✅     | ✅          |            |
-| BRD-G-01 | board        | get    | /boards/:id                                               | ✅     | ✅          |            |
-| BRD-G-02 | board        | get    | /boards/:id/:field                                        | ✅     | ✅          |            |
-| BRD-G-03 | board        | get    | /boards/:id/actions                                       | ✅     | ✅          |            |
-| BRD-G-04 | board        | get    | /boards/:id/boardStars                                    | ✅     | ✅          |            |
-| BRD-G-05 | board        | get    | /boards/:id/cards                                         | ✅     | ️️️️✅️          |            |
-| BRD-G-06 | board        | get    | /boards/:id/cards/:filter                                 | ✅     | ✅          |            |
-| BRD-G-07 | board        | get    | /boards/:id/cards/:idCard                                 | ✅     | ✅          |            |
-| BRD-G-08 | board        | get    | /boards/:id/checklists                                    | ✅     | ✅          |            |
-| BRD-G-09 | board        | get    | /boards/:id/deltas                                        | ✅     | 🔒          |            |
-| BRD-G-10 | board        | get    | /boards/:id/idTags                                        | ✅     | 🔒          |            |
-| BRD-G-11 | board        | get    | /boards/:id/labels                                        | ✅     | ✅️          |            |
-| BRD-G-12 | board        | get    | /boards/:id/labels/:idLabel                               | ✅     | ✅          |            |
-| BRD-G-13 | board        | get    | /boards/:id/lists                                         | ✅     | ✅          |            |
-| BRD-G-14 | board        | get    | /boards/:id/lists/:filter                                 | ✅     | ✅          |            |
-| BRD-G-15 | board        | get    | /boards/:id/members                                       | ✅     | ✅          |            |
-| BRD-G-16 | board        | get    | /boards/:id/members/:filter                               | ✅     | ✅          |            |
-| BRD-G-17 | board        | get    | /boards/:id/members/:idMember/cards                       | ✅     | ✅          |            |
-| BRD-G-18 | board        | get    | /boards/:id/membersInvited                                | ✅     | ✅          |            |
-| BRD-G-19 | board        | get    | /boards/:id/membersInvited/:field                         | ✅     | ✅          |            |
+| BTC-G-01 | batch        | get    | /batch/                                                   | ✅     | ✅          | ✅         |
+| BRD-G-01 | board        | get    | /boards/:id                                               | ✅     | ✅          | ✅         |
+| BRD-G-02 | board        | get    | /boards/:id/:field                                        | ✅     | ✅          | ✅         |
+| BRD-G-03 | board        | get    | /boards/:id/actions                                       | ✅     | ✅          | ✅         |
+| BRD-G-04 | board        | get    | /boards/:id/boardStars                                    | ✅     | ✅          | ✅         |
+| BRD-G-05 | board        | get    | /boards/:id/cards                                         | ✅     | ️️️️✅️          | ✅         |
+| BRD-G-06 | board        | get    | /boards/:id/cards/:filter                                 | ✅     | ✅          | ✅         |
+| BRD-G-07 | board        | get    | /boards/:id/cards/:idCard                                 | ✅     | ✅          | ✅         |
+| BRD-G-08 | board        | get    | /boards/:id/checklists                                    | ✅     | ✅          | ✅         |
+| BRD-G-09 | board        | get    | /boards/:id/deltas                                        | ✅     | 🔒          | ✅         |
+| BRD-G-10 | board        | get    | /boards/:id/idTags                                        | ✅     | 🔒          | ✅         |
+| BRD-G-11 | board        | get    | /boards/:id/labels                                        | ✅     | ✅️          | ✅         |
+| BRD-G-12 | board        | get    | /boards/:id/labels/:idLabel                               | ✅     | ✅          | ✅         |
+| BRD-G-13 | board        | get    | /boards/:id/lists                                         | ✅     | ✅          | ✅         |
+| BRD-G-14 | board        | get    | /boards/:id/lists/:filter                                 | ✅     | ✅          | ✅         |
+| BRD-G-15 | board        | get    | /boards/:id/members                                       | ✅     | ✅          | ✅         |
+| BRD-G-16 | board        | get    | /boards/:id/members/:filter                               | ✅     | ✅          | ✅         |
+| BRD-G-17 | board        | get    | /boards/:id/members/:idMember/cards                       | ✅     | ✅          | ✅         |
+| BRD-G-18 | board        | get    | /boards/:id/membersInvited                                | ✅     | ✅          | ✅         |
+| BRD-G-19 | board        | get    | /boards/:id/membersInvited/:field                         | ✅     | ✅          | ✅         |
 | BRD-G-20 | board        | get    | /boards/:id/memberships                                   | ✅     | ✅          |            |
 | BRD-G-21 | board        | get    | /boards/:id/memberships/:idMembership                     | ✅     | ✅          |            |
-| BRD-G-22 | board        | get    | /boards/:id/myPrefs                                       | ✅     | ✅          |            |
+| BRD-G-22 | board        | get    | /boards/:id/myPrefs                                       | ✅     | ✅          | ✅         |
 | BRD-G-23 | board        | get    | /boards/:id/organization                                  | ✅     | ✅          |            |
 | BRD-G-24 | board        | get    | /boards/:id/organization/:field                           | ✅     | ✅          |            |
-| BRD-G-25 | board        | get    | /boards/:id/pluginData                                    | ✅     | ✅          |            |
+| BRD-G-25 | board        | get    | /boards/:id/pluginData                                    | ✅     | ✅          | ✅         |
 | BRD-U-01 | board        | put    | /boards/:id                                               | ✅     | ✅          |            |
 | BRD-U-02 | board        | put    | /boards/:id/closed                                        | ✅     | ✅          |            |
 | BRD-U-03 | board        | put    | /boards/:id/desc                                          | ✅     | ✅          |            |
