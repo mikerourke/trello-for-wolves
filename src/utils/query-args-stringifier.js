@@ -36,8 +36,9 @@ const getQueryStringForNestedArgs = (
     throw new Error('Separator must be specified for child args');
   }
 
-  Object.entries(childGroup).forEach(([childKey, childValue]) => {
+  Object.keys(childGroup).forEach((childKey) => {
     const childArgKey = `${childName}${separator}${childKey}`;
+    const childValue = childGroup[childKey];
     const childArgValue: string = (childValue: any);
     childUrlString = `${childUrlString}${childArgKey}=${childArgValue}&`;
   });
@@ -105,11 +106,12 @@ const stringifyQueryArgs = (
   queryArgs: Object,
 ): string => {
   let queryArgsString = '';
-  Object.entries(queryArgs).forEach(([key, value]) => {
+  Object.keys(queryArgs).forEach((queryArgKey) => {
+    const value = queryArgs[queryArgKey];
     // If the value of the entry is an object (rather than a value), the
     // corresponding child properties need to be combined for the URL string.
     if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
-      const childName = (key: string);
+      const childName = (queryArgKey: string);
       const nestedString = getQueryStringForNestedArgs(childName, queryArgs);
       queryArgsString = `${queryArgsString}${nestedString}&`;
 
@@ -118,8 +120,8 @@ const stringifyQueryArgs = (
     } else {
       // Ensure the separator key specified for handling nested args isn't
       // present in the query string.
-      if (key !== 'separator') { // eslint-disable-line no-lonely-if
-        const argKey = getKeyForQueryString(key);
+      if (queryArgKey !== 'separator') { // eslint-disable-line no-lonely-if
+        const argKey = getKeyForQueryString(queryArgKey);
         const argValue = (value: any);
         queryArgsString = `${queryArgsString}${argKey}=${argValue}&`;
       }
