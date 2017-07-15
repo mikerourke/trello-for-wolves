@@ -6,6 +6,7 @@ import Batch from './resources/batch';
 import Board from './resources/board';
 import Card from './resources/card';
 import Checklist from './resources/checklist';
+import Enterprise from './resources/enterprise';
 import Label from './resources/label';
 import List from './resources/list';
 import Member from './resources/member';
@@ -44,6 +45,11 @@ export default class Trello {
 
   checklists(checklistId?: string = ''): Object {
     return new Checklist(this.auth, `/checklists/${checklistId}`);
+  }
+
+  /* istanbul ignore next: I can't test these with my current membership level. */
+  enterprise(enterpriseId?: string = ''): Object {
+    return new Enterprise(this.auth, `/enterprise/${enterpriseId}`);
   }
 
   labels(labelId?: string = ''): Object {
