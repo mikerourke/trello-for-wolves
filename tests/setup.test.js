@@ -130,7 +130,7 @@ describe('SETUP | Test Preparation and Setup', function() {
       }
     });
 
-    it.only('BRD-P-01-T01 | creates a Board', function(done) {
+    it('BRD-P-01-T01 | creates a Board', function(done) {
       const boardName = 'BRD-P-01-T01';
       trello.boards().addBoard({
         name: boardName,
