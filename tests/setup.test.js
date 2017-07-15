@@ -130,11 +130,16 @@ describe('SETUP | Test Preparation and Setup', function() {
       }
     });
 
-    it('BRD-P-01-T01 | creates a Board', function(done) {
+    it.only('BRD-P-01-T01 | creates a Board', function(done) {
       const boardName = 'BRD-P-01-T01';
       trello.boards().addBoard({
         name: boardName,
+        defaultLabels: false,
+        defaultLists: false,
         idOrganization: resources.org.id,
+        prefs: {
+          permissionLevel: 'private',
+        },
       })
         .then(logResponse)
         .then((response) => {

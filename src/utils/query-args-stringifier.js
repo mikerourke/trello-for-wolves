@@ -59,17 +59,21 @@ const getKeyForQueryString = (key: string): string => {
   switch (key) {
     case 'boardBackgrounds':
     case 'boardStars':
+    case 'confirmationAccepted': // Enterprise
     case 'customBoardBackgrounds':
     case 'customEmoji':
     case 'customStickers':
+    case 'defaultLabels':
+    case 'defaultLists':
     case 'displayName':
     case 'fullName':
+    case 'keepFromSource':
     case 'modelTypes':
     case 'myPrefs':
+    case 'powerUps':
+    case 'returnUrl': // Enterprise
     case 'savedSearches':
     case 'zIndex':
-    case 'confirmationAccepted': // Enterprise
-    case 'returnUrl': // Enterprise
       return key;
 
     default:
