@@ -165,6 +165,7 @@
     ],
     "exclude": [
       "src/utils/errors.js",
+      "src/resources/enterprise.js",
       "src/resources/notification.js",
       "src/resources/webhook.js",
       "internals",
