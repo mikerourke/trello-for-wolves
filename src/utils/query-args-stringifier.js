@@ -68,6 +68,8 @@ const getKeyForQueryString = (key: string): string => {
     case 'myPrefs':
     case 'savedSearches':
     case 'zIndex':
+    case 'confirmationAccepted': // Enterprise
+    case 'returnUrl': // Enterprise
       return key;
 
     default:
@@ -91,6 +93,12 @@ const getKeyForQueryString = (key: string): string => {
     recasedKey = recasedKey.replace('_data', 'Data');
   } else if (recasedKey.includes('_invited')) {
     recasedKey = recasedKey.replace('_invited', 'Invited');
+  } else if (recasedKey.includes('sort_by')) {
+    recasedKey = recasedKey.replace('sort_by', 'sortBy');
+  } else if (recasedKey.includes('sort_order')) {
+    recasedKey = recasedKey.replace('sort_order', 'sortOrder');
+  } else if (recasedKey.includes('start_index')) {
+    recasedKey = recasedKey.replace('start_index', 'startIndex');
   }
 
   return recasedKey;

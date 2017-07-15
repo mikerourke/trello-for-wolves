@@ -8,10 +8,10 @@
  *
  * @apiParam {String[]="all","addAttachmentToCard","addChecklistToCard","addMemberToBoard","addMemberToCard","addMemberToOrganization","addToOrganizationBoard","commentCard","convertToCardFromCheckItem","copyBoard","copyCard","copyCommentCard","createBoard","createCard","createList","createOrganization","deleteAttachmentFromCard","deleteBoardInvitation","deleteCard","deleteOrganizationInvitation","disablePowerUp","emailCard","enablePowerUp","makeAdminOfBoard","makeNormalMemberOfBoard","makeNormalMemberOfOrganization","makeObserverOfBoard","memberJoinedTrello","moveCardFromBoard","moveCardToBoard","moveListFromBoard","moveListToBoard","removeChecklistFromCard","removeFromOrganizationBoard","removeMemberFromCard","unconfirmedBoardInvitation","unconfirmedOrganizationInvitation","updateBoard","updateCard","updateCard:closed","updateCard:desc","updateCard:idList","updateCard:name","updateCheckItemStateOnCard","updateChecklist","updateList","updateList:closed","updateList:name","updateMember","updateOrganization"} [actions='"all"']
  *    Action types to include in the response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {Boolean} [actionsEntities=false]
- *    Include <code>entities</code> data in the response.
  * @apiParam {Boolean} [actionsDisplay=false]
  *    Include <code>display</code> data in the response.
+ * @apiParam {Boolean} [actionsEntities=false]
+ *    Include <code>entities</code> data in the response.
  * @apiParam {String="list","count","minimal"} [actionsFormat='"list"']
  *    Format for returning actions in the response.
  * @apiParam {String} [actionsSince]
@@ -32,7 +32,7 @@
  *    Limit cards in the response.
  * @apiParam {String[]="all","badges","checkItemStates","closed","dateLastActivity","desc","descData","due","email","idAttachmentCover","idBoard","idChecklists","idLabels","idList","idMembers","idMembersVoted","idShort","labels","manualCoverAttachment","name","pos","shortLink","shortUrl","subscribed","url"} [cardFields='"all"']
  *    Card fields to include in response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {Boolean=true,false,"cover"} [cardAttachments=true]
+ * @apiParam {Boolean=true,false,"cover"} [cardAttachments=false]
  *    If <code>true</code>, include all attachments, if <code>false</code>, include none, and if <code>"cover"</code>, include only card cover attachments.
  * @apiParam {String[]="all","bytes","date","edgeColor","idMember","isUpload","mimeType","name","previews","url"} [cardAttachmentFields='"all"']
  *    Card attachment fields to include in the response, can either be <code>"all"</code> or an array of field names.
@@ -50,19 +50,19 @@
  *    Label fields to include in response, can either be <code>"all"</code> or an array of field names.
  * @apiParam {Number{0-1000}} [labelsLimit=50]
  *    Maximum number of labels to show in response.
- * @apiParam {String[]="all","closed","none","open"} [list='"all"']
- *    Limit response to include specified statuses, can either be <code>"all"</code> or an array of field names.
+ * @apiParam {String="all","closed","none","open"} [list='"none"']
+ *    Limit response to include specified statuses.
  * @apiParam {String[]="all","closed","idBoard","name","pos","subscribed"} [listFields='"all"']
  *    List fields to include in response, can either be <code>"all"</code> or an array of field names.
  * @apiParam {String[]="all","active","admin","deactivated","me","none","normal"} [memberships='"none"']
  *    Memberships to include in the response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {Boolean} [membershipsMember=true]
+ * @apiParam {Boolean} [membershipsMember=false]
  *    Indicates if membership member fields should be included in response.
- * @apiParam {String[]="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [memberCreatorFields='["avatarHash", "fullName", "initials", "username"]']
+ * @apiParam {String[]="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [membershipsMemberFields='["fullName", "username"]']
  *    Membership member fields to include in response, can either be <code>"all"</code> or an array of field names.
  * @apiParam {String="admins","all","none","normal","owners"} [members='"none"']
  *    Member level types to include in the response
- * @apiParam {String[]="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [memberFields='["avatarHash", "fullName", "initials", "username"]']
+ * @apiParam {String[]="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [memberFields='["avatarHash", "fullName", "initials", "username", "confirmed"]']
  *    Member fields to include in response, can either be <code>"all"</code> or an array of field names.
  * @apiParam {String="admins","all","none","normal","owners"} [membersInvited='"none"']
  *    Member levels for invited members that should be included in response.
@@ -74,14 +74,6 @@
  *    Checklist data to include in the response.
  * @apiParam {String[]="all","idBoard","idCard","name","pos"} [checklistFields='"all"']
  *    Checklist fields to include in response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {String[]="all","closed","none","open"} [list='"all"']
- *    Limit response to include specified statuses, can either be <code>"all"</code> or an array of field names.
- * @apiParam {String[]="all","closed","idBoard","name","pos","subscribed"} [listFields='"all"']
- *    List fields to include in response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {Boolean} [memberCreator=true]
- *    Indicates if member creator fields should be included in response.
- * @apiParam {String[]="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [memberCreatorFields='["avatarHash", "fullName", "initials", "username"]']
- *    Member creator fields to include in response, can either be <code>"all"</code> or an array of field names.
  * @apiParam {Boolean} [organization=false]
  *    Include organization data in the response.
  * @apiParam {String[]="all","billableMemberCount","desc","descData","displayName","idBoards","invitations","invited","logoHash","memberships","name","powerUps","prefs","premiumFeatures","products","url","website"} [organizationFields='["name", "displayName"]']
@@ -122,10 +114,10 @@
  * @apiGroup board
  * @apiPermission read
  *
- * @apiParam {Boolean} [display=false]
- *    Include <code>display</code> data in the response.
  * @apiParam {Boolean} [entities=false]
  *    Include <code>entities</code> data in the response.
+ * @apiParam {Boolean} [display=false]
+ *    Include <code>display</code> data in the response.
  * @apiParam {String[]="all","addAttachmentToCard","addChecklistToCard","addMemberToBoard","addMemberToCard","addMemberToOrganization","addToOrganizationBoard","commentCard","convertToCardFromCheckItem","copyBoard","copyCard","copyCommentCard","createBoard","createCard","createList","createOrganization","deleteAttachmentFromCard","deleteBoardInvitation","deleteCard","deleteOrganizationInvitation","disablePowerUp","emailCard","enablePowerUp","makeAdminOfBoard","makeNormalMemberOfBoard","makeNormalMemberOfOrganization","makeObserverOfBoard","memberJoinedTrello","moveCardFromBoard","moveCardToBoard","moveListFromBoard","moveListToBoard","removeChecklistFromCard","removeFromOrganizationBoard","removeMemberFromCard","unconfirmedBoardInvitation","unconfirmedOrganizationInvitation","updateBoard","updateCard","updateCard:closed","updateCard:desc","updateCard:idList","updateCard:name","updateCheckItemStateOnCard","updateChecklist","updateList","updateList:closed","updateList:name","updateMember","updateOrganization"} [filter='"all"']
  *    Action types to include in the response, can either be <code>"all"</code> or an array of field names.
  * @apiParam {String[]="all","data","date","idMemberCreator","type"} [fields='"all"']
@@ -178,28 +170,28 @@
  *
  * @apiParam {String[]="all","addAttachmentToCard","addChecklistToCard","addMemberToBoard","addMemberToCard","addMemberToOrganization","addToOrganizationBoard","commentCard","convertToCardFromCheckItem","copyBoard","copyCard","copyCommentCard","createBoard","createCard","createList","createOrganization","deleteAttachmentFromCard","deleteBoardInvitation","deleteCard","deleteOrganizationInvitation","disablePowerUp","emailCard","enablePowerUp","makeAdminOfBoard","makeNormalMemberOfBoard","makeNormalMemberOfOrganization","makeObserverOfBoard","memberJoinedTrello","moveCardFromBoard","moveCardToBoard","moveListFromBoard","moveListToBoard","removeChecklistFromCard","removeFromOrganizationBoard","removeMemberFromCard","unconfirmedBoardInvitation","unconfirmedOrganizationInvitation","updateBoard","updateCard","updateCard:closed","updateCard:desc","updateCard:idList","updateCard:name","updateCheckItemStateOnCard","updateChecklist","updateList","updateList:closed","updateList:name","updateMember","updateOrganization"} [actions='"all"']
  *    Action types to include in the response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {Boolean=true,false,"cover"} [attachments=true]
+ * @apiParam {Boolean=true,false,"cover"} [attachments=false]
  *    If <code>true</code>, include all attachments, if <code>false</code>, include none, and if <code>"cover"</code>, include only card cover attachments.
  * @apiParam {String[]="all","bytes","date","edgeColor","idMember","isUpload","mimeType","name","previews","url"} [attachmentFields='"all"']
  *    Attachment fields to include in the response, can either be <code>"all"</code> or an array of field names.
  * @apiParam {Boolean} [stickers=false]
  *    Indicates if sticker data should be included in the response.
- * @apiParam {Boolean} [member=true]
+ * @apiParam {Boolean} [members=false]
  *    Indicates if member fields should be included in response.
  * @apiParam {String[]="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [memberFields='["avatarHash", "fullName", "initials", "username"]']
  *    Member fields to include in response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {Boolean} [checkItemStates=true]
+ * @apiParam {Boolean} [checkItemStates=false]
  *    Indicates if check item state data should be included in response.
  * @apiParam {String="all","none"} [checklists='"none"']
  *    Checklists to include in response.
- * @apiParam {number{0-1000}} [limit=50]
+ * @apiParam {number{0-1000}} [limit]
  *    Limit to impose on actions included in response.
  * @apiParam {Date} [since]
- *    Starting date for actions to include in the response.
+ *    Starting date for actions to include in the response, can be either a date or <code>null</code>.
  * @apiParam {Date} [before]
- *    End date for actions to include in the response.
- * @apiParam {String[]="all","closed","none","open","visible"} [filter='"visible"']
- *    Limit cards in the response, can either be <code>"all"</code> or an array of field names.
+ *    End date for actions to include in the response, can be either a date or <code>null</code>.
+ * @apiParam {String="all","closed","none","open","visible"} [filter='"visible"']
+ *    Limit cards in the response.
  * @apiParam {String[]="all","badges","checkItemStates","closed","dateLastActivity","desc","descData","due","email","idAttachmentCover","idBoard","idChecklists","idLabels","idList","idMembers","idMembersVoted","idShort","labels","manualCoverAttachment","name","pos","shortLink","shortUrl","subscribed","url"} [fields='"all"']
  *    Card fields to include in response, can either be <code>"all"</code> or an array of field names.
  * @apiExample {js} Example:
@@ -229,7 +221,7 @@
  * @apiPermission read
  *
  *
- * @apiParam {Boolean=true,false,"cover"} [attachments=true]
+ * @apiParam {Boolean=true,false,"cover"} [attachments=false]
  *    If <code>true</code>, include all attachments, if <code>false</code>, include none, and if <code>"cover"</code>, include only card cover attachments.
  * @apiParam {String[]="all","bytes","date","edgeColor","idMember","isUpload","mimeType","name","previews","url"} [attachmentFields='"all"']
  *    Attachment fields to include in the response, can either be <code>"all"</code> or an array of field names.
@@ -245,7 +237,7 @@
  *    Action fields to include in the response, can either be <code>"all"</code> or an array of field names.
  * @apiParam {String[]="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [actionMemberCreatorFields='["avatarHash", "fullName", "initials", "username"]']
  *    Member creator fields for actions to include in response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {Boolean} [members=true]
+ * @apiParam {Boolean} [members=false]
  *    Indicates if member fields should be included in response.
  * @apiParam {String[]="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [memberFields='["avatarHash", "fullName", "initials", "username"]']
  *    Member fields to include in response, can either be <code>"all"</code> or an array of field names.
@@ -254,11 +246,13 @@
  * @apiParam {String[]="all","idCheckItem","state"} [checkItemStateFields='"all"']
  *    Check item state fields to include in response, can either be <code>"all"</code> or an array
  *    of field names.
- * @apiParam {Boolean} [labels=true] Indicates if label data should be included in the response.
- * @apiParam {String="all","none"} [checklists='"none"'] Checklist data to include in the response.
+ * @apiParam {Boolean} [labels=true]
+ *    Indicates if label data should be included in the response.
+ * @apiParam {String="all","none"} [checklists='"none"']
+ *    Checklist data to include in the response.
  * @apiParam {String[]="all","idBoard","idCard","name","pos"} [checklistFields='"all"']
  *    Checklist fields to include in response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {String[]="all","badges","checkItemStates","closed","dateLastActivity","desc","descData","due","email","idAttachmentCover","idBoard","idChecklists","idLabels","idList","idMembers","idMembersVoted","idShort","labels","manualCoverAttachment","name","pos","shortLink","shortUrl","subscribed","url"} [cardFields='"all"']
+ * @apiParam {String[]="all","badges","checkItemStates","closed","dateLastActivity","desc","descData","due","email","idAttachmentCover","idBoard","idChecklists","idLabels","idList","idMembers","idMembersVoted","idShort","labels","manualCoverAttachment","name","pos","shortLink","shortUrl","subscribed","url"} [fields='"all"']
  *    Card fields to include in response, can either be <code>"all"</code> or an array of field names.
  * @apiExample {js} Example:
  trello.boards('BoArDId').cards('CaRdId').getCard({...});
@@ -272,18 +266,18 @@
  * @apiGroup board
  * @apiPermission read
  *
- * @apiParam {String[]="all","closed","none","open","visible"} [cards='"none"']
+ * @apiParam {String="all","closed","none","open","visible"} [cards='"none"']
  *    Limit cards in the response.
  * @apiParam {String[]="all","badges","checkItemStates","closed","dateLastActivity","desc","descData","due","email","idAttachmentCover","idBoard","idChecklists","idLabels","idList","idMembers","idMembersVoted","idShort","labels","manualCoverAttachment","name","pos","shortLink","shortUrl","subscribed","url"} [cardFields='"all"']
  *    Card fields to include in response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {String="all","none"} [checkItems='"none"']
+ * @apiParam {String="all","none"} [checkItems='"all"']
  *    Checklist items to include in response.
- * @apiParam {String[]="all","name","nameData","pos","state","value"} [checkItemFields='"all"']
+ * @apiParam {String[]="all","name","nameData","pos","state","value"} [checkItemFields='["name", "nameData", "pos", "state"]']
  *    Checklist item fields to include in response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {String[]="all","idBoard","idCard","name","pos"} [fields='"all"']
- *    Checklist fields to include in response, can either be <code>"all"</code> or an array of field names.
  * @apiParam {String="all","none"} [filter='"all"']
  *    Checklist types to include in response.
+ * @apiParam {String[]="all","idBoard","idCard","name","pos"} [fields='"all"']
+ *    Checklist fields to include in response, can either be <code>"all"</code> or an array of field names.
  * @apiExample {js} Example:
  trello.boards('BoArDId').checklists().getChecklists({...});
  */
@@ -308,7 +302,7 @@
  * @api {get} /boards/:boardId/tags getTags
  * @apiVersion 1.0.0
  * @apiName getTags
- * @apiDescription Gets the tags associated with a board.
+ * @apiDescription Returns a list of idTags that represent the collections that the board has been added to.
  * @apiGroup board
  * @apiPermission read
  * @apiExample {js} Example:
@@ -387,7 +381,7 @@
  * @apiGroup board
  * @apiPermission read
  *
- * @apiParam {String="admins","all","none","normal","owners"} [filter]
+ * @apiParam {String="admins","all","none","normal","owners"} [filter='"all"']
  *    Member level types to include in the response.
  * @apiParam {String[]="all","avatarHash","bioData","idPremOrgsAdmin","memberType","products","status","url"} [fields='["fullName", "username"]']
  *    Member fields to include in response, can either be <code>"all"</code> or an array of field names.
@@ -422,27 +416,27 @@
  *
  * @apiParam {String[]="all","addAttachmentToCard","addChecklistToCard","addMemberToBoard","addMemberToCard","addMemberToOrganization","addToOrganizationBoard","commentCard","convertToCardFromCheckItem","copyBoard","copyCard","copyCommentCard","createBoard","createCard","createList","createOrganization","deleteAttachmentFromCard","deleteBoardInvitation","deleteCard","deleteOrganizationInvitation","disablePowerUp","emailCard","enablePowerUp","makeAdminOfBoard","makeNormalMemberOfBoard","makeNormalMemberOfOrganization","makeObserverOfBoard","memberJoinedTrello","moveCardFromBoard","moveCardToBoard","moveListFromBoard","moveListToBoard","removeChecklistFromCard","removeFromOrganizationBoard","removeMemberFromCard","unconfirmedBoardInvitation","unconfirmedOrganizationInvitation","updateBoard","updateCard","updateCard:closed","updateCard:desc","updateCard:idList","updateCard:name","updateCheckItemStateOnCard","updateChecklist","updateList","updateList:closed","updateList:name","updateMember","updateOrganization"} [actions='"all"']
  *    Action types to include in the response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {Boolean=true,false,"cover"} [attachments=true]
+ * @apiParam {Boolean=true,false,"cover"} [attachments=false]
  *    If <code>true</code>, include all attachments, if <code>false</code>, include none, and if <code>"cover"</code>, include only card cover attachments.
  * @apiParam {String[]="all","bytes","date","edgeColor","idMember","isUpload","mimeType","name","previews","url"} [attachmentFields='"all"']
  *    Attachment fields to include in the response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {Boolean} [member=true]
+ * @apiParam {Boolean} [members=false]
  *    Indicates if member fields should be included in response.
  * @apiParam {String[]="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [memberFields='["avatarHash", "fullName", "initials", "username"]']
  *    Member fields to include in response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {Boolean} [checkItemStates=true]
+ * @apiParam {Boolean} [checkItemStates=false]
  *    Indicates if check item state data should be included in response.
  * @apiParam {String="all","none"} [checklists='"none"']
  *    Checklist data to include in the response.
- * @apiParam {Boolean} [board=true]
+ * @apiParam {Boolean} [board=false]
  *    If <code>true</code>, include board data in the response.
- * @apiParam {String[]="all","closed","dateLastActivity","dateLastView","desc","descData","idOrganization","invitations","invited","labelNames","memberships","name","pinned","powerUps","prefs","shortLink","shortUrl","starred","subscribed","url"} [boardFields='"all"']
+ * @apiParam {String[]="all","closed","dateLastActivity","dateLastView","desc","descData","idOrganization","invitations","invited","labelNames","memberships","name","pinned","powerUps","prefs","shortLink","shortUrl","starred","subscribed","url"} [boardFields='["name", "desc", "closed", "idOrganization", "pinned", "url", "prefs"]']
  *    Board fields to include in response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {String[]="all","closed","none","open"} [list='"all"']
- *    Limit response to include specified statuses, can either be <code>"all"</code> or an array of field names.
+ * @apiParam {Boolean} [list=false]
+ *    Include list fields in the response.
  * @apiParam {String[]="all","closed","idBoard","name","pos","subscribed"} [listFields='"all"']
  *    List fields to include in response, can either be <code>"all"</code> or an array of field names.
- * @apiParam {String[]="all","closed","none","open","visible"} [filter='"all"']
+ * @apiParam {String="all","closed","none","open","visible"} [filter='"visible"']
  *    Card types to include in the response.
  * @apiParam {String[]="all","badges","checkItemStates","closed","dateLastActivity","desc","descData","due","email","idAttachmentCover","idBoard","idChecklists","idLabels","idList","idMembers","idMembersVoted","idShort","labels","manualCoverAttachment","name","pos","shortLink","shortUrl","subscribed","url"} [fields='"all"']
  *    Card fields to include in response, can either be <code>"all"</code> or an array of field names.
@@ -459,8 +453,7 @@
  * @apiPermission read
  *
  * @apiParam {String[]="all","avatarHash","avatarSource","bio","bioData","confirmed","email","fullName","gravatarHash","idBoards","idBoardsPinned","idOrganizations","idPremOrgsAdmin","initials","loginTypes","memberType","oneTimeMessagesDismissed","prefs","premiumFeatures","products","status","status","trophies","uploadedAvatarHash","url","username"} [fields='"all"']
- *    Member fields to include in response, can either be <code>"all"</code> or an array of field
- *    names.
+ *    Member fields to include in response, can either be <code>"all"</code> or an array of field names.
  * @apiExample {js} Example:
  trello.boards('BoArDId').membersInvited().getMembers({...});
  */
@@ -473,9 +466,8 @@
  * @apiGroup board
  * @apiPermission read
  *
- * @apiParam {String[]="all","avatarHash","avatarSource","bio","bioData","confirmed","email","fullName","gravatarHash","idBoards","idBoardsPinned","idOrganizations","idPremOrgsAdmin","initials","loginTypes","memberType","oneTimeMessagesDismissed","prefs","premiumFeatures","products","status","status","trophies","uploadedAvatarHash","url","username"} [fields='"all"']
- *    Member fields to include in response, can either be <code>"all"</code> or an array of field
- *    names.
+ * @apiParam {String="avatarHash","avatarSource","bio","bioData","confirmed","email","fullName","gravatarHash","idBoards","idBoardsPinned","idOrganizations","idPremOrgsAdmin","initials","loginTypes","memberType","oneTimeMessagesDismissed","prefs","premiumFeatures","products","status","status","trophies","uploadedAvatarHash","url","username"} field
+ *    Members invited field to get value for.
  * @apiExample {js} Example:
  trello.boards('BoArDId').membersInvited().getFieldValue('bio');
  */
@@ -490,13 +482,15 @@
  *
  * @apiParam {String[]="all","active","admin","deactivated","me","none","normal"} [filter='"all"']
  *    Membership types to include in response.
- * @apiParam {Boolean} [member=true] Indicates if member fields should be included in response.
+ * @apiParam {Boolean} [member=false]
+ *    Indicates if member fields should be included in response.
  * @apiParam {String[]="all","avatarHash","bioData","idPremOrgsAdmin","memberType","products","status","url"} [memberFields='["fullName", "username"]']
- *    Member fields to include in response, can either be <code>"all"</code> or
- *    an array of field names.
+ *    Member fields to include in response, can either be <code>"all"</code> or an array of field names.
  * @apiExample {js} Example:
- trello.boards('BoArDId').membersInvited().getMembers({...});
+ trello.boards('BoArDId').memberships().getMemberships({...});
  */
+
+// Add for Id
 
 /**
  * @api {get} /boards/:boardId/myPrefs getMyPrefs

@@ -38,19 +38,21 @@ export type AvatarSourceField =
   | 'none'
   | 'upload';
 
-export type MemberField =
+export type MemberEnterpriseOnlyField =
   'avatarHash'
-  | 'bio'
+  | 'fullName'
+  | 'initials'
+  | 'username';
+
+export type MemberField = MemberEnterpriseOnlyField &
+  'bio'
   | 'bioData'
   | 'confirmed'
-  | 'fullName'
   | 'idPremOrgsAdmin'
-  | 'initials'
   | 'memberType'
   | 'products'
   | 'status'
-  | 'url'
-  | 'username';
+  | 'url';
 
 export type MemberEveryField = MemberField &
   'avatarSource'
