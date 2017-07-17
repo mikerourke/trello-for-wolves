@@ -143,7 +143,7 @@
  * @apiParam {String[]="all","avatarHash","bio","bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [memberCreatorFields='["avatarHash", "fullName", "initials", "username"]']
  *    Member creator fields to include in response, can either be <code>"all"</code> or an array of field names.
  * @apiExample {js} Example:
- trello.boards('BoArDId').action().getActions({...});
+ trello.boards('BoArDId').actions().getActions({...});
  */
 
 /**
@@ -406,11 +406,10 @@
  */
 
 /**
- * @api {get} /boards/:boardId/member/:memberId getCardsForMemberInBoard
+ * @api {get} /boards/:boardId/member/:memberId/cards getCardsForMemberInBoard
  * @apiVersion 1.0.0
- * @apiName getMemberInBoard
- * @apiDescription Gets the card data associated with the specified member
- *    on this board.
+ * @apiName getCardsForMemberInBoard
+ * @apiDescription Gets the card data associated with the specified member on this board.
  * @apiGroup board
  * @apiPermission read
  *
@@ -459,7 +458,7 @@
  */
 
 /**
- * @api {get} /boards/:boardId/membersInvited getMembersInvitedFieldValue
+ * @api {get} /boards/:boardId/membersInvited/:field getMembersInvitedFieldValue
  * @apiVersion 1.0.0
  * @apiName getMembersInvitedFieldValue
  * @apiDescription Gets the field value of the members invited for a board.
@@ -489,8 +488,22 @@
  * @apiExample {js} Example:
  trello.boards('BoArDId').memberships().getMemberships({...});
  */
-
-// Add for Id
+ 
+ /**
+ * @api {get} /boards/:boardId/memberships/:membershipId getMembershipForBoard
+ * @apiVersion 1.0.0
+ * @apiName getMembershipForBoard
+ * @apiDescription Gets the membership data with the specified ID for the specified board.
+ * @apiGroup board
+ * @apiPermission read
+ *
+ * @apiParam {Boolean} [member=false]
+ *    Indicates if member fields should be included in response.
+ * @apiParam {String[]="all","avatarHash","bio",bioData","confirmed","fullName","idPremOrgsAdmin","initials","memberType","products","status","url","username"} [memberFields='["fullName", "username"]']
+ *    Member fields to include in response, can either be <code>"all"</code> or an array of field names.
+ * @apiExample {js} Example:
+ trello.boards('BoArDId').memberships('mEmbErShIpId').getMembership({...});
+ */
 
 /**
  * @api {get} /boards/:boardId/myPrefs getMyPrefs
@@ -501,6 +514,34 @@
  * @apiPermission read
  * @apiExample {js} Example:
  trello.boards('BoArDId').myPrefs().getMyPrefs();
+ */
+ 
+ /**
+ * @api {get} /boards/:boardId/organization getOrganizationForBoard
+ * @apiVersion 1.0.0
+ * @apiName getOrganizationForBoard
+ * @apiDescription Gets the organization the board is associated with.
+ * @apiGroup board
+ * @apiPermission read
+ *
+ * @apiParam {String[]="billableMemberCount","desc","descData","displayName","idBoards","invitations","invited","logoHash","memberships","name","powerUps","prefs","premiumFeatures","products","url","website"} [fields='"all"']
+ *   Organization fields to include in response, can either be <code>"all"</code> or an array of field names.
+ * @apiExample {js} Example:
+ trello.boards('BoArDId').organization().getOrganization({...});
+ */
+ 
+ /**
+ * @api {get} /boards/:boardId/organization/:field getOrganizationFieldValue
+ * @apiVersion 1.0.0
+ * @apiName getOrganizationForBoard
+ * @apiDescription Gets the field value for the organization associated with the board.
+ * @apiGroup board
+ * @apiPermission read
+ *
+ * @apiParam {String="billableMemberCount","desc","descData","displayName","idBoards","invitations","invited","logoHash","memberships","name","powerUps","prefs","premiumFeatures","products","url","website"} field
+ *   Organization field to get value for.
+ * @apiExample {js} Example:
+ trello.boards('BoArDId').organization().getFieldValue('desc');
  */
 
 /**

@@ -114,11 +114,10 @@
 
 /**
  * @apiDefine BoardInclusionQueryArgs
- * @apiParam {Boolean} [board=true] If <code>true</code>, include board data
- *    in the response.
+ * @apiParam {Boolean} [board=true]
+ *    If <code>true</code>, include board data in the response.
  * @apiParam {String[]="all","closed","dateLastActivity","dateLastView","desc","descData","idOrganization","invitations","invited","labelNames","memberships","name","pinned","powerUps","prefs","shortLink","shortUrl","starred","subscribed","url"} [boardFields='"all"']
- *    Board fields to include in response, can either be <code>"all"</code> or
- *    an array of field names.
+ *    Board fields to include in response, can either be <code>"all"</code> or an array of field names.
  */
 
 /**
@@ -152,20 +151,16 @@
  * @apiDefine CardInclusionQueryArgs
  * @apiParam {String[]="all","closed","none","open","visible"} [cards='"none"']
  *    Limit cards in the response.
- * @apiParam {String[]="all","badges","checkItemStates","closed","dateLastActivity","desc","descData","due","email","idAttachmentCover","idBoard","idChecklists","idLabels","idList","idMembers","idMembersVoted","idShort","labels","manualCoverAttachment","name","pos","shortLink","shortUrl","subscribed","url"} [cardFields='"all"']
- *    Card fields to include in response, can either be <code>"all"</code> or
- *    an array of field names.
+ * @apiParam {String[]="all","badges","checkItemStates","closed","dateLastActivity","desc","descData","due","email","idAttachmentCover","idBoard","idChecklists","idLabels","idList","idMembers","idMembersVoted","idShort","labels","manualCoverAttachment","name","pos","shortLink","shortUrl","subscribed","url"} [cardFields='["badges", "checkItemStates", "closed", "dateLastActivity", "desc", "descData", "due", "email", "idBoard", "idChecklists", "idLabels", "idList", "idMembers", "idShort", "idAttachmentCover", "manualCoverAttachment", "labels", "name", "pos", "shortUrl", "url"]']
+ *    Card fields to include in response, can either be <code>"all"</code> or an array of field names.
  */
 
 /**
  * @apiDefine AttachmentInclusionQueryArgs
  * @apiParam {Boolean=true,false,"cover"} [attachments=true]
- *    If <code>true</code>, include all attachments, if <code>false</code>,
- *    include none, and if <code>"cover"</code>, include only card cover
- *    attachments.
+ *    If <code>true</code>, include all attachments, if <code>false</code>, include none, and if <code>"cover"</code>, include only card cover attachments.
  * @apiParam {String[]="all","bytes","date","edgeColor","idMember","isUpload","mimeType","name","previews","url"} [attachmentFields='"all"']
- *    Attachment fields to include in the response, can either be
- *    <code>"all"</code> or an array of field names.
+ *    Attachment fields to include in the response, can either be <code>"all"</code> or an array of field names.
  */
 
 /**
@@ -194,11 +189,10 @@
 
 /**
  * @apiDefine ChecklistInclusionQueryArgs
- * @apiParam {String="all","none"} [checklists='"none"'] Checklists to include
- *    in response.
+ * @apiParam {String="all","none"} [checklists='"none"']
+ *    Checklists to include in response.
  * @apiParam {String[]="all","idBoard","idCard","name","pos"} [checklistFields='"all"']
- *    Checklist fields to include in response, can either be <code>"all"</code>
- *    or an array of field names.
+ *    Checklist fields to include in response, can either be <code>"all"</code> or an array of field names.
  */
 
 /**
@@ -212,11 +206,10 @@
 
 /**
  * @apiDefine CheckItemStateInclusionQueryArgs
- * @apiParam {Boolean} [checkItemStates=true] Indicates if check item state
- *    data should be included in response.
+ * @apiParam {Boolean} [checkItemStates=true]
+ *    Indicates if check item state data should be included in response.
  * @apiParam {String[]="all","idCheckItem","state"} [checkItemStateFields='"all"']
- *    Check item state fields to include in response, can either be
- *    <code>"all"</code> or an array of field names.
+ *    Check item state fields to include in response, can either be <code>"all"</code> or an array of field names.
  */
 
 /**
