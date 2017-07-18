@@ -62,12 +62,19 @@ const performApiRequest = (
   });
 
   limiter.request(requestConfig, (error, response) => {
-    const { statusCode, body = {}, ...responseData } = response;
-    const errorMessage = error && error;
-    if (error || statusCode < 200 || statusCode > 299) {
-      reject(new ApiCallResponseError(statusCode, httpMethod, requestUrl, body, errorMessage));
+    if (error) {
+      reject(new Error(`Error performing request: ${error}`));
     } else {
-      resolve({ ...responseData, statusCode, data: body });
+      if (!response) {
+        reject(new Error('No response present when performing request.'));
+      } else {
+        const {statusCode = 400, body = {}, ...responseData} = response;
+        if (statusCode > 299 || statusCode < 200) {
+          reject(new ApiCallResponseError(statusCode, httpMethod, requestUrl, body));
+        } else {
+          resolve({ ...responseData, statusCode, data: body });
+        }
+      }
     }
   });
 });
