@@ -132,51 +132,51 @@ export default class Card extends BaseResource {
   }
 
   actions() {
-    return new Action(this.auth, `${this.routePath}/actions`);
+    return new Action(this.config, `${this.routePath}/actions`);
   }
 
   attachments(attachmentId?: string = '') {
-    return new Attachment(this.auth, `${this.routePath}/attachments/${attachmentId}`);
+    return new Attachment(this.config, `${this.routePath}/attachments/${attachmentId}`);
   }
 
   board() {
-    return new Board(this.auth, `${this.routePath}/board`);
+    return new Board(this.config, `${this.routePath}/board`);
   }
 
   checkItemStates() {
-    return new CheckItem(this.auth, `${this.routePath}/checkItemStates`);
+    return new CheckItem(this.config, `${this.routePath}/checkItemStates`);
   }
 
   checklist(checklistId: string) {
-    return new Checklist(this.auth, `${this.routePath}/checklist/${checklistId}`);
+    return new Checklist(this.config, `${this.routePath}/checklist/${checklistId}`);
   }
 
   checklists(checklistId?: string = '') {
-    return new Checklist(this.auth, `${this.routePath}/checklists/${checklistId}`);
+    return new Checklist(this.config, `${this.routePath}/checklists/${checklistId}`);
   }
 
   checkItem(checkItemId: string) {
-    return new CheckItem(this.auth, `${this.routePath}/checkItem/${checkItemId}`);
+    return new CheckItem(this.config, `${this.routePath}/checkItem/${checkItemId}`);
   }
 
   comments(commentId?: string = '') {
-    return new Comment(this.auth, `${this.routePath}/actions/${commentId}`);
+    return new Comment(this.config, `${this.routePath}/actions/${commentId}`);
   }
 
   labels() {
-    return new Label(this.auth, `${this.routePath}/labels`);
+    return new Label(this.config, `${this.routePath}/labels`);
   }
 
   list() {
-    return new List(this.auth, `${this.routePath}/list`);
+    return new List(this.config, `${this.routePath}/list`);
   }
 
   members() {
-    return new Member(this.auth, `${this.routePath}/members`);
+    return new Member(this.config, `${this.routePath}/members`);
   }
 
   membersVoted(memberId?: string = '') {
-    return new Member(this.auth, `${this.routePath}/membersVoted`, memberId);
+    return new Member(this.config, `${this.routePath}/membersVoted`, memberId);
   }
 
   getPluginData(): Promise<*> {
@@ -184,7 +184,7 @@ export default class Card extends BaseResource {
   }
 
   stickers(stickerId?: string = '') {
-    return new Sticker(this.auth, `${this.routePath}/stickers/${stickerId}`);
+    return new Sticker(this.config, `${this.routePath}/stickers/${stickerId}`);
   }
 
   updateCard(

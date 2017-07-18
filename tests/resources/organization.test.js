@@ -11,7 +11,7 @@ describe('ORG | Organization Resource', function() {
   let testMember = {};
 
   before(function() {
-    trello = new Trello(auth);
+    trello = new Trello(config);
     logger = new Logger();
     if (resources.org) {
       orgId = resources.org.id;

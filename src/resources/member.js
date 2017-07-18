@@ -346,40 +346,40 @@ export default class Member extends BaseResource {
   }
 
   actions() {
-    return new Action(this.auth, `${this.routePath}/actions`);
+    return new Action(this.config, `${this.routePath}/actions`);
   }
 
   boardBackgrounds(backgroundId?: string = '') {
-    return new BoardBackground(this.auth, `${this.routePath}/boardBackgrounds/${backgroundId}`);
+    return new BoardBackground(this.config, `${this.routePath}/boardBackgrounds/${backgroundId}`);
   }
 
   boardStars(boardStarId?: string = '') {
-    return new BoardStar(this.auth, `${this.routePath}/boardStars/${boardStarId}`);
+    return new BoardStar(this.config, `${this.routePath}/boardStars/${boardStarId}`);
   }
 
   boards() {
-    return new Board(this.auth, `${this.routePath}/boards`);
+    return new Board(this.config, `${this.routePath}/boards`);
   }
 
   boardsInvited() {
-    return new Board(this.auth, `${this.routePath}/boardsInvited`);
+    return new Board(this.config, `${this.routePath}/boardsInvited`);
   }
 
   cards() {
-    return new Card(this.auth, `${this.routePath}/cards`);
+    return new Card(this.config, `${this.routePath}/cards`);
   }
 
   customBoardBackgrounds(backgroundId?: string = '') {
     return new BoardBackground(
-      this.auth, `${this.routePath}/customBoardBackgrounds/${backgroundId}`);
+      this.config, `${this.routePath}/customBoardBackgrounds/${backgroundId}`);
   }
 
   customEmoji(customEmojiId?: string = '') {
-    return new CustomEmoji(this.auth, `${this.routePath}/customEmoji/${customEmojiId}`);
+    return new CustomEmoji(this.config, `${this.routePath}/customEmoji/${customEmojiId}`);
   }
 
   customStickers(customStickerId?: string = '') {
-    return new Sticker(this.auth, `${this.routePath}/customStickers/${customStickerId}`);
+    return new Sticker(this.config, `${this.routePath}/customStickers/${customStickerId}`);
   }
 
   /* istanbul ignore next: Requires Business Class subscription */
@@ -393,24 +393,24 @@ export default class Member extends BaseResource {
   }
 
   notifications() {
-    return new Notification(this.auth, `${this.routePath}/notifications`);
+    return new Notification(this.config, `${this.routePath}/notifications`);
   }
 
   organizations() {
-    return new Organization(this.auth, `${this.routePath}/organizations`);
+    return new Organization(this.config, `${this.routePath}/organizations`);
   }
 
   organizationsInvited() {
     return new Organization(
-      this.auth, `${this.routePath}/organizationsInvited`);
+      this.config, `${this.routePath}/organizationsInvited`);
   }
 
   savedSearches(savedSearchId?: string = '') {
-    return new SavedSearch(this.auth, `${this.routePath}/savedSearches/${savedSearchId}`);
+    return new SavedSearch(this.config, `${this.routePath}/savedSearches/${savedSearchId}`);
   }
 
   tokens() {
-    return new Token(this.auth, `${this.routePath}/tokens`);
+    return new Token(this.config, `${this.routePath}/tokens`);
   }
 
   updateMember(
@@ -447,7 +447,7 @@ export default class Member extends BaseResource {
   }
 
   prefs() {
-    return new Pref(this.auth, `${this.routePath}/prefs`);
+    return new Pref(this.config, `${this.routePath}/prefs`);
   }
 
   updateUsername(value: string): Promise<*> {

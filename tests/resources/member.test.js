@@ -19,7 +19,7 @@ describe('MBR | Member Resource', function() {
   let testSavedSearch = {};
 
   before(function() {
-    trello = new Trello(auth);
+    trello = new Trello(config);
     logger = new Logger();
   });
 

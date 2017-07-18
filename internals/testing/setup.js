@@ -9,16 +9,16 @@ chai.should();
 chai.use(chaiAsPromised);
 
 // This is used by all the tests, so it's much easier to set it here.
-const auth = {
+const config = {
   key: process.env.TRELLO_API_KEY || /* istanbul ignore next */ '',
   token: process.env.TRELLO_AUTH_TOKEN || /* istanbul ignore next */ '',
 };
-global.auth = auth;
+global.config = config;
 
 // Sets the time (in milliseconds) that is called in the before() function
 // of each test suite.  This is to ensure the Trello API rate limits aren't
 // exceeded.
-const testDelay = process.env.TEST_DELAY || /* istanbul ignore next */ 1500;
+const testDelay = process.env.TEST_DELAY || /* istanbul ignore next */ 500;
 global.testDelay = testDelay;
 
 // Path to assets (used for uploading files).

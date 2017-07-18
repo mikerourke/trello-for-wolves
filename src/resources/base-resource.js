@@ -8,32 +8,32 @@ import stringifyQueryArgs from '../utils/query-args-stringifier';
 import performApiRequest from '../utils/api-request';
 
 /* Types */
-import type { Auth, HttpMethod } from '../types';
+import type { Config, HttpMethod } from '../types';
 
 /**
  * Base class for resources.
  */
 export default class BaseResource {
   /* eslint-disable no-undef */
-  auth: Auth;
+  config: Config;
   routePath: string;
   routePathElements: Array<string>;
   associationId: string;
   /* eslint-enable no-undef */
 
   /**
-   * @param {Auth} auth Auth object containing Trello API key and token.
+   * @param {Config} config Config object containing Trello API key and token.
    * @param {string} routePath Route path for performing the request.
    * @param {string} associationId Id number of the associated resource to
    *    update.
    * @constructor
    */
   constructor(
-    auth: Auth,
+    config: Config,
     routePath: string,
     associationId?: string = '',
   ) {
-    this.auth = auth;
+    this.config = config;
     this.routePath = routePath;
     this.associationId = associationId;
 
@@ -81,7 +81,8 @@ export default class BaseResource {
     const queryString = hasQueryArgs ? stringifyQueryArgs(argsToUse) : '';
 
     // Ensure the key and token is appended to the end of the querystring.
-    const authSuffix = stringify(this.auth);
+    const { key, token } = this.config;
+    const authSuffix = stringify({ key, token });
     return `${sanitizedPath}?${queryString}${authSuffix}`;
   }
 
@@ -98,7 +99,8 @@ export default class BaseResource {
     queryArgs?: Object,
   ): Promise<*> {
     const endpoint = this.getEndpoint(pathVariables, queryArgs);
-    return performApiRequest(httpMethod, endpoint, queryArgs);
+    const { backoffTime = 3, maxWaitingTime = 300 } = this.config;
+    return performApiRequest(httpMethod, endpoint, backoffTime, maxWaitingTime, queryArgs);
   }
 
   httpGet(

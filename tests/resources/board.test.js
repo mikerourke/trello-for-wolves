@@ -10,7 +10,7 @@ describe('BRD | Board Resource', function() {
   let boardId = '';
 
   before(function() {
-    trello = new Trello(auth);
+    trello = new Trello(config);
     logger = new Logger();
     if (resources.board) {
       boardId = resources.board.id;

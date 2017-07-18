@@ -56,9 +56,12 @@ export class ApiCallResponseError extends BaseError {
   /* eslint-enable no-undef */
 
   constructor(
-    response: Object,
+    status: string,
+    method: string,
+    url: string,
+    data?: Object | string,
+    error?: string,
   ) {
-    const { data, status, config: { method, url } } = response;
     const cleanUrl = getCleanUrl(url);
     let includedMessage = '';
     if (data) {
@@ -71,6 +74,8 @@ export class ApiCallResponseError extends BaseError {
       if (!dataContent.includes('Cannot ')) {
         includedMessage = ` with an error message of "${dataContent}"`;
       }
+    } else {
+      includedMessage = error || '';
     }
     const message =
       `The server returned status code ${status}${includedMessage} when ` +
@@ -78,9 +83,8 @@ export class ApiCallResponseError extends BaseError {
       'key and token have been removed from the displayed url.)';
     super(message, 'ApiCallResponseError');
 
-    this.apiMessage = data;
+    this.apiMessage = message;
     this.apiStatus = status;
-    this.apiConfig = response.config;
   }
 }
 

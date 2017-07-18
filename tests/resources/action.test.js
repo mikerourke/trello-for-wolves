@@ -37,7 +37,7 @@ describe('ACT | Action Resource', function() {
   });
 
   before(function(done) {
-    trello = new Trello(auth);
+    trello = new Trello(config);
     logger = new Logger();
     getIds()
       .then(() => done())

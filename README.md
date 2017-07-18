@@ -31,6 +31,7 @@ $ biscuits gravy trello-for-wolves
 ## Documentation
 
 [Trello API Documentation](https://developers.trello.com/advanced-reference)
+[Trello for Wolves Documentation](https://mikerourke.github.io/trello-for-wolves/)
 
 ## Prerequisites
 
@@ -49,19 +50,43 @@ I created this library because I wanted to cover all of the Trello routes and
 make it freakishly easy to figure out how to utilize the API by simply reading
 the Trello documentation.  It uses chaining to build a "route" so to speak.
 
-I used [axios](https://github.com/mzabriskie/axios) for performing requests, so 
-if you're not familiar with Promises, you're going to have a bad time.  
+I used the [request](https://www.npmjs.com/package/request) library for performing requests.  I 
+wrapped the callback that the library uses with a Promise.  If you're not familiar with Promises,
+you're going to have a bad time. 
 
 This library is typed using [Flow](https://flow.org/), so if you use Flow plugins,
 it'll show you a handy autocomplete when cooking up code.  However, it's probably
 a good idea to have the Trello API docs up while you're coding, because some
 of these routes have [a whole bunch of options for arguments](https://developers.trello.com/advanced-reference/board#get-1-boards-board-id).
 
+## Rate Limits
+
+Trello imposes [API rate limits](http://help.trello.com/article/838-api-rate-limits).  You can 
+make no more than 100 requests in 10 seconds per token or 300 requests in 10 seconds per key.  I
+added the [request-rate-limiter](https://www.npmjs.com/package/request-rate-limiter) library to 
+retry requests if a `429` error is returned.
+
+You can override the default `backoffTime` (3 seconds) and `maxWaitingTime` (300 seconds) with your
+own options depending on your requirements.  You can pass them into the Trello constructor:
+```javascript
+const Trello = require('trello-for-wolves');
+
+const trello = new Trello({
+  key: API_KEY,
+  token: AUTH_TOKEN,
+  backoffTime: 10,
+  maxWaitingTime: 300,
+});
+```
+
+Check out the [request-rate-limiter](https://www.npmjs.com/package/request-rate-limiter) 
+documentation for more details.
+
 ## Examples
 
 ### Authorization
 
-You'll need to create a new instance of `Trello` and pass in an "auth" object
+You'll need to create a new instance of `Trello` and pass in an "config" object
 containing a `key` and `token`.  There isn't any async voodoo associated with
 this, the credentials are passed to each function call through the magic of
 class constructors.
@@ -149,8 +174,8 @@ Trello Endpoint:
 
 [Trello API Link](https://developers.trello.com/advanced-reference/batch#get-1-batch)
 
-To get around the [API rate limits](http://help.trello.com/article/838-api-rate-limits), 
-you can do a little batchy-doodle.
+If you just need to make a bunch of `GET` requests, you can get around the API rate limits by doing
+a little batchy-doodle.
 
 ```javascript
 trello.batch().makeRequests([

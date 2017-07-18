@@ -18,75 +18,75 @@ import Type from './resources/type';
 import Webhook from './resources/webhook';
 
 /* Types */
-import type { Auth } from './types';
+import type { Config } from './types';
 
 export default class Trello {
-  auth: Auth; // eslint-disable-line no-undef
+  config: Config; // eslint-disable-line no-undef
 
-  constructor(auth: Auth) {
-    this.auth = auth;
+  constructor(config: Config) {
+    this.config = config;
   }
 
   actions(actionId?: string = ''): Object {
-    return new Action(this.auth, `/actions/${actionId}`);
+    return new Action(this.config, `/actions/${actionId}`);
   }
 
   batch(): Object {
-    return new Batch(this.auth, '/batch');
+    return new Batch(this.config, '/batch');
   }
 
   boards(boardId?: string = ''): Object {
-    return new Board(this.auth, `/boards/${boardId}`);
+    return new Board(this.config, `/boards/${boardId}`);
   }
 
   cards(cardId?: string = ''): Object {
-    return new Card(this.auth, `/cards/${cardId}`);
+    return new Card(this.config, `/cards/${cardId}`);
   }
 
   checklists(checklistId?: string = ''): Object {
-    return new Checklist(this.auth, `/checklists/${checklistId}`);
+    return new Checklist(this.config, `/checklists/${checklistId}`);
   }
 
   /* istanbul ignore next: I can't test these with my current membership level. */
   enterprise(enterpriseId?: string = ''): Object {
-    return new Enterprise(this.auth, `/enterprise/${enterpriseId}`);
+    return new Enterprise(this.config, `/enterprise/${enterpriseId}`);
   }
 
   labels(labelId?: string = ''): Object {
-    return new Label(this.auth, `/labels/${labelId}`);
+    return new Label(this.config, `/labels/${labelId}`);
   }
 
   lists(listId?: string = ''): Object {
-    return new List(this.auth, `/lists/${listId}`);
+    return new List(this.config, `/lists/${listId}`);
   }
 
   members(memberIdOrUsername?: string = ''): Object {
-    return new Member(this.auth, `/members/${memberIdOrUsername}`);
+    return new Member(this.config, `/members/${memberIdOrUsername}`);
   }
 
   /* istanbul ignore next: Need to figure out how to trigger Notifications. */
   notifications(notificationId?: string = ''): Object {
-    return new Notification(this.auth, `/notifications/${notificationId}`);
+    return new Notification(this.config, `/notifications/${notificationId}`);
   }
 
   organizations(orgIdOrName?: string = ''): Object {
-    return new Organization(this.auth, `/organizations/${orgIdOrName}`);
+    return new Organization(this.config, `/organizations/${orgIdOrName}`);
   }
 
   search(): Object {
-    return new Search(this.auth, '/search');
+    return new Search(this.config, '/search');
   }
 
   tokens(tokenName?: string = ''): Object {
-    return new Token(this.auth, `/tokens/${tokenName}`);
+    return new Token(this.config, `/tokens/${tokenName}`);
   }
 
   types(): Object {
-    return new Type(this.auth, '/types');
+    return new Type(this.config, '/types');
   }
 
   /* istanbul ignore next: Need a valid callback URL to create Webhooks. */
   webhooks(webhookId?: string = ''): Object {
-    return new Webhook(this.auth, `/webhooks/${webhookId}`);
+    return new Webhook(this.config, `/webhooks/${webhookId}`);
   }
 }

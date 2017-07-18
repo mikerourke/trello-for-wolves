@@ -45,11 +45,11 @@ export default class Token extends BaseResource {
   }
 
   member() {
-    return new Member(this.auth, `${this.routePath}/member`);
+    return new Member(this.config, `${this.routePath}/member`);
   }
 
   webhooks(webhookId?: string = '') {
-    return new Webhook(this.auth, `${this.routePath}/webhooks/${webhookId}`);
+    return new Webhook(this.config, `${this.routePath}/webhooks/${webhookId}`);
   }
 
   /* istanbul ignore next: This should pass, but if I delete my token, I can't keep testing. */

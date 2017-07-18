@@ -10,7 +10,7 @@ describe('TKN | Token Resource', function() {
   let tokenValue = '';
 
   before(function() {
-    trello = new Trello(auth);
+    trello = new Trello(config);
     logger = new Logger();
     tokenValue = process.env.TRELLO_AUTH_TOKEN || '';
   });

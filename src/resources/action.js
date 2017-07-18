@@ -121,11 +121,11 @@ export default class Action extends BaseResource {
   }
 
   board() {
-    return new Board(this.auth, `${this.routePath}/board`);
+    return new Board(this.config, `${this.routePath}/board`);
   }
 
   card() {
-    return new Card(this.auth, `${this.routePath}/card`);
+    return new Card(this.config, `${this.routePath}/card`);
   }
 
   getDisplay(): Promise<*> {
@@ -137,20 +137,20 @@ export default class Action extends BaseResource {
   }
 
   list() {
-    return new List(this.auth, `${this.routePath}/list`);
+    return new List(this.config, `${this.routePath}/list`);
   }
 
   member() {
-    return new Member(this.auth, `${this.routePath}/member`);
+    return new Member(this.config, `${this.routePath}/member`);
   }
 
   memberCreator() {
-    return new Member(this.auth, `${this.routePath}/memberCreator`);
+    return new Member(this.config, `${this.routePath}/memberCreator`);
   }
 
   organization() {
     return new Organization(
-      this.auth, `${this.routePath}/organization`);
+      this.config, `${this.routePath}/organization`);
   }
 
   updateAction(

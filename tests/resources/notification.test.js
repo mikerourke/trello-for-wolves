@@ -9,7 +9,7 @@ describe.skip('NTF | Notification Resource', function() {
   let notificationId = '';
 
   before(function() {
-    trello = new Trello(auth);
+    trello = new Trello(config);
     logger = new Logger();
     if (resources.notification) {
       notificationId = resources.notification.id;

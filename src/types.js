@@ -20,9 +20,11 @@ export type * from './resources/token';
 export type * from './resources/type';
 export type * from './resources/webhook';
 
-export type Auth = {
+export type Config = {
   key: string,
   token: string,
+  backoffTime?: number,
+  maxWaitingTime?: number,
 };
 
 export type AllOrNone = 'all' | 'none';

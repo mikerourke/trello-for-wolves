@@ -1,9 +1,7 @@
 /* @flow */
 
 /* External dependencies */
-import axios from 'axios';
-import FormData from 'form-data';
-import concat from 'concat-stream';
+import RateLimiter from 'request-rate-limiter';
 
 /* Internal dependencies */
 import { ApiCallResponseError } from '../utils/errors';
@@ -11,98 +9,34 @@ import { ApiCallResponseError } from '../utils/errors';
 /* Types */
 import type { HttpMethod } from '../types';
 
-let thisHttpMethod = 'get';
-let thisFile = {
-  contents: { readable: false },
-  name: '',
-};
-let thisUrl = '';
+const getRequestConfig = (
+  httpMethod: HttpMethod,
+  requestUrl: string,
+  queryArgs?: Object = {},
+): Object => {
+  let requestConfig = {
+    method: httpMethod,
+    url: `https://${requestUrl}`,
+    json: true,
+  };
 
-/**
- * Handles the request error based on the contents of the Error object returned from the API call.
- * @param {Object} error Custom error created by Axios.
- * @param {Function} reject Reject handler from Promise.
- * @see {@link https://github.com/mzabriskie/axios#handling-errors}
- */
-const handleRequestError = (
-  error: Object,
-  reject: Function,
-) => {
-  if (error.response) {
-    reject(new ApiCallResponseError(error.response));
-  } else if (error.request) {
-    // @todo: Create custom error for API Request errors.
-    reject(error);
-  } else {
-    // @todo: Create custom error for other API errors.
-    reject(error);
-  }
-};
-
-/**
- * If a file was specified in the request, this reads the contents and returns the configuration
- *    object to include in the Axios request.
- */
-const getFileDetailsForRequest = (): Promise<*> =>
-  new Promise((resolve, reject) => {
-    const form = new FormData();
-    form.append('file', thisFile.contents, thisFile.name);
-    form
-      .on('error', error => reject(error))
-      .pipe(concat(
-        { encoding: 'buffer' },
-        data => resolve({ data, headers: form.getHeaders() })),
-      );
-  });
-
-/**
- * Constructs an `config` object that will be passed to the Axios instance for performing the API
- *    request.  If a file needs to be uploaded, the contents to send as multipart form data are
- *    added to the object.
- */
-const getRequestConfig = (): Promise<*> =>
-  new Promise((resolve, reject) => {
-    const baseConfig = {
-      method: thisHttpMethod,
-      url: `https://${thisUrl}`,
+  if (queryArgs.file && queryArgs.file.readable) {
+    const fileName = queryArgs.name || 'file';
+    const formData = {
+      name: fileName,
+      file: queryArgs.file,
     };
-    // Ensure the file is a ReadStream.
-    if (thisFile.contents.readable) {
-      getFileDetailsForRequest()
-        .then((fileDetails) => {
-          resolve({ ...baseConfig, ...fileDetails });
-        })
-        // @todo: Write test to handle get file details error.
-        .catch((error) => { reject(error); });
-    } else {
-      resolve(baseConfig);
-    }
-  });
-
-/**
- * Attempts to make an HTTP request.  The configuration is contingent on whether a file needs to
- *    be uploaded.
- */
-const attemptRequest = (): Promise<*> =>
-  new Promise((resolve, reject) => {
-    getRequestConfig()
-      .then((requestConfig) => {
-        axios(requestConfig)
-          .then((response) => {
-            resolve(response);
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      })
-      /* istanbul ignore next: This inform the user of an error, no need to test. */
-      .catch((error) => { reject(error); });
-  });
+    requestConfig = { ...requestConfig, formData };
+  }
+  return requestConfig;
+};
 
 /**
  * Returns a resolved Promise with the results of the Trello API call.
  * @param {HttpMethod} httpMethod Method associated with the request.
  * @param {string} endpoint Endpoint for API request.
+ * @param {number} backoffTime Seconds to wait before retrying API request.
+ * @param {number} maxWaitingTime Seconds to wait before throwing error for API request.
  * @param {Object} [queryArgs={}] Arguments for building the querystring.
  * @returns {Promise}
  * @private
@@ -110,41 +44,32 @@ const attemptRequest = (): Promise<*> =>
 const performApiRequest = (
   httpMethod: HttpMethod,
   endpoint: string,
-  queryArgs?: Object = {},
-): Promise<*> =>
-  new Promise((resolve, reject) => {
-    // Assign local variables to avoid passing arguments to each method.
-    thisHttpMethod = httpMethod;
-    // One more check is done to ensure there are no consecutive slashes.
-    thisUrl = `api.trello.com/1/${endpoint}`.replace(/\/+/g, '/');
-    thisFile = {
-      contents: queryArgs.file || { readable: false },
-      name: queryArgs.name,
-    };
+  backoffTime: number,
+  maxWaitingTime: number,
+  queryArgs?: Object,
+): Promise<*> => new Promise((resolve, reject) => {
+  // One more check is done to ensure there are no consecutive slashes.
+  const requestUrl = `api.trello.com/1/${endpoint}`.replace(/\/+/g, '/');
 
-    attemptRequest()
-      .then((firstResponse) => {
-        resolve(firstResponse);
-      })
-      .catch((firstError) => {
-        // If the error was due to a timeout, wait 3 seconds and try again.
-        const firstErrorResponse = firstError.response
-          || /* istanbul ignore next */ { status: 400 };
-        /* istanbul ignore next: This can only be tested if the API rate limit is exceeded. */
-        if (firstErrorResponse.status === 429) {
-          setTimeout(() => {
-            attemptRequest()
-              .then((secondResponse) => {
-                resolve(secondResponse);
-              })
-              .catch((secondError) => {
-                handleRequestError(secondError, reject);
-              });
-          }, 3000);
-        } else {
-          handleRequestError(firstError, reject);
-        }
-      });
+  // Build the configuration object for sending the request.
+  const requestConfig = getRequestConfig(httpMethod, requestUrl, queryArgs);
+
+  const limiter = new RateLimiter({
+    rate: 100,
+    interval: 10,
+    backoffTime,
+    maxWaitingTime,
   });
+
+  limiter.request(requestConfig, (error, response) => {
+    const { statusCode, body = {}, ...responseData } = response;
+    const errorMessage = error && error;
+    if (error || statusCode < 200 || statusCode > 299) {
+      reject(new ApiCallResponseError(statusCode, httpMethod, requestUrl, body, errorMessage));
+    } else {
+      resolve({ ...responseData, statusCode, data: body });
+    }
+  });
+});
 
 export default performApiRequest;

@@ -5,14 +5,14 @@ describe('BASE | Base Resource', function() {
   const boardId = 'BoArDiD';
   const cardId = 'cArDiD';
 
-  const authSuffix = `key=${auth.key}&token=${auth.token}`;
+  const authSuffix = `key=${config.key}&token=${config.token}`;
 
   let baseEntity;
 
   describe('BASE-EB | Endpoint Builder', function() {
     describe('BASE-EB-PN | No Parent', function() {
       before(function() {
-        baseEntity = new BaseResource(auth, `/cards/${cardId}`);
+        baseEntity = new BaseResource(config, `/cards/${cardId}`);
       });
 
       it('BASE-EB-PN-T01 | builds an endpoint with the root path', function() {
@@ -82,7 +82,7 @@ describe('BASE | Base Resource', function() {
     describe('BASE-EB-PY | With Parent', function() {
       before(function() {
         baseEntity = new BaseResource(
-          auth, `/boards/${boardId}/cards/${cardId}`);
+          config, `/boards/${boardId}/cards/${cardId}`);
       });
 
       it('BASE-EB-PY-T01 | builds an endpoint with the root path', function() {

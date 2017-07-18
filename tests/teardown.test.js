@@ -7,7 +7,7 @@ describe('TEARDOWN | Test Cleanup', function() {
   let trello;
 
   before(function() {
-    trello = new Trello(auth);
+    trello = new Trello(config);
     logger = new Logger();
   });
 

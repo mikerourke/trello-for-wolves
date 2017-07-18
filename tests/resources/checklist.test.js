@@ -10,7 +10,7 @@ describe('CHK | Checklist Resource', function() {
   let checklistId = '';
 
   before(function() {
-    trello = new Trello(auth);
+    trello = new Trello(config);
     logger = new Logger();
     if (resources.checklist) {
       checklistId = resources.checklist.id;

@@ -10,7 +10,7 @@ describe('LST | List Resource', function() {
   let listId = '';
 
   before(() => {
-    trello = new Trello(auth);
+    trello = new Trello(config);
     logger = new Logger();
     if (resources.list) {
       listId = resources.list.id;

@@ -152,11 +152,11 @@ export default class Organization extends BaseResource {
   }
 
   actions() {
-    return new Action(this.auth, `${this.routePath}/actions`);
+    return new Action(this.config, `${this.routePath}/actions`);
   }
 
   boards() {
-    return new Board(this.auth, `${this.routePath}/boards`);
+    return new Board(this.config, `${this.routePath}/boards`);
   }
 
   /* istanbul ignore next: Requires Business Class subscription */
@@ -170,15 +170,15 @@ export default class Organization extends BaseResource {
   }
 
   members(memberId?: string = '') {
-    return new Member(this.auth, `${this.routePath}/members/${memberId}`);
+    return new Member(this.config, `${this.routePath}/members/${memberId}`);
   }
 
   membersInvited() {
-    return new Member(this.auth, `${this.routePath}/membersInvited`);
+    return new Member(this.config, `${this.routePath}/membersInvited`);
   }
 
   memberships(membershipId?: string = '') {
-    return new Membership(this.auth, `${this.routePath}/memberships/${membershipId}`);
+    return new Membership(this.config, `${this.routePath}/memberships/${membershipId}`);
   }
 
   getPluginData(): Promise<*> {
@@ -226,7 +226,7 @@ export default class Organization extends BaseResource {
   }
 
   prefs() {
-    return new Pref(this.auth, `${this.routePath}/prefs`);
+    return new Pref(this.config, `${this.routePath}/prefs`);
   }
 
   updateWebsite(value: ?string): Promise<*> {

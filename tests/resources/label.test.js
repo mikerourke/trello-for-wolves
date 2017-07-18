@@ -10,7 +10,7 @@ describe('LBL | Label Resource', function() {
   let labelId = '';
 
   before(function() {
-    trello = new Trello(auth);
+    trello = new Trello(config);
     logger = new Logger();
     if (resources.labels) {
       labelId = resources.labels[0].id;

@@ -43,7 +43,7 @@ export default class Label extends BaseResource {
   }
 
   board() {
-    return new Board(this.auth, `${this.routePath}/board`);
+    return new Board(this.config, `${this.routePath}/board`);
   }
 
   updateLabel(

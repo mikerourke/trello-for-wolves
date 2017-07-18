@@ -7,7 +7,7 @@ describe('TYP | Type Resource', function() {
   let logger;
 
   before(function(done) {
-    trello = new Trello(auth);
+    trello = new Trello(config);
     logger = new Logger();
     setTimeout(() => { done(); }, testDelay);
   });

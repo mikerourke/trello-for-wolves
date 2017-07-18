@@ -97,10 +97,13 @@ const getKeyForQueryString = (key: string): string => {
     recasedKey = recasedKey.replace('_data', 'Data');
   } else if (recasedKey.includes('_invited')) {
     recasedKey = recasedKey.replace('_invited', 'Invited');
+  /* istanbul ignore next: I can't test these (part of Enterprise routes). */
   } else if (recasedKey.includes('sort_by')) {
     recasedKey = recasedKey.replace('sort_by', 'sortBy');
+  /* istanbul ignore next: I can't test these (part of Enterprise routes). */
   } else if (recasedKey.includes('sort_order')) {
     recasedKey = recasedKey.replace('sort_order', 'sortOrder');
+  /* istanbul ignore next: I can't test these (part of Enterprise routes). */
   } else if (recasedKey.includes('start_index')) {
     recasedKey = recasedKey.replace('start_index', 'startIndex');
   }

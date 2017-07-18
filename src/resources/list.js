@@ -55,15 +55,15 @@ export default class List extends BaseResource {
   }
 
   actions() {
-    return new Action(this.auth, `${this.routePath}/actions`);
+    return new Action(this.config, `${this.routePath}/actions`);
   }
 
   board() {
-    return new Board(this.auth, `${this.routePath}/board`);
+    return new Board(this.config, `${this.routePath}/board`);
   }
 
   cards() {
-    return new Card(this.auth, `${this.routePath}/cards`);
+    return new Card(this.config, `${this.routePath}/cards`);
   }
 
   updateList(

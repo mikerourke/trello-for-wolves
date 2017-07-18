@@ -10,7 +10,7 @@ describe('CAR | Card Resource', function() {
   let cardId = '';
 
   before(function() {
-    trello = new Trello(auth);
+    trello = new Trello(config);
     logger = new Logger();
     if (resources.card) {
       cardId = resources.card.id;

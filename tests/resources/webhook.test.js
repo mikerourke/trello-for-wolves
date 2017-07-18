@@ -9,7 +9,7 @@ describe.skip('WEB | Webhook Resource', function() {
   let webhookId = '';
 
   before(() => {
-    trello = new Trello(auth);
+    trello = new Trello(config);
     logger = new Logger();
   });
 

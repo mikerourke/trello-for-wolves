@@ -247,7 +247,7 @@ export default class Board extends BaseResource {
   }
 
   actions() {
-    return new Action(this.auth, `${this.routePath}/actions`);
+    return new Action(this.config, `${this.routePath}/actions`);
   }
 
   getBoardStars(
@@ -259,11 +259,11 @@ export default class Board extends BaseResource {
   }
 
   cards(cardId?: string = '') {
-    return new Card(this.auth, `${this.routePath}/cards/${cardId}`);
+    return new Card(this.config, `${this.routePath}/cards/${cardId}`);
   }
 
   checklists() {
-    return new Checklist(this.auth, `${this.routePath}/checklists`);
+    return new Checklist(this.config, `${this.routePath}/checklists`);
   }
 
   /* istanbul ignore next: Requires Business Class subscription */
@@ -282,31 +282,31 @@ export default class Board extends BaseResource {
   }
 
   labels(labelId?: string = '') {
-    return new Label(this.auth, `${this.routePath}/labels/${labelId}`);
+    return new Label(this.config, `${this.routePath}/labels/${labelId}`);
   }
 
   lists() {
-    return new List(this.auth, `${this.routePath}/lists`);
+    return new List(this.config, `${this.routePath}/lists`);
   }
 
   members(memberId?: string = '') {
-    return new Member(this.auth, `${this.routePath}/members/${memberId}`);
+    return new Member(this.config, `${this.routePath}/members/${memberId}`);
   }
 
   membersInvited() {
-    return new Member(this.auth, `${this.routePath}/membersInvited`);
+    return new Member(this.config, `${this.routePath}/membersInvited`);
   }
 
   memberships(membershipId?: string = '') {
-    return new Membership(this.auth, `${this.routePath}/memberships/${membershipId}`);
+    return new Membership(this.config, `${this.routePath}/memberships/${membershipId}`);
   }
 
   myPrefs() {
-    return new MyPref(this.auth, `${this.routePath}/myPrefs`);
+    return new MyPref(this.config, `${this.routePath}/myPrefs`);
   }
 
   organization() {
-    return new Organization(this.auth, `${this.routePath}/organization`);
+    return new Organization(this.config, `${this.routePath}/organization`);
   }
 
   getPluginData(): Promise<*> {
@@ -368,7 +368,7 @@ export default class Board extends BaseResource {
   }
 
   prefs() {
-    return new Pref(this.auth, `${this.routePath}/prefs`);
+    return new Pref(this.config, `${this.routePath}/prefs`);
   }
 
   updateSubscribed(value: boolean): Promise<*> {
