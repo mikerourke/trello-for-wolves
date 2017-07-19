@@ -459,11 +459,12 @@ describe('SETUP | Test Preparation and Setup', function() {
         .catch(error => done(error));
     });
 
-    it('CAR-P-03-T01 | uploads an Attachment to a Card', function(done) {
+    it('CAR-P-03-T01 | uploads an image Attachment to a Card', function(done) {
       const attachmentFile = fs.createReadStream(`${assetsDir}/attachment.jpg`);
       trello.cards(cardId).attachments().uploadAttachment({
         file: attachmentFile,
         name: 'wolf-one.jpg',
+        mimeType: 'image/jpeg',
       })
         .then(logResponse)
         .then((response) => {
@@ -474,7 +475,22 @@ describe('SETUP | Test Preparation and Setup', function() {
         .catch(error => done(error));
     });
 
-    it('CAR-P-03-T02 | uploads an Attachment as a URL to a Card', function(done) {
+    it('CAR-P-03-T02 | uploads a plain text Attachment to a Card', function(done) {
+      const attachmentFile = fs.createReadStream(`${assetsDir}/file.txt`);
+      trello.cards(cardId).attachments().uploadAttachment({
+        file: attachmentFile,
+        name: 'file.txt',
+        mimeType: 'text/plain',
+      })
+        .then(logResponse)
+        .then((response) => {
+          assert.isDefined(response.data);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    it('CAR-P-03-T03 | uploads an Attachment as a URL to a Card', function(done) {
       trello.cards(cardId).attachments().uploadAttachment({
         url: 'http://www.spiritanimal.info/wp-content/uploads/Wolf-Spirit-Animal-2.jpg',
         name: 'wolf-two.jpg',

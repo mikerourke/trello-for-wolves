@@ -22,10 +22,13 @@ const getRequestConfig = (
 
   if (queryArgs.file && queryArgs.file.readable) {
     const fileName = queryArgs.name || 'file';
-    const formData = {
+    let formData = {
       name: fileName,
       file: queryArgs.file,
     };
+    if (queryArgs.mimeType) {
+      formData = { ...formData, mimeType: queryArgs.mimeType };
+    }
     requestConfig = { ...requestConfig, formData };
   }
   return requestConfig;
@@ -62,20 +65,20 @@ const performApiRequest = (
   });
 
   limiter.request(requestConfig, (error, response) => {
+    /* instanbul ignore next */
     if (error) {
       reject(new Error(`Error performing request: ${error}`));
-    } else {
-      if (!response) {
-        reject(new Error('No response present when performing request.'));
-      } else {
-        const {statusCode = 400, body = {}, ...responseData} = response;
-        if (statusCode > 299 || statusCode < 200) {
-          reject(new ApiCallResponseError(statusCode, httpMethod, requestUrl, body));
-        } else {
-          resolve({ ...responseData, statusCode, data: body });
-        }
-      }
     }
+    /* instanbul ignore next */
+    if (!response) {
+      reject(new Error('No response present when performing request.'));
+    }
+    const { statusCode = 400, body, ...responseData } = response;
+    if (statusCode > 299 || statusCode < 200) {
+      reject(new ApiCallResponseError(statusCode, httpMethod, requestUrl, body));
+    }
+    // The "body" key is changed to "data" to maintain backwards compatibility with Axios
+    resolve({ ...responseData, statusCode, data: body });
   });
 });
 

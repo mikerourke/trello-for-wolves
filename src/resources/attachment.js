@@ -4,7 +4,7 @@
 import BaseResource from './base-resource';
 
 /* Types */
-import type { ArgumentGroup } from '../types';
+import type { ArgumentGroup, MimeType } from '../types';
 
 export type AttachmentFilter = boolean | 'cover';
 
@@ -59,7 +59,7 @@ export default class Attachment extends BaseResource {
       file?: Object,
       url?: string,
       name?: string,
-      mimeType?: string,
+      mimeType?: MimeType | string,
     },
   ): Promise<*> {
     return this.httpPost('/', queryArgs);

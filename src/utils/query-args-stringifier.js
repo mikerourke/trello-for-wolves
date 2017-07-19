@@ -56,28 +56,37 @@ const getQueryStringForNestedArgs = (
  */
 const getKeyForQueryString = (key: string): string => {
   // Certain keys should not be recased.
-  switch (key) {
-    case 'boardBackgrounds':
-    case 'boardStars':
-    case 'confirmationAccepted': // Enterprise
-    case 'customBoardBackgrounds':
-    case 'customEmoji':
-    case 'customStickers':
-    case 'defaultLabels':
-    case 'defaultLists':
-    case 'displayName':
-    case 'fullName':
-    case 'keepFromSource':
-    case 'modelTypes':
-    case 'myPrefs':
-    case 'powerUps':
-    case 'returnUrl': // Enterprise
-    case 'savedSearches':
-    case 'zIndex':
-      return key;
-
-    default:
-      break;
+  const excludedKeys = [
+    'avatarSource',
+    'boardBackgrounds',
+    'boardStars',
+    'callbackURL',
+    'confirmationAccepted', // Enterprise
+    'customBoardBackgrounds',
+    'customEmoji',
+    'customStickers',
+    'defaultLabels',
+    'defaultLists',
+    'displayName',
+    'dueComplete',
+    'fullName',
+    'ixLastUpdate',
+    'keepFromSource',
+    'mimeType',
+    'modelTypes',
+    'myPrefs',
+    'onlyOrgMembers',
+    'powerUp',
+    'powerUps',
+    'returnUrl', // Enterprise
+    'savedSearches',
+    'webhook',
+    'webhooks',
+    'website',
+    'zIndex',
+  ];
+  if (excludedKeys.includes(key)) {
+    return key;
   }
 
   // All of the params that start with "id" (e.g. idBoard, idCard, etc.)
@@ -90,21 +99,26 @@ const getKeyForQueryString = (key: string): string => {
 
   // These are fields that have been recased to ensure all the other words
   // are separated by underscores, but only part of the key needs to be
-  // changed.
+  // changed.  The Instanbul ignore statements are present because I can't test
+  // Enterprise routes.
   if (recasedKey.includes('member_creator')) {
     recasedKey = recasedKey.replace('_creator', 'Creator');
+  } else if (recasedKey.includes('_voted')) {
+    recasedKey = recasedKey.replace('_voted', 'Voted');
   } else if (recasedKey.includes('plugin_data')) {
     recasedKey = recasedKey.replace('_data', 'Data');
   } else if (recasedKey.includes('_invited')) {
     recasedKey = recasedKey.replace('_invited', 'Invited');
-  /* istanbul ignore next: I can't test these (part of Enterprise routes). */
-  } else if (recasedKey.includes('sort_by')) {
+  } else if (recasedKey.includes('check_item')) {
+    recasedKey = recasedKey.replace('check_item', 'checkItem');
+    if (recasedKey.includes('_state')) {
+      recasedKey = recasedKey.replace('_state', 'State');
+    }
+  } else /* istanbul ignore if */ if (recasedKey.includes('sort_by')) {
     recasedKey = recasedKey.replace('sort_by', 'sortBy');
-  /* istanbul ignore next: I can't test these (part of Enterprise routes). */
-  } else if (recasedKey.includes('sort_order')) {
+  } else /* istanbul ignore if */ if (recasedKey.includes('sort_order')) {
     recasedKey = recasedKey.replace('sort_order', 'sortOrder');
-  /* istanbul ignore next: I can't test these (part of Enterprise routes). */
-  } else if (recasedKey.includes('start_index')) {
+  } else /* istanbul ignore if */ if (recasedKey.includes('start_index')) {
     recasedKey = recasedKey.replace('start_index', 'startIndex');
   }
 

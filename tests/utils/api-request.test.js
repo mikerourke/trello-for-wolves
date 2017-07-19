@@ -1,5 +1,6 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
+import performApiRequest from '../../src/utils/api-request';
 
 describe('ARQ | API Request', function() {
   let trello;
@@ -67,5 +68,5 @@ describe('ARQ | API Request', function() {
         })
         .catch(error => done(error));
     });
-  })
+  });
 });

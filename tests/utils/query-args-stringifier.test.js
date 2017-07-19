@@ -119,4 +119,60 @@ describe('QAS | Query Args Stringifier', function() {
     const expectedValue = 'prefs_selfJoin=true&';
     expect(actualValue).to.equal(expectedValue);
   });
+
+  it('QAS-T12 | stringifies any args in excludedKeys', function() {
+    const queryArgs = {
+      avatarSource: 0,
+      boardBackgrounds: 0,
+      boardStars: 0,
+      callbackURL: 0,
+      confirmationAccepted: 0,
+      customBoardBackgrounds: 0,
+      customEmoji: 0,
+      customStickers: 0,
+      defaultLabels: 0,
+      defaultLists: 0,
+      displayName: 0,
+      dueComplete: 0,
+      fullName: 0,
+      ixLastUpdate: 0,
+      keepFromSource: 0,
+      mimeType: 0,
+      modelTypes: 0,
+      myPrefs: 0,
+      onlyOrgMembers: 0,
+      powerUp: 0,
+      powerUps: 0,
+      returnUrl: 0,
+      savedSearches: 0,
+      webhook: 0,
+      webhooks: 0,
+      website: 0,
+      zIndex: 0,
+    };
+    const actualValue = stringifyQueryArgs(queryArgs);
+    const expectedValue =
+      'avatarSource=0&boardBackgrounds=0&boardStars=0&callbackURL=0&confirmationAccepted=0' +
+      '&customBoardBackgrounds=0&customEmoji=0&customStickers=0&defaultLabels=0&defaultLists=0' +
+      '&displayName=0&dueComplete=0&fullName=0&ixLastUpdate=0&keepFromSource=0&mimeType=0&' +
+      'modelTypes=0&myPrefs=0&onlyOrgMembers=0&powerUp=0&powerUps=0&returnUrl=0&savedSearches=0&' +
+      'webhook=0&webhooks=0&website=0&zIndex=0&';
+    expect(actualValue).to.equal(expectedValue);
+  });
+
+  it('QAS-T13 | stringifies query args that needs to be recased', function() {
+    const queryArgs = {
+      memberCreator: 0,
+      membersVoted: 0,
+      boardPluginData: 0,
+      membersInvited: 0,
+      checkItems: 0,
+      checkItemStates: 0,
+    };
+    const actualValue = stringifyQueryArgs(queryArgs);
+    const expectedValue =
+      'memberCreator=0&membersVoted=0&board_pluginData=0&membersInvited=0&' +
+      'checkItems=0&checkItemStates=0';
+    expect(actualValue).to.equal(expectedValue);
+  });
 });
