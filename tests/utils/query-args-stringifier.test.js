@@ -172,7 +172,7 @@ describe('QAS | Query Args Stringifier', function() {
     const actualValue = stringifyQueryArgs(queryArgs);
     const expectedValue =
       'memberCreator=0&membersVoted=0&board_pluginData=0&membersInvited=0&' +
-      'checkItems=0&checkItemStates=0';
+      'checkItems=0&checkItemStates=0&';
     expect(actualValue).to.equal(expectedValue);
   });
 });
