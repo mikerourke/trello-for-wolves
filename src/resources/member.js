@@ -535,7 +535,7 @@ export default class Member extends BaseResource {
    * @example DELETE /1/organizations/:organizationId/members/:memberId/all
    * @see {@link https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember-all}
    */
-  /* istanbul ignore next: This passed, I don't want to keep creating and deleting members. */
+  /* istanbul ignore next: Requires Business Class. */
   dissociateMemberFromAll(): Promise<*> {
     return this.httpDelete('/all');
   }

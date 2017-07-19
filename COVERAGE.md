@@ -9,8 +9,8 @@ The table below contains all of the available Trello routes and their status in 
 📌: Test was skipped or is failing, need to come back to it.<br />
 🔒: Premium feature or special permission that I'm not able to test (e.g. Business Class).<br />
 
-| Id       | Resource     | Method | Path                                                      | Coded  | Tested      | Documented |
-|:---------|:-------------|:-------|:----------------------------------------------------------|:------:|:-----------:|:----------:|
+| Id       | Resource     | Method | Path                                                      | Coded  | Tested       | Documented |
+|:---------|:-------------|:-------|:----------------------------------------------------------|:------:|:------------:|:----------:|
 | ACT-G-01 | action       | get    | /actions/:id                                              | ✅     | ✅          | ✅         |
 | ACT-G-02 | action       | get    | /actions/:id/:field                                       | ✅     | ✅          | ✅         |
 | ACT-G-03 | action       | get    | /actions/:id/board                                        | ✅     | ✅          | ✅         |
@@ -35,7 +35,7 @@ The table below contains all of the available Trello routes and their status in 
 | BRD-G-02 | board        | get    | /boards/:id/:field                                        | ✅     | ✅          | ✅         |
 | BRD-G-03 | board        | get    | /boards/:id/actions                                       | ✅     | ✅          | ✅         |
 | BRD-G-04 | board        | get    | /boards/:id/boardStars                                    | ✅     | ✅          | ✅         |
-| BRD-G-05 | board        | get    | /boards/:id/cards                                         | ✅     | ️️️️✅️          | ✅         |
+| BRD-G-05 | board        | get    | /boards/:id/cards                                         | ✅     | ✅️          | ✅         |
 | BRD-G-06 | board        | get    | /boards/:id/cards/:filter                                 | ✅     | ✅          | ✅         |
 | BRD-G-07 | board        | get    | /boards/:id/cards/:idCard                                 | ✅     | ✅          | ✅         |
 | BRD-G-08 | board        | get    | /boards/:id/checklists                                    | ✅     | ✅          | ✅         |
@@ -95,7 +95,7 @@ The table below contains all of the available Trello routes and their status in 
 | BRD-P-06 | board        | post   | /boards/:id/labels                                        | ✅     | ✅️          |            |
 | BRD-P-07 | board        | post   | /boards/:id/lists                                         | ✅     | ✅️          |            |
 | BRD-P-08 | board        | post   | /boards/:id/markAsViewed                                  | ✅     | ✅          |            |
-| BRD-P-09 | board        | post   | /boards/:id/powerUps                                      | ✅     | 📌️          |            |
+| BRD-P-09 | board        | post   | /boards/:id/powerUps                                      | ✅     | ✅ 📌️         |            |
 | BRD-D-01 | board        | delete | /boards/:id/members/:idMember                             | ✅     | 🆗          |            |
 | BRD-D-02 | board        | delete | /boards/:id/powerUps/:powerUp                             | ✅     | 📌          |            |
 | CAR-G-01 | card         | get    | /cards/:id                                                | ✅     | ✅          |            |
@@ -110,7 +110,7 @@ The table below contains all of the available Trello routes and their status in 
 | CAR-G-10 | card         | get    | /cards/:id/checkItem/:idCheckItem                         | ✅     | ✅          |            |
 | CAR-G-11 | card         | get    | /cards/:id/list                                           | ✅     | ✅          |            |
 | CAR-G-12 | card         | get    | /cards/:id/list/:field                                    | ✅     | ✅          |            |
-| CAR-G-13 | card         | get    | /cards/:id/members                                        | ✅     | 📌          |            |
+| CAR-G-13 | card         | get    | /cards/:id/members                                        | ✅     | ✅          |            |
 | CAR-G-14 | card         | get    | /cards/:id/membersVoted                                   | ✅     | 📌          |            |
 | CAR-G-15 | card         | get    | /cards/:id/pluginData                                     | ✅     | ✅          |            |
 | CAR-G-16 | card         | get    | /cards/:id/stickers                                       | ✅     | ✅          |            |
@@ -313,7 +313,7 @@ The table below contains all of the available Trello routes and their status in 
 | ORG-D-01 | organization | delete | /organizations/:id                                        | ✅     | ✅          |            |
 | ORG-D-02 | organization | delete | /organizations/:id/logo                                   | ✅     | ✅          |            |
 | ORG-D-03 | organization | delete | /organizations/:id/members/:idMember                      | ✅     | ✅          |            |
-| ORG-D-04 | organization | delete | /organizations/:id/members/:idMember/all                  | ✅     | ✅          |            |
+| ORG-D-04 | organization | delete | /organizations/:id/members/:idMember/all                  | ✅     | 🔒          |            |
 | ORG-D-05 | organization | delete | /organizations/:id/prefs/associatedDomain                 | ✅     | 🔒          |            |
 | ORG-D-06 | organization | delete | /organizations/:id/prefs/orgInviteRestrict                | ✅     | 🔒          |            |
 | SRC-G-01 | search       | get    | /search                                                   | ✅     | ✅          |            |

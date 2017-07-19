@@ -6,7 +6,7 @@
  * @apiGroup action
  * @apiPermission read
  *
- * @apiParam {Boolean} [display=false]
+ * @apiParam {Boolean} [display=true]
  *    Include <code>display</code> data in the response.
  * @apiParam {Boolean} [entities=false]
  *    Include <code>entities</code> data in the response.

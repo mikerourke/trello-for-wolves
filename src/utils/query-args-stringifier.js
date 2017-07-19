@@ -95,6 +95,11 @@ const getKeyForQueryString = (key: string): string => {
     return key;
   }
 
+  // Ensure this doesn't get converted to one word.
+  if (key === 'cardBoard') {
+    return 'card_board';
+  }
+
   let recasedKey: string = snakeCase(key);
 
   // These are fields that have been recased to ensure all the other words
