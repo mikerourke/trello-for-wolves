@@ -96,6 +96,7 @@ const getKeyForQueryString = (key: string): string => {
   }
 
   // Ensure this doesn't get converted to one word.
+  /* istanbul ignore if */
   if (key === 'cardBoard') {
     return 'card_board';
   }
@@ -119,11 +120,14 @@ const getKeyForQueryString = (key: string): string => {
     if (recasedKey.includes('_state')) {
       recasedKey = recasedKey.replace('_state', 'State');
     }
-  } else /* istanbul ignore if */ if (recasedKey.includes('sort_by')) {
+    /* istanbul ignore else */
+  } else if (recasedKey.includes('sort_by')) {
     recasedKey = recasedKey.replace('sort_by', 'sortBy');
-  } else /* istanbul ignore if */ if (recasedKey.includes('sort_order')) {
+    /* istanbul ignore else */
+  } else if (recasedKey.includes('sort_order')) {
     recasedKey = recasedKey.replace('sort_order', 'sortOrder');
-  } else /* istanbul ignore if */ if (recasedKey.includes('start_index')) {
+    /* istanbul ignore else */
+  } else if (recasedKey.includes('start_index')) {
     recasedKey = recasedKey.replace('start_index', 'startIndex');
   }
 

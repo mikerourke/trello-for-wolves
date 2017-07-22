@@ -1,10 +1,8 @@
 /* @flow */
 
-/* External dependencies */
-import RateLimiter from 'request-rate-limiter';
-
 /* Internal dependencies */
 import { ApiCallResponseError } from '../utils/errors';
+import RequestRateLimiter from '../utils/request-rate-limiter';
 
 /* Types */
 import type { HttpMethod } from '../types';
@@ -57,23 +55,21 @@ const performApiRequest = (
   // Build the configuration object for sending the request.
   const requestConfig = getRequestConfig(httpMethod, requestUrl, queryArgs);
 
-  const limiter = new RateLimiter({
-    rate: 100,
-    interval: 10,
+  const limiter = new RequestRateLimiter({
     backoffTime,
     maxWaitingTime,
   });
 
   limiter.request(requestConfig, (error, response) => {
-    /* instanbul ignore next */
+    /* instanbul ignore if */
     if (error) {
       reject(new Error(`Error performing request: ${error}`));
     }
-    /* instanbul ignore next */
+    /* instanbul ignore if */
     if (!response) {
       reject(new Error('No response present when performing request.'));
     }
-    const { statusCode = 400, body, ...responseData } = response;
+    const { statusCode /* instanbul ignore next */ = 400, body, ...responseData } = response;
     if (statusCode > 299 || statusCode < 200) {
       reject(new ApiCallResponseError(statusCode, httpMethod, requestUrl, body));
     }
