@@ -48,7 +48,7 @@ export default class Trello {
   }
 
   /* istanbul ignore next: I can't test these with my current membership level. */
-  enterprise(enterpriseId?: string = ''): Object {
+  enterprises(enterpriseId?: string = ''): Object {
     return new Enterprise(this.config, `/enterprise/${enterpriseId}`);
   }
 

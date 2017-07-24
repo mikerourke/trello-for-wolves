@@ -171,19 +171,19 @@ The table below contains all of the available Trello routes and their status in 
 | CHK-P-02 | checklist    | post   | /checklists/:id/checkItems                                | ✅  | ✅         |    |
 | CHK-D-01 | checklist    | delete | /checklists/:id                                           | ✅  | ✅         |    |
 | CHK-D-02 | checklist    | delete | /checklists/:id/checkItems/:id                            | ✅  | ✅         |    |
-| ENT-G-01 | enterprise   | get    | /enterprises/:id                                          | ✅  |           |    |
-| ENT-G-02 | enterprise   | get    | /enterprises/:id/admins                                   | ✅  |           |    |
-| ENT-G-03 | enterprise   | get    | /enterprises/:id/signupUrl                                | ✅  |           |    |
-| ENT-G-04 | enterprise   | get    | /enterprises/:id/members                                  | ✅  |           |    |
-| ENT-G-05 | enterprise   | get    | /enterprises/:id/members/:idMember                        | ✅  |           |    |
-| ENT-G-06 | enterprise   | get    | /enterprises/:id/transferrable/organization/:idOrg        | ✅  |           |    |
-| ENT-U-01 | enterprise   | put    | /enterprises/:id/members/:idMember/deactivated            | ✅  |           |    |
-| ENT-U-02 | enterprise   | put    | /enterprises/:id/organizations                            | ✅  |           |    |
-| ENT-U-03 | enterprise   | put    | /enterprises/:id/admins/:idMember                         | ✅  |           |    |
-| ENT-P-01 | enterprise   | post    | /enterprises/:id/tokens                                  | ✅  |           |    |
-| ENT-D-01 | enterprise   | delete | /enterprises/:id/organizations/:idOrg                     | ✅  |           |    |
-| ENT-D-02 | enterprise   | delete | /enterprises/:id/admins/:idMember                         | ✅  |           |    |
-| ENT-P-01 | enterprise   | get    | /enterprises/:id/transferrable/organization/:idOrg        | ✅  |           |    |
+| ENT-G-01 | enterprise   | get    | /enterprises/:id                                          | ✅  | 🔒         |    |
+| ENT-G-02 | enterprise   | get    | /enterprises/:id/admins                                   | ✅  | 🔒         |    |
+| ENT-G-03 | enterprise   | get    | /enterprises/:id/signupUrl                                | ✅  | 🔒         |    |
+| ENT-G-04 | enterprise   | get    | /enterprises/:id/members                                  | ✅  | 🔒         |    |
+| ENT-G-05 | enterprise   | get    | /enterprises/:id/members/:idMember                        | ✅  | 🔒         |    |
+| ENT-G-06 | enterprise   | get    | /enterprises/:id/transferrable/organization/:idOrg        | ✅  | 🔒         |    |
+| ENT-U-01 | enterprise   | put    | /enterprises/:id/members/:idMember/deactivated            | ✅  | 🔒         |    |
+| ENT-U-02 | enterprise   | put    | /enterprises/:id/organizations                            | ✅  | 🔒         |    |
+| ENT-U-03 | enterprise   | put    | /enterprises/:id/admins/:idMember                         | ✅  | 🔒         |    |
+| ENT-P-01 | enterprise   | post   | /enterprises/:id/tokens                                   | ✅  | 🔒         |    |
+| ENT-D-01 | enterprise   | delete | /enterprises/:id/organizations/:idOrg                     | ✅  | 🔒         |    |
+| ENT-D-02 | enterprise   | delete | /enterprises/:id/admins/:idMember                         | ✅  | 🔒         |    |
+| ENT-P-01 | enterprise   | get    | /enterprises/:id/transferrable/organization/:idOrg        | ✅  | 🔒         |    |
 | LBL-G-01 | label        | get    | /labels/:id                                               | ✅  | ✅         |    |
 | LBL-G-02 | label        | get    | /labels/:id/board                                         | ✅  | ✅         |    |
 | LBL-G-03 | label        | get    | /labels/:id/board/:field                                  | ✅  | ✅         |    |

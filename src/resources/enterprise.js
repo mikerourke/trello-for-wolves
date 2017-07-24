@@ -14,6 +14,8 @@ import type {
   OrganizationFilter,
 } from '../types';
 
+type Combination<T> = T | Array<T>;
+
 type EnterpriseField =
   'id'
   | 'name'
@@ -29,8 +31,6 @@ type EnterpriseField =
   | 'orgIds';
 
 type SortOrder = 'id' | 'ascending' | 'descending' | 'asc' | 'desc';
-
-type Combination<T> = T | Array<T>;
 
 /**
  * @namespace Enterprise
@@ -63,14 +63,14 @@ export default class Enterprise extends BaseResource {
     return this.httpGet('/admins', queryArgs);
   }
 
-  getConfirmationUrl(
+  getSignupUrl(
     queryArgs?: {
       authenticate?: boolean,
       confirmationAccepted?: boolean,
       returnUrl?: 'none' | string,
     },
   ): Promise<*> {
-    return this.httpGet('/admins', queryArgs);
+    return this.httpGet('/signupUrl', queryArgs);
   }
 
   getMembers(
@@ -103,15 +103,7 @@ export default class Enterprise extends BaseResource {
     return this.httpGet(`/transferrable/organization/${orgId}`);
   }
 
-  addToken(
-    queryArgs?: {
-      expiration: 'none' | '1hour' | '1day' | '30days' | 'never',
-    },
-  ): Promise<*> {
-    return this.httpPost('/tokens', queryArgs);
-  }
-
-  updateMemberDeactivated(
+  deactivateMember(
     memberId: string,
     queryArgs?: {
       fields?: Combination<MemberEnterpriseOnlyField>,
@@ -122,7 +114,7 @@ export default class Enterprise extends BaseResource {
     return this.httpPut(`/members/${memberId}/deactivated`, queryArgs);
   }
 
-  addOrganization(orgId: string): Promise<*> {
+  transferToOrganization(orgId: string): Promise<*> {
     return this.httpPut('/organizations', { idOrganization: orgId });
   }
 
@@ -130,7 +122,15 @@ export default class Enterprise extends BaseResource {
     return this.httpPut(`/admins/${memberId}`);
   }
 
-  removeOrganization(orgId: string): Promise<*> {
+  addToken(
+    queryArgs?: {
+      expiration: 'none' | '1hour' | '1day' | '30days' | 'never',
+    },
+  ): Promise<*> {
+    return this.httpPost('/tokens', queryArgs);
+  }
+
+  dissociateOrganization(orgId: string): Promise<*> {
     return this.httpDelete(`/organizations/${orgId}`);
   }
 
