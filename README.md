@@ -33,6 +33,10 @@ $ biscuits gravy trello-for-wolves
 [Trello API Documentation](https://developers.trello.com/advanced-reference)
 <br/>
 [Trello for Wolves Documentation](https://mikerourke.github.io/trello-for-wolves/)
+<br/>
+
+*Note: The Trello for Wolves documentation is still in progress.  You can see what I've documented
+so far in the [COVERAGE](./COVERAGE.md) file.*
 
 ## Prerequisites
 
@@ -64,8 +68,9 @@ of these routes have [a whole bunch of options for arguments](https://developers
 
 Trello imposes [API rate limits](http://help.trello.com/article/838-api-rate-limits).  You can 
 make no more than 100 requests in 10 seconds per token or 300 requests in 10 seconds per key.  I
-added the [request-rate-limiter](https://www.npmjs.com/package/request-rate-limiter) library to 
-retry requests if a `429` error is returned.
+added code based off of the [request-rate-limiter](https://www.npmjs.com/package/request-rate-limiter) 
+library to retry requests if a `429` error is returned.  I couldn't use the library directly due to
+a security issue.
 
 You can override the default `backoffTime` (3 seconds) and `maxWaitingTime` (300 seconds) with your
 own options depending on your requirements.  You can pass them into the Trello constructor:
