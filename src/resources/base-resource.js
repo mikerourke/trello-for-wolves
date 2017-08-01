@@ -41,7 +41,7 @@ export default class BaseResource {
     // zero:
     this.routePathElements = this.routePath.split('/');
 
-    /* istanbul ignore if */
+    /* istanbul ignore next */
     if (!this.routePathElements[0].length) {
       this.routePathElements.shift();
     }

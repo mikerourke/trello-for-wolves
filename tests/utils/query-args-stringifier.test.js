@@ -175,4 +175,15 @@ describe('QAS | Query Args Stringifier', function() {
       'checkItems=0&checkItemStates=0&';
     expect(actualValue).to.equal(expectedValue);
   });
+
+  it('QAS-T14 | stringifies query args for Enterprise routes', function() {
+    const queryArgs = {
+      sortBy: 0,
+      sortOrder: 0,
+      startIndex: 0,
+    };
+    const actualValue = stringifyQueryArgs(queryArgs);
+    const expectedValue = 'sortBy=0&sortOrder=0&startIndex=0&'
+    expect(actualValue).to.equal(expectedValue);
+  });
 });

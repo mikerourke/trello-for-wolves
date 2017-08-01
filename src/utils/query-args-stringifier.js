@@ -120,13 +120,10 @@ const getKeyForQueryString = (key: string): string => {
     if (recasedKey.includes('_state')) {
       recasedKey = recasedKey.replace('_state', 'State');
     }
-    /* istanbul ignore else */
   } else if (recasedKey.includes('sort_by')) {
     recasedKey = recasedKey.replace('sort_by', 'sortBy');
-    /* istanbul ignore else */
   } else if (recasedKey.includes('sort_order')) {
     recasedKey = recasedKey.replace('sort_order', 'sortOrder');
-    /* istanbul ignore else */
   } else if (recasedKey.includes('start_index')) {
     recasedKey = recasedKey.replace('start_index', 'startIndex');
   }

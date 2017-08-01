@@ -61,11 +61,11 @@ const performApiRequest = (
   });
 
   limiter.request(requestConfig, (error, response) => {
-    /* instanbul ignore if */
+    /* instanbul ignore next */
     if (error) {
       reject(new Error(`Error performing request: ${error}`));
     }
-    /* instanbul ignore if */
+    /* instanbul ignore next */
     if (!response) {
       reject(new Error('No response present when performing request.'));
     }

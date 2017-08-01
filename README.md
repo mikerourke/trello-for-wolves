@@ -221,9 +221,15 @@ Trello Endpoint:
 
 [Trello API Link](https://developers.trello.com/advanced-reference/card#post-1-cards-card-id-or-shortlink-attachments)
 
+There's actually a few different ways to add attachments to cards.  Thanks 
+to [blesson3](https://github.com/blesson3) for providing me with the code.
+
+##### Attaching text to card using `fs.createReadStream()`
+
 ```javascript
   const fs = require('fs');
   const path = require('path');
+  const trello = require('trello-for-wolves');
 
   const attachPath = path.resolve(__dirname, 'bubblegum.jpg');
   const attachFile = fs.createReadStream(attachPath);
@@ -235,6 +241,71 @@ Trello Endpoint:
     console.log(response.data); // <- Hooray!  Attachment details!
   })
   .catch(error => console.log(`Something went awry: ${error}`));
+```
+
+##### Attaching text to card with a temporary file using the [`tmp` library](https://www.npmjs.com/package/tmp)
+
+```javascript
+  const fs = require('fs');
+  const tmp = require('tmp');
+  const trello = require('trello-for-wolves');
+
+  const attachTextToCardUsingTmp = (cardId, name, contentString, callback) => {
+    // Create a temporary file to put the content into, then create a read stream from that
+    // to pass into the library to create an attachment:
+    tmp.file({ postfix: '.txt' }, (err, path, fd, cleanupCallback) => {
+      fs.writeFile(path, contentString, (error) => {
+        const fileStream = fs.createReadStream(path);
+        trello.cards(cardId).attachments().uploadAttachment({
+          file: fileStream,
+          name,
+        })
+        .then((response) => {
+          cleanupCallback();
+          callback(response.data);
+        })
+        .catch((error) => {
+          cleanupCallback();
+          callback(undefined, error);
+        })
+      })
+    })
+  }
+  
+  const testingText = 'This is some testing text for the attachment';
+  attachTextToCardUsingTmp('cArDiD', 'testing.txt', testingText, (data, error) => {
+    if (error) {
+      console.log("ERROR: " + error);
+    } else {
+      console.log("DATA: " + JSON.stringify(data));
+    }
+  });
+```
+
+##### Attaching text to card using a Readable stream
+
+```javascript
+  const Readable = require('stream').Readable;
+  const trello = require('trello-for-wolves');
+  
+  attachTextToCardUsingReadable = (cardId, name, contentString, callback) => {
+    // We have to build a stream for the content:
+    const readable = new Readable;
+    readable.push(contentString);
+    readable.push(null);
+    
+    trello.cards(cardId).attachments().uploadAttachment({
+      file: readable,
+      name,
+      mimeType: 'text/plain',
+    })
+    .then((response) => {
+      callback(response.data);
+    })
+    .catch((error) => {
+      callback(undefined, error);
+    })
+  }
 ```
 
 ## Contributing
