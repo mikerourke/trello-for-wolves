@@ -95,7 +95,7 @@ The table below contains all of the available Trello routes and their status in 
 | BRD-P-06 | board        | post   | /boards/:id/labels                                        | ✅  | ✅️         |    |
 | BRD-P-07 | board        | post   | /boards/:id/lists                                         | ✅  | ✅️         |    |
 | BRD-P-08 | board        | post   | /boards/:id/markAsViewed                                  | ✅  | ✅         |    |
-| BRD-P-09 | board        | post   | /boards/:id/powerUps                                      | ✅  | ✅ 📌️        |    |
+| BRD-P-09 | board        | post   | /boards/:id/powerUps                                      | ✅  | ✅         |    |
 | BRD-D-01 | board        | delete | /boards/:id/members/:idMember                             | ✅  | 🆗         |    |
 | BRD-D-02 | board        | delete | /boards/:id/powerUps/:powerUp                             | ✅  | 📌         |    |
 | CAR-G-01 | card         | get    | /cards/:id                                                | ✅  | ✅         |    |
