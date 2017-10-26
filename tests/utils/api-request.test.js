@@ -1,23 +1,35 @@
 /* Internal dependencies */
 import Trello from '../../src/index';
-import performApiRequest from '../../src/utils/api-request';
 
 describe('ARQ | API Request', function() {
   let trello;
   let boardId = '';
   let listId = '';
 
-  before(function() {
+  before(function(done) {
     trello = new Trello(config);
-    if (resources.board) {
-      boardId = resources.board.id;
-    } else {
-      this.skip();
-    }
+    setTimeout(() => done(), 8000);
   });
 
   describe('ARQ-SETUP | API Request Setup', function() {
-    it('ARQ-SETUP-T01 | creates a List on a Board for testing rate limits', function(done) {
+    it('ARQ-SETUP-T01 | creates a Board for testing rate limits', function(done) {
+      const boardName = 'ARQ-SETUP-T01';
+      trello.boards().addBoard({
+        name: boardName,
+        defaultLabels: false,
+        defaultLists: false,
+      })
+        .then((response) => {
+          if (response.data) {
+            boardId = response.data.id;
+          }
+          assert.isDefined(response.data);
+          done();
+        })
+        .catch(error => done(error));
+    });
+
+    it('ARQ-SETUP-T02 | creates a List on a Board for testing rate limits', function(done) {
       trello.boards(boardId).lists().addList({
         name: 'ARQ-SETUP-T01',
       })
@@ -34,9 +46,7 @@ describe('ARQ | API Request', function() {
 
   describe('ARQ-EXECUTE | API Request Test Execution', function() {
     before(function() {
-      if (!listId) {
-        throw new Error('List Id not found.  API request testing cannot proceed.')
-      }
+      if (!listId) throw new Error('List Id not found.  API request testing cannot proceed.')
     });
 
     it('ARQ-EXECUTE-T01 | creates 110 Cards in a List to validate rate limiter', function(done) {
@@ -67,6 +77,14 @@ describe('ARQ | API Request', function() {
             .catch(error => done(error));
         })
         .catch(error => done(error));
+    });
+  });
+
+  describe('ARQ-TEARDOWN | API Request Teardown', function() {
+    it('ARQ-TEARDOWN-T01 | closes the board', function(done) {
+      trello.boards(boardId).updateClosedStatus(true)
+        .should.eventually.be.fulfilled
+        .notify(done);
     });
   });
 });

@@ -44,16 +44,12 @@ describe('SETUP | Test Preparation and Setup', function() {
     let orgId = '';
 
     before(function() {
-      if (!resources.org) {
-        resources.org = {};
-      }
+      if (!resources.org) resources.org = {};
     });
 
     beforeEach(function() {
       if (!this.currentTest.title.includes('ORG-P-01')) {
-        if (!orgId) {
-          throw new Error('New Organization not found.');
-        }
+        if (!orgId) throw new Error('New Organization not found.');
       }
     });
 
@@ -116,17 +112,13 @@ describe('SETUP | Test Preparation and Setup', function() {
     let boardId = '';
 
     before(function(done) {
-      if (!resources.board) {
-        resources.board = {};
-      }
-      setTimeout(() => { done(); }, testDelay);
+      if (!resources.board) resources.board = {};
+      setTimeout(() => done(), testDelay);
     });
 
     beforeEach(function() {
       if (!this.currentTest.title.includes('BRD-P-01')) {
-        if (!boardId) {
-          throw new Error('New Board not found.');
-        }
+        if (!boardId) throw new Error('New Board not found.');
       }
     });
 
@@ -255,13 +247,9 @@ describe('SETUP | Test Preparation and Setup', function() {
 
     before(function (done) {
       boardId = resources.board.id;
-      if (!boardId) {
-        done(new Error('Board not found.'))
-      }
-      if (!resources.labels) {
-        resources.labels = [];
-      }
-      setTimeout(() => { done(); }, testDelay);
+      if (!boardId) done(new Error('Board not found.'))
+      if (!resources.labels) resources.labels = [];
+      setTimeout(() => done(), testDelay);
     });
 
     it('LBL-P-01-T01 | creates a Green Label', function(done) {
@@ -303,26 +291,21 @@ describe('SETUP | Test Preparation and Setup', function() {
     let listId = '';
 
     before(function(done) {
-      if (!resources.list) {
-        resources.list = {};
-      }
-      setTimeout(() => { done(); }, testDelay);
+      if (!resources.list) resources.list = {};
+      setTimeout(() => done(), testDelay);
     });
 
     beforeEach(function() {
       if (!this.currentTest.title.includes('LST-P-01')) {
-        if (!listId) {
-          throw new Error('New List not found.');
-        }
+        if (!listId) throw new Error('New List not found.');
       }
     });
 
     it('LST-P-01-T01 | creates a List', function(done) {
       const listName = 'LST-P-01-T01';
       const boardId = resources.board.id;
-      if (!boardId) {
-        done(new Error('Board not found.'))
-      }
+      if (!boardId) done(new Error('Board not found.'))
+
       trello.lists().addList({
         name: listName,
         idBoard: boardId,
@@ -339,9 +322,8 @@ describe('SETUP | Test Preparation and Setup', function() {
     });
 
     it('LST-P-03-T01 | adds a Card to a List with no description', function(done) {
-      if (!resources.list.cards) {
-        resources.list.cards = [];
-      }
+      if (!resources.list.cards) resources.list.cards = [];
+
       const cardName = 'LST-P-03-T01';
       trello.lists(listId).cards().addCard({
         name: cardName,
@@ -398,24 +380,19 @@ describe('SETUP | Test Preparation and Setup', function() {
     let cardId = '';
 
     before(function(done) {
-      if (!resources.card) {
-        resources.card = {};
-      }
-      setTimeout(() => { done(); }, testDelay);
+      if (!resources.card) resources.card = {};
+      setTimeout(() => done(), testDelay);
     });
 
     beforeEach(function() {
       if (!this.currentTest.title.includes('CAR-P-01')) {
-        if (!cardId) {
-          throw new Error('New Card not found.');
-        }
+        if (!cardId) throw new Error('New Card not found.');
       }
     });
 
     it('CAR-P-01-T01 | creates a Card', function(done) {
-      if (!resources.list) {
-        done(new Error('List Id not found.'));
-      }
+      if (!resources.list) done(new Error('List Id not found.'));
+
       const listId = resources.list.id;
       const cardName = 'CAR-P-01-T01';
       trello.cards().addCard({
@@ -520,9 +497,8 @@ describe('SETUP | Test Preparation and Setup', function() {
     });
 
     it('CAR-P-06-T02 | copies a Checklist on a Card', function(done) {
-      if (!resources.card.checklist) {
-        done(new Error('Existing Checklist not found.'));
-      }
+      if (!resources.card.checklist) done(new Error('Existing Checklist not found.'));
+
       const sourceChecklistId = resources.card.checklist.id;
       const checklistName = 'CAR-P-06-T02';
       trello.cards(cardId).checklists().addChecklist({
@@ -540,12 +516,9 @@ describe('SETUP | Test Preparation and Setup', function() {
     });
 
     it('CAR-P-04-T01 | adds a Check Item to a Checklist on a Card with default position', function(done) {
-      if (!resources.card.checkItems) {
-        resources.card.checkItems = [];
-      }
-      if (!resources.card.checklist) {
-        done(new Error('Checklist not found.'));
-      }
+      if (!resources.card.checkItems) resources.card.checkItems = [];
+      if (!resources.card.checklist) done(new Error('Checklist not found.'));
+
       const checklistId = resources.card.checklist.id;
       const checkItemName = 'CAR-P-04-T01';
       trello.cards(cardId).checklist(checklistId).checkItem().addCheckItem({
@@ -562,9 +535,8 @@ describe('SETUP | Test Preparation and Setup', function() {
     });
 
     it('CAR-P-04-T02 | adds a Check Item to a Checklist on a Card with numbered position', function(done) {
-      if (!resources.card.checklist) {
-        done(new Error('Checklist not found.'));
-      }
+      if (!resources.card.checklist) done(new Error('Checklist not found.'));
+
       const checklistId = resources.card.checklist.id;
       const checkItemName = 'CAR-P-04-T02';
       trello.cards(cardId).checklist(checklistId).checkItem().addCheckItem({
@@ -582,9 +554,8 @@ describe('SETUP | Test Preparation and Setup', function() {
     });
 
     it('CAR-P-04-T03 | adds a Check Item to a Checklist on a Card with named position', function(done) {
-      if (!resources.card.checklist) {
-        done(new Error('Checklist not found.'));
-      }
+      if (!resources.card.checklist) done(new Error('Checklist not found.'));
+
       const checklistId = resources.card.checklist.id;
       const checkItemName = 'CAR-P-04-T03';
       trello.cards(cardId).checklist(checklistId).checkItem().addCheckItem({
@@ -602,13 +573,11 @@ describe('SETUP | Test Preparation and Setup', function() {
     });
 
     it('CAR-P-05-T01 | converts a Check Item to a Card', function(done) {
-      if (!resources.card.checklist) {
-        done(new Error('Checklist not found.'));
-      }
+      if (!resources.card.checklist) done(new Error('Checklist not found.'));
+
       const checklistId = resources.card.checklist.id;
-      if (!resources.card.checkItems.length) {
-        done(new Error('Check Item not found.'));
-      }
+      if (!resources.card.checkItems.length) done(new Error('Check Item not found.'));
+
       const lastCheckItem = resources.card.checkItems.pop();
       trello.cards(cardId).checklist(checklistId).checkItem(lastCheckItem.id).convertToCard()
         .then(logResponse)
@@ -622,9 +591,8 @@ describe('SETUP | Test Preparation and Setup', function() {
     });
 
     it('CAR-P-07-T01 | associates a Label with a Card', function(done) {
-      if (!resources.labels.length) {
-        done(new Error('Label not found.'));
-      }
+      if (!resources.labels.length) done(new Error('Label not found.'));
+
       const labelId = resources.labels[0].id;
       trello.cards(cardId).associateLabel(labelId)
         .then(logResponse)
@@ -634,9 +602,8 @@ describe('SETUP | Test Preparation and Setup', function() {
 
     // @fix: Returns "invalid member" error.
     it.skip('CAR-P-08-T01 | associates a Member with a Card', function(done) {
-      if (!resources.member) {
-        done(new Error('Member not found.'));
-      }
+      if (!resources.member) done(new Error('Member not found.'));
+
       const memberId = resources.member.id;
       trello.cards(cardId).associateMember(memberId)
         .then(logResponse)
@@ -669,9 +636,8 @@ describe('SETUP | Test Preparation and Setup', function() {
 
     // @fix: Returns "unauthorized card permission requested" error.
     it.skip('CAR-P-11-T01 | updates the Members Voted on a Card', function(done) {
-      if (!resources.member) {
-        done(new Error('Member not found.'));
-      }
+      if (!resources.member) done(new Error('Member not found.'));
+
       const memberId = resources.member.id;
       trello.cards(cardId).membersVoted(memberId).updateVote(true)
         .then(logResponse)
@@ -680,9 +646,8 @@ describe('SETUP | Test Preparation and Setup', function() {
     });
 
     it('CAR-P-12-T01 | adds a Sticker with the Check image to a Card', function(done) {
-      if (!resources.card.stickers) {
-        resources.card.stickers = [];
-      }
+      if (!resources.card.stickers) resources.card.stickers = [];
+
       const imageName = 'check';
       trello.cards(cardId).stickers().addSticker({
         image: imageName,
@@ -725,17 +690,14 @@ describe('SETUP | Test Preparation and Setup', function() {
     let checklistId = '';
 
     before(function (done) {
-      if (!resources.checklist) {
-        resources.checklist = {};
-      }
-      setTimeout(() => { done(); }, testDelay);
+      if (!resources.checklist) resources.checklist = {};
+      setTimeout(() => done(), testDelay);
     });
 
     it('CHK-P-01-T01 | creates a Checklist', function(done) {
       const cardId = resources.card.id;
-      if (!cardId) {
-        done(new Error('Card not found.'))
-      }
+      if (!cardId) done(new Error('Card not found.'));
+
       const checklistName = 'CHK-P-01-T01';
       trello.checklists().addChecklist({
         name: checklistName,
@@ -753,9 +715,8 @@ describe('SETUP | Test Preparation and Setup', function() {
     });
 
     it('CHK-P-02-T01 | adds an unchecked Check Item to a Checklist', function(done) {
-      if (!resources.checklist.checkItems) {
-        resources.checklist.checkItems = [];
-      }
+      if (!resources.checklist.checkItems) resources.checklist.checkItems = [];
+
       const checkItemName = 'CHK-P-02-T01';
       trello.checklists(checklistId).checkItems().addCheckItem({
         name: checkItemName,

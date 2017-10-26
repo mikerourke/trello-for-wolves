@@ -3,9 +3,11 @@ import Trello from '../../src/index';
 import Logger from '../../internals/testing/logger';
 
 describe('ACT | Action Resource', function() {
+  const BOARD_NAME = 'ACT-SETUP-BOARD';
+  const ORG_NAME = 'ACT-SETUP-ORG';
+
   let trello;
   let logger;
-
   let commentActionId = '';
   let cardActionId = '';
   let orgActionId = '';
@@ -14,9 +16,7 @@ describe('ACT | Action Resource', function() {
    * Gets the Ids of Actions required to perform tests.
    */
   const getIds = () => new Promise((resolve, reject) => {
-    trello.members('me').actions().getActions({
-      filter: ['commentCard', 'createCard', 'unconfirmedOrganizationInvitation'],
-    })
+    trello.members('me').actions().getActions()
       .then((response) => {
         const { data: actions } = response;
         actions.forEach((action) => {
@@ -36,12 +36,9 @@ describe('ACT | Action Resource', function() {
       .catch((error) => { reject(new Error(`Error getting Ids: ${error}`)); });
   });
 
-  before(function(done) {
+  before(function() {
     trello = new Trello(config);
     logger = new Logger();
-    getIds()
-      .then(() => done())
-      .catch(error => done(error));
   });
 
   beforeEach(function() {
@@ -56,12 +53,53 @@ describe('ACT | Action Resource', function() {
 
   const logResponse = (response) => logger.processResponse(response);
 
+  describe('ACT-SETUP | Action Setup', function() {
+    it('ACT-SETUP-T01 | creates the entities required to run Action tests', async () => {
+      const { data: newOrg } = await trello.organizations().addOrganization({
+        displayName: ORG_NAME,
+      });
+
+      await trello.organizations(newOrg.id).members().addMember({
+        email: 'user@test.com',
+        fullName: 'Test User',
+        type: 'normal',
+      });
+
+      const { data: newBoard } = await trello.boards().addBoard({
+        name: BOARD_NAME,
+        defaultLists: false,
+        idOrganization: newOrg.id,
+      });
+
+      const { data: newList } = await trello.boards(newBoard.id).lists().addList({
+        name: 'ACT-SETUP-LIST',
+        idBoard: newBoard.id,
+      });
+
+      const { data: newCard } = await trello.lists(newList.id).cards().addCard({
+        name: 'ACT-SETUP-CARD',
+        desc: 'This is a test card.',
+      });
+      const { data: newComment } = await trello
+        .cards(newCard.id)
+        .comments()
+        .addComment('Test comment');
+      assert.isDefined(newComment);
+    });
+  });
+
   describe('ACT-G | Action GET Requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      getIds()
+        .then(() => {
+          setTimeout(() => done(), testDelay);
+        })
+        .catch(error => done(new Error(error)));
     });
 
     it('ACT-G-01-T01 | gets an Action', function(done) {
+      if (!cardActionId) done(new Error('Card Action Id not found.'));
+
       trello.actions(cardActionId).getAction()
         .then(logResponse)
         .should.eventually.be.fulfilled
@@ -269,7 +307,7 @@ describe('ACT | Action Resource', function() {
     const commentText = 'This is a test comment';
 
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('ACT-U-01-T01 | updates an Action', function(done) {
@@ -291,7 +329,7 @@ describe('ACT | Action Resource', function() {
 
   describe('ACT-D | Action DELETE Requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('ACT-D-01-T01 | deletes an Action', function(done) {
@@ -299,6 +337,30 @@ describe('ACT | Action Resource', function() {
         .then(logResponse)
         .should.eventually.be.fulfilled
         .notify(done);
+    });
+  });
+
+  describe('ACT-TEARDOWN | Action Teardown Requests', function() {
+    before(function(done) {
+      setTimeout(() => done(), 5000);
+    });
+
+    it('ACT-TEARDOWN-T01 | closes the board', async () => {
+      const { data: myBoards } = await trello.members('me').boards().getBoards();
+      const boardToClose = myBoards.find(myBoard => (myBoard.name === BOARD_NAME));
+      if (!boardToClose) throw new Error('Board not found');
+
+      const { data } = await trello.boards(boardToClose.id).updateClosedStatus(true)
+      assert.isDefined(data);
+    });
+
+    it('ACT-TEARDOWN-T02 | deletes the organization', async () => {
+      const { data: myOrgs } = await trello.members('me').organizations().getOrganizations();
+      const orgToDelete = myOrgs.find(myOrg => (myOrg.displayName === ORG_NAME));
+      if (!orgToDelete) throw new Error('Organization not found');
+
+      const { data } = await trello.organizations(orgToDelete.id).deleteOrganization()
+      assert.isDefined(data);
     });
   });
 });

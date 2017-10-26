@@ -9,349 +9,349 @@ The table below contains all of the available Trello routes and their status in 
 📌: Test was skipped or is failing, need to come back to it.<br />
 🔒: Premium feature or special permission that I'm not able to test (e.g. Business Class).<br />
 
-| Id       | Resource     | Method | Path                                                      | Code | Test      | Doc |
-|:---------|:-------------|:-------|:----------------------------------------------------------|:----:|:--------:|:---:|
-| ACT-G-02 | action       | get    | /actions/:id/:field                                       | ✅  | ✅         | ✅ | 
-| ACT-G-01 | action       | get    | /actions/:id                                              | ✅  | ✅         | ✅ | 
-| ACT-G-03 | action       | get    | /actions/:id/board                                        | ✅  | ✅         | ✅ | 
-| ACT-G-04 | action       | get    | /actions/:id/board/:field                                 | ✅  | ✅         | ✅ | 
-| ACT-G-05 | action       | get    | /actions/:id/card                                         | ✅  | ✅         | ✅ | 
-| ACT-G-06 | action       | get    | /actions/:id/card/:field                                  | ✅  | ✅         | ✅ | 
-| ACT-G-07 | action       | get    | /actions/:id/display                                      | ✅  | ✅         | ✅ | 
-| ACT-G-08 | action       | get    | /actions/:id/entities                                     | ✅  | ✅         | ✅ | 
-| ACT-G-09 | action       | get    | /actions/:id/list                                         | ✅  | ✅         | ✅ | 
-| ACT-G-10 | action       | get    | /actions/:id/list/:field                                  | ✅  | ✅         | ✅ | 
-| ACT-G-11 | action       | get    | /actions/:id/member                                       | ✅  | ✅         | ✅ | 
-| ACT-G-12 | action       | get    | /actions/:id/member/:field                                | ✅  | ✅         | ✅ | 
-| ACT-G-13 | action       | get    | /actions/:id/memberCreator                                | ✅  | ✅         | ✅ | 
-| ACT-G-14 | action       | get    | /actions/:id/memberCreator/:field                         | ✅  | ✅         | ✅ | 
-| ACT-G-15 | action       | get    | /actions/:id/organization                                 | ✅  | ✅         | ✅ | 
-| ACT-G-16 | action       | get    | /actions/:id/organization/:field                          | ✅  | ✅         | ✅ | 
-| ACT-U-01 | action       | put    | /actions/:id                                              | ✅  | ✅         | ✅ | 
-| ACT-U-02 | action       | put    | /actions/:id/text                                         | ✅  | ✅         | ✅ | 
-| ACT-D-01 | action       | delete | /actions/:id                                              | ✅  | [📝](#N1)  | ✅ | 
-| BTC-G-01 | batch        | get    | /batch/                                                   | ✅  | ✅         | ✅ | 
-| BRD-G-01 | board        | get    | /boards/:id                                               | ✅  | ✅         | ✅ | 
-| BRD-G-02 | board        | get    | /boards/:id/:field                                        | ✅  | ✅         | ✅ | 
-| BRD-G-03 | board        | get    | /boards/:id/actions                                       | ✅  | ✅         | ✅ | 
-| BRD-G-04 | board        | get    | /boards/:id/boardStars                                    | ✅  | ✅         | ✅ | 
-| BRD-G-05 | board        | get    | /boards/:id/cards                                         | ✅  | ✅️         | ✅ |
-| BRD-G-06 | board        | get    | /boards/:id/cards/:filter                                 | ✅  | ✅         | ✅ | 
-| BRD-G-07 | board        | get    | /boards/:id/cards/:idCard                                 | ✅  | ✅         | ✅ | 
-| BRD-G-08 | board        | get    | /boards/:id/checklists                                    | ✅  | ✅         | ✅ | 
-| BRD-G-09 | board        | get    | /boards/:id/deltas                                        | ✅  | 🔒         | ✅ | 
-| BRD-G-10 | board        | get    | /boards/:id/idTags                                        | ✅  | 🔒         | ✅ | 
-| BRD-G-11 | board        | get    | /boards/:id/labels                                        | ✅  | ✅️         | ✅ |
-| BRD-G-12 | board        | get    | /boards/:id/labels/:idLabel                               | ✅  | ✅         | ✅ | 
-| BRD-G-13 | board        | get    | /boards/:id/lists                                         | ✅  | ✅         | ✅ | 
-| BRD-G-14 | board        | get    | /boards/:id/lists/:filter                                 | ✅  | ✅         | ✅ | 
-| BRD-G-15 | board        | get    | /boards/:id/members                                       | ✅  | ✅         | ✅ | 
-| BRD-G-16 | board        | get    | /boards/:id/members/:filter                               | ✅  | ✅         | ✅ | 
-| BRD-G-17 | board        | get    | /boards/:id/members/:idMember/cards                       | ✅  | ✅         | ✅ | 
-| BRD-G-18 | board        | get    | /boards/:id/membersInvited                                | ✅  | ✅         | ✅ | 
-| BRD-G-19 | board        | get    | /boards/:id/membersInvited/:field                         | ✅  | ✅         | ✅ | 
-| BRD-G-20 | board        | get    | /boards/:id/memberships                                   | ✅  | ✅         |    |
-| BRD-G-21 | board        | get    | /boards/:id/memberships/:idMembership                     | ✅  | ✅         |    |
-| BRD-G-22 | board        | get    | /boards/:id/myPrefs                                       | ✅  | ✅         | ✅ | 
-| BRD-G-23 | board        | get    | /boards/:id/organization                                  | ✅  | ✅         |    |
-| BRD-G-24 | board        | get    | /boards/:id/organization/:field                           | ✅  | ✅         |    |
-| BRD-G-25 | board        | get    | /boards/:id/pluginData                                    | ✅  | ✅         | ✅ | 
-| BRD-U-01 | board        | put    | /boards/:id                                               | ✅  | ✅         |    |
-| BRD-U-02 | board        | put    | /boards/:id/closed                                        | ✅  | ✅         |    |
-| BRD-U-03 | board        | put    | /boards/:id/desc                                          | ✅  | ✅         |    |
-| BRD-U-04 | board        | put    | /boards/:id/idOrganization                                | ✅  | ✅         |    |
-| BRD-U-05 | board        | put    | /boards/:id/labelNames/blue                               | ✅  | ✅         |    |
-| BRD-U-06 | board        | put    | /boards/:id/labelNames/green                              | ✅  | ✅         |    |
-| BRD-U-07 | board        | put    | /boards/:id/labelNames/orange                             | ✅  | ✅         |    |
-| BRD-U-08 | board        | put    | /boards/:id/labelNames/purple                             | ✅  | ✅         |    |
-| BRD-U-09 | board        | put    | /boards/:id/labelNames/red                                | ✅  | ✅         |    |
-| BRD-U-10 | board        | put    | /boards/:id/labelNames/yellow                             | ✅  | ✅         |    |
-| BRD-U-11 | board        | put    | /boards/:id/members                                       | ✅  | 🆗         |    |
-| BRD-U-12 | board        | put    | /boards/:id/members/:idMember                             | ✅  | 🆗         |    |
-| BRD-U-13 | board        | put    | /boards/:id/memberships/:idMembership                     | ✅  | ✅         |    |
-| BRD-U-14 | board        | put    | /boards/:id/myPrefs/emailPosition                         | ✅  | ✅         |    |
-| BRD-U-15 | board        | put    | /boards/:id/myPrefs/idEmailList                           | ✅  | 📌         |    |
-| BRD-U-16 | board        | put    | /boards/:id/myPrefs/showListGuide                         | ✅  | ✅         |    |
-| BRD-U-17 | board        | put    | /boards/:id/myPrefs/showSidebar                           | ✅  | ✅         |    |
-| BRD-U-18 | board        | put    | /boards/:id/myPrefs/showSidebarActivity                   | ✅  | ✅         |    |
-| BRD-U-19 | board        | put    | /boards/:id/myPrefs/showSidebarBoardActions               | ✅  | ✅         |    |
-| BRD-U-20 | board        | put    | /boards/:id/myPrefs/showSidebarMembers                    | ✅  | ✅         |    |
-| BRD-U-21 | board        | put    | /boards/:id/name                                          | ✅  | ✅         |    |
-| BRD-U-22 | board        | put    | /boards/:id/prefs/background                              | ✅  | ✅         |    |
-| BRD-U-23 | board        | put    | /boards/:id/prefs/calendarFeedEnabled                     | ✅  | ✅         |    |
-| BRD-U-24 | board        | put    | /boards/:id/prefs/cardAging                               | ✅  | ✅         |    |
-| BRD-U-25 | board        | put    | /boards/:id/prefs/cardCovers                              | ✅  | ✅         |    |
-| BRD-U-26 | board        | put    | /boards/:id/prefs/comments                                | ✅  | ✅         |    |
-| BRD-U-27 | board        | put    | /boards/:id/prefs/invitations                             | ✅  | ✅         |    |
-| BRD-U-28 | board        | put    | /boards/:id/prefs/permissionLevel                         | ✅  | ✅         |    |
-| BRD-U-29 | board        | put    | /boards/:id/prefs/selfJoin                                | ✅  | ✅         |    |
-| BRD-U-30 | board        | put    | /boards/:id/prefs/voting                                  | ✅  | ✅         |    |
-| BRD-U-31 | board        | put    | /boards/:id/subscribed                                    | ✅  | ✅         |    |
-| BRD-P-01 | board        | post   | /boards                                                   | ✅  | ✅️         |    |
-| BRD-P-02 | board        | post   | /boards/:id/calendarKey/generate                          | ✅  | 🆗         |    |
-| BRD-P-03 | board        | post   | /boards/:id/checklists                                    | ✅  | 📌         |    |
-| BRD-P-04 | board        | post   | /boards/:id/emailKey/generate                             | ✅  | 🆗         |    |
-| BRD-P-05 | board        | post   | /boards/:id/idTags                                        | ✅  | 🔒         |    |
-| BRD-P-06 | board        | post   | /boards/:id/labels                                        | ✅  | ✅️         |    |
-| BRD-P-07 | board        | post   | /boards/:id/lists                                         | ✅  | ✅️         |    |
-| BRD-P-08 | board        | post   | /boards/:id/markAsViewed                                  | ✅  | ✅         |    |
-| BRD-P-09 | board        | post   | /boards/:id/powerUps                                      | ✅  | ✅         |    |
-| BRD-D-01 | board        | delete | /boards/:id/members/:idMember                             | ✅  | 🆗         |    |
-| BRD-D-02 | board        | delete | /boards/:id/powerUps/:powerUp                             | ✅  | 📌         |    |
-| CAR-G-01 | card         | get    | /cards/:id                                                | ✅  | ✅         |    |
-| CAR-G-02 | card         | get    | /cards/:id/:field                                         | ✅  | ✅         |    |
-| CAR-G-03 | card         | get    | /cards/:id/actions                                        | ✅  | ✅️         |    |
-| CAR-G-04 | card         | get    | /cards/:id/attachments                                    | ✅  | ✅         |    |
-| CAR-G-05 | card         | get    | /cards/:id/attachments/:idAttachment                      | ✅  | ✅         |    |
-| CAR-G-06 | card         | get    | /cards/:id/board                                          | ✅  | ✅         |    |
-| CAR-G-07 | card         | get    | /cards/:id/board/:field                                   | ✅  | ✅         |    |
-| CAR-G-08 | card         | get    | /cards/:id/checkItemStates                                | ✅  | ✅         |    |
-| CAR-G-09 | card         | get    | /cards/:id/checklists                                     | ✅  | ✅         |    |
-| CAR-G-10 | card         | get    | /cards/:id/checkItem/:idCheckItem                         | ✅  | ✅         |    |
-| CAR-G-11 | card         | get    | /cards/:id/list                                           | ✅  | ✅         |    |
-| CAR-G-12 | card         | get    | /cards/:id/list/:field                                    | ✅  | ✅         |    |
-| CAR-G-13 | card         | get    | /cards/:id/members                                        | ✅  | ✅         |    |
-| CAR-G-14 | card         | get    | /cards/:id/membersVoted                                   | ✅  | 📌         |    |
-| CAR-G-15 | card         | get    | /cards/:id/pluginData                                     | ✅  | ✅         |    |
-| CAR-G-16 | card         | get    | /cards/:id/stickers                                       | ✅  | ✅         |    |
-| CAR-G-17 | card         | get    | /cards/:id/stickers/:idSticker                            | ✅  | ✅         |    |
-| CAR-U-01 | card         | put    | /cards/:id                                                | ✅  | ✅         |    |
-| CAR-U-02 | card         | put    | /cards/:id/actions/:id/comments                           | ✅  | ✅         |    |
-| CAR-U-03 | card         | put    | /cards/:id/checklist/:id/checkItem/:id/name               | ✅  | ✅         |    |
-| CAR-U-04 | card         | put    | /cards/:id/checklist/:id/checkItem/:id/pos                | ✅  | ✅         |    |
-| CAR-U-05 | card         | put    | /cards/:id/checklist/:id/checkItem/:id/state              | ✅  | ✅         |    |
-| CAR-U-06 | card         | put    | /cards/:id/checklist/:id/checkItem/:id                    | ✅  | ✅         |    |
-| CAR-U-07 | card         | put    | /cards/:id/checkItem/:idCheckItem                         | ✅  | ✅         |    |
-| CAR-U-08 | card         | put    | /cards/:id/closed                                         | ✅  | ✅         |    |
-| CAR-U-09 | card         | put    | /cards/:id/desc                                           | ✅  | ✅         |    |
-| CAR-U-10 | card         | put    | /cards/:id/due                                            | ✅  | ✅         |    |
-| CAR-U-11 | card         | put    | /cards/:id/dueComplete                                    | ✅  | ✅         |    |
-| CAR-U-12 | card         | put    | /cards/:id/idAttachmentCover                              | ✅  | 📌         |    |
-| CAR-U-13 | card         | put    | /cards/:id/idBoard                                        | ✅  | 🆗         |    |
-| CAR-U-14 | card         | put    | /cards/:id/idList                                         | ✅  | 🆗         |    |
-| CAR-U-15 | card         | put    | /cards/:id/idMembers                                      | ✅  | 📌         |    |
-| CAR-U-16 | card         | put    | /cards/:id/name                                           | ✅  | ✅         |    |
-| CAR-U-17 | card         | put    | /cards/:id/pos                                            | ✅  | ✅         |    |
-| CAR-U-18 | card         | put    | /cards/:id/stickers/:idSticker                            | ✅  | ✅         |    |
-| CAR-U-19 | card         | put    | /cards/:id/subscribed                                     | ✅  | ✅         |    |
-| CAR-P-01 | card         | post   | /cards                                                    | ✅  | ✅️         |    |
-| CAR-P-02 | card         | post   | /cards/:id/actions/comments                               | ✅  | ✅️         |    |
-| CAR-P-03 | card         | post   | /cards/:id/attachments                                    | ✅  | ✅         |    |
-| CAR-P-04 | card         | post   | /cards/:id/checklist/:id/checkItem                        | ✅  | ✅️         |    |
-| CAR-P-05 | card         | post   | /cards/:id/checklist/:id/checkItem/:id/convertToCard      | ✅  | ✅         |    |
-| CAR-P-06 | card         | post   | /cards/:id/checklists                                     | ✅  | ✅️         |    |
-| CAR-P-07 | card         | post   | /cards/:id/idLabels                                       | ✅  | ✅         |    |
-| CAR-P-08 | card         | post   | /cards/:id/idMembers                                      | ✅  | 📌         |    |
-| CAR-P-09 | card         | post   | /cards/:id/labels                                         | ✅  | ✅         |    |
-| CAR-P-10 | card         | post   | /cards/:id/markAssociatedNotificationsRead                | ✅  | ✅         |    |
-| CAR-P-11 | card         | post   | /cards/:id/membersVoted                                   | ✅  | 🔒         |    |
-| CAR-P-12 | card         | post   | /cards/:id/stickers                                       | ✅  | ✅         |    |
-| CAR-D-01 | card         | delete | /cards/:id                                                | ✅  | ✅         |    |
-| CAR-D-02 | card         | delete | /cards/:id/actions/:id/comments                           | ✅  | ✅         |    |
-| CAR-D-03 | card         | delete | /cards/:id/attachments/:idAttachment                      | ✅  | ✅         |    |
-| CAR-D-04 | card         | delete | /cards/:id/checklist/:id/checkItem/:id                    | ✅  | ✅         |    |
-| CAR-D-05 | card         | delete | /cards/:id/checkItem/:idCheckItem                         | ✅  | ✅         |    |
-| CAR-D-06 | card         | delete | /cards/:id/checklists/:id                                 | ✅  | ✅         |    |
-| CAR-D-07 | card         | delete | /cards/:id/idLabels/:idLabel                              | ✅  | ✅         |    |
-| CAR-D-08 | card         | delete | /cards/:id/idMembers/:idMember                            | ✅  | 📌         |    |
-| CAR-D-09 | card         | delete | /cards/:id/membersVoted/:idMember                         | ✅  | 🔒         |    |
-| CAR-D-10 | card         | delete | /cards/:id/stickers/:idSticker                            | ✅  | ✅         |    |
-| CHK-G-01 | checklist    | get    | /checklists/:id                                           | ✅  | ✅         |    |
-| CHK-G-02 | checklist    | get    | /checklists/:id/:field                                    | ✅  | ✅         |    |
-| CHK-G-03 | checklist    | get    | /checklists/:id/board                                     | ✅  | ✅         |    |
-| CHK-G-04 | checklist    | get    | /checklists/:id/board/:field                              | ✅  | ✅         |    |
-| CHK-G-05 | checklist    | get    | /checklists/:id/cards                                     | ✅  | ✅         |    |
-| CHK-G-06 | checklist    | get    | /checklists/:id/cards/:filter                             | ✅  | ✅         |    |
-| CHK-G-07 | checklist    | get    | /checklists/:id/checkItems                                | ✅  | ✅         |    |
-| CHK-G-08 | checklist    | get    | /checklists/:id/checkItems/:id                            | ✅  | ✅         |    |
-| CHK-U-01 | checklist    | put    | /checklists/:id                                           | ✅  | ✅         |    |
-| CHK-U-02 | checklist    | put    | /checklists/:id/name                                      | ✅  | ✅         |    |
-| CHK-U-03 | checklist    | put    | /checklists/:id/pos                                       | ✅  | ✅         |    |
-| CHK-P-01 | checklist    | post   | /checklists                                               | ✅  | ✅         |    |
-| CHK-P-02 | checklist    | post   | /checklists/:id/checkItems                                | ✅  | ✅         |    |
-| CHK-D-01 | checklist    | delete | /checklists/:id                                           | ✅  | ✅         |    |
-| CHK-D-02 | checklist    | delete | /checklists/:id/checkItems/:id                            | ✅  | ✅         |    |
-| ENT-G-01 | enterprise   | get    | /enterprises/:id                                          | ✅  | 🔒         |    |
-| ENT-G-02 | enterprise   | get    | /enterprises/:id/admins                                   | ✅  | 🔒         |    |
-| ENT-G-03 | enterprise   | get    | /enterprises/:id/signupUrl                                | ✅  | 🔒         |    |
-| ENT-G-04 | enterprise   | get    | /enterprises/:id/members                                  | ✅  | 🔒         |    |
-| ENT-G-05 | enterprise   | get    | /enterprises/:id/members/:idMember                        | ✅  | 🔒         |    |
-| ENT-G-06 | enterprise   | get    | /enterprises/:id/transferrable/organization/:idOrg        | ✅  | 🔒         |    |
-| ENT-U-01 | enterprise   | put    | /enterprises/:id/members/:idMember/deactivated            | ✅  | 🔒         |    |
-| ENT-U-02 | enterprise   | put    | /enterprises/:id/organizations                            | ✅  | 🔒         |    |
-| ENT-U-03 | enterprise   | put    | /enterprises/:id/admins/:idMember                         | ✅  | 🔒         |    |
-| ENT-P-01 | enterprise   | post   | /enterprises/:id/tokens                                   | ✅  | 🔒         |    |
-| ENT-D-01 | enterprise   | delete | /enterprises/:id/organizations/:idOrg                     | ✅  | 🔒         |    |
-| ENT-D-02 | enterprise   | delete | /enterprises/:id/admins/:idMember                         | ✅  | 🔒         |    |
-| ENT-P-01 | enterprise   | get    | /enterprises/:id/transferrable/organization/:idOrg        | ✅  | 🔒         |    |
-| LBL-G-01 | label        | get    | /labels/:id                                               | ✅  | ✅         |    |
-| LBL-G-02 | label        | get    | /labels/:id/board                                         | ✅  | ✅         |    |
-| LBL-G-03 | label        | get    | /labels/:id/board/:field                                  | ✅  | ✅         |    |
-| LBL-U-01 | label        | put    | /labels/:id                                               | ✅  | ✅         |    |
-| LBL-U-02 | label        | put    | /labels/:id/color                                         | ✅  | ✅         |    |
-| LBL-U-03 | label        | put    | /labels/:id/name                                          | ✅  | ✅         |    |
-| LBL-P-01 | label        | post   | /labels                                                   | ✅  | ✅         |    |
-| LBL-D-01 | label        | delete | /labels/:id                                               | ✅  | ✅         |    |
-| LST-G-01 | list         | get    | /lists/:id                                                | ✅  | ✅         |    |
-| LST-G-02 | list         | get    | /lists/:id/:field                                         | ✅  | ✅         |    |
-| LST-G-03 | list         | get    | /lists/:id/actions                                        | ✅  | ✅         |    |
-| LST-G-04 | list         | get    | /lists/:id/board                                          | ✅  | ✅         |    |
-| LST-G-05 | list         | get    | /lists/:id/board/:field                                   | ✅  | ✅         |    |
-| LST-G-06 | list         | get    | /lists/:id/cards                                          | ✅  | ✅         |    |
-| LST-G-07 | list         | get    | /lists/:id/cards/:filter                                  | ✅  | ✅         |    |
-| LST-U-01 | list         | put    | /lists/:id                                                | ✅  | ✅         |    |
-| LST-U-02 | list         | put    | /lists/:id/closed                                         | ✅  | ✅         |    |
-| LST-U-03 | list         | put    | /lists/:id/idBoard                                        | ✅  | ✅         |    |
-| LST-U-04 | list         | put    | /lists/:id/name                                           | ✅  | ✅         |    |
-| LST-U-05 | list         | put    | /lists/:id/pos                                            | ✅  | ✅         |    |
-| LST-U-06 | list         | put    | /lists/:id/subscribed                                     | ✅  | ✅         |    |
-| LST-P-01 | list         | post   | /lists                                                    | ✅  | ✅         |    |
-| LST-P-02 | list         | post   | /lists/:id/archiveAllCards                                | ✅  | ✅         |    |
-| LST-P-03 | list         | post   | /lists/:id/cards                                          | ✅  | ✅️         |    |
-| LST-P-04 | list         | post   | /lists/:id/moveAllCards                                   | ✅  | ✅         |    |
-| MBR-G-01 | member       | get    | /members/:id                                              | ✅  | ✅️         |    |
-| MBR-G-02 | member       | get    | /members/:id/:field                                       | ✅  | ✅         |    |
-| MBR-G-03 | member       | get    | /members/:id/actions                                      | ✅  | ✅️         |    |
-| MBR-G-04 | member       | get    | /members/:id/boardBackgrounds                             | ✅  | ✅         |    |
-| MBR-G-05 | member       | get    | /members/:id/boardBackgrounds/:idBoardBackground          | ✅  | ✅         |    |
-| MBR-G-06 | member       | get    | /members/:id/boardStars                                   | ✅  | ✅         |    |
-| MBR-G-07 | member       | get    | /members/:id/boardStars/:idBoardStar                      | ✅  | ✅         |    |
-| MBR-G-08 | member       | get    | /members/:id/boards                                       | ✅  | ✅         |    |
-| MBR-G-09 | member       | get    | /members/:id/boards/:filter                               | ✅  | ✅         |    |
-| MBR-G-10 | member       | get    | /members/:id/boardsInvited                                | ✅  | ✅         |    |
-| MBR-G-11 | member       | get    | /members/:id/boardsInvited/:field                         | ✅  | ✅         |    |
-| MBR-G-12 | member       | get    | /members/:id/cards                                        | ✅  | ✅         |    |
-| MBR-G-13 | member       | get    | /members/:id/cards/:filter                                | ✅  | ✅         |    |
-| MBR-G-14 | member       | get    | /members/:id/customBoardBackgrounds                       | ✅  | ✅         |    |
-| MBR-G-15 | member       | get    | /members/:id/customBoardBackgrounds/:idBoardBackground    | ✅  | ✅         |    |
-| MBR-G-16 | member       | get    | /members/:id/customEmoji                                  | ✅  | ✅         |    |
-| MBR-G-17 | member       | get    | /members/:id/customEmoji/:idCustomEmoji                   | ✅  | ✅         |    |
-| MBR-G-18 | member       | get    | /members/:id/customStickers                               | ✅  | ✅         |    |
-| MBR-G-19 | member       | get    | /members/:id/customStickers/:idCustomSticker              | ✅  | ✅         |    |
-| MBR-G-20 | member       | get    | /members/:id/deltas                                       | ✅  | 🔒         |    |
-| MBR-G-21 | member       | get    | /members/:id/notifications                                | ✅  | ✅         |    |
-| MBR-G-22 | member       | get    | /members/:id/notifications/:filter                        | ✅  | ✅         |    |
-| MBR-G-23 | member       | get    | /members/:id/organizations                                | ✅  | ✅         |    |
-| MBR-G-24 | member       | get    | /members/:id/organizations/:filter                        | ✅  | ✅         |    |
-| MBR-G-25 | member       | get    | /members/:id/organizationsInvited                         | ✅  | ✅         |    |
-| MBR-G-26 | member       | get    | /members/:id/organizationsInvited/:field                  | ✅  | ✅         |    |
-| MBR-G-27 | member       | get    | /members/:id/savedSearches                                | ✅  | ✅         |    |
-| MBR-G-28 | member       | get    | /members/:id/savedSearches/:idSavedSearch                 | ✅  | ✅         |    |
-| MBR-G-29 | member       | get    | /members/:id/tokens                                       | ✅  | ✅         |    |
-| MBR-U-01 | member       | put    | /members/:id                                              | ✅  | ✅         |    |
-| MBR-U-02 | member       | put    | /members/:id/avatarSource                                 | ✅  | ✅         |    |
-| MBR-U-03 | member       | put    | /members/:id/bio                                          | ✅  | ✅         |    |
-| MBR-U-04 | member       | put    | /members/:id/boardBackgrounds/:idBoardBackground          | ✅  | ✅         |    |
-| MBR-U-05 | member       | put    | /members/:id/boardStars/:idBoardStar                      | ✅  | ✅         |    |
-| MBR-U-06 | member       | put    | /members/:id/boardStars/:idBoardStar/idBoard              | ✅  | ✅         |    |
-| MBR-U-07 | member       | put    | /members/:id/boardStars/:idBoardStar/pos                  | ✅  | ✅         |    |
-| MBR-U-08 | member       | put    | /members/:id/customBoardBackgrounds/:idBoardBackground    | ✅  | ✅         |    |
-| MBR-U-09 | member       | put    | /members/:id/fullName                                     | ✅  | ✅         |    |
-| MBR-U-10 | member       | put    | /members/:id/initials                                     | ✅  | ✅         |    |
-| MBR-U-11 | member       | put    | /members/:id/prefs/colorBlind                             | ✅  | ✅         |    |
-| MBR-U-12 | member       | put    | /members/:id/prefs/locale                                 | ✅  | ✅         |    |
-| MBR-U-13 | member       | put    | /members/:id/prefs/minutesBetweenSummaries                | ✅  | ✅         |    |
-| MBR-U-14 | member       | put    | /members/:id/savedSearches/:idSavedSearch                 | ✅  | ✅         |    |
-| MBR-U-15 | member       | put    | /members/:id/savedSearches/:idSavedSearch/name            | ✅  | ✅         |    |
-| MBR-U-16 | member       | put    | /members/:id/savedSearches/:idSavedSearch/pos             | ✅  | ✅         |    |
-| MBR-U-17 | member       | put    | /members/:id/savedSearches/:idSavedSearch/query           | ✅  | ✅         |    |
-| MBR-U-18 | member       | put    | /members/:id/username                                     | ✅  | ✅         |    |
-| MBR-P-01 | member       | post   | /members/:id/avatar                                       | ✅  | 🔒         |    |
-| MBR-P-02 | member       | post   | /members/:id/boardBackgrounds                             | ✅  | ✅         |    |
-| MBR-P-03 | member       | post   | /members/:id/boardStars                                   | ✅  | ✅         |    |
-| MBR-P-04 | member       | post   | /members/:id/customBoardBackgrounds                       | ✅  | ✅         |    |
-| MBR-P-05 | member       | post   | /members/:id/customEmoji                                  | ✅  | ✅         |    |
-| MBR-P-06 | member       | post   | /members/:id/customStickers                               | ✅  | ✅         |    |
-| MBR-P-07 | member       | post   | /members/:id/oneTimeMessagesDismissed                     | ✅  | 📌         |    |
-| MBR-P-08 | member       | post   | /members/:id/savedSearches                                | ✅  | ✅         |    |
-| MBR-D-01 | member       | delete | /members/:id/boardBackgrounds/:idBoardBackground          | ✅  | ✅         |    |
-| MBR-D-02 | member       | delete | /members/:id/boardStars/:idBoardStar                      | ✅  | ✅         |    |
-| MBR-D-03 | member       | delete | /members/:id/customBoardBackgrounds/:idBoardBackground    | ✅  | ✅         |    |
-| MBR-D-04 | member       | delete | /members/:id/customStickers/:idCustomSticker              | ✅  | ✅         |    |
-| MBR-D-05 | member       | delete | /members/:id/savedSearches/:idSavedSearch                 | ✅  | ✅         |    |
-| NTF-G-01 | notification | get    | /notifications/:id                                        | ✅  | ✅         |    |
-| NTF-G-02 | notification | get    | /notifications/:id/:field                                 | ✅  | ✅         |    |
-| NTF-G-03 | notification | get    | /notifications/:id/board                                  | ✅  | ✅         |    |
-| NTF-G-04 | notification | get    | /notifications/:id/board/:field                           | ✅  | ✅         |    |
-| NTF-G-05 | notification | get    | /notifications/:id/card                                   | ✅  | ✅         |    |
-| NTF-G-06 | notification | get    | /notifications/:id/card/:field                            | ✅  | ✅         |    |
-| NTF-G-07 | notification | get    | /notifications/:id/display                                | ✅  | ✅         |    |
-| NTF-G-08 | notification | get    | /notifications/:id/entities                               | ✅  | ✅         |    |
-| NTF-G-09 | notification | get    | /notifications/:id/list                                   | ✅  | ✅         |    |
-| NTF-G-10 | notification | get    | /notifications/:id/list/:field                            | ✅  | ✅         |    |
-| NTF-G-11 | notification | get    | /notifications/:id/member                                 | ✅  | ✅         |    |
-| NTF-G-12 | notification | get    | /notifications/:id/member/:field                          | ✅  | ✅         |    |
-| NTF-G-13 | notification | get    | /notifications/:id/memberCreator                          | ✅  | ✅         |    |
-| NTF-G-14 | notification | get    | /notifications/:id/memberCreator/:field                   | ✅  | ✅         |    |
-| NTF-G-15 | notification | get    | /notifications/:id/organization                           | ✅  | ✅         |    |
-| NTF-G-16 | notification | get    | /notifications/:id/organization/:field                    | ✅  | ✅         |    |
-| NTF-U-01 | notification | put    | /notifications/:id                                        | ✅  | ✅         |    |
-| NTF-U-02 | notification | put    | /notifications/:id/unread                                 | ✅  | ✅         |    |
-| NTF-P-01 | notification | post   | /notifications/all/read                                   | ✅  | ✅         |    |
-| ORG-G-01 | organization | get    | /organizations/:id                                        | ✅  | ✅️         |    |
-| ORG-G-02 | organization | get    | /organizations/:id/:field                                 | ✅  | ✅         |    |
-| ORG-G-03 | organization | get    | /organizations/:id/actions                                | ✅  | ✅         |    |
-| ORG-G-04 | organization | get    | /organizations/:id/boards                                 | ✅  | ✅         |    |
-| ORG-G-05 | organization | get    | /organizations/:id/boards/:filter                         | ✅  | ✅         |    |
-| ORG-G-06 | organization | get    | /organizations/:id/deltas                                 | ✅  | 🔒         |    |
-| ORG-G-07 | organization | get    | /organizations/:id/members                                | ✅  | ✅         |    |
-| ORG-G-08 | organization | get    | /organizations/:id/members/:filter                        | ✅  | ✅         |    |
-| ORG-G-09 | organization | get    | /organizations/:id/members/:idMember/cards                | ✅  | ✅         |    |
-| ORG-G-10 | organization | get    | /organizations/:id/membersInvited                         | ✅  | ✅         |    |
-| ORG-G-11 | organization | get    | /organizations/:id/membersInvited/:field                  | ✅  | ✅         |    |
-| ORG-G-12 | organization | get    | /organizations/:id/memberships                            | ✅  | ✅         |    |
-| ORG-G-13 | organization | get    | /organizations/:id/memberships/:idMembership              | ✅  | ✅         |    |
-| ORG-G-14 | organization | get    | /organizations/:id/pluginData                             | ✅  | ✅         |    |
-| ORG-G-15 | organization | get    | /organizations/:id/tags                                   | ✅  | 🔒         |    |
-| ORG-U-01 | organization | put    | /organizations/:id                                        | ✅  | ✅         |    |
-| ORG-U-02 | organization | put    | /organizations/:id/desc                                   | ✅  | ✅         |    |
-| ORG-U-03 | organization | put    | /organizations/:id/displayName                            | ✅  | ✅         |    |
-| ORG-U-04 | organization | put    | /organizations/:id/members                                | ✅  | ✅         |    |
-| ORG-U-05 | organization | put    | /organizations/:id/members/:idMember                      | ✅  | ✅         |    |
-| ORG-U-06 | organization | put    | /organizations/:id/members/:idMember/deactivated          | ✅  | ✅         |    |
-| ORG-U-07 | organization | put    | /organizations/:id/memberships/:idMembership              | ✅  | ✅         |    |
-| ORG-U-08 | organization | put    | /organizations/:id/name                                   | ✅  | ✅         |    |
-| ORG-U-09 | organization | put    | /organizations/:id/prefs/associatedDomain                 | ✅  | 🔒         |    |
-| ORG-U-10 | organization | put    | /organizations/:id/prefs/boardVisibilityRestrict/org      | ✅  | 🔒         |    |
-| ORG-U-11 | organization | put    | /organizations/:id/prefs/boardVisibilityRestrict/private  | ✅  | 🔒         |    |
-| ORG-U-12 | organization | put    | /organizations/:id/prefs/boardVisibilityRestrict/public   | ✅  | 🔒         |    |
-| ORG-U-13 | organization | put    | /organizations/:id/prefs/externalMembersDisabled          | ✅  | 🔒         |    |
-| ORG-U-14 | organization | put    | /organizations/:id/prefs/googleAppsVersion                | ✅  | 🔒         |    |
-| ORG-U-15 | organization | put    | /organizations/:id/prefs/orgInviteRestrict                | ✅  | 🔒         |    |
-| ORG-U-16 | organization | put    | /organizations/:id/prefs/permissionLevel                  | ✅  | ✅         |    |
-| ORG-U-17 | organization | put    | /organizations/:id/website                                | ✅  | ✅         |    |
-| ORG-P-01 | organization | post   | /organizations                                            | ✅  | ✅️         |    |
-| ORG-P-02 | organization | post   | /organizations/:id/logo                                   | ✅  | ✅         |    |
-| ORG-P-03 | organization | post   | /organizations/:id/tags                                   | ✅  | 🔒         |    |
-| ORG-D-01 | organization | delete | /organizations/:id                                        | ✅  | ✅         |    |
-| ORG-D-02 | organization | delete | /organizations/:id/logo                                   | ✅  | ✅         |    |
-| ORG-D-03 | organization | delete | /organizations/:id/members/:idMember                      | ✅  | ✅         |    |
-| ORG-D-04 | organization | delete | /organizations/:id/members/:idMember/all                  | ✅  | 🔒         |    |
-| ORG-D-05 | organization | delete | /organizations/:id/prefs/associatedDomain                 | ✅  | 🔒         |    |
-| ORG-D-06 | organization | delete | /organizations/:id/prefs/orgInviteRestrict                | ✅  | 🔒         |    |
-| SRC-G-01 | search       | get    | /search                                                   | ✅  | ✅         |    |
-| SRC-G-02 | search       | get    | /search/members                                           | ✅  | ✅         |    |
-| TKN-G-01 | token        | get    | /tokens/:token                                            | ✅  | ✅         |    |
-| TKN-G-02 | token        | get    | /tokens/:token/:field                                     | ✅  | ✅         |    |
-| TKN-G-03 | token        | get    | /tokens/:token/member                                     | ✅  | ✅         |    |
-| TKN-G-04 | token        | get    | /tokens/:token/member/:field                              | ✅  | ✅         |    |
-| TKN-G-05 | token        | get    | /tokens/:token/webhooks                                   | ✅  | ✅         |    |
-| TKN-G-06 | token        | get    | /tokens/:token/webhooks/:idWebhook                        | ✅  | ✅         |    |
-| TKN-U-01 | token        | put    | /tokens/:token/webhooks                                   | ✅  | 📌         |    |
-| TKN-P-01 | token        | post   | /tokens/:token/webhooks                                   | ✅  | 📌         |    |
-| TKN-D-01 | token        | delete | /tokens/:token                                            | ✅  | 📌         |    |
-| TKN-D-02 | token        | delete | /tokens/:token/webhooks/:idWebhook                        | ✅  | 📌         |    |
-| TYP-G-01 | type         | get    | /types/:id                                                | ✅  | ✅         |    |
-| WEB-G-02 | webhook      | get    | /webhooks/:id                                             | ✅  | 📌         |    |
-| WEB-G-03 | webhook      | get    | /webhooks/:id/:field                                      | ✅  | 📌         |    |
-| WEB-U-01 | webhook      | put    | /webhooks/:id                                             | ✅  | 📌         |    |
-| WEB-U-02 | webhook      | put    | /webhooks/                                                | ✅  | 📌         |    |
-| WEB-U-03 | webhook      | put    | /webhooks/:id/active                                      | ✅  | 📌         |    |
-| WEB-U-04 | webhook      | put    | /webhooks/:id/callbackURL                                 | ✅  | 📌         |    |
-| WEB-U-05 | webhook      | put    | /webhooks/:id/description                                 | ✅  | 📌         |    |
-| WEB-U-06 | webhook      | put    | /webhooks/:id/idModel                                     | ✅  | 📌         |    |
-| WEB-P-01 | webhook      | post   | /webhooks                                                 | ✅  | 📌         |    |
-| WEB-D-01 | webhook      | delete | /webhooks/:id                                             | ✅  | 📌         |    |
+| Id       | Resource      | Type | Path                                           | Code | Test      | Doc |
+|:---------|:--------------|:-----|:-----------------------------------------------|:----:|:---------:|:---:|
+| ACT-G-01 | actions       | GET  | /:id                                           | ✅  | ✅         | ✅ | 
+| ACT-G-02 | actions       | GET  | /:id/:field                                    | ✅  | ✅         | ✅ | 
+| ACT-G-03 | actions       | GET  | /:id/board                                     | ✅  | ✅         | ✅ | 
+| ACT-G-04 | actions       | GET  | /:id/board/:field                              | ✅  | ✅         | ✅ | 
+| ACT-G-05 | actions       | GET  | /:id/card                                      | ✅  | ✅         | ✅ | 
+| ACT-G-06 | actions       | GET  | /:id/card/:field                               | ✅  | ✅         | ✅ | 
+| ACT-G-07 | actions       | GET  | /:id/display                                   | ✅  | ✅         | ✅ | 
+| ACT-G-08 | actions       | GET  | /:id/entities                                  | ✅  | ✅         | ✅ | 
+| ACT-G-09 | actions       | GET  | /:id/list                                      | ✅  | ✅         | ✅ | 
+| ACT-G-10 | actions       | GET  | /:id/list/:field                               | ✅  | ✅         | ✅ | 
+| ACT-G-11 | actions       | GET  | /:id/member                                    | ✅  | ✅         | ✅ | 
+| ACT-G-12 | actions       | GET  | /:id/member/:field                             | ✅  | ✅         | ✅ | 
+| ACT-G-13 | actions       | GET  | /:id/memberCreator                             | ✅  | ✅         | ✅ | 
+| ACT-G-14 | actions       | GET  | /:id/memberCreator/:field                      | ✅  | ✅         | ✅ | 
+| ACT-G-15 | actions       | GET  | /:id/organization                              | ✅  | ✅         | ✅ | 
+| ACT-G-16 | actions       | GET  | /:id/organization/:field                       | ✅  | ✅         | ✅ | 
+| ACT-U-01 | actions       | PUT  | /:id                                           | ✅  | ✅         | ✅ | 
+| ACT-U-02 | actions       | PUT  | /:id/text                                      | ✅  | ✅         | ✅ | 
+| ACT-D-01 | actions       | DEL  | /:id                                           | ✅  | [📝](#N1)  | ✅ | 
+| BTC-G-01 | batch         | GET  | /                                              | ✅  | ✅         | ✅ | 
+| BRD-G-01 | boards        | GET  | /:id                                           | ✅  | ✅         | ✅ | 
+| BRD-G-02 | boards        | GET  | /:id/:field                                    | ✅  | ✅         | ✅ | 
+| BRD-G-03 | boards        | GET  | /:id/actions                                   | ✅  | ✅         | ✅ | 
+| BRD-G-04 | boards        | GET  | /:id/boardStars                                | ✅  | ✅         | ✅ | 
+| BRD-G-05 | boards        | GET  | /:id/cards                                     | ✅  | ✅️✅         | ✅ |
+| BRD-G-06 | boards        | GET  | /:id/cards/:filter                             | ✅  | ✅         | ✅ | 
+| BRD-G-07 | boards        | GET  | /:id/cards/:idCard                             | ✅  | ✅         | ✅ | 
+| BRD-G-08 | boards        | GET  | /:id/checklists                                | ✅  | ✅         | ✅ | 
+| BRD-G-09 | boards        | GET  | /:id/deltas                                    | ✅  | 🔒         | ✅ | 
+| BRD-G-10 | boards        | GET  | /:id/idTags                                    | ✅  | 🔒         | ✅ | 
+| BRD-G-11 | boards        | GET  | /:id/labels                                    | ✅  | ✅✅️         | ✅ |
+| BRD-G-12 | boards        | GET  | /:id/labels/:idLabel                           | ✅  | ✅         | ✅ | 
+| BRD-G-13 | boards        | GET  | /:id/lists                                     | ✅  | ✅         | ✅ | 
+| BRD-G-14 | boards        | GET  | /:id/lists/:filter                             | ✅  | ✅         | ✅ | 
+| BRD-G-15 | boards        | GET  | /:id/members                                   | ✅  | ✅         | ✅ | 
+| BRD-G-16 | boards        | GET  | /:id/members/:filter                           | ✅  | ✅         | ✅ | 
+| BRD-G-17 | boards        | GET  | /:id/members/:idMember/cards                   | ✅  | ✅         | ✅ | 
+| BRD-G-18 | boards        | GET  | /:id/membersInvited                            | ✅  | ✅         | ✅ | 
+| BRD-G-19 | boards        | GET  | /:id/membersInvited/:field                     | ✅  | ✅         | ✅ | 
+| BRD-G-20 | boards        | GET  | /:id/memberships                               | ✅  | ✅         |    |
+| BRD-G-21 | boards        | GET  | /:id/memberships/:idMembership                 | ✅  | ✅         |    |
+| BRD-G-22 | boards        | GET  | /:id/myPrefs                                   | ✅  | ✅         | ✅ | 
+| BRD-G-23 | boards        | GET  | /:id/organization                              | ✅  | ✅         |    |
+| BRD-G-24 | boards        | GET  | /:id/organization/:field                       | ✅  | ✅         |    |
+| BRD-G-25 | boards        | GET  | /:id/pluginData                                | ✅  | ✅         | ✅ | 
+| BRD-U-01 | boards        | PUT  | /:id                                           | ✅  | ✅         |    |
+| BRD-U-02 | boards        | PUT  | /:id/closed                                    | ✅  | ✅         |    |
+| BRD-U-03 | boards        | PUT  | /:id/desc                                      | ✅  | ✅         |    |
+| BRD-U-04 | boards        | PUT  | /:id/idOrganization                            | ✅  | ✅         |    |
+| BRD-U-05 | boards        | PUT  | /:id/labelNames/blue                           | ✅  | ✅         |    |
+| BRD-U-06 | boards        | PUT  | /:id/labelNames/green                          | ✅  | ✅         |    |
+| BRD-U-07 | boards        | PUT  | /:id/labelNames/orange                         | ✅  | ✅         |    |
+| BRD-U-08 | boards        | PUT  | /:id/labelNames/purple                         | ✅  | ✅         |    |
+| BRD-U-09 | boards        | PUT  | /:id/labelNames/red                            | ✅  | ✅         |    |
+| BRD-U-10 | boards        | PUT  | /:id/labelNames/yellow                         | ✅  | ✅         |    |
+| BRD-U-11 | boards        | PUT  | /:id/members                                   | ✅  | 🆗         |    |
+| BRD-U-12 | boards        | PUT  | /:id/members/:idMember                         | ✅  | 🆗         |    |
+| BRD-U-13 | boards        | PUT  | /:id/memberships/:idMembership                 | ✅  | ✅         |    |
+| BRD-U-14 | boards        | PUT  | /:id/myPrefs/emailPosition                     | ✅  | ✅         |    |
+| BRD-U-15 | boards        | PUT  | /:id/myPrefs/idEmailList                       | ✅  | 📌         |    |
+| BRD-U-16 | boards        | PUT  | /:id/myPrefs/showListGuide                     | ✅  | ✅         |    |
+| BRD-U-17 | boards        | PUT  | /:id/myPrefs/showSidebar                       | ✅  | ✅         |    |
+| BRD-U-18 | boards        | PUT  | /:id/myPrefs/showSidebarActivity               | ✅  | ✅         |    |
+| BRD-U-19 | boards        | PUT  | /:id/myPrefs/showSidebarBoardActions           | ✅  | ✅         |    |
+| BRD-U-20 | boards        | PUT  | /:id/myPrefs/showSidebarMembers                | ✅  | ✅         |    |
+| BRD-U-21 | boards        | PUT  | /:id/name                                      | ✅  | ✅         |    |
+| BRD-U-22 | boards        | PUT  | /:id/prefs/background                          | ✅  | ✅         |    |
+| BRD-U-23 | boards        | PUT  | /:id/prefs/calendarFeedEnabled                 | ✅  | ✅         |    |
+| BRD-U-24 | boards        | PUT  | /:id/prefs/cardAging                           | ✅  | ✅         |    |
+| BRD-U-25 | boards        | PUT  | /:id/prefs/cardCovers                          | ✅  | ✅         |    |
+| BRD-U-26 | boards        | PUT  | /:id/prefs/comments                            | ✅  | ✅         |    |
+| BRD-U-27 | boards        | PUT  | /:id/prefs/invitations                         | ✅  | ✅         |    |
+| BRD-U-28 | boards        | PUT  | /:id/prefs/permissionLevel                     | ✅  | ✅         |    |
+| BRD-U-29 | boards        | PUT  | /:id/prefs/selfJoin                            | ✅  | ✅         |    |
+| BRD-U-30 | boards        | PUT  | /:id/prefs/voting                              | ✅  | ✅         |    |
+| BRD-U-31 | boards        | PUT  | /:id/subscribed                                | ✅  | ✅         |    |
+| BRD-P-01 | boards        | POST | /                                              | ✅  | ✅✅️         |    |
+| BRD-P-02 | boards        | POST | /:id/calendarKey/generate                      | ✅  | 🆗         |    |
+| BRD-P-03 | boards        | POST | /:id/checklists                                | ✅  | 📌         |    |
+| BRD-P-04 | boards        | POST | /:id/emailKey/generate                         | ✅  | 🆗         |    |
+| BRD-P-05 | boards        | POST | /:id/idTags                                    | ✅  | 🔒         |    |
+| BRD-P-06 | boards        | POST | /:id/labels                                    | ✅  | ✅️✅         |    |
+| BRD-P-07 | boards        | POST | /:id/lists                                     | ✅  | ✅️✅         |    |
+| BRD-P-08 | boards        | POST | /:id/markAsViewed                              | ✅  | ✅         |    |
+| BRD-P-09 | boards        | POST | /:id/powerUps                                  | ✅  | ✅         |    |
+| BRD-D-01 | boards        | DEL  | /:id/members/:idMember                         | ✅  | 🆗         |    |
+| BRD-D-02 | boards        | DEL  | /:id/powerUps/:powerUp                         | ✅  | 📌         |    |
+| CAR-G-01 | cards         | GET  | /:id                                           | ✅  | ✅         |    |
+| CAR-G-02 | cards         | GET  | /:id/:field                                    | ✅  | ✅         |    |
+| CAR-G-03 | cards         | GET  | /:id/actions                                   | ✅  | ✅️✅         |    |
+| CAR-G-04 | cards         | GET  | /:id/attachments                               | ✅  | ✅         |    |
+| CAR-G-05 | cards         | GET  | /:id/attachments/:idAttachment                 | ✅  | ✅         |    |
+| CAR-G-06 | cards         | GET  | /:id/board                                     | ✅  | ✅         |    |
+| CAR-G-07 | cards         | GET  | /:id/board/:field                              | ✅  | ✅         |    |
+| CAR-G-08 | cards         | GET  | /:id/checkItemStates                           | ✅  | ✅         |    |
+| CAR-G-09 | cards         | GET  | /:id/checklists                                | ✅  | ✅         |    |
+| CAR-G-10 | cards         | GET  | /:id/checkItem/:idCheckItem                    | ✅  | ✅         |    |
+| CAR-G-11 | cards         | GET  | /:id/list                                      | ✅  | ✅         |    |
+| CAR-G-12 | cards         | GET  | /:id/list/:field                               | ✅  | ✅         |    |
+| CAR-G-13 | cards         | GET  | /:id/members                                   | ✅  | ✅         |    |
+| CAR-G-14 | cards         | GET  | /:id/membersVoted                              | ✅  | 📌         |    |
+| CAR-G-15 | cards         | GET  | /:id/pluginData                                | ✅  | ✅         |    |
+| CAR-G-16 | cards         | GET  | /:id/stickers                                  | ✅  | ✅         |    |
+| CAR-G-17 | cards         | GET  | /:id/stickers/:idSticker                       | ✅  | ✅         |    |
+| CAR-U-01 | cards         | PUT  | /:id                                           | ✅  | ✅         |    |
+| CAR-U-02 | cards         | PUT  | /:id/actions/:id/comments                      | ✅  | ✅         |    |
+| CAR-U-03 | cards         | PUT  | /:id/checklist/:id/checkItem/:id/name          | ✅  | ✅         |    |
+| CAR-U-04 | cards         | PUT  | /:id/checklist/:id/checkItem/:id/pos           | ✅  | ✅         |    |
+| CAR-U-05 | cards         | PUT  | /:id/checklist/:id/checkItem/:id/state         | ✅  | ✅         |    |
+| CAR-U-06 | cards         | PUT  | /:id/checklist/:id/checkItem/:id               | ✅  | ✅         |    |
+| CAR-U-07 | cards         | PUT  | /:id/checkItem/:idCheckItem                    | ✅  | ✅         |    |
+| CAR-U-08 | cards         | PUT  | /:id/closed                                    | ✅  | ✅         |    |
+| CAR-U-09 | cards         | PUT  | /:id/desc                                      | ✅  | ✅         |    |
+| CAR-U-10 | cards         | PUT  | /:id/due                                       | ✅  | ✅         |    |
+| CAR-U-11 | cards         | PUT  | /:id/dueComplete                               | ✅  | ✅         |    |
+| CAR-U-12 | cards         | PUT  | /:id/idAttachmentCover                         | ✅  | 📌         |    |
+| CAR-U-13 | cards         | PUT  | /:id/idBoard                                   | ✅  | 🆗         |    |
+| CAR-U-14 | cards         | PUT  | /:id/idList                                    | ✅  | 🆗         |    |
+| CAR-U-15 | cards         | PUT  | /:id/idMembers                                 | ✅  | 📌         |    |
+| CAR-U-16 | cards         | PUT  | /:id/name                                      | ✅  | ✅         |    |
+| CAR-U-17 | cards         | PUT  | /:id/pos                                       | ✅  | ✅         |    |
+| CAR-U-18 | cards         | PUT  | /:id/stickers/:idSticker                       | ✅  | ✅         |    |
+| CAR-U-19 | cards         | PUT  | /:id/subscribed                                | ✅  | ✅         |    |
+| CAR-P-01 | cards         | POST | /                                              | ✅  | ✅️✅         |    |
+| CAR-P-02 | cards         | POST | /:id/actions/comments                          | ✅  | ✅️✅         |    |
+| CAR-P-03 | cards         | POST | /:id/attachments                               | ✅  | ✅         |    |
+| CAR-P-04 | cards         | POST | /:id/checklist/:id/checkItem                   | ✅  | ✅️✅         |    |
+| CAR-P-05 | cards         | POST | /:id/checklist/:id/checkItem/:id/convertToCard | ✅  | ✅         |    |
+| CAR-P-06 | cards         | POST | /:id/checklists                                | ✅  | ✅️✅         |    |
+| CAR-P-07 | cards         | POST | /:id/idLabels                                  | ✅  | ✅         |    |
+| CAR-P-08 | cards         | POST | /:id/idMembers                                 | ✅  | 📌         |    |
+| CAR-P-09 | cards         | POST | /:id/labels                                    | ✅  | ✅         |    |
+| CAR-P-10 | cards         | POST | /:id/markAssociatedNotificationsRead           | ✅  | ✅         |    |
+| CAR-P-11 | cards         | POST | /:id/membersVoted                              | ✅  | 🔒         |    |
+| CAR-P-12 | cards         | POST | /:id/stickers                                  | ✅  | ✅         |    |
+| CAR-D-01 | cards         | DEL  | /:id                                           | ✅  | ✅         |    |
+| CAR-D-02 | cards         | DEL  | /:id/actions/:id/comments                      | ✅  | ✅         |    |
+| CAR-D-03 | cards         | DEL  | /:id/attachments/:idAttachment                 | ✅  | ✅         |    |
+| CAR-D-04 | cards         | DEL  | /:id/checklist/:id/checkItem/:id               | ✅  | ✅         |    |
+| CAR-D-05 | cards         | DEL  | /:id/checkItem/:idCheckItem                    | ✅  | ✅         |    |
+| CAR-D-06 | cards         | DEL  | /:id/checklists/:id                            | ✅  | ✅         |    |
+| CAR-D-07 | cards         | DEL  | /:id/idLabels/:idLabel                         | ✅  | ✅         |    |
+| CAR-D-08 | cards         | DEL  | /:id/idMembers/:idMember                       | ✅  | 📌         |    |
+| CAR-D-09 | cards         | DEL  | /:id/membersVoted/:idMember                    | ✅  | 🔒         |    |
+| CAR-D-10 | cards         | DEL  | /:id/stickers/:idSticker                       | ✅  | ✅         |    |
+| CHK-G-01 | checklists    | GET  | /:id                                           | ✅  | ✅         |    |
+| CHK-G-02 | checklists    | GET  | /:id/:field                                    | ✅  | ✅         |    |
+| CHK-G-03 | checklists    | GET  | /:id/board                                     | ✅  | ✅         |    |
+| CHK-G-04 | checklists    | GET  | /:id/board/:field                              | ✅  | ✅         |    |
+| CHK-G-05 | checklists    | GET  | /:id/cards                                     | ✅  | ✅         |    |
+| CHK-G-06 | checklists    | GET  | /:id/cards/:filter                             | ✅  | ✅         |    |
+| CHK-G-07 | checklists    | GET  | /:id/checkItems                                | ✅  | ✅         |    |
+| CHK-G-08 | checklists    | GET  | /:id/checkItems/:id                            | ✅  | ✅         |    |
+| CHK-U-01 | checklists    | PUT  | /:id                                           | ✅  | ✅         |    |
+| CHK-U-02 | checklists    | PUT  | /:id/name                                      | ✅  | ✅         |    |
+| CHK-U-03 | checklists    | PUT  | /:id/pos                                       | ✅  | ✅         |    |
+| CHK-P-01 | checklists    | POST | /                                              | ✅  | ✅         |    |
+| CHK-P-02 | checklists    | POST | /:id/checkItems                                | ✅  | ✅         |    |
+| CHK-D-01 | checklists    | DEL  | /:id                                           | ✅  | ✅         |    |
+| CHK-D-02 | checklists    | DEL  | /:id/checkItems/:id                            | ✅  | ✅         |    |
+| ENT-G-01 | enterprises   | GET  | /:id                                           | ✅  | 🔒         |    |
+| ENT-G-02 | enterprises   | GET  | /:id/admins                                    | ✅  | 🔒         |    |
+| ENT-G-03 | enterprises   | GET  | /:id/signupUrl                                 | ✅  | 🔒         |    |
+| ENT-G-04 | enterprises   | GET  | /:id/members                                   | ✅  | 🔒         |    |
+| ENT-G-05 | enterprises   | GET  | /:id/members/:idMember                         | ✅  | 🔒         |    |
+| ENT-G-06 | enterprises   | GET  | /:id/transferrable/organization/:idOrg         | ✅  | 🔒         |    |
+| ENT-U-01 | enterprises   | PUT  | /:id/members/:idMember/deactivated             | ✅  | 🔒         |    |
+| ENT-U-02 | enterprises   | PUT  | /:id/organizations                             | ✅  | 🔒         |    |
+| ENT-U-03 | enterprises   | PUT  | /:id/admins/:idMember                          | ✅  | 🔒         |    |
+| ENT-P-01 | enterprises   | POST | /:id/tokens                                    | ✅  | 🔒         |    |
+| ENT-D-01 | enterprises   | DEL  | /:id/organizations/:idOrg                      | ✅  | 🔒         |    |
+| ENT-D-02 | enterprises   | DEL  | /:id/admins/:idMember                          | ✅  | 🔒         |    |
+| ENT-P-01 | enterprises   | GET  | /:id/transferrable/organization/:idOrg         | ✅  | 🔒         |    |
+| LBL-G-01 | labels        | GET  | /:id                                           | ✅  | ✅         |    |
+| LBL-G-02 | labels        | GET  | /:id/board                                     | ✅  | ✅         |    |
+| LBL-G-03 | labels        | GET  | /:id/board/:field                              | ✅  | ✅         |    |
+| LBL-U-01 | labels        | PUT  | /:id                                           | ✅  | ✅         |    |
+| LBL-U-02 | labels        | PUT  | /:id/color                                     | ✅  | ✅         |    |
+| LBL-U-03 | labels        | PUT  | /:id/name                                      | ✅  | ✅         |    |
+| LBL-P-01 | labels        | POST | /                                              | ✅  | ✅         |    |
+| LBL-D-01 | labels        | DEL  | /:id                                           | ✅  | ✅         |    |
+| LST-G-01 | lists         | GET  | /:id                                           | ✅  | ✅         |    |
+| LST-G-02 | lists         | GET  | /:id/:field                                    | ✅  | ✅         |    |
+| LST-G-03 | lists         | GET  | /:id/actions                                   | ✅  | ✅         |    |
+| LST-G-04 | lists         | GET  | /:id/board                                     | ✅  | ✅         |    |
+| LST-G-05 | lists         | GET  | /:id/board/:field                              | ✅  | ✅         |    |
+| LST-G-06 | lists         | GET  | /:id/cards                                     | ✅  | ✅         |    |
+| LST-G-07 | lists         | GET  | /:id/cards/:filter                             | ✅  | ✅         |    |
+| LST-U-01 | lists         | PUT  | /:id                                           | ✅  | ✅         |    |
+| LST-U-02 | lists         | PUT  | /:id/closed                                    | ✅  | ✅         |    |
+| LST-U-03 | lists         | PUT  | /:id/idBoard                                   | ✅  | ✅         |    |
+| LST-U-04 | lists         | PUT  | /:id/name                                      | ✅  | ✅         |    |
+| LST-U-05 | lists         | PUT  | /:id/pos                                       | ✅  | ✅         |    |
+| LST-U-06 | lists         | PUT  | /:id/subscribed                                | ✅  | ✅         |    |
+| LST-P-01 | lists         | POST | /                                              | ✅  | ✅         |    |
+| LST-P-02 | lists         | POST | /:id/archiveAllCards                           | ✅  | ✅         |    |
+| LST-P-03 | lists         | POST | /:id/cards                                     | ✅  | ✅️✅         |    |
+| LST-P-04 | lists         | POST | /:id/moveAllCards                              | ✅  | ✅         |    |
+| MBR-G-01 | members       | GET  | /:id                                           | ✅  | ✅️✅         |    |
+| MBR-G-02 | members       | GET  | /:id/:field                                    | ✅  | ✅         |    |
+| MBR-G-03 | members       | GET  | /:id/actions                                   | ✅  | ✅✅️         |    |
+| MBR-G-04 | members       | GET  | /:id/boardBackgrounds                          | ✅  | ✅         |    |
+| MBR-G-05 | members       | GET  | /:id/boardBackgrounds/:idBoardBackground       | ✅  | ✅         |    |
+| MBR-G-06 | members       | GET  | /:id/boardStars                                | ✅  | ✅         |    |
+| MBR-G-07 | members       | GET  | /:id/boardStars/:idBoardStar                   | ✅  | ✅         |    |
+| MBR-G-08 | members       | GET  | /:id/boards                                    | ✅  | ✅         |    |
+| MBR-G-09 | members       | GET  | /:id/boards/:filter                            | ✅  | ✅         |    |
+| MBR-G-10 | members       | GET  | /:id/boardsInvited                             | ✅  | ✅         |    |
+| MBR-G-11 | members       | GET  | /:id/boardsInvited/:field                      | ✅  | ✅         |    |
+| MBR-G-12 | members       | GET  | /:id/cards                                     | ✅  | ✅         |    |
+| MBR-G-13 | members       | GET  | /:id/cards/:filter                             | ✅  | ✅         |    |
+| MBR-G-14 | members       | GET  | /:id/customBoardBackgrounds                    | ✅  | ✅         |    |
+| MBR-G-15 | members       | GET  | /:id/customBoardBackgrounds/:idBoardBackground | ✅  | ✅         |    |
+| MBR-G-16 | members       | GET  | /:id/customEmoji                               | ✅  | ✅         |    |
+| MBR-G-17 | members       | GET  | /:id/customEmoji/:idCustomEmoji                | ✅  | ✅         |    |
+| MBR-G-18 | members       | GET  | /:id/customStickers                            | ✅  | ✅         |    |
+| MBR-G-19 | members       | GET  | /:id/customStickers/:idCustomSticker           | ✅  | ✅         |    |
+| MBR-G-20 | members       | GET  | /:id/deltas                                    | ✅  | 🔒         |    |
+| MBR-G-21 | members       | GET  | /:id/notifications                             | ✅  | ✅         |    |
+| MBR-G-22 | members       | GET  | /:id/notifications/:filter                     | ✅  | ✅         |    |
+| MBR-G-23 | members       | GET  | /:id/organizations                             | ✅  | ✅         |    |
+| MBR-G-24 | members       | GET  | /:id/organizations/:filter                     | ✅  | ✅         |    |
+| MBR-G-25 | members       | GET  | /:id/organizationsInvited                      | ✅  | ✅         |    |
+| MBR-G-26 | members       | GET  | /:id/organizationsInvited/:field               | ✅  | ✅         |    |
+| MBR-G-27 | members       | GET  | /:id/savedSearches                             | ✅  | ✅         |    |
+| MBR-G-28 | members       | GET  | /:id/savedSearches/:idSavedSearch              | ✅  | ✅         |    |
+| MBR-G-29 | members       | GET  | /:id/tokens                                    | ✅  | ✅         |    |
+| MBR-U-01 | members       | PUT  | /:id                                           | ✅  | ✅         |    |
+| MBR-U-02 | members       | PUT  | /:id/avatarSource                              | ✅  | ✅         |    |
+| MBR-U-03 | members       | PUT  | /:id/bio                                       | ✅  | ✅         |    |
+| MBR-U-04 | members       | PUT  | /:id/boardBackgrounds/:idBoardBackground       | ✅  | ✅         |    |
+| MBR-U-05 | members       | PUT  | /:id/boardStars/:idBoardStar                   | ✅  | ✅         |    |
+| MBR-U-06 | members       | PUT  | /:id/boardStars/:idBoardStar/idBoard           | ✅  | ✅         |    |
+| MBR-U-07 | members       | PUT  | /:id/boardStars/:idBoardStar/pos               | ✅  | ✅         |    |
+| MBR-U-08 | members       | PUT  | /:id/customBoardBackgrounds/:idBoardBackground | ✅  | ✅         |    |
+| MBR-U-09 | members       | PUT  | /:id/fullName                                  | ✅  | ✅         |    |
+| MBR-U-10 | members       | PUT  | /:id/initials                                  | ✅  | ✅         |    |
+| MBR-U-11 | members       | PUT  | /:id/prefs/colorBlind                          | ✅  | ✅         |    |
+| MBR-U-12 | members       | PUT  | /:id/prefs/locale                              | ✅  | ✅         |    |
+| MBR-U-13 | members       | PUT  | /:id/prefs/minutesBetweenSummaries             | ✅  | ✅         |    |
+| MBR-U-14 | members       | PUT  | /:id/savedSearches/:idSavedSearch              | ✅  | ✅         |    |
+| MBR-U-15 | members       | PUT  | /:id/savedSearches/:idSavedSearch/name         | ✅  | ✅         |    |
+| MBR-U-16 | members       | PUT  | /:id/savedSearches/:idSavedSearch/pos          | ✅  | ✅         |    |
+| MBR-U-17 | members       | PUT  | /:id/savedSearches/:idSavedSearch/query        | ✅  | ✅         |    |
+| MBR-U-18 | members       | PUT  | /:id/username                                  | ✅  | ✅         |    |
+| MBR-P-01 | members       | POST | /:id/avatar                                    | ✅  | 🔒         |    |
+| MBR-P-02 | members       | POST | /:id/boardBackgrounds                          | ✅  | ✅         |    |
+| MBR-P-03 | members       | POST | /:id/boardStars                                | ✅  | ✅         |    |
+| MBR-P-04 | members       | POST | /:id/customBoardBackgrounds                    | ✅  | ✅         |    |
+| MBR-P-05 | members       | POST | /:id/customEmoji                               | ✅  | ✅         |    |
+| MBR-P-06 | members       | POST | /:id/customStickers                            | ✅  | ✅         |    |
+| MBR-P-07 | members       | POST | /:id/oneTimeMessagesDismissed                  | ✅  | 📌         |    |
+| MBR-P-08 | members       | POST | /:id/savedSearches                             | ✅  | ✅         |    |
+| MBR-D-01 | members       | DEL  | /:id/boardBackgrounds/:idBoardBackground       | ✅  | ✅         |    |
+| MBR-D-02 | members       | DEL  | /:id/boardStars/:idBoardStar                   | ✅  | ✅         |    |
+| MBR-D-03 | members       | DEL  | /:id/customBoardBackgrounds/:idBoardBackground | ✅  | ✅         |    |
+| MBR-D-04 | members       | DEL  | /:id/customStickers/:idCustomSticker           | ✅  | ✅         |    |
+| MBR-D-05 | members       | DEL  | /:id/savedSearches/:idSavedSearch              | ✅  | ✅         |    |
+| NTF-G-01 | notifications | GET  | /:id                                           | ✅  | ✅         |    |
+| NTF-G-02 | notifications | GET  | /:id/:field                                    | ✅  | ✅         |    |
+| NTF-G-03 | notifications | GET  | /:id/board                                     | ✅  | ✅         |    |
+| NTF-G-04 | notifications | GET  | /:id/board/:field                              | ✅  | ✅         |    |
+| NTF-G-05 | notifications | GET  | /:id/card                                      | ✅  | ✅         |    |
+| NTF-G-06 | notifications | GET  | /:id/card/:field                               | ✅  | ✅         |    |
+| NTF-G-07 | notifications | GET  | /:id/display                                   | ✅  | ✅         |    |
+| NTF-G-08 | notifications | GET  | /:id/entities                                  | ✅  | ✅         |    |
+| NTF-G-09 | notifications | GET  | /:id/list                                      | ✅  | ✅         |    |
+| NTF-G-10 | notifications | GET  | /:id/list/:field                               | ✅  | ✅         |    |
+| NTF-G-11 | notifications | GET  | /:id/member                                    | ✅  | ✅         |    |
+| NTF-G-12 | notifications | GET  | /:id/member/:field                             | ✅  | ✅         |    |
+| NTF-G-13 | notifications | GET  | /:id/memberCreator                             | ✅  | ✅         |    |
+| NTF-G-14 | notifications | GET  | /:id/memberCreator/:field                      | ✅  | ✅         |    |
+| NTF-G-15 | notifications | GET  | /:id/organization                              | ✅  | ✅         |    |
+| NTF-G-16 | notifications | GET  | /:id/organization/:field                       | ✅  | ✅         |    |
+| NTF-U-01 | notifications | PUT  | /:id                                           | ✅  | ✅         |    |
+| NTF-U-02 | notifications | PUT  | /:id/unread                                    | ✅  | ✅         |    |
+| NTF-P-01 | notifications | POST | /all/read                                      | ✅  | ✅         |    |
+| ORG-G-01 | organizations | GET  | /:id                                           | ✅  | ✅️✅         |    |
+| ORG-G-02 | organizations | GET  | /:id/:field                                    | ✅  | ✅         |    |
+| ORG-G-03 | organizations | GET  | /:id/actions                                   | ✅  | ✅         |    |
+| ORG-G-04 | organizations | GET  | /:id/boards                                    | ✅  | ✅         |    |
+| ORG-G-05 | organizations | GET  | /:id/boards/:filter                            | ✅  | ✅         |    |
+| ORG-G-06 | organizations | GET  | /:id/deltas                                    | ✅  | 🔒         |    |
+| ORG-G-07 | organizations | GET  | /:id/members                                   | ✅  | ✅         |    |
+| ORG-G-08 | organizations | GET  | /:id/members/:filter                           | ✅  | ✅         |    |
+| ORG-G-09 | organizations | GET  | /:id/members/:idMember/cards                   | ✅  | ✅         |    |
+| ORG-G-10 | organizations | GET  | /:id/membersInvited                            | ✅  | ✅         |    |
+| ORG-G-11 | organizations | GET  | /:id/membersInvited/:field                     | ✅  | ✅         |    |
+| ORG-G-12 | organizations | GET  | /:id/memberships                               | ✅  | ✅         |    |
+| ORG-G-13 | organizations | GET  | /:id/memberships/:idMembership                 | ✅  | ✅         |    |
+| ORG-G-14 | organizations | GET  | /:id/pluginData                                | ✅  | ✅         |    |
+| ORG-G-15 | organizations | GET  | /:id/tags                                      | ✅  | 🔒         |    |
+| ORG-U-01 | organizations | PUT  | /:id                                           | ✅  | ✅         |    |
+| ORG-U-02 | organizations | PUT  | /:id/desc                                      | ✅  | ✅         |    |
+| ORG-U-03 | organizations | PUT  | /:id/displayName                               | ✅  | ✅         |    |
+| ORG-U-04 | organizations | PUT  | /:id/members                                   | ✅  | ✅         |    |
+| ORG-U-05 | organizations | PUT  | /:id/members/:idMember                         | ✅  | ✅         |    |
+| ORG-U-06 | organizations | PUT  | /:id/members/:idMember/deactivated             | ✅  | ✅         |    |
+| ORG-U-07 | organizations | PUT  | /:id/memberships/:idMembership                 | ✅  | ✅         |    |
+| ORG-U-08 | organizations | PUT  | /:id/name                                      | ✅  | ✅         |    |
+| ORG-U-09 | organizations | PUT  | /:id/prefs/associatedDomain                    | ✅  | 🔒         |    |
+| ORG-U-10 | organizations | PUT  | /:id/prefs/boardVisibilityRestrict/org         | ✅  | 🔒         |    |
+| ORG-U-11 | organizations | PUT  | /:id/prefs/boardVisibilityRestrict/private     | ✅  | 🔒         |    |
+| ORG-U-12 | organizations | PUT  | /:id/prefs/boardVisibilityRestrict/public      | ✅  | 🔒         |    |
+| ORG-U-13 | organizations | PUT  | /:id/prefs/externalMembersDisabled             | ✅  | 🔒         |    |
+| ORG-U-14 | organizations | PUT  | /:id/prefs/googleAppsVersion                   | ✅  | 🔒         |    |
+| ORG-U-15 | organizations | PUT  | /:id/prefs/orgInviteRestrict                   | ✅  | 🔒         |    |
+| ORG-U-16 | organizations | PUT  | /:id/prefs/permissionLevel                     | ✅  | ✅         |    |
+| ORG-U-17 | organizations | PUT  | /:id/website                                   | ✅  | ✅         |    |
+| ORG-P-01 | organizations | POST | /                                              | ✅  | ✅✅️         |    |
+| ORG-P-02 | organizations | POST | /:id/logo                                      | ✅  | ✅         |    |
+| ORG-P-03 | organizations | POST | /:id/tags                                      | ✅  | 🔒         |    |
+| ORG-D-01 | organizations | DEL  | /:id                                           | ✅  | ✅         |    |
+| ORG-D-02 | organizations | DEL  | /:id/logo                                      | ✅  | ✅         |    |
+| ORG-D-03 | organizations | DEL  | /:id/members/:idMember                         | ✅  | ✅         |    |
+| ORG-D-04 | organizations | DEL  | /:id/members/:idMember/all                     | ✅  | 🔒         |    |
+| ORG-D-05 | organizations | DEL  | /:id/prefs/associatedDomain                    | ✅  | 🔒         |    |
+| ORG-D-06 | organizations | DEL  | /:id/prefs/orgInviteRestrict                   | ✅  | 🔒         |    |
+| SRC-G-01 | search        | GET  | /                                              | ✅  | ✅         |    |
+| SRC-G-02 | search        | GET  | /members                                       | ✅  | ✅         |    |
+| TKN-G-01 | tokens        | GET  | /:token                                        | ✅  | ✅         |    |
+| TKN-G-02 | tokens        | GET  | /:token/:field                                 | ✅  | ✅         |    |
+| TKN-G-03 | tokens        | GET  | /:token/member                                 | ✅  | ✅         |    |
+| TKN-G-04 | tokens        | GET  | /:token/member/:field                          | ✅  | ✅         |    |
+| TKN-G-05 | tokens        | GET  | /:token/webhooks                               | ✅  | ✅         |    |
+| TKN-G-06 | tokens        | GET  | /:token/webhooks/:idWebhook                    | ✅  | ✅         |    |
+| TKN-U-01 | tokens        | PUT  | /:token/webhooks                               | ✅  | 📌         |    |
+| TKN-P-01 | tokens        | POST | /:token/webhooks                               | ✅  | 📌         |    |
+| TKN-D-01 | tokens        | DEL  | /:token                                        | ✅  | 📌         |    |
+| TKN-D-02 | tokens        | DEL  | /:token/webhooks/:idWebhook                    | ✅  | 📌         |    |
+| TYP-G-01 | types         | GET  | /:id                                           | ✅  | ✅         |    |
+| WEB-G-02 | webhooks      | GET  | /:id                                           | ✅  | 📌         |    |
+| WEB-G-03 | webhooks      | GET  | /:id/:field                                    | ✅  | 📌         |    |
+| WEB-U-01 | webhooks      | PUT  | /:id                                           | ✅  | 📌         |    |
+| WEB-U-02 | webhooks      | PUT  | /                                              | ✅  | 📌         |    |
+| WEB-U-03 | webhooks      | PUT  | /:id/active                                    | ✅  | 📌         |    |
+| WEB-U-04 | webhooks      | PUT  | /:id/callbackURL                               | ✅  | 📌         |    |
+| WEB-U-05 | webhooks      | PUT  | /:id/description                               | ✅  | 📌         |    |
+| WEB-U-06 | webhooks      | PUT  | /:id/idModel                                   | ✅  | 📌         |    |
+| WEB-P-01 | webhooks      | POST | /                                              | ✅  | 📌         |    |
+| WEB-D-01 | webhooks      | DEL  | /:id                                           | ✅  | 📌         |    |
  
 ### Notes
 

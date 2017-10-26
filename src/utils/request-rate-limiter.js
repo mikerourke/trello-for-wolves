@@ -48,7 +48,7 @@ export default class RequestRateLimiter {
           this.handleError(config, callback);
         } else {
           /* istanbul ignore if */
-          if ((typeof config !== 'object') && (this.isConfigAFunction(config))) { // eslint-disable-line
+          if (typeof config !== 'object' && this.isConfigAFunction(config)) { // eslint-disable-line
             config(null, () => {
               this.backoff(() => executeRequest(null, config));
             });
@@ -93,7 +93,7 @@ export default class RequestRateLimiter {
         this.handleError(config, callback);
       } else {
         /* istanbul ignore if */
-        if ((typeof config !== 'object') && (this.isConfigAFunction(config))) { // eslint-disable-line
+        if (typeof config !== 'object' && this.isConfigAFunction(config)) { // eslint-disable-line
           config();
         } else {
           this.performRequest(config, callback);
