@@ -62,13 +62,11 @@ const performApiRequest = (
 
   limiter.request(requestConfig, (error, response) => {
     /* instanbul ignore next */
-    if (error) {
-      reject(new Error(`Error performing request: ${error}`));
-    }
+    if (error) reject(new Error(`Error performing request: ${error}`)); /* instanbul ignore if */
+
     /* instanbul ignore next */
-    if (!response) {
-      reject(new Error('No response present when performing request.'));
-    }
+    if (!response) reject(new Error('No response present when performing request.')); /* instanbul ignore if */
+
     const { statusCode /* instanbul ignore next */ = 400, body, ...responseData } = response;
     if (statusCode > 299 || statusCode < 200) {
       reject(new ApiCallResponseError(statusCode, httpMethod, requestUrl, body));
