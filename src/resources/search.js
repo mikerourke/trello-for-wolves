@@ -1,6 +1,7 @@
 /* @flow */
 
 /* Internal dependencies */
+import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 
 /* Types */
@@ -13,12 +14,14 @@ import type {
   OrganizationField,
 } from '../types';
 
-export type ModelType =
-  'actions'
-  | 'boards'
-  | 'cards'
-  | 'members'
-  | 'organizations';
+export const modelTypeMap = generateTypeMap(
+  'actions',
+  'boards',
+  'cards',
+  'members',
+  'organizations',
+);
+export type ModelType = $Keys<typeof modelTypeMap>;
 
 /**
  * @namespace Search

@@ -62,7 +62,7 @@ you're going to have a bad time.
 This library is typed using [Flow](https://flow.org/), so if you use Flow plugins,
 it'll show you a handy autocomplete when cooking up code.  However, it's probably
 a good idea to have the Trello API docs up while you're coding, because some
-of these routes have [a whole bunch of options for arguments](https://developers.trello.com/advanced-reference/board#get-1-boards-board-id).
+of these routes have [a whole bunch of options for arguments](https://developers.trello.com/v1.0/reference#boards-nested-resource).
 
 ## Rate Limits
 
@@ -126,7 +126,7 @@ Trello Endpoint:
 
 `GET /1/members/me/boards&fields=desc,name,pinned&filter=closed,...`
 
-[Trello API Link](https://developers.trello.com/advanced-reference/member#get-1-members-idmember-or-username-boards)
+[Trello API Link](https://developers.trello.com/v1.0/reference#membersidboards)
 
 ```javascript
 trello.members('me').boards().getBoards({
@@ -148,7 +148,7 @@ Trello Endpoint:
 
 `PUT /1/boards/bOaRdId?name=Hooray&prefs/cardCovers=false&...`
 
-[Trello API Link](https://developers.trello.com/advanced-reference/board#put-1-boards-board-id)
+[Trello API Link](https://developers.trello.com/v1.0/reference#idnext)
 
 ```javascript
 // In the docs, the "prefs" and "labelNames" arguments use a "/" for
@@ -178,7 +178,7 @@ Trello Endpoint:
 
 `GET /1/batch/?urls=/boards/bOaRdId/lists,/cards/cArDiD&key=...`
 
-[Trello API Link](https://developers.trello.com/advanced-reference/batch#get-1-batch)
+[Trello API Link](https://developers.trello.com/v1.0/reference#batch-1)
 
 If you just need to make a bunch of `GET` requests, you can get around the API rate limits by doing
 a little batchy-doodle.
@@ -219,7 +219,7 @@ Trello Endpoint:
 
 `POST /1/cards/cArDiD/attachments`
 
-[Trello API Link](https://developers.trello.com/advanced-reference/card#post-1-cards-card-id-or-shortlink-attachments)
+[Trello API Link](https://developers.trello.com/v1.0/reference#cardsidattachments-1)
 
 There's actually a few different ways to add attachments to cards.  Thanks 
 to [blesson3](https://github.com/blesson3) for providing me with the code.
@@ -323,11 +323,9 @@ I'm currently in the process of documenting the whole kit and caboodle using
 [apiDoc](http://apidocjs.com/), similar to how they did it for the 
 [node-github](https://github.com/mikedeboer/node-github/blob/master/README.md) package.
 
-I'd like to document the argument types and the function call that corresponds with
-a route.
+I'd like to document the argument types and the function call that corresponds with a route.
 
-It's a pretty massive undertaking because there's over 300 routes, but I started
-chipping away at it.
+It's a pretty massive undertaking because there's over 300 routes, but I started chipping away at it.
 
 You can see what I have so far in the `internals/api-docs` directory.  If you 
 hate your life or don't value your time, that could be an option for you.

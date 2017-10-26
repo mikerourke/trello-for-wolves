@@ -1,6 +1,7 @@
 /* @flow */
 
 /* Internal dependencies */
+import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 import Action from './action';
 import Board from './board';
@@ -23,33 +24,40 @@ import type {
   PermissionLevel,
 } from '../types';
 
-export type OrganizationField =
-  'billableMemberCount'
-  | 'desc'
-  | 'descData'
-  | 'displayName'
-  | 'idBoards'
-  | 'invitations'
-  | 'invited'
-  | 'logoHash'
-  | 'memberships'
-  | 'name'
-  | 'powerUps'
-  | 'prefs'
-  | 'premiumFeatures'
-  | 'products'
-  | 'url'
-  | 'website';
+export const organizationFieldMap = generateTypeMap(
+  'billableMemberCount',
+  'desc',
+  'descData',
+  'displayName',
+  'idBoards',
+  'invitations',
+  'invited',
+  'logoHash',
+  'memberships',
+  'name',
+  'powerUps',
+  'prefs',
+  'premiumFeatures',
+  'products',
+  'url',
+  'website',
+);
+export type OrganizationField = $Keys<typeof organizationFieldMap>;
 
-export type OrganizationFilter =
-  'all'
-  | 'members'
-  | 'none'
-  | 'public';
 
-type BoardVisibilityFilter = 'admin' | 'none' | 'org';
+export const organizationFilterMap = generateTypeMap(
+  'all',
+  'members',
+  'none',
+  'public',
+);
+export type OrganizationFilter = $Keys<typeof organizationFilterMap>;
 
-type BoardVisibilityRestrictionLevel = 'org' | 'private' | 'public';
+export const boardVisibilityFilterMap = generateTypeMap('admin', 'none', 'org');
+type BoardVisibilityFilter = $Keys<typeof boardVisibilityFilterMap>;
+
+export const boardVisibilityRestrictionLevelMap = generateTypeMap('org', 'private', 'public');
+type BoardVisibilityRestrictionLevel = $Keys<typeof boardVisibilityRestrictionLevelMap>;
 
 class Pref extends BaseResource {
   /* istanbul ignore next: Requires Business Class subscription */

@@ -1,6 +1,7 @@
 /* @flow */
 
 /* Internal dependencies */
+import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 
 /* Types */
@@ -11,13 +12,15 @@ import type {
   MemberType,
 } from '../types';
 
-export type MembershipFilter =
-  'active'
-  | 'admin'
-  | 'deactivated'
-  | 'me'
-  | 'none'
-  | 'normal';
+export const membershipFilterMap = generateTypeMap(
+  'active',
+  'admin',
+  'deactivated',
+  'me',
+  'none',
+  'normal',
+);
+export type MembershipFilter = $Keys<typeof membershipFilterMap>;
 
 /**
  * @namespace Membership

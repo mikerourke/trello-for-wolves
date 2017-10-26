@@ -1,6 +1,7 @@
 /* @flow */
 
 /* Internal dependencies */
+import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 import Board from './board';
 import Card from './card';
@@ -17,43 +18,48 @@ import type {
   OrganizationField,
 } from '../types';
 
-export type NotificationField =
-  'data'
-  | 'date'
-  | 'idMemberCreator'
-  | 'type'
-  | 'unread';
+export const notificationFieldMap = generateTypeMap(
+  'data',
+  'date',
+  'idMemberCreator',
+  'type',
+  'unread',
+);
+export type NotificationField = $Keys<typeof notificationFieldMap>;
 
-export type NotificationFilter =
-  'addAdminToBoard'
-  | 'addAdminToOrganization'
-  | 'addedAttachmentToCard'
-  | 'addedMemberToCard'
-  | 'addedToBoard'
-  | 'addedToCard'
-  | 'addedToOrganization'
-  | 'cardDueSoon'
-  | 'changeCard'
-  | 'closeBoard'
-  | 'commentCard'
-  | 'createdCard'
-  | 'declinedInvitationToBoard'
-  | 'declinedInvitationToOrganization'
-  | 'invitedToBoard'
-  | 'invitedToOrganization'
-  | 'makeAdminOfBoard'
-  | 'makeAdminOfOrganization'
-  | 'memberJoinedTrello'
-  | 'mentionedOnCard'
-  | 'removedFromBoard'
-  | 'removedFromCard'
-  | 'removedFromOrganization'
-  | 'removedMemberFromCard'
-  | 'unconfirmedInvitedToBoard'
-  | 'unconfirmedInvitedToOrganization'
-  | 'updateCheckItemStateOnCard';
+export const notificationFilterMap = generateTypeMap(
+  'addAdminToBoard',
+  'addAdminToOrganization',
+  'addedAttachmentToCard',
+  'addedMemberToCard',
+  'addedToBoard',
+  'addedToCard',
+  'addedToOrganization',
+  'cardDueSoon',
+  'changeCard',
+  'closeBoard',
+  'commentCard',
+  'createdCard',
+  'declinedInvitationToBoard',
+  'declinedInvitationToOrganization',
+  'invitedToBoard',
+  'invitedToOrganization',
+  'makeAdminOfBoard',
+  'makeAdminOfOrganization',
+  'memberJoinedTrello',
+  'mentionedOnCard',
+  'removedFromBoard',
+  'removedFromCard',
+  'removedFromOrganization',
+  'removedMemberFromCard',
+  'unconfirmedInvitedToBoard',
+  'unconfirmedInvitedToOrganization',
+  'updateCheckItemStateOnCard',
+);
+export type NotificationFilter = $Keys<typeof notificationFilterMap>;
 
-type ReadFilter = 'all' | 'read' | 'unread';
+export const readFilterMap = generateTypeMap('all', 'read', 'unread');
+type ReadFilter = $Keys<typeof readFilterMap>;
 
 /**
  * @namespace Notification

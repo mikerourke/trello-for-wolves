@@ -1,6 +1,7 @@
 /* @flow */
 
 /* Internal dependencies */
+import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 
 /* Types */
@@ -16,21 +17,24 @@ import type {
 
 type Combination<T> = T | Array<T>;
 
-type EnterpriseField =
-  'id'
-  | 'name'
-  | 'displayName'
-  | 'prefs'
-  | 'ssoActivationFailed'
-  | 'idAdmins'
-  | 'memberIds'
-  | 'orgIds'
-  | 'products'
-  | 'userTypes'
-  | 'memberIds'
-  | 'orgIds';
+export const enterpriseFieldMap = generateTypeMap(
+  'id',
+  'name',
+  'displayName',
+  'prefs',
+  'ssoActivationFailed',
+  'idAdmins',
+  'memberIds',
+  'orgIds',
+  'products',
+  'userTypes',
+  'memberIds',
+  'orgIds',
+);
+type EnterpriseField = $Keys<typeof enterpriseFieldMap>
 
-type SortOrder = 'id' | 'ascending' | 'descending' | 'asc' | 'desc';
+export const sortOrderMap = generateTypeMap('id', 'ascending', 'descending', 'asc', 'desc');
+type SortOrder = $Keys<typeof sortOrderMap>;
 
 /**
  * @namespace Enterprise

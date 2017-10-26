@@ -1,6 +1,7 @@
 /* @flow */
 
 /* Internal dependencies */
+import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 import Action from './action';
 import Board from './board';
@@ -15,9 +16,11 @@ import type {
   PositionNumbered,
 } from '../types';
 
-export type ListField = 'closed' | 'idBoard' | 'name' | 'pos' | 'subscribed';
+export const listFieldMap = generateTypeMap('closed', 'idBoard', 'name', 'pos', 'subscribed');
+export type ListField = $Keys<typeof listFieldMap>;
 
-export type ListFilter = 'all' | 'closed' | 'none' | 'open';
+export const listFilterMap = generateTypeMap('all', 'closed', 'none', 'open');
+export type ListFilter = $Keys<typeof listFilterMap>;
 
 /**
  * @namespace List

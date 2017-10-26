@@ -1,6 +1,7 @@
 /* @flow */
 
 /* Internal dependencies */
+import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 import Board from './board';
 import Card from './card';
@@ -16,66 +17,67 @@ import type {
   MemberField,
 } from '../types';
 
-export type ActionField =
-  'data'
-  | 'date'
-  | 'idMemberCreator'
-  | 'type';
+export const actionFieldMap = generateTypeMap('data', 'date', 'idMemberCreator', 'type');
+export type ActionField = $Keys<typeof actionFieldMap>;
 
 // These actions only apply to List resources:
-export type ActionListFilter =
-  'commentCard'
-  | 'convertToCardFromCheckItem'
-  | 'copyCard'
-  | 'createCard'
-  | 'createList'
-  | 'deleteCard'
-  | 'emailCard'
-  | 'updateCard'
-  | 'updateCard:closed'
-  | 'updateCard:desc'
-  | 'updateCard:idList'
-  | 'updateCard:name'
-  | 'updateList'
-  | 'updateList:closed'
-  | 'updateList:name';
+export const actionListFilterMap = generateTypeMap(
+  'commentCard',
+  'convertToCardFromCheckItem',
+  'copyCard',
+  'createCard',
+  'createList',
+  'deleteCard',
+  'emailCard',
+  'updateCard',
+  'updateCard:closed',
+  'updateCard:desc',
+  'updateCard:idList',
+  'updateCard:name',
+  'updateList',
+  'updateList:closed',
+  'updateList:name',
+);
+export type ActionListFilter = $Keys<typeof actionListFilterMap>;
 
-export type ActionFilter = ActionListFilter &
-  'addAttachmentToCard'
-  | 'addChecklistToCard'
-  | 'addMemberToBoard'
-  | 'addMemberToCard'
-  | 'addMemberToOrganization'
-  | 'addToOrganizationBoard'
-  | 'copyBoard'
-  | 'copyCommentCard'
-  | 'createBoard'
-  | 'createList'
-  | 'createOrganization'
-  | 'deleteAttachmentFromCard'
-  | 'deleteBoardInvitation'
-  | 'deleteOrganizationInvitation'
-  | 'disablePowerUp'
-  | 'enablePowerUp'
-  | 'makeAdminOfBoard'
-  | 'makeNormalMemberOfBoard'
-  | 'makeNormalMemberOfOrganization'
-  | 'makeObserverOfBoard'
-  | 'memberJoinedTrello'
-  | 'moveCardFromBoard'
-  | 'moveCardToBoard'
-  | 'moveListFromBoard'
-  | 'moveListToBoard'
-  | 'removeChecklistFromCard'
-  | 'removeFromOrganizationBoard'
-  | 'removeMemberFromCard'
-  | 'unconfirmedBoardInvitation'
-  | 'unconfirmedOrganizationInvitation'
-  | 'updateBoard'
-  | 'updateCheckItemStateOnCard'
-  | 'updateChecklist'
-  | 'updateMember'
-  | 'updateOrganization';
+export const actionFilterMap = generateTypeMap(
+  'addAttachmentToCard',
+  'addChecklistToCard',
+  'addMemberToBoard',
+  'addMemberToCard',
+  'addMemberToOrganization',
+  'addToOrganizationBoard',
+  'copyBoard',
+  'copyCommentCard',
+  'createBoard',
+  'createList',
+  'createOrganization',
+  'deleteAttachmentFromCard',
+  'deleteBoardInvitation',
+  'deleteOrganizationInvitation',
+  'disablePowerUp',
+  'enablePowerUp',
+  'makeAdminOfBoard',
+  'makeNormalMemberOfBoard',
+  'makeNormalMemberOfOrganization',
+  'makeObserverOfBoard',
+  'memberJoinedTrello',
+  'moveCardFromBoard',
+  'moveCardToBoard',
+  'moveListFromBoard',
+  'moveListToBoard',
+  'removeChecklistFromCard',
+  'removeFromOrganizationBoard',
+  'removeMemberFromCard',
+  'unconfirmedBoardInvitation',
+  'unconfirmedOrganizationInvitation',
+  'updateBoard',
+  'updateCheckItemStateOnCard',
+  'updateChecklist',
+  'updateMember',
+  'updateOrganization',
+);
+export type ActionFilter = ActionListFilter & $Keys<typeof actionFilterMap>;
 
 /**
  * @namespace Action

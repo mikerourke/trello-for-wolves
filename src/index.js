@@ -21,7 +21,7 @@ import Webhook from './resources/webhook';
 import type { Config } from './types';
 
 export default class Trello {
-  config: Config; // eslint-disable-line no-undef
+  config: Config;
 
   constructor(config: Config) {
     this.config = config;

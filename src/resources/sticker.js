@@ -1,6 +1,7 @@
 /* @flow */
 
 /* Internal dependencies */
+import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 
 /* Types */
@@ -9,16 +10,19 @@ import type {
   ArgumentGroup,
 } from '../types';
 
-export type StickerField =
-  'image'
-  | 'imageScaled'
-  | 'imageUrl'
-  | 'left'
-  | 'rotate'
-  | 'top'
-  | 'zIndex';
+export const stickerFieldMap = generateTypeMap(
+  'image',
+  'imageScaled',
+  'imageUrl',
+  'left',
+  'rotate',
+  'top',
+  'zIndex',
+);
+export type StickerField = $Keys<typeof stickerFieldMap>;
 
-type CustomStickerField = 'scaled' | 'url';
+export const customStickerFieldMap = generateTypeMap('scaled', 'url');
+type CustomStickerField = $Keys<typeof customStickerFieldMap>;
 
 /**
  * @namespace Sticker

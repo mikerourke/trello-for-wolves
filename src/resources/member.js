@@ -1,6 +1,7 @@
 /* @flow */
 
 /* Internal dependencies */
+import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 import Action from './action';
 import Board from './board';
@@ -33,64 +34,73 @@ import type {
   PositionNumbered,
 } from '../types';
 
-export type AvatarSourceField =
-  'gravatar'
-  | 'none'
-  | 'upload';
+export const avatarSourceFieldMap = generateTypeMap('gravatar', 'none', 'upload');
+export type AvatarSourceField = $Keys<typeof avatarSourceFieldMap>;
 
-export type MemberEnterpriseOnlyField =
-  'avatarHash'
-  | 'fullName'
-  | 'initials'
-  | 'username';
+export const memberEnterpriseOnlyField = generateTypeMap(
+  'avatarHash',
+  'fullName',
+  'initials',
+  'username',
+);
+export type MemberEnterpriseOnlyField = $Keys<typeof memberEnterpriseOnlyField>;
 
-export type MemberField = MemberEnterpriseOnlyField &
-  'bio'
-  | 'bioData'
-  | 'confirmed'
-  | 'idPremOrgsAdmin'
-  | 'memberType'
-  | 'products'
-  | 'status'
-  | 'url';
+const memberFieldMap = generateTypeMap(
+  'bio',
+  'bioData',
+  'confirmed',
+  'idPremOrgsAdmin',
+  'memberType',
+  'products',
+  'status',
+  'url',
+);
+export type MemberField = MemberEnterpriseOnlyField & $Keys<typeof memberFieldMap>;
 
-export type MemberEveryField = MemberField &
-  'avatarSource'
-  | 'email'
-  | 'gravatarHash'
-  | 'idBoards'
-  | 'idBoardsPinned'
-  | 'idOrganizations'
-  | 'loginTypes'
-  | 'oneTimeMessageDismissed'
-  | 'prefs'
-  | 'premiumFeatures'
-  | 'trophies'
-  | 'uploadedAvatarHash';
+export const memberOtherFieldsMap = generateTypeMap(
+  'avatarSource',
+  'email',
+  'gravatarHash',
+  'idBoards',
+  'idBoardsPinned',
+  'idOrganizations',
+  'loginTypes',
+  'oneTimeMessageDismissed',
+  'prefs',
+  'premiumFeatures',
+  'trophies',
+  'uploadedAvatarHash',
+);
+export type MemberEveryField = MemberField & $Keys<typeof memberOtherFieldsMap>;
 
-export type MemberFilter = 'admins' | 'all' | 'none' | 'normal' | 'owners';
+export const memberFilterMap = generateTypeMap('admins', 'all', 'none', 'normal', 'owners');
+export type MemberFilter = $Keys<typeof memberFilterMap>;
 
-export type MemberType = 'admin' | 'normal';
+export const memberTypeMap = generateTypeMap('admin', 'normal');
+export type MemberType = $Keys<typeof memberTypeMap>;
 
-type BoardBackgroundBrightness =
-  'dark'
-  | 'light'
-  | 'unknown';
+export const boardBackgroundBrightnessMap = generateTypeMap('dark', 'light', 'unknown');
+type BoardBackgroundBrightness = $Keys<typeof boardBackgroundBrightnessMap>;
 
-type BoardBackgroundField =
-  'brightness'
-  | 'fullSizeUrl'
-  | 'scaled'
-  | 'tile';
+export const boardBackgroundFieldMap = generateTypeMap(
+  'brightness',
+  'fullSizeUrl',
+  'scaled',
+  'tile',
+);
+type BoardBackgroundField = $Keys<typeof boardBackgroundFieldMap>;
 
-type BoardBackgroundFilter =
-  'all'
-  | 'custom'
-  | 'default'
-  | 'none'
-  | 'premium';
+export const boardBackgroundFilterMap = generateTypeMap(
+  'all',
+  'custom',
+  'default',
+  'none',
+  'premium',
+);
+type BoardBackgroundFilter = $Keys<typeof boardBackgroundFilterMap>;
 
-type CustomEmojiField = 'name' | 'url';
+export const customEmojiFieldMap = generateTypeMap('name', 'url');
+type CustomEmojiField = $Keys<typeof customEmojiFieldMap>;
 
 /**
  * This class handles both the "boardBackground" and "customBoardBackground"

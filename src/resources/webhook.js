@@ -1,13 +1,16 @@
 /* @flow */
 
 /* Internal dependencies */
+import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 
-type WehookField =
-  'active'
-  | 'callbackURL'
-  | 'description'
-  | 'idModel';
+export const wehookFieldMap = generateTypeMap(
+  'active',
+  'callbackURL',
+  'description',
+  'idModel',
+);
+export type WebhookField = $Keys<typeof wehookFieldMap>;
 
 /**
  * @namespace Webhook
@@ -21,7 +24,7 @@ export default class Webhook extends BaseResource {
     return this.httpGet('/');
   }
 
-  getFieldValue(field: WehookField): Promise<*> {
+  getFieldValue(field: WebhookField): Promise<*> {
     return this.httpGet(`/${field}`);
   }
 

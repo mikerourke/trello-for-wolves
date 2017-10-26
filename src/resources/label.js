@@ -1,26 +1,30 @@
 /* @flow */
 
 /* Internal dependencies */
+import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 import Board from './board';
 
 /* Types */
 import type { ArgumentGroup } from '../types';
 
-export type LabelColor =
-  'blue'
-  | 'green'
-  | 'orange'
-  | 'purple'
-  | 'red'
-  | 'yellow'
+export const labelColorMap = generateTypeMap(
+  'blue',
+  'green',
+  'orange',
+  'purple',
+  'red',
+  'yellow',
   // These colors are also available, they're just not documented:
-  | 'sky'
-  | 'lime'
-  | 'pink'
-  | 'black';
+  'sky',
+  'lime',
+  'pink',
+  'black',
+);
+export type LabelColor = $Keys<typeof labelColorMap>;
 
-export type LabelField = 'color' | 'idBoard' | 'name' | 'uses';
+export const labelFieldMap = generateTypeMap('color', 'idBoard', 'name', 'uses');
+export type LabelField = $Keys<typeof labelFieldMap>;
 
 /**
  * @namespace Label

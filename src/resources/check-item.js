@@ -1,6 +1,7 @@
 /* @flow */
 
 /* Internal dependencies */
+import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 
 /* Types */
@@ -10,11 +11,14 @@ import type {
   PositionNumbered,
 } from '../types';
 
-export type CheckItemField = 'name' | 'nameData' | 'pos' | 'state';
+export const checkItemFieldMap = generateTypeMap('name', 'nameData', 'pos', 'state');
+export type CheckItemField = $Keys<typeof checkItemFieldMap>;
 
-export type CheckItemState = 'complete' | 'false' | 'incomplete' | 'true';
+export const checkItemStateMap = generateTypeMap('complete', 'false', 'incomplete', 'true');
+export type CheckItemState = $Keys<typeof checkItemStateMap>;
 
-export type CheckItemStateField = 'idCheckItem' | 'state';
+export const checkItemStateFieldMap = generateTypeMap('idCheckItem', 'state');
+export type CheckItemStateField = $Keys<typeof checkItemStateFieldMap>;
 
 /**
  * @namespace CheckItem
