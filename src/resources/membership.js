@@ -33,7 +33,7 @@ export default class Membership extends BaseResource {
       // Member Fields are only allowed when called from a Board:
       memberFields?: ArgumentGroup<MemberField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -43,7 +43,7 @@ export default class Membership extends BaseResource {
       // Member Fields are only allowed when called from a Board:
       memberFields?: ArgumentGroup<MemberField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -57,7 +57,7 @@ export default class Membership extends BaseResource {
       type: MemberType,
       fields?: ArgumentGroup<MemberField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 }

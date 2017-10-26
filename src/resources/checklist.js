@@ -33,7 +33,7 @@ export default class Checklist extends BaseResource {
       filter?: AllOrNone,
       fields?: ArgumentGroup<ChecklistField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -45,11 +45,11 @@ export default class Checklist extends BaseResource {
       checkItemFields?: ArgumentGroup<CheckItemField>,
       fields?: ArgumentGroup<ChecklistField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getFieldValue(field: ChecklistField): Promise<*> {
+  getFieldValue(field: ChecklistField): Promise<any> {
     return this.httpGet(`/${field}`);
   }
 
@@ -74,15 +74,15 @@ export default class Checklist extends BaseResource {
       name?: string,
       pos?: PositionNumbered,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
-  updateName(value: string): Promise<*> {
+  updateName(value: string): Promise<any> {
     return this.httpPut('/name', { value });
   }
 
-  updatePosition(value: PositionNumbered): Promise<*> {
+  updatePosition(value: PositionNumbered): Promise<any> {
     return this.httpPut('/pos', { value });
   }
 
@@ -93,7 +93,7 @@ export default class Checklist extends BaseResource {
       pos?: PositionNumbered,
       idChecklistSource?: string,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     let updatedArgs = queryArgs;
     if (this.routePathElements[0] === 'cards') {
       updatedArgs = { ...queryArgs, idCard: this.routePathElements[1] };
@@ -101,7 +101,7 @@ export default class Checklist extends BaseResource {
     return this.httpPost('/', updatedArgs);
   }
 
-  deleteChecklist(): Promise<*> {
+  deleteChecklist(): Promise<any> {
     return this.httpDelete('/');
   }
 }

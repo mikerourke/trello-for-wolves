@@ -33,7 +33,7 @@ export default class List extends BaseResource {
       filter?: ListFilter,
       fields?: ArgumentGroup<ListField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -45,15 +45,15 @@ export default class List extends BaseResource {
       boardFields?: ArgumentGroup<BoardField>,
       fields?: ArgumentGroup<ListField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getListsFilteredBy(filter: ListFilter): Promise<*> {
+  getListsFilteredBy(filter: ListFilter): Promise<any> {
     return this.httpGet('/', { filter });
   }
 
-  getFieldValue(field: ListField): Promise<*> {
+  getFieldValue(field: ListField): Promise<any> {
     return this.httpGet(`/${field}`);
   }
 
@@ -77,11 +77,11 @@ export default class List extends BaseResource {
       pos?: PositionNumbered,
       subscribed?: boolean,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
-  updateClosedStatus(value: boolean): Promise<*> {
+  updateClosedStatus(value: boolean): Promise<any> {
     return this.httpPut('/closed', { value });
   }
 
@@ -90,19 +90,19 @@ export default class List extends BaseResource {
     queryArgs?: {
       pos?: PositionNumbered,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', { value: boardId, ...queryArgs });
   }
 
-  updateName(value: string): Promise<*> {
+  updateName(value: string): Promise<any> {
     return this.httpPut('/name', { value });
   }
 
-  updatePosition(value: PositionNumbered): Promise<*> {
+  updatePosition(value: PositionNumbered): Promise<any> {
     return this.httpPut('/pos', { value });
   }
 
-  updateSubscribed(value: boolean): Promise<*> {
+  updateSubscribed(value: boolean): Promise<any> {
     return this.httpPut('/subscribed', { value });
   }
 
@@ -113,7 +113,7 @@ export default class List extends BaseResource {
       idListSource?: string,
       pos?: PositionNumbered,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     let updatedArgs = queryArgs;
     if (this.routePathElements[0] === 'boards') {
       updatedArgs = { ...queryArgs, idBoard: this.routePathElements[1] };
@@ -121,7 +121,7 @@ export default class List extends BaseResource {
     return this.httpPost('/', updatedArgs);
   }
 
-  archiveAllCards(): Promise<*> {
+  archiveAllCards(): Promise<any> {
     return this.httpPost('/archiveAllCards');
   }
 
@@ -130,7 +130,7 @@ export default class List extends BaseResource {
       idBoard: string,
       idList: string,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPost('/moveAllCards', queryArgs);
   }
 }

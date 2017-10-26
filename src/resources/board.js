@@ -99,11 +99,11 @@ export const powerUpMap = generateTypeMap('calendar', 'cardAging', 'recap', 'vot
 type PowerUp = $Keys<typeof powerUpMap>;
 
 class MyPref extends BaseResource {
-  getMyPrefs(): Promise<*> {
+  getMyPrefs(): Promise<any> {
     return this.httpGet('/');
   }
 
-  updateEmailPosition(value: Position): Promise<*> {
+  updateEmailPosition(value: Position): Promise<any> {
     return this.httpPut('/emailPosition', { value });
   }
 
@@ -113,65 +113,65 @@ class MyPref extends BaseResource {
    * @see {@link https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-myprefs-idemaillist}
    */
   /* istanbul ignore next: Requires special permissions */
-  moveToEmailList(emailListId: string): Promise<*> {
+  moveToEmailList(emailListId: string): Promise<any> {
     return this.httpPut('/idEmailList', { value: emailListId });
   }
 
-  updateShowListGuide(value: boolean): Promise<*> {
+  updateShowListGuide(value: boolean): Promise<any> {
     return this.httpPut('/showListGuide', { value });
   }
 
-  updateShowSidebar(value: boolean): Promise<*> {
+  updateShowSidebar(value: boolean): Promise<any> {
     return this.httpPut('/showSidebar', { value });
   }
 
-  updateShowSidebarActivity(value: boolean): Promise<*> {
+  updateShowSidebarActivity(value: boolean): Promise<any> {
     return this.httpPut('/showSidebarActivity', { value });
   }
 
-  updateShowSidebarBoardActions(value: boolean): Promise<*> {
+  updateShowSidebarBoardActions(value: boolean): Promise<any> {
     return this.httpPut('/showSidebarBoardActions', { value });
   }
 
-  updateShowSidebarMembers(value: boolean): Promise<*> {
+  updateShowSidebarMembers(value: boolean): Promise<any> {
     return this.httpPut('/showSidebarMembers', { value });
   }
 }
 
 class Pref extends BaseResource {
-  updateBackground(value: string): Promise<*> {
+  updateBackground(value: string): Promise<any> {
     return this.httpPut('/background', { value });
   }
 
-  updateCalendarFeedEnabled(value: boolean): Promise<*> {
+  updateCalendarFeedEnabled(value: boolean): Promise<any> {
     return this.httpPut('/calendarFeedEnabled', { value });
   }
 
-  updateCardAging(value: CardAging): Promise<*> {
+  updateCardAging(value: CardAging): Promise<any> {
     return this.httpPut('/cardAging', { value });
   }
 
-  updateCardCovers(value: boolean): Promise<*> {
+  updateCardCovers(value: boolean): Promise<any> {
     return this.httpPut('/cardCovers', { value });
   }
 
-  updateComments(value: GroupPermission): Promise<*> {
+  updateComments(value: GroupPermission): Promise<any> {
     return this.httpPut('/comments', { value });
   }
 
-  updateInvitations(value: Invitation): Promise<*> {
+  updateInvitations(value: Invitation): Promise<any> {
     return this.httpPut('/invitations', { value });
   }
 
-  updatePermissionLevel(value: BoardPermissionLevel): Promise<*> {
+  updatePermissionLevel(value: BoardPermissionLevel): Promise<any> {
     return this.httpPut('/permissionLevel', { value });
   }
 
-  updateSelfJoin(value: boolean): Promise<*> {
+  updateSelfJoin(value: boolean): Promise<any> {
     return this.httpPut('/selfJoin', { value });
   }
 
-  updateVoting(value: GroupPermission): Promise<*> {
+  updateVoting(value: GroupPermission): Promise<any> {
     return this.httpPut('/voting', { value });
   }
 }
@@ -195,7 +195,7 @@ export default class Board extends BaseResource {
       organizationFields?: ArgumentGroup<OrganizationField>,
       lists?: ListFilter,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -246,15 +246,15 @@ export default class Board extends BaseResource {
       // This is the only option if calling from a different resource.
       fields?: ArgumentGroup<BoardField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getBoardsFilteredBy(filter: ArgumentGroup<BoardFilter>): Promise<*> {
+  getBoardsFilteredBy(filter: ArgumentGroup<BoardFilter>): Promise<any> {
     return this.httpGet('/', { filter });
   }
 
-  getFieldValue(field: BoardField): Promise<*> {
+  getFieldValue(field: BoardField): Promise<any> {
     return this.httpGet(`/${field}`);
   }
 
@@ -266,7 +266,7 @@ export default class Board extends BaseResource {
     queryArgs?: {
       filter?: BoardStarsFilter,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/boardStars', queryArgs);
   }
 
@@ -284,12 +284,12 @@ export default class Board extends BaseResource {
       tags: string,
       ixLastUpdate: number,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/deltas', queryArgs);
   }
 
   /* istanbul ignore next: Requires Business Class subscription */
-  getTags(): Promise<*> {
+  getTags(): Promise<any> {
     return this.httpGet('/idTags');
   }
 
@@ -321,7 +321,7 @@ export default class Board extends BaseResource {
     return new Organization(this.config, `${this.routePath}/organization`);
   }
 
-  getPluginData(): Promise<*> {
+  getPluginData(): Promise<any> {
     return this.httpGet('/pluginData');
   }
 
@@ -352,30 +352,30 @@ export default class Board extends BaseResource {
         blue?: string,
       },
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
 
-  updateClosedStatus(value: boolean): Promise<*> {
+  updateClosedStatus(value: boolean): Promise<any> {
     return this.httpPut('/closed', { value });
   }
 
-  updateDescription(value: string): Promise<*> {
+  updateDescription(value: string): Promise<any> {
     return this.httpPut('/desc', { value });
   }
 
-  moveToOrganization(organizationId: string): Promise<*> {
+  moveToOrganization(organizationId: string): Promise<any> {
     return this.httpPut('/idOrganization', { value: organizationId });
   }
 
   updateLabelNameForColor(
     labelColor: LabelColor,
     value: string,
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut(`/labelNames/${labelColor}`, { value });
   }
 
-  updateName(value: string): Promise<*> {
+  updateName(value: string): Promise<any> {
     return this.httpPut('/name', { value });
   }
 
@@ -383,7 +383,7 @@ export default class Board extends BaseResource {
     return new Pref(this.config, `${this.routePath}/prefs`);
   }
 
-  updateSubscribed(value: boolean): Promise<*> {
+  updateSubscribed(value: boolean): Promise<any> {
     return this.httpPut('/subscribed', { value });
   }
 
@@ -408,35 +408,35 @@ export default class Board extends BaseResource {
         cardAging?: CardAging,
       },
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPost('/', { ...queryArgs, separator: '_' });
   }
 
   /* istanbul ignore next: This works, I don't want to keep re-testing it. */
-  generateCalendarKey(): Promise<*> {
+  generateCalendarKey(): Promise<any> {
     return this.httpPost('/calendarKey/generate');
   }
 
   /* istanbul ignore next: This works, I don't want to keep re-testing it. */
-  generateEmailKey(): Promise<*> {
+  generateEmailKey(): Promise<any> {
     return this.httpPost('/emailKey/generate');
   }
 
   /* istanbul ignore next: Requires Business Class subscription */
-  addTags(value: string): Promise<*> {
+  addTags(value: string): Promise<any> {
     return this.httpPost('/tags', { value });
   }
 
-  markAsViewed(): Promise<*> {
+  markAsViewed(): Promise<any> {
     return this.httpPost('/markAsViewed');
   }
 
   /* istanbul ignore next: Requires special permissions */
-  addPowerUp(value: PowerUp): Promise<*> {
+  addPowerUp(value: PowerUp): Promise<any> {
     return this.httpPost('/powerUps', { value });
   }
 
-  deletePowerUp(powerUp: PowerUp): Promise<*> {
+  deletePowerUp(powerUp: PowerUp): Promise<any> {
     return this.httpDelete(`/powerUps/${powerUp}`);
   }
 }

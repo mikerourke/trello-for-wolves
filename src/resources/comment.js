@@ -35,19 +35,19 @@ export default class Comment extends BaseResource {
       memberCreator?: boolean,
       memberCreatorFields?: ArgumentGroup<MemberField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', { ...queryArgs, filter: 'commentCard' });
   }
 
-  updateComment(text: string): Promise<*> {
+  updateComment(text: string): Promise<any> {
     return this.httpPut('/comments', { text });
   }
 
-  addComment(text: string): Promise<*> {
+  addComment(text: string): Promise<any> {
     return this.httpPost('/comments', { text });
   }
 
-  deleteComment(): Promise<*> {
+  deleteComment(): Promise<any> {
     return this.httpDelete('/comments');
   }
 }

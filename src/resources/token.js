@@ -30,7 +30,7 @@ export default class Token extends BaseResource {
       filter?: AllOrNone,
       webhooks?: boolean,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -39,11 +39,11 @@ export default class Token extends BaseResource {
       fields?: ArgumentGroup<TokenField>,
       webhooks?: boolean,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getFieldValue(field: TokenField): Promise<*> {
+  getFieldValue(field: TokenField): Promise<any> {
     return this.httpGet(`/${field}`);
   }
 
@@ -56,7 +56,7 @@ export default class Token extends BaseResource {
   }
 
   /* istanbul ignore next: This should pass, but if I delete my token, I can't keep testing. */
-  deleteToken(): Promise<*> {
+  deleteToken(): Promise<any> {
     return this.httpDelete('/');
   }
 }

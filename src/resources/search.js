@@ -50,7 +50,7 @@ export default class Search extends BaseResource {
       membersLimit?: number,
       partial?: boolean,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -62,7 +62,7 @@ export default class Search extends BaseResource {
       idOrganization?: ?string,
       onlyOrgMembers?: boolean,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/members', queryArgs);
   }
 }

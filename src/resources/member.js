@@ -116,7 +116,7 @@ class BoardBackground extends BaseResource {
       // customBoardBackgrounds:
       filter?: AllOrNone
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -124,7 +124,7 @@ class BoardBackground extends BaseResource {
     queryArgs?: {
       fields?: ArgumentGroup<BoardBackgroundField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -133,25 +133,25 @@ class BoardBackground extends BaseResource {
       tile?: boolean,
       brightness?: BoardBackgroundBrightness,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
-  uploadBoardBackground(file: Object): Promise<*> {
+  uploadBoardBackground(file: Object): Promise<any> {
     return this.httpPost('/', { file });
   }
 
-  deleteBoardBackground(): Promise<*> {
+  deleteBoardBackground(): Promise<any> {
     return this.httpDelete('/');
   }
 }
 
 class BoardStar extends BaseResource {
-  getBoardStars(): Promise<*> {
+  getBoardStars(): Promise<any> {
     return this.httpGet('/');
   }
 
-  getBoardStar(): Promise<*> {
+  getBoardStar(): Promise<any> {
     return this.httpGet('/');
   }
 
@@ -159,15 +159,15 @@ class BoardStar extends BaseResource {
     queryArgs?: {
       pos?: PositionNumbered,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
-  moveBoardStarToBoard(idBoard: string): Promise<*> {
+  moveBoardStarToBoard(idBoard: string): Promise<any> {
     return this.httpPut('/idBoard', { value: idBoard });
   }
 
-  updatePosition(value: PositionNumbered): Promise<*> {
+  updatePosition(value: PositionNumbered): Promise<any> {
     return this.httpPut('/pos', { value });
   }
 
@@ -176,11 +176,11 @@ class BoardStar extends BaseResource {
       idBoard: string,
       pos: PositionNumbered,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 
-  deleteBoardStar(): Promise<*> {
+  deleteBoardStar(): Promise<any> {
     return this.httpDelete('/');
   }
 }
@@ -190,7 +190,7 @@ class CustomEmoji extends BaseResource {
     queryArgs?: {
       filter?: AllOrNone,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -198,7 +198,7 @@ class CustomEmoji extends BaseResource {
     queryArgs?: {
       fields?: ArgumentGroup<CustomEmojiField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -207,31 +207,31 @@ class CustomEmoji extends BaseResource {
       name: string,
       file: Object,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 }
 
 class Pref extends BaseResource {
-  updateColorBlind(value: boolean): Promise<*> {
+  updateColorBlind(value: boolean): Promise<any> {
     return this.httpPut('/colorBlind', { value });
   }
 
-  updateLocale(value: string): Promise<*> {
+  updateLocale(value: string): Promise<any> {
     return this.httpPut('/locale', { value });
   }
 
-  updateMinutesBetweenSummaries(value: number): Promise<*> {
+  updateMinutesBetweenSummaries(value: number): Promise<any> {
     return this.httpPut('/minutesBetweenSummaries', { value });
   }
 }
 
 class SavedSearch extends BaseResource {
-  getSavedSearches(): Promise<*> {
+  getSavedSearches(): Promise<any> {
     return this.httpGet('/');
   }
 
-  getSavedSearch(): Promise<*> {
+  getSavedSearch(): Promise<any> {
     return this.httpGet('/');
   }
 
@@ -241,19 +241,19 @@ class SavedSearch extends BaseResource {
       query?: string,
       pos?: PositionNumbered,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
-  updateName(value: string): Promise<*> {
+  updateName(value: string): Promise<any> {
     return this.httpPut('/name', { value });
   }
 
-  updatePosition(value: PositionNumbered): Promise<*> {
+  updatePosition(value: PositionNumbered): Promise<any> {
     return this.httpPut('/pos', { value });
   }
 
-  updateQuery(value: string): Promise<*> {
+  updateQuery(value: string): Promise<any> {
     return this.httpPut('/query', { value });
   }
 
@@ -263,11 +263,11 @@ class SavedSearch extends BaseResource {
       query: string,
       pos: PositionNumbered,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 
-  deleteSavedSearch(): Promise<*> {
+  deleteSavedSearch(): Promise<any> {
     return this.httpDelete('/');
   }
 }
@@ -281,7 +281,7 @@ export default class Member extends BaseResource {
       fields?: ArgumentGroup<MemberEveryField>,
       limit?: number,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -343,15 +343,15 @@ export default class Member extends BaseResource {
       // This is the only option if calling from a different resource.
       fields?: ArgumentGroup<MemberEveryField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getMembersFilteredBy(filter: MemberFilter): Promise<*> {
+  getMembersFilteredBy(filter: MemberFilter): Promise<any> {
     return this.httpGet('/', { filter });
   }
 
-  getFieldValue(field: MemberEveryField): Promise<*> {
+  getFieldValue(field: MemberEveryField): Promise<any> {
     return this.httpGet(`/${field}`);
   }
 
@@ -398,7 +398,7 @@ export default class Member extends BaseResource {
       tags: string,
       ixLastUpdate: number,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/deltas', queryArgs);
   }
 
@@ -436,23 +436,23 @@ export default class Member extends BaseResource {
         minutesBetweenSummaries?: number,
       },
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
 
-  updateAvatarSource(value: AvatarSourceField): Promise<*> {
+  updateAvatarSource(value: AvatarSourceField): Promise<any> {
     return this.httpPut('/avatarSource', { value });
   }
 
-  updateBio(value: string): Promise<*> {
+  updateBio(value: string): Promise<any> {
     return this.httpPut('/bio', { value });
   }
 
-  updateFullName(value: string): Promise<*> {
+  updateFullName(value: string): Promise<any> {
     return this.httpPut('/fullName', { value });
   }
 
-  updateInitials(value: string): Promise<*> {
+  updateInitials(value: string): Promise<any> {
     return this.httpPut('/initials', { value });
   }
 
@@ -460,7 +460,7 @@ export default class Member extends BaseResource {
     return new Pref(this.config, `${this.routePath}/prefs`);
   }
 
-  updateUsername(value: string): Promise<*> {
+  updateUsername(value: string): Promise<any> {
     return this.httpPut('/username', { value });
   }
 
@@ -471,7 +471,7 @@ export default class Member extends BaseResource {
    * @example PUT /1/organizations/:organizationId/members/:memberId
    * @see {@link https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember-deactivated}
    */
-  updateDeactivatedStatus(value: boolean): Promise<*> {
+  updateDeactivatedStatus(value: boolean): Promise<any> {
     return this.httpPut('/deactivated', { value });
   }
 
@@ -486,7 +486,7 @@ export default class Member extends BaseResource {
    * @example PUT /1/organizations/:organizationId/members/:memberId
    * @see {@link https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember}
    */
-  updateMemberType(type: MemberType): Promise<*> {
+  updateMemberType(type: MemberType): Promise<any> {
     return this.httpPut('/', { type });
   }
 
@@ -502,17 +502,17 @@ export default class Member extends BaseResource {
       fullName: string,
       type?: MemberType
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
   /* istanbul ignore next: I never ran this test because I don't want to mess with my Avatar. */
-  uploadAvatar(file: Object): Promise<*> {
+  uploadAvatar(file: Object): Promise<any> {
     return this.httpPost('/avatar', { file });
   }
 
   /* istanbul ignore next: I need to determine a message type for this. */
-  dismissOneTimeMessages(value: string): Promise<*> {
+  dismissOneTimeMessages(value: string): Promise<any> {
     return this.httpPost('/oneTimeMessagesDismissed', { value });
   }
 
@@ -523,7 +523,7 @@ export default class Member extends BaseResource {
    * @see {@link https://developers.trello.com/advanced-reference/board#delete-1-boards-board-id-members-idmember}
    */
   /* istanbul ignore next: This passed, I don't want to keep creating and deleting members. */
-  deleteMember(): Promise<*> {
+  deleteMember(): Promise<any> {
     return this.httpDelete('/');
   }
 
@@ -534,7 +534,7 @@ export default class Member extends BaseResource {
    * @example DELETE /1/organizations/:organizationId/members/:memberId
    * @see {@link https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember}
    */
-  dissociateMember(): Promise<*> {
+  dissociateMember(): Promise<any> {
     return this.httpDelete('/');
   }
 
@@ -546,12 +546,12 @@ export default class Member extends BaseResource {
    * @see {@link https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember-all}
    */
   /* istanbul ignore next: Requires Business Class. */
-  dissociateMemberFromAll(): Promise<*> {
+  dissociateMemberFromAll(): Promise<any> {
     return this.httpDelete('/all');
   }
 
   /* istanbul ignore next: Requires special permissions */
-  updateVote(isVoting: boolean): Promise<*> {
+  updateVote(isVoting: boolean): Promise<any> {
     if (isVoting) {
       return this.httpPost('/', { value: this.associationId });
     }

@@ -61,7 +61,7 @@ type BoardVisibilityRestrictionLevel = $Keys<typeof boardVisibilityRestrictionLe
 
 class Pref extends BaseResource {
   /* istanbul ignore next: Requires Business Class subscription */
-  updateAssociatedDomain(value: string): Promise<*> {
+  updateAssociatedDomain(value: string): Promise<any> {
     return this.httpPut('/associatedDomain', { value });
   }
 
@@ -69,36 +69,36 @@ class Pref extends BaseResource {
   updateBoardVisibilityRestriction(
     level: BoardVisibilityRestrictionLevel,
     value: BoardVisibilityFilter,
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut(`/boardVisibilityRestrict/${level}`, { value });
   }
 
   /* istanbul ignore next: Requires special permissions */
-  updateExternalMembersDisabled(value: boolean): Promise<*> {
+  updateExternalMembersDisabled(value: boolean): Promise<any> {
     return this.httpPut('/externalMembersDisabled', { value });
   }
 
   /* istanbul ignore next: Requires special permissions */
-  updateGoogleAppsVersion(value: number): Promise<*> {
+  updateGoogleAppsVersion(value: number): Promise<any> {
     return this.httpPut('/googleAppsVersion', { value });
   }
 
   /* istanbul ignore next: Requires special permissions */
-  updateOrgInviteRestrict(value: string): Promise<*> {
+  updateOrgInviteRestrict(value: string): Promise<any> {
     return this.httpPut('/orgInviteRestrict', { value });
   }
 
-  updatePermissionLevel(value: PermissionLevel): Promise<*> {
+  updatePermissionLevel(value: PermissionLevel): Promise<any> {
     return this.httpPut('/permissionLevel', { value });
   }
 
   /* istanbul ignore next: Requires special permissions */
-  deleteAssociatedDomain(): Promise<*> {
+  deleteAssociatedDomain(): Promise<any> {
     return this.httpDelete('/associatedDomain');
   }
 
   /* istanbul ignore next: Requires special permissions */
-  deleteOrgInviteRestrict(emailAddress: string): Promise<*> {
+  deleteOrgInviteRestrict(emailAddress: string): Promise<any> {
     return this.httpDelete('/orgInviteRestrict', { value: emailAddress });
   }
 }
@@ -113,7 +113,7 @@ export default class Organization extends BaseResource {
       fields?: ArgumentGroup<OrganizationField>,
       paidAccount?: boolean,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -147,15 +147,15 @@ export default class Organization extends BaseResource {
       paidAccount?: boolean,
       fields?: ArgumentGroup<OrganizationField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getOrganizationsFilteredBy(filter: ArgumentGroup<OrganizationFilter>): Promise<*> {
+  getOrganizationsFilteredBy(filter: ArgumentGroup<OrganizationFilter>): Promise<any> {
     return this.httpGet('/', { filter });
   }
 
-  getFieldValue(field: OrganizationField): Promise<*> {
+  getFieldValue(field: OrganizationField): Promise<any> {
     return this.httpGet(`/${field}`);
   }
 
@@ -173,7 +173,7 @@ export default class Organization extends BaseResource {
       tags: string,
       ixLastUpdate: number,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/deltas', queryArgs);
   }
 
@@ -189,12 +189,12 @@ export default class Organization extends BaseResource {
     return new Membership(this.config, `${this.routePath}/memberships/${membershipId}`);
   }
 
-  getPluginData(): Promise<*> {
+  getPluginData(): Promise<any> {
     return this.httpGet('/pluginData');
   }
 
   /* istanbul ignore next: Requires Business Class subscription */
-  getTags(): Promise<*> {
+  getTags(): Promise<any> {
     return this.httpGet('/tags');
   }
 
@@ -217,19 +217,19 @@ export default class Organization extends BaseResource {
       desc?: string,
       website?: ?string,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
 
-  updateDescription(value: string): Promise<*> {
+  updateDescription(value: string): Promise<any> {
     return this.httpPut('/desc', { value });
   }
 
-  updateDisplayName(value: string): Promise<*> {
+  updateDisplayName(value: string): Promise<any> {
     return this.httpPut('/displayName', { value });
   }
 
-  updateName(value: string): Promise<*> {
+  updateName(value: string): Promise<any> {
     return this.httpPut('/name', { value });
   }
 
@@ -237,7 +237,7 @@ export default class Organization extends BaseResource {
     return new Pref(this.config, `${this.routePath}/prefs`);
   }
 
-  updateWebsite(value: ?string): Promise<*> {
+  updateWebsite(value: ?string): Promise<any> {
     return this.httpPut('/website', { value });
   }
 
@@ -248,24 +248,24 @@ export default class Organization extends BaseResource {
       desc?: string,
       website?: string,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 
-  uploadLogo(file: Object): Promise<*> {
+  uploadLogo(file: Object): Promise<any> {
     return this.httpPost('/logo', { file });
   }
 
   /* istanbul ignore next: Requires Business Class subscription */
-  addTags(name: string): Promise<*> {
+  addTags(name: string): Promise<any> {
     return this.httpPost('/tags', { name });
   }
 
-  deleteOrganization(): Promise<*> {
+  deleteOrganization(): Promise<any> {
     return this.httpDelete('/');
   }
 
-  deleteLogo(): Promise<*> {
+  deleteLogo(): Promise<any> {
     return this.httpDelete('/logo');
   }
 }

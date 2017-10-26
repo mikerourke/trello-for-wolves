@@ -100,7 +100,7 @@ export default class Action extends BaseResource {
       memberCreator?: boolean,
       memberCreatorFields?: ArgumentGroup<MemberField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -114,11 +114,11 @@ export default class Action extends BaseResource {
       memberCreator?: boolean,
       memberCreatorFields?: ArgumentGroup<MemberField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getFieldValue(field: ActionField): Promise<*> {
+  getFieldValue(field: ActionField): Promise<any> {
     return this.httpGet(`/${field}`);
   }
 
@@ -130,11 +130,11 @@ export default class Action extends BaseResource {
     return new Card(this.config, `${this.routePath}/card`);
   }
 
-  getDisplay(): Promise<*> {
+  getDisplay(): Promise<any> {
     return this.httpGet('/display');
   }
 
-  getEntities(): Promise<*> {
+  getEntities(): Promise<any> {
     return this.httpGet('/entities');
   }
 
@@ -159,15 +159,15 @@ export default class Action extends BaseResource {
     queryArgs?: {
       text?: string,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
-  updateText(value: string): Promise<*> {
+  updateText(value: string): Promise<any> {
     return this.httpPut('/text', { value });
   }
 
-  deleteAction(): Promise<*> {
+  deleteAction(): Promise<any> {
     return this.httpDelete('/');
   }
 }

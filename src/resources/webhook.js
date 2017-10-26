@@ -16,15 +16,15 @@ export type WebhookField = $Keys<typeof wehookFieldMap>;
  * @namespace Webhook
  */
 export default class Webhook extends BaseResource {
-  getWebhooks(): Promise<*> {
+  getWebhooks(): Promise<any> {
     return this.httpGet('/');
   }
 
-  getWebhook(): Promise<*> {
+  getWebhook(): Promise<any> {
     return this.httpGet('/');
   }
 
-  getFieldValue(field: WebhookField): Promise<*> {
+  getFieldValue(field: WebhookField): Promise<any> {
     return this.httpGet(`/${field}`);
   }
 
@@ -35,23 +35,23 @@ export default class Webhook extends BaseResource {
       idModel?: string,
       active?: boolean,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
-  updateActiveStatus(value: boolean): Promise<*> {
+  updateActiveStatus(value: boolean): Promise<any> {
     return this.httpPut('/active', { value });
   }
 
-  updateCallbackUrl(value: string): Promise<*> {
+  updateCallbackUrl(value: string): Promise<any> {
     return this.httpPut('/callbackURL', { value });
   }
 
-  updateDescription(value: string): Promise<*> {
+  updateDescription(value: string): Promise<any> {
     return this.httpPut('/description', { value });
   }
 
-  associateWithModel(value: string): Promise<*> {
+  associateWithModel(value: string): Promise<any> {
     return this.httpPut('/idModel', { value });
   }
 
@@ -61,11 +61,11 @@ export default class Webhook extends BaseResource {
       callbackURL: string,
       idModel: string,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 
-  deleteWebhook(): Promise<*> {
+  deleteWebhook(): Promise<any> {
     return this.httpDelete('/');
   }
 }

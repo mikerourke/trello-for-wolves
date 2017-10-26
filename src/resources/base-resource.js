@@ -97,7 +97,7 @@ export default class BaseResource {
     httpMethod: HttpMethod,
     pathVariables: string,
     queryArgs?: Object,
-  ): Promise<*> {
+  ): Promise<any> {
     const endpoint = this.getEndpoint(pathVariables, queryArgs);
     const { backoffTime = 3, maxWaitingTime = 300 } = this.config;
     return performApiRequest(httpMethod, endpoint, backoffTime, maxWaitingTime, queryArgs);

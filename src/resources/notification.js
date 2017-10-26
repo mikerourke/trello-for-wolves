@@ -79,7 +79,7 @@ export default class Notification extends BaseResource {
       memberCreator?: boolean,
       memberCreatorFields?: ArgumentGroup<MemberField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -100,17 +100,17 @@ export default class Notification extends BaseResource {
       member?: boolean,
       memberFields?: ArgumentGroup<MemberField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
   getNotificationsFilteredBy(
     filter: ArgumentGroup<NotificationFilter>,
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', { filter });
   }
 
-  getFieldValue(field: NotificationField): Promise<*> {
+  getFieldValue(field: NotificationField): Promise<any> {
     return this.httpGet(`/${field}`);
   }
 
@@ -122,11 +122,11 @@ export default class Notification extends BaseResource {
     return new Card(this.config, `${this.routePath}/card`);
   }
 
-  getDisplay(): Promise<*> {
+  getDisplay(): Promise<any> {
     return this.httpGet('/display');
   }
 
-  getEntities(): Promise<*> {
+  getEntities(): Promise<any> {
     return this.httpGet('/entities');
   }
 
@@ -150,15 +150,15 @@ export default class Notification extends BaseResource {
     queryArgs?: {
       unread?: boolean,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
-  updateUnreadStatus(value: boolean): Promise<*> {
+  updateUnreadStatus(value: boolean): Promise<any> {
     return this.httpPut('/unread', { value });
   }
 
-  markAllAsRead(): Promise<*> {
+  markAllAsRead(): Promise<any> {
     return this.httpPost('/all/read');
   }
 }

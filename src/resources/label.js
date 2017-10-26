@@ -34,7 +34,7 @@ export default class Label extends BaseResource {
     queryArgs?: {
       fields?: ArgumentGroup<LabelField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -42,7 +42,7 @@ export default class Label extends BaseResource {
     queryArgs?: {
       fields?: ArgumentGroup<LabelField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -55,15 +55,15 @@ export default class Label extends BaseResource {
       name?: string,
       color?: ?LabelColor,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
-  updateColor(value: ?LabelColor): Promise<*> {
+  updateColor(value: ?LabelColor): Promise<any> {
     return this.httpPut('/color', { value });
   }
 
-  updateName(value: string): Promise<*> {
+  updateName(value: string): Promise<any> {
     return this.httpPut('/name', { value });
   }
 
@@ -73,7 +73,7 @@ export default class Label extends BaseResource {
       color: ?LabelColor,
       idBoard?: string,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     let updatedArgs = queryArgs;
     if (this.routePathElements[0] === 'boards') {
       updatedArgs = { ...queryArgs, idBoard: this.routePathElements[1] };
@@ -81,7 +81,7 @@ export default class Label extends BaseResource {
     return this.httpPost('/', updatedArgs);
   }
 
-  deleteLabel(): Promise<*> {
+  deleteLabel(): Promise<any> {
     return this.httpDelete('/');
   }
 }

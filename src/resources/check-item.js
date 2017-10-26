@@ -29,7 +29,7 @@ export default class CheckItem extends BaseResource {
       filter?: AllOrNone,
       fields?: ArgumentGroup<CheckItemField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -37,7 +37,7 @@ export default class CheckItem extends BaseResource {
     queryArgs?: {
       fields?: ArgumentGroup<CheckItemField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -45,7 +45,7 @@ export default class CheckItem extends BaseResource {
     queryArgs?: {
       fields?: ArgumentGroup<CheckItemStateField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -56,19 +56,19 @@ export default class CheckItem extends BaseResource {
       pos?: PositionNumbered,
       idChecklist?: ?string,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
-  updateName(value: string): Promise<*> {
+  updateName(value: string): Promise<any> {
     return this.httpPut('/name', { value });
   }
 
-  updatePosition(value: PositionNumbered): Promise<*> {
+  updatePosition(value: PositionNumbered): Promise<any> {
     return this.httpPut('/pos', { value });
   }
 
-  updateState(value: CheckItemState): Promise<*> {
+  updateState(value: CheckItemState): Promise<any> {
     return this.httpPut('/state', { value });
   }
 
@@ -78,15 +78,15 @@ export default class CheckItem extends BaseResource {
       pos?: PositionNumbered,
       checked?: boolean,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 
-  convertToCard(): Promise<*> {
+  convertToCard(): Promise<any> {
     return this.httpPost('/convertToCard');
   }
 
-  deleteCheckItem(): Promise<*> {
+  deleteCheckItem(): Promise<any> {
     return this.httpDelete('/');
   }
 }

@@ -48,7 +48,7 @@ const performApiRequest = (
   backoffTime: number,
   maxWaitingTime: number,
   queryArgs?: Object,
-): Promise<*> => new Promise((resolve, reject) => {
+): Promise<any> => new Promise((resolve, reject) => {
   // One more check is done to ensure there are no consecutive slashes.
   const requestUrl = `api.trello.com/1/${endpoint}`.replace(/\/+/g, '/');
 

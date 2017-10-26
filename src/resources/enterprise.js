@@ -55,7 +55,7 @@ export default class Enterprise extends BaseResource {
       organizationPaidAccounts?: boolean,
       organizationMemberships?: Combination<MembershipFilter>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -63,7 +63,7 @@ export default class Enterprise extends BaseResource {
     queryArgs?: {
       fields: 'fullName' | 'userName',
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/admins', queryArgs);
   }
 
@@ -73,7 +73,7 @@ export default class Enterprise extends BaseResource {
       confirmationAccepted?: boolean,
       returnUrl?: 'none' | string,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/signupUrl', queryArgs);
   }
 
@@ -88,7 +88,7 @@ export default class Enterprise extends BaseResource {
       organizationFields?: ArgumentGroup<OrganizationField>,
       boardFields?: ArgumentGroup<BoardField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/members', queryArgs);
   }
 
@@ -99,11 +99,11 @@ export default class Enterprise extends BaseResource {
       organizationFields?: ArgumentGroup<OrganizationField>,
       boardFields?: ArgumentGroup<BoardField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet(`/members/${memberId}`, queryArgs);
   }
 
-  getIfOrgTransferrable(orgId: string): Promise<*> {
+  getIfOrgTransferrable(orgId: string): Promise<any> {
     return this.httpGet(`/transferrable/organization/${orgId}`);
   }
 
@@ -114,15 +114,15 @@ export default class Enterprise extends BaseResource {
       organizationFields?: ArgumentGroup<OrganizationField>,
       boardFields?: ArgumentGroup<BoardField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut(`/members/${memberId}/deactivated`, queryArgs);
   }
 
-  transferToOrganization(orgId: string): Promise<*> {
+  transferToOrganization(orgId: string): Promise<any> {
     return this.httpPut('/organizations', { idOrganization: orgId });
   }
 
-  addMemberAsAdmin(memberId: string): Promise<*> {
+  addMemberAsAdmin(memberId: string): Promise<any> {
     return this.httpPut(`/admins/${memberId}`);
   }
 
@@ -130,15 +130,15 @@ export default class Enterprise extends BaseResource {
     queryArgs?: {
       expiration: 'none' | '1hour' | '1day' | '30days' | 'never',
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPost('/tokens', queryArgs);
   }
 
-  dissociateOrganization(orgId: string): Promise<*> {
+  dissociateOrganization(orgId: string): Promise<any> {
     return this.httpDelete(`/organizations/${orgId}`);
   }
 
-  removeMemberFromAdmin(memberId: string): Promise<*> {
+  removeMemberFromAdmin(memberId: string): Promise<any> {
     return this.httpDelete(`/admins/${memberId}`);
   }
 }

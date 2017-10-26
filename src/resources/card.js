@@ -93,7 +93,7 @@ export default class Card extends BaseResource {
       filter?: CardFilter,
       fields?: ArgumentGroup<CardField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -124,15 +124,15 @@ export default class Card extends BaseResource {
       stickerFields?: ArgumentGroup<StickerField>,
       fields?: ArgumentGroup<CardField>,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getCardsFilteredBy(filter: CardFilter): Promise<*> {
+  getCardsFilteredBy(filter: CardFilter): Promise<any> {
     return this.httpGet(`/${filter}`);
   }
 
-  getFieldValue(field: CardField): Promise<*> {
+  getFieldValue(field: CardField): Promise<any> {
     return this.httpGet(`/${field}`);
   }
 
@@ -184,7 +184,7 @@ export default class Card extends BaseResource {
     return new Member(this.config, `${this.routePath}/membersVoted`, memberId);
   }
 
-  getPluginData(): Promise<*> {
+  getPluginData(): Promise<any> {
     return this.httpGet('/pluginData');
   }
 
@@ -207,23 +207,23 @@ export default class Card extends BaseResource {
       dueComplete?: boolean,
       subscribed?: boolean,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
-  updateClosedStatus(value: boolean): Promise<*> {
+  updateClosedStatus(value: boolean): Promise<any> {
     return this.httpPut('/closed', { value });
   }
 
-  updateDescription(value: string): Promise<*> {
+  updateDescription(value: string): Promise<any> {
     return this.httpPut('/desc', { value });
   }
 
-  updateDueDate(value: ?Date): Promise<*> {
+  updateDueDate(value: ?Date): Promise<any> {
     return this.httpPut('/due', { value });
   }
 
-  updateDueComplete(value: boolean): Promise<*> {
+  updateDueComplete(value: boolean): Promise<any> {
     return this.httpPut('/dueComplete', { value });
   }
 
@@ -232,7 +232,7 @@ export default class Card extends BaseResource {
    * @example PUT /1/cards/:cardId/idAttachmentCover
    * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idattachmentcover}
    */
-  updateAttachmentCoverImage(idAttachmentCover: string): Promise<*> {
+  updateAttachmentCoverImage(idAttachmentCover: string): Promise<any> {
     return this.httpPut('/idAttachmentCover', { value: idAttachmentCover });
   }
 
@@ -241,27 +241,27 @@ export default class Card extends BaseResource {
     queryArgs?: {
       idList?: string,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPut('/idBoard', { value: boardId, ...queryArgs });
   }
 
-  moveToList(listId: string): Promise<*> {
+  moveToList(listId: string): Promise<any> {
     return this.httpPut('/idList', { value: listId });
   }
 
-  associateMembers(memberIds: Array<string>): Promise<*> {
+  associateMembers(memberIds: Array<string>): Promise<any> {
     return this.httpPut('/idMembers', { value: memberIds });
   }
 
-  updateName(value: string): Promise<*> {
+  updateName(value: string): Promise<any> {
     return this.httpPut('/name', { value });
   }
 
-  updatePosition(value: PositionNumbered): Promise<*> {
+  updatePosition(value: PositionNumbered): Promise<any> {
     return this.httpPut('/pos', { value });
   }
 
-  updateSubscribed(value: boolean): Promise<*> {
+  updateSubscribed(value: boolean): Promise<any> {
     return this.httpPut('/subscribed', { value });
   }
 
@@ -287,32 +287,32 @@ export default class Card extends BaseResource {
       idMembers?: Array<string>,
       due?: ?Date,
     },
-  ): Promise<*> {
+  ): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 
-  associateLabel(labelId: string): Promise<*> {
+  associateLabel(labelId: string): Promise<any> {
     return this.httpPost('/idLabels', { value: labelId });
   }
 
   /* istanbul ignore next: Requires special permissions */
-  associateMember(memberId: string): Promise<*> {
+  associateMember(memberId: string): Promise<any> {
     return this.httpPost('/idMembers', { value: memberId });
   }
 
-  markAssociatedNotificationsRead(): Promise<*> {
+  markAssociatedNotificationsRead(): Promise<any> {
     return this.httpPost('/markAssociatedNotificationsRead');
   }
 
-  deleteCard(): Promise<*> {
+  deleteCard(): Promise<any> {
     return this.httpDelete('/');
   }
 
-  dissociateMember(memberId: string): Promise<*> {
+  dissociateMember(memberId: string): Promise<any> {
     return this.httpDelete(`/idMembers/${memberId}`);
   }
 
-  dissociateLabel(labelId: string): Promise<*> {
+  dissociateLabel(labelId: string): Promise<any> {
     return this.httpDelete(`/idLabels/${labelId}`);
   }
 }
