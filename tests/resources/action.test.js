@@ -51,7 +51,7 @@ describe('ACT | Action Resource', function() {
       .catch(error => done(error));
   });
 
-  const logResponse = (response) => logger.processResponse(response);
+  const logResponse = response => logger.processResponse(response);
 
   describe('ACT-SETUP | Action Setup', function() {
     it('ACT-SETUP-T01 | creates the entities required to run Action tests', async () => {

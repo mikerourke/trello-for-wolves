@@ -29,11 +29,11 @@ describe('CAR | Card Resource', function() {
       .catch(error => done(error));
   });
 
-  const logResponse = (response) => logger.processResponse(response);
+  const logResponse = response => logger.processResponse(response);
 
   describe('CAR-G | Card GET Requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('CAR-G-01-T01 | gets a Card', (done) => {
@@ -277,7 +277,7 @@ describe('CAR | Card Resource', function() {
 
   describe('CAR-U | Card PUT requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     const getFirstCheckItem = () => {

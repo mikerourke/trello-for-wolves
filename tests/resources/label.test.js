@@ -29,11 +29,11 @@ describe('LBL | Label Resource', function() {
       .catch(error => done(error));
   });
 
-  const logResponse = (response) => logger.processResponse(response);
+  const logResponse = response => logger.processResponse(response);
 
   describe('LBL-G | Label GET requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('LBL-G-01-T01 | gets a Label', (done) => {
@@ -82,7 +82,7 @@ describe('LBL | Label Resource', function() {
 
   describe('LBL-U | Label PUT requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('LBL-U-01-T01 | updates a Label', function(done) {

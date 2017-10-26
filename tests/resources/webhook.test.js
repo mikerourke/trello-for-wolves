@@ -23,11 +23,11 @@ describe.skip('WEB | Webhook Resource', function() {
       .catch(error => done(error));
   });
 
-  const logResponse = (response) => logger.processResponse(response);
+  const logResponse = response => logger.processResponse(response);
 
   describe.skip('WEB-P | Webhook POST requests', function () {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('WEB-P-01-T01 | creates a Webhook', (done) => {
@@ -47,7 +47,7 @@ describe.skip('WEB | Webhook Resource', function() {
 
   describe('WEB-G | Webhook GET requests', function () {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('WEB-G-01-T01 | gets a Webhook', (done) => {
@@ -67,7 +67,7 @@ describe.skip('WEB | Webhook Resource', function() {
 
   describe.skip('WEB-U | Webhook PUT requests', function () {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it.skip('WEB-U-01-T01 | updates a Webhook', function(done) {
@@ -123,7 +123,7 @@ describe.skip('WEB | Webhook Resource', function() {
 
   describe('WEB-D | Webhook DELETE requests', function () {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it.skip('WEB-D-02-T01 | deletes a Webhook', function(done) {

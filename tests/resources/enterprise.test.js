@@ -26,11 +26,11 @@ describe.skip('ENT | Enterprise Resource', function() {
       .catch(error => done(error));
   });
 
-  const logResponse = (response) => logger.processResponse(response);
+  const logResponse = response => logger.processResponse(response);
 
   describe('ENT-G | Enterprise GET requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('ENT-G-01-T01 | gets a Enterprise', (done) => {
@@ -102,7 +102,7 @@ describe.skip('ENT | Enterprise Resource', function() {
 
   describe('ENT-U | Enterprise PUT requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('ENT-U-01-T01 | deactivates a Member associated with the Enterprise', function(done) {

@@ -9,7 +9,7 @@ describe('BTC | Batch Resource', function() {
   before(function(done) {
     trello = new Trello(config);
     logger = new Logger();
-    setTimeout(() => { done(); }, testDelay);
+    setTimeout(() => done(), testDelay);
   });
 
   beforeEach(function() {
@@ -22,7 +22,7 @@ describe('BTC | Batch Resource', function() {
       .catch(error => done(error));
   });
 
-  const logResponse = (response) => logger.processResponse(response);
+  const logResponse = response => logger.processResponse(response);
 
   describe('BTC-G | Batch GET requests', function() {
     before(function() {

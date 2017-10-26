@@ -9,7 +9,7 @@ describe('TYP | Type Resource', function() {
   before(function(done) {
     trello = new Trello(config);
     logger = new Logger();
-    setTimeout(() => { done(); }, testDelay);
+    setTimeout(() => done(), testDelay);
   });
 
   beforeEach(function() {
@@ -22,7 +22,7 @@ describe('TYP | Type Resource', function() {
       .catch(error => done(error));
   });
 
-  const logResponse = (response) => logger.processResponse(response);
+  const logResponse = response => logger.processResponse(response);
 
   describe('TYP-G | Type GET requests', function() {
     it('TYP-G-01-T01 | gets the Type for an Organization', function (done) {

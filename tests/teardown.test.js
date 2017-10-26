@@ -21,7 +21,7 @@ describe('TEARDOWN | Test Cleanup', function() {
       .catch(error => done(error));
   });
 
-  const logResponse = (response) => logger.processResponse(response);
+  const logResponse = response => logger.processResponse(response);
 
   describe('CHK-D | Checklist DELETE requests', function() {
     let checklistId = '';
@@ -32,7 +32,7 @@ describe('TEARDOWN | Test Cleanup', function() {
       } else {
         this.skip();
       }
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('CHK-D-02-T01 | deletes a Check Item from a Checklist', function(done) {
@@ -63,7 +63,7 @@ describe('TEARDOWN | Test Cleanup', function() {
       } else {
         this.skip();
       }
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('CAR-D-10-T01 | deletes a Sticker from a Card', function(done) {
@@ -195,7 +195,7 @@ describe('TEARDOWN | Test Cleanup', function() {
       if (!resources.labels) {
         this.skip();
       }
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('LBL-D-01-T01 | deletes the first Label', function(done) {
@@ -230,7 +230,7 @@ describe('TEARDOWN | Test Cleanup', function() {
       } else {
         this.skip();
       }
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('BRD-D-02-T01 | deletes a PowerUp', function(done) {
@@ -270,7 +270,7 @@ describe('TEARDOWN | Test Cleanup', function() {
       } else {
         this.skip();
       }
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     // @todo: Need email address for this.

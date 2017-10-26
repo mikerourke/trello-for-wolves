@@ -9,7 +9,7 @@ describe('SRC | Search Resource', function() {
   before(function(done) {
     trello = new Trello(config);
     logger = new Logger();
-    setTimeout(() => { done(); }, testDelay);
+    setTimeout(() => done(), testDelay);
   });
 
   beforeEach(function() {
@@ -22,7 +22,7 @@ describe('SRC | Search Resource', function() {
       .catch(error => done(error));
   });
 
-  const logResponse = (response) => logger.processResponse(response);
+  const logResponse = response => logger.processResponse(response);
 
   describe('SRC-G | Search GET requests', function() {
     it('SRC-G-01-T01 | performs a partial Search on my Boards', function(done) {

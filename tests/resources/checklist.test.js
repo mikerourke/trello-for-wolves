@@ -29,11 +29,11 @@ describe('CHK | Checklist Resource', function() {
       .catch(error => done(error));
   });
 
-  const logResponse = (response) => logger.processResponse(response);
+  const logResponse = response => logger.processResponse(response);
 
   describe('CHK-G | Checklist GET requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('CHK-G-01-T01 | gets a Checklist', (done) => {
@@ -146,7 +146,7 @@ describe('CHK | Checklist Resource', function() {
 
   describe('CHK-U | Checklist PUT requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('CHK-U-01-T01 | updates a Checklist', function(done) {

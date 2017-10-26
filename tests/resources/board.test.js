@@ -29,11 +29,11 @@ describe('BRD | Board Resource', function() {
       .catch(error => done(error));
   });
 
-  const logResponse = (response) => logger.processResponse(response);
+  const logResponse = response => logger.processResponse(response);
 
   describe('BRD-G | Board GET requests', function() {
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('BRD-G-01-T01 | gets a Board', function(done) {
@@ -406,7 +406,7 @@ describe('BRD | Board Resource', function() {
     let newMemberId = '';
 
     before(function(done) {
-      setTimeout(() => { done(); }, testDelay);
+      setTimeout(() => done(), testDelay);
     });
 
     it('BRD-U-01-T01 | updates a Board', function(done) {

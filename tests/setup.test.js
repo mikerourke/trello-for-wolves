@@ -38,7 +38,7 @@ describe('SETUP | Test Preparation and Setup', function() {
     });
   });
 
-  const logResponse = (response) => logger.processResponse(response);
+  const logResponse = response => logger.processResponse(response);
 
   describe('ORG-P | Organization POST requests', function() {
     let orgId = '';

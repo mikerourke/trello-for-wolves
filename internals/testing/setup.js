@@ -18,7 +18,7 @@ global.config = config;
 // Sets the time (in milliseconds) that is called in the before() function
 // of each test suite.  This is to ensure the Trello API rate limits aren't
 // exceeded.
-const testDelay = process.env.TEST_DELAY || /* istanbul ignore next */ 500;
+const testDelay = process.env.TEST_DELAY || /* istanbul ignore next */ 2000;
 global.testDelay = testDelay;
 
 // Path to assets (used for uploading files).

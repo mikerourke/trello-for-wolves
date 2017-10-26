@@ -2,4 +2,5 @@
 --require ./internals/testing/setup.js
 --recursive
 --colors
---timeout 10000
+--timeout 20000
+--bail

@@ -2,51 +2,49 @@
 import Trello from '../../src/index';
 
 describe('ARQ | API Request', function() {
-  let trello;
+  const BOARD_NAME = 'ARQ-SETUP-BOARD';
+  const LIST_NAME = 'ARQ-SETUP-LIST';
   let boardId = '';
   let listId = '';
+  let trello;
 
   before(function(done) {
     trello = new Trello(config);
-    setTimeout(() => done(), 8000);
+    setTimeout(() => done(), 5000);
   });
 
   describe('ARQ-SETUP | API Request Setup', function() {
-    it('ARQ-SETUP-T01 | creates a Board for testing rate limits', function(done) {
-      const boardName = 'ARQ-SETUP-T01';
-      trello.boards().addBoard({
-        name: boardName,
-        defaultLabels: false,
-        defaultLists: false,
-      })
-        .then((response) => {
-          if (response.data) {
-            boardId = response.data.id;
-          }
-          assert.isDefined(response.data);
-          done();
+    it('ARQ-SETUP-T01 | creates a Board for testing rate limits', async () => {
+      try {
+        const { data: newBoard } = await trello.boards().addBoard({
+          name: BOARD_NAME,
+          defaultLabels: false,
+          defaultLists: false,
         })
-        .catch(error => done(error));
+        boardId = newBoard.id;
+        assert.isDefined(newBoard);
+      } catch (e) {
+        throw new Error(e);
+      }
     });
 
-    it('ARQ-SETUP-T02 | creates a List on a Board for testing rate limits', function(done) {
-      trello.boards(boardId).lists().addList({
-        name: 'ARQ-SETUP-T01',
-      })
-        .then((response) => {
-          if (response.data) {
-            listId = response.data.id;
-          }
-          assert.isDefined(response.data);
-          done();
-        })
-        .catch(error => done(error));
+    it('ARQ-SETUP-T02 | creates a List on a Board for testing rate limits', async () => {
+      try {
+        const { data: newList } = await trello.boards(boardId).lists().addList({
+          name: LIST_NAME,
+        });
+        listId = newList.id;
+        assert.isDefined(newList);
+      } catch (e) {
+        throw new Error(e);
+      }
     });
   });
 
   describe('ARQ-EXECUTE | API Request Test Execution', function() {
-    before(function() {
-      if (!listId) throw new Error('List Id not found.  API request testing cannot proceed.')
+    before(function(done) {
+      if (listId === '') done(new Error('Could not find list.'));
+      setTimeout(() => done(), 1000);
     });
 
     it('ARQ-EXECUTE-T01 | creates 110 Cards in a List to validate rate limiter', function(done) {
@@ -81,6 +79,10 @@ describe('ARQ | API Request', function() {
   });
 
   describe('ARQ-TEARDOWN | API Request Teardown', function() {
+    before(function(done) {
+      setTimeout(() => done(), 1000);
+    });
+
     it('ARQ-TEARDOWN-T01 | closes the board', function(done) {
       trello.boards(boardId).updateClosedStatus(true)
         .should.eventually.be.fulfilled
