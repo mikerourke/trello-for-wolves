@@ -1,7 +1,6 @@
-/* Internal dependencies */
 import Trello from '../../src/index';
 
-describe('ARQ | API Request', function() {
+describe.skip('ARQ | API Request', function() {
   const BOARD_NAME = 'ARQ-SETUP-BOARD';
   const LIST_NAME = 'ARQ-SETUP-LIST';
   let boardId = '';

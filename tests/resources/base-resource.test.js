@@ -1,4 +1,3 @@
-/* Internal dependencies */
 import BaseResource from '../../src/resources/base-resource';
 
 describe('BASE | Base Resource', function() {

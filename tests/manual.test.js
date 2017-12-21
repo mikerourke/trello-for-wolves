@@ -1,8 +1,4 @@
-/* External dependencies */
-import { Readable } from 'stream';
 import fs from 'fs';
-
-/* Internal dependencies */
 import Trello from '../src/index';
 import performApiRequest from '../src/utils/api-request';
 
