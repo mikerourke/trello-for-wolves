@@ -10,19 +10,19 @@ name, I just love wolves and everything else on npm with the word
 
 #### npm
 
-```bash
+```
 $ npm install trello-for-wolves
 ```
 
 #### yarn
 
-```bash
+```
 $ yarn add trello-for-wolves
 ```
 
 #### biscuits*
 
-```bash
+```
 $ biscuits gravy trello-for-wolves
 ```
 
