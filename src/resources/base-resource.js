@@ -1,25 +1,17 @@
-/* @flow */
-
-/* External dependencies */
-import { stringify } from 'querystring';
-
-/* Internal dependencies */
+// @flow
+import { stringify } from 'qs';
 import stringifyQueryArgs from '../utils/query-args-stringifier';
 import performApiRequest from '../utils/api-request';
-
-/* Types */
 import type { Config, HttpMethod } from '../types';
 
 /**
  * Base class for resources.
  */
 export default class BaseResource {
-  /* eslint-disable no-undef */
   config: Config;
   routePath: string;
   routePathElements: Array<string>;
   associationId: string;
-  /* eslint-enable no-undef */
 
   /**
    * @param {Config} config Config object containing Trello API key and token.

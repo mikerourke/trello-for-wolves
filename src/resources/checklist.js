@@ -1,13 +1,9 @@
-/* @flow */
-
-/* Internal dependencies */
+// @flow
 import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 import Board from './board';
 import Card from './card';
 import CheckItem from './check-item';
-
-/* Types */
 import type {
   AllOrNone,
   ArgumentGroup,

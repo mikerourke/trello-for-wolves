@@ -1,6 +1,4 @@
-/* @flow */
-
-/* External dependencies */
+// @flow
 import snakeCase from 'lodash.snakecase';
 
 /**

@@ -1,9 +1,5 @@
-/* @flow */
-
-/* Internal dependencies */
+// @flow
 import BaseResource from './base-resource';
-
-/* Types */
 import type {
   ActionField,
   ArgumentGroup,

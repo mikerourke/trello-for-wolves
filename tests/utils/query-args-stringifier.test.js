@@ -1,4 +1,3 @@
-/* Internal dependencies */
 import stringifyQueryArgs from '../../src/utils/query-args-stringifier';
 
 describe('QAS | Query Args Stringifier', function() {

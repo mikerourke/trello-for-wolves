@@ -25,12 +25,12 @@
   "scripts": {
     "build:clean": "rimraf lib",
     "build:lib": "cross-env NODE_ENV=production babel -d lib src --ignore src/types.js",
-    "build:flow": "flow-copy-source -v src lib",
-    "build": "yarn run build:clean && yarn run build:lib && yarn run build:flow",
+    "build:flowcopy": "flow-copy-source -v src lib",
+    "build:flowcheck": "flow check --include lib",
+    "build": "yarn build:clean && yarn build:lib && yarn build:flowcopy && yarn build:flowcheck",
     "cleanup": "rimraf .nyc_output && rimraf coverage && rimraf lib",
     "predoc": "rimraf docs/",
     "doc": "apidoc -i internals/api-docs/ -o docs/",
-    "flow": "flow check || exit 0",
     "lint": "eslint src --color || exit 0",
     "presetup": "node internals/scripts/pre-setup.js",
     "setup": "yarn cache clean && yarn install",
@@ -51,6 +51,7 @@
     "async-method": "^0.1.1",
     "leaky-bucket": "^2.1.1",
     "lodash.snakecase": "^4.1.1",
+    "qs": "^6.5.1",
     "request": "^2.81.0"
   },
   "devDependencies": {

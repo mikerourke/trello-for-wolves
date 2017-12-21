@@ -1,8 +1,5 @@
-/* External dependencies */
 import fs from 'fs';
 import jsonFile from 'jsonfile';
-
-/* Internal dependencies */
 import Trello from '../src/index';
 import Logger from '../internals/testing/logger';
 

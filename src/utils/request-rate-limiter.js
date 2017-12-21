@@ -1,13 +1,10 @@
-/* @flow */
-
+// @flow
 /**
  * This code was taken from the request-rate-limiter library on npm.  I added Flow
  *    typing and removed some of the logging functionality.  I copied it over because
  *    the library is using an old version of the request library that is insecure.
  * @see https://www.npmjs.com/package/request-rate-limiter
  */
-
-/* External dependencies */
 import asyncMethod from 'async-method';
 import request from 'request';
 import LeakyBucket from 'leaky-bucket';

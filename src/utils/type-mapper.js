@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-/* @flow */
+// @flow
 
 export const generateTypeMap = (...args: any) => (
   args.reduce((acc, itemName) => ({

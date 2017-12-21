@@ -35,13 +35,13 @@ The table below contains all of the available Trello routes and their status in 
 | BRD-G-02 | boards        | GET  | /:id/:field                                    | ✅  | ✅         | ✅ | 
 | BRD-G-03 | boards        | GET  | /:id/actions                                   | ✅  | ✅         | ✅ | 
 | BRD-G-04 | boards        | GET  | /:id/boardStars                                | ✅  | ✅         | ✅ | 
-| BRD-G-05 | boards        | GET  | /:id/cards                                     | ✅  | ✅️✅         | ✅ |
+| BRD-G-05 | boards        | GET  | /:id/cards                                     | ✅  | ✅         | ✅ |
 | BRD-G-06 | boards        | GET  | /:id/cards/:filter                             | ✅  | ✅         | ✅ | 
 | BRD-G-07 | boards        | GET  | /:id/cards/:idCard                             | ✅  | ✅         | ✅ | 
 | BRD-G-08 | boards        | GET  | /:id/checklists                                | ✅  | ✅         | ✅ | 
 | BRD-G-09 | boards        | GET  | /:id/deltas                                    | ✅  | 🔒         | ✅ | 
 | BRD-G-10 | boards        | GET  | /:id/idTags                                    | ✅  | 🔒         | ✅ | 
-| BRD-G-11 | boards        | GET  | /:id/labels                                    | ✅  | ✅✅️         | ✅ |
+| BRD-G-11 | boards        | GET  | /:id/labels                                    | ✅  | ✅️         | ✅ |
 | BRD-G-12 | boards        | GET  | /:id/labels/:idLabel                           | ✅  | ✅         | ✅ | 
 | BRD-G-13 | boards        | GET  | /:id/lists                                     | ✅  | ✅         | ✅ | 
 | BRD-G-14 | boards        | GET  | /:id/lists/:filter                             | ✅  | ✅         | ✅ | 
@@ -87,20 +87,20 @@ The table below contains all of the available Trello routes and their status in 
 | BRD-U-29 | boards        | PUT  | /:id/prefs/selfJoin                            | ✅  | ✅         |    |
 | BRD-U-30 | boards        | PUT  | /:id/prefs/voting                              | ✅  | ✅         |    |
 | BRD-U-31 | boards        | PUT  | /:id/subscribed                                | ✅  | ✅         |    |
-| BRD-P-01 | boards        | POST | /                                              | ✅  | ✅✅️         |    |
+| BRD-P-01 | boards        | POST | /                                              | ✅  | ✅         |    |
 | BRD-P-02 | boards        | POST | /:id/calendarKey/generate                      | ✅  | 🆗         |    |
 | BRD-P-03 | boards        | POST | /:id/checklists                                | ✅  | 📌         |    |
 | BRD-P-04 | boards        | POST | /:id/emailKey/generate                         | ✅  | 🆗         |    |
 | BRD-P-05 | boards        | POST | /:id/idTags                                    | ✅  | 🔒         |    |
-| BRD-P-06 | boards        | POST | /:id/labels                                    | ✅  | ✅️✅         |    |
-| BRD-P-07 | boards        | POST | /:id/lists                                     | ✅  | ✅️✅         |    |
+| BRD-P-06 | boards        | POST | /:id/labels                                    | ✅  | ✅️         |    |
+| BRD-P-07 | boards        | POST | /:id/lists                                     | ✅  | ✅         |    |
 | BRD-P-08 | boards        | POST | /:id/markAsViewed                              | ✅  | ✅         |    |
 | BRD-P-09 | boards        | POST | /:id/powerUps                                  | ✅  | ✅         |    |
 | BRD-D-01 | boards        | DEL  | /:id/members/:idMember                         | ✅  | 🆗         |    |
 | BRD-D-02 | boards        | DEL  | /:id/powerUps/:powerUp                         | ✅  | 📌         |    |
 | CAR-G-01 | cards         | GET  | /:id                                           | ✅  | ✅         |    |
 | CAR-G-02 | cards         | GET  | /:id/:field                                    | ✅  | ✅         |    |
-| CAR-G-03 | cards         | GET  | /:id/actions                                   | ✅  | ✅️✅         |    |
+| CAR-G-03 | cards         | GET  | /:id/actions                                   | ✅  | ✅         |    |
 | CAR-G-04 | cards         | GET  | /:id/attachments                               | ✅  | ✅         |    |
 | CAR-G-05 | cards         | GET  | /:id/attachments/:idAttachment                 | ✅  | ✅         |    |
 | CAR-G-06 | cards         | GET  | /:id/board                                     | ✅  | ✅         |    |
@@ -134,12 +134,12 @@ The table below contains all of the available Trello routes and their status in 
 | CAR-U-17 | cards         | PUT  | /:id/pos                                       | ✅  | ✅         |    |
 | CAR-U-18 | cards         | PUT  | /:id/stickers/:idSticker                       | ✅  | ✅         |    |
 | CAR-U-19 | cards         | PUT  | /:id/subscribed                                | ✅  | ✅         |    |
-| CAR-P-01 | cards         | POST | /                                              | ✅  | ✅️✅         |    |
-| CAR-P-02 | cards         | POST | /:id/actions/comments                          | ✅  | ✅️✅         |    |
+| CAR-P-01 | cards         | POST | /                                              | ✅  | ✅         |    |
+| CAR-P-02 | cards         | POST | /:id/actions/comments                          | ✅  | ✅         |    |
 | CAR-P-03 | cards         | POST | /:id/attachments                               | ✅  | ✅         |    |
-| CAR-P-04 | cards         | POST | /:id/checklist/:id/checkItem                   | ✅  | ✅️✅         |    |
+| CAR-P-04 | cards         | POST | /:id/checklist/:id/checkItem                   | ✅  | ✅         |    |
 | CAR-P-05 | cards         | POST | /:id/checklist/:id/checkItem/:id/convertToCard | ✅  | ✅         |    |
-| CAR-P-06 | cards         | POST | /:id/checklists                                | ✅  | ✅️✅         |    |
+| CAR-P-06 | cards         | POST | /:id/checklists                                | ✅  | ✅         |    |
 | CAR-P-07 | cards         | POST | /:id/idLabels                                  | ✅  | ✅         |    |
 | CAR-P-08 | cards         | POST | /:id/idMembers                                 | ✅  | 📌         |    |
 | CAR-P-09 | cards         | POST | /:id/labels                                    | ✅  | ✅         |    |
@@ -207,11 +207,11 @@ The table below contains all of the available Trello routes and their status in 
 | LST-U-06 | lists         | PUT  | /:id/subscribed                                | ✅  | ✅         |    |
 | LST-P-01 | lists         | POST | /                                              | ✅  | ✅         |    |
 | LST-P-02 | lists         | POST | /:id/archiveAllCards                           | ✅  | ✅         |    |
-| LST-P-03 | lists         | POST | /:id/cards                                     | ✅  | ✅️✅         |    |
+| LST-P-03 | lists         | POST | /:id/cards                                     | ✅  | ✅         |    |
 | LST-P-04 | lists         | POST | /:id/moveAllCards                              | ✅  | ✅         |    |
-| MBR-G-01 | members       | GET  | /:id                                           | ✅  | ✅️✅         |    |
+| MBR-G-01 | members       | GET  | /:id                                           | ✅  | ✅         |    |
 | MBR-G-02 | members       | GET  | /:id/:field                                    | ✅  | ✅         |    |
-| MBR-G-03 | members       | GET  | /:id/actions                                   | ✅  | ✅✅️         |    |
+| MBR-G-03 | members       | GET  | /:id/actions                                   | ✅  | ✅️         |    |
 | MBR-G-04 | members       | GET  | /:id/boardBackgrounds                          | ✅  | ✅         |    |
 | MBR-G-05 | members       | GET  | /:id/boardBackgrounds/:idBoardBackground       | ✅  | ✅         |    |
 | MBR-G-06 | members       | GET  | /:id/boardStars                                | ✅  | ✅         |    |
@@ -288,7 +288,7 @@ The table below contains all of the available Trello routes and their status in 
 | NTF-U-01 | notifications | PUT  | /:id                                           | ✅  | ✅         |    |
 | NTF-U-02 | notifications | PUT  | /:id/unread                                    | ✅  | ✅         |    |
 | NTF-P-01 | notifications | POST | /all/read                                      | ✅  | ✅         |    |
-| ORG-G-01 | organizations | GET  | /:id                                           | ✅  | ✅️✅         |    |
+| ORG-G-01 | organizations | GET  | /:id                                           | ✅  | ✅         |    |
 | ORG-G-02 | organizations | GET  | /:id/:field                                    | ✅  | ✅         |    |
 | ORG-G-03 | organizations | GET  | /:id/actions                                   | ✅  | ✅         |    |
 | ORG-G-04 | organizations | GET  | /:id/boards                                    | ✅  | ✅         |    |
@@ -320,7 +320,7 @@ The table below contains all of the available Trello routes and their status in 
 | ORG-U-15 | organizations | PUT  | /:id/prefs/orgInviteRestrict                   | ✅  | 🔒         |    |
 | ORG-U-16 | organizations | PUT  | /:id/prefs/permissionLevel                     | ✅  | ✅         |    |
 | ORG-U-17 | organizations | PUT  | /:id/website                                   | ✅  | ✅         |    |
-| ORG-P-01 | organizations | POST | /                                              | ✅  | ✅✅️         |    |
+| ORG-P-01 | organizations | POST | /                                              | ✅  | ✅️         |    |
 | ORG-P-02 | organizations | POST | /:id/logo                                      | ✅  | ✅         |    |
 | ORG-P-03 | organizations | POST | /:id/tags                                      | ✅  | 🔒         |    |
 | ORG-D-01 | organizations | DEL  | /:id                                           | ✅  | ✅         |    |

@@ -1,12 +1,8 @@
-/* @flow */
-
-/* Internal dependencies */
+// @flow
 import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 import Member from './member';
 import Webhook from './webhook';
-
-/* Types */
 import type {
   AllOrNone,
   ArgumentGroup,
