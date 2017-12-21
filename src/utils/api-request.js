@@ -1,10 +1,6 @@
-/* @flow */
-
-/* Internal dependencies */
+// @flow
 import { ApiCallResponseError } from '../utils/errors';
 import RequestRateLimiter from '../utils/request-rate-limiter';
-
-/* Types */
 import type { HttpMethod } from '../types';
 
 const getRequestConfig = (

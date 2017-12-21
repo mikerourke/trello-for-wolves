@@ -1,6 +1,4 @@
-/* @flow */
-
-/* Internal dependencies */
+// @flow
 import Action from './resources/action';
 import Batch from './resources/batch';
 import Board from './resources/board';
@@ -16,8 +14,6 @@ import Search from './resources/search';
 import Token from './resources/token';
 import Type from './resources/type';
 import Webhook from './resources/webhook';
-
-/* Types */
 import type { Config } from './types';
 
 export default class Trello {

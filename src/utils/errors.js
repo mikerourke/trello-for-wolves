@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 
 /**
  * Represents the base error for the application that other Errors inherit

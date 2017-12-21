@@ -1,7 +1,5 @@
-/* @flow */
+// @flow
 import { generateTypeMap } from "./utils/type-mapper";
-
-/* Types */
 export type * from './resources/action';
 export type * from './resources/attachment';
 export type * from './resources/base-resource';

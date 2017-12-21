@@ -1,6 +1,4 @@
-/* @flow */
-
-/* Internal dependencies */
+// @flow
 import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 import Action from './action';
@@ -11,8 +9,6 @@ import List from './list';
 import Member from './member';
 import Membership from './membership';
 import Organization from './organization';
-
-/* Types */
 import type {
   ActionField,
   ActionFilter,

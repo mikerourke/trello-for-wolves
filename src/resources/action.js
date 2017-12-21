@@ -1,6 +1,4 @@
-/* @flow */
-
-/* Internal dependencies */
+// @flow
 import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 import Board from './board';
@@ -8,8 +6,6 @@ import Card from './card';
 import List from './list';
 import Member from './member';
 import Organization from './organization';
-
-/* Types */
 import type {
   ArgumentGroup,
   FilterDate,

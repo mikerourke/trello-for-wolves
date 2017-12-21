@@ -1,6 +1,4 @@
-/* @flow */
-
-/* Internal dependencies */
+// @flow
 import BaseResource from './base-resource';
 
 /**

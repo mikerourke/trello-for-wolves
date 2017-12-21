@@ -1,10 +1,6 @@
-/* @flow */
-
-/* Internal dependencies */
+// @flow
 import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
-
-/* Types */
 import type {
   ArgumentGroup,
   BoardField,
