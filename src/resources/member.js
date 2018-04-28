@@ -30,7 +30,11 @@ import type {
   PositionNumbered,
 } from '../types';
 
-export const avatarSourceFieldMap = generateTypeMap('gravatar', 'none', 'upload');
+export const avatarSourceFieldMap = generateTypeMap(
+  'gravatar',
+  'none',
+  'upload',
+);
 export type AvatarSourceField = $Keys<typeof avatarSourceFieldMap>;
 
 export const memberEnterpriseOnlyField = generateTypeMap(
@@ -51,7 +55,8 @@ const memberFieldMap = generateTypeMap(
   'status',
   'url',
 );
-export type MemberField = MemberEnterpriseOnlyField & $Keys<typeof memberFieldMap>;
+export type MemberField = MemberEnterpriseOnlyField &
+  $Keys<typeof memberFieldMap>;
 
 export const memberOtherFieldsMap = generateTypeMap(
   'avatarSource',
@@ -69,13 +74,23 @@ export const memberOtherFieldsMap = generateTypeMap(
 );
 export type MemberEveryField = MemberField & $Keys<typeof memberOtherFieldsMap>;
 
-export const memberFilterMap = generateTypeMap('admins', 'all', 'none', 'normal', 'owners');
+export const memberFilterMap = generateTypeMap(
+  'admins',
+  'all',
+  'none',
+  'normal',
+  'owners',
+);
 export type MemberFilter = $Keys<typeof memberFilterMap>;
 
 export const memberTypeMap = generateTypeMap('admin', 'normal');
 export type MemberType = $Keys<typeof memberTypeMap>;
 
-export const boardBackgroundBrightnessMap = generateTypeMap('dark', 'light', 'unknown');
+export const boardBackgroundBrightnessMap = generateTypeMap(
+  'dark',
+  'light',
+  'unknown',
+);
 type BoardBackgroundBrightness = $Keys<typeof boardBackgroundBrightnessMap>;
 
 export const boardBackgroundFieldMap = generateTypeMap(
@@ -105,31 +120,29 @@ type CustomEmojiField = $Keys<typeof customEmojiFieldMap>;
  */
 class BoardBackground extends BaseResource {
   getBoardBackgrounds(
-    queryArgs?: {
-      // boardBackgrounds:
-      filter?: BoardBackgroundFilter,
-    } | {
-      // customBoardBackgrounds:
-      filter?: AllOrNone
-    },
+    queryArgs?:
+      | {
+          // boardBackgrounds:
+          filter?: BoardBackgroundFilter,
+        }
+      | {
+          // customBoardBackgrounds:
+          filter?: AllOrNone,
+        },
   ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getBoardBackground(
-    queryArgs?: {
-      fields?: ArgumentGroup<BoardBackgroundField>,
-    },
-  ): Promise<any> {
+  getBoardBackground(queryArgs?: {
+    fields?: ArgumentGroup<BoardBackgroundField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  updateBoardBackground(
-    queryArgs?: {
-      tile?: boolean,
-      brightness?: BoardBackgroundBrightness,
-    },
-  ): Promise<any> {
+  updateBoardBackground(queryArgs?: {
+    tile?: boolean,
+    brightness?: BoardBackgroundBrightness,
+  }): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
@@ -151,11 +164,7 @@ class BoardStar extends BaseResource {
     return this.httpGet('/');
   }
 
-  updateBoardStar(
-    queryArgs?: {
-      pos?: PositionNumbered,
-    },
-  ): Promise<any> {
+  updateBoardStar(queryArgs?: { pos?: PositionNumbered }): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
@@ -167,12 +176,10 @@ class BoardStar extends BaseResource {
     return this.httpPut('/pos', { value });
   }
 
-  addBoardStar(
-    queryArgs: {
-      idBoard: string,
-      pos: PositionNumbered,
-    },
-  ): Promise<any> {
+  addBoardStar(queryArgs: {
+    idBoard: string,
+    pos: PositionNumbered,
+  }): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 
@@ -182,28 +189,17 @@ class BoardStar extends BaseResource {
 }
 
 class CustomEmoji extends BaseResource {
-  getCustomEmojis(
-    queryArgs?: {
-      filter?: AllOrNone,
-    },
-  ): Promise<any> {
+  getCustomEmojis(queryArgs?: { filter?: AllOrNone }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getCustomEmoji(
-    queryArgs?: {
-      fields?: ArgumentGroup<CustomEmojiField>,
-    },
-  ): Promise<any> {
+  getCustomEmoji(queryArgs?: {
+    fields?: ArgumentGroup<CustomEmojiField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  uploadCustomEmoji(
-    queryArgs: {
-      name: string,
-      file: Object,
-    },
-  ): Promise<any> {
+  uploadCustomEmoji(queryArgs: { name: string, file: Object }): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 }
@@ -231,13 +227,11 @@ class SavedSearch extends BaseResource {
     return this.httpGet('/');
   }
 
-  updateSavedSearch(
-    queryArgs?: {
-      name?: string,
-      query?: string,
-      pos?: PositionNumbered,
-    },
-  ): Promise<any> {
+  updateSavedSearch(queryArgs?: {
+    name?: string,
+    query?: string,
+    pos?: PositionNumbered,
+  }): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
@@ -253,13 +247,11 @@ class SavedSearch extends BaseResource {
     return this.httpPut('/query', { value });
   }
 
-  addSavedSearch(
-    queryArgs: {
-      name: string,
-      query: string,
-      pos: PositionNumbered,
-    },
-  ): Promise<any> {
+  addSavedSearch(queryArgs: {
+    name: string,
+    query: string,
+    pos: PositionNumbered,
+  }): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 
@@ -272,73 +264,73 @@ class SavedSearch extends BaseResource {
  * @namespace Member
  */
 export default class Member extends BaseResource {
-  getMembers(
-    queryArgs?: {
-      fields?: ArgumentGroup<MemberEveryField>,
-      limit?: number,
-    },
-  ): Promise<any> {
+  getMembers(queryArgs?: {
+    fields?: ArgumentGroup<MemberEveryField>,
+    limit?: number,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
   getMember(
-    queryArgs?: {
-      actions?: ArgumentGroup<ActionFilter>,
-      actionsEntities?: boolean,
-      actionsDisplay?: boolean,
-      actionsLimit?: number,
-      actionFields?: ArgumentGroup<ActionField>,
-      actionsSince?: FilterDate,
-      actionBefore?: ?Date,
-      cards?: CardFilter,
-      cardFields?: ArgumentGroup<CardField>,
-      cardMembers?: boolean,
-      cardMemberFields?: ArgumentGroup<MemberField>,
-      cardAttachments?: AttachmentFilter,
-      cardAttachmentFields?: ArgumentGroup<AttachmentField>,
-      cardStickers?: boolean,
-      boards?: ArgumentGroup<BoardFilter>,
-      boardFields?: ArgumentGroup<BoardField>,
-      boardActions?: ArgumentGroup<ActionFilter>,
-      boardActionsEntities?: boolean,
-      boardActionsDisplay?: boolean,
-      boardActionsFormat?: Format,
-      boardActionsSince?: FilterDate,
-      boardActionsLimit?: number,
-      boardActionFields?: ArgumentGroup<ActionField>,
-      boardLists?: ArgumentGroup<ListFilter>,
-      boardMemberships?: ArgumentGroup<MembershipFilter>,
-      boardOrganization?: boolean,
-      boardOrganizationFields?: ArgumentGroup<OrganizationField>,
-      boardsInvited?: ArgumentGroup<BoardFilter>,
-      boardsInvitedFields?: ArgumentGroup<BoardField>,
-      boardStars?: boolean,
-      savedSearches?: boolean,
-      organizations?: ArgumentGroup<OrganizationFilter>,
-      organizationFields?: ArgumentGroup<OrganizationField>,
-      organizationPaidAccount?: boolean,
-      organizationsInvited?: OrganizationFilter,
-      organizationsInvitedFields?: ArgumentGroup<OrganizationField>,
-      notifications?: ArgumentGroup<NotificationFilter>,
-      notificationsEntities?: boolean,
-      notificationsDisplay?: boolean,
-      notificationsLimit?: number,
-      notificationFields?: ArgumentGroup<NotificationField>,
-      notificationMemberCreator?: boolean,
-      notificationMemberCreatorFields?: ArgumentGroup<MemberField>,
-      notificationBefore?: ?string,
-      notificationSince?: ?string,
-      tokens?: AllOrNone,
-      paidAccount?: boolean,
-      boardBackgrounds?: ArgumentGroup<BoardBackgroundFilter>,
-      customBoardBackgrounds?: AllOrNone,
-      customStickers?: AllOrNone,
-      customEmoji?: AllOrNone,
-      fields?: ArgumentGroup<MemberEveryField>,
-    } | {
-      // This is the only option if calling from a different resource.
-      fields?: ArgumentGroup<MemberEveryField>,
-    },
+    queryArgs?:
+      | {
+          actions?: ArgumentGroup<ActionFilter>,
+          actionsEntities?: boolean,
+          actionsDisplay?: boolean,
+          actionsLimit?: number,
+          actionFields?: ArgumentGroup<ActionField>,
+          actionsSince?: FilterDate,
+          actionBefore?: ?Date,
+          cards?: CardFilter,
+          cardFields?: ArgumentGroup<CardField>,
+          cardMembers?: boolean,
+          cardMemberFields?: ArgumentGroup<MemberField>,
+          cardAttachments?: AttachmentFilter,
+          cardAttachmentFields?: ArgumentGroup<AttachmentField>,
+          cardStickers?: boolean,
+          boards?: ArgumentGroup<BoardFilter>,
+          boardFields?: ArgumentGroup<BoardField>,
+          boardActions?: ArgumentGroup<ActionFilter>,
+          boardActionsEntities?: boolean,
+          boardActionsDisplay?: boolean,
+          boardActionsFormat?: Format,
+          boardActionsSince?: FilterDate,
+          boardActionsLimit?: number,
+          boardActionFields?: ArgumentGroup<ActionField>,
+          boardLists?: ArgumentGroup<ListFilter>,
+          boardMemberships?: ArgumentGroup<MembershipFilter>,
+          boardOrganization?: boolean,
+          boardOrganizationFields?: ArgumentGroup<OrganizationField>,
+          boardsInvited?: ArgumentGroup<BoardFilter>,
+          boardsInvitedFields?: ArgumentGroup<BoardField>,
+          boardStars?: boolean,
+          savedSearches?: boolean,
+          organizations?: ArgumentGroup<OrganizationFilter>,
+          organizationFields?: ArgumentGroup<OrganizationField>,
+          organizationPaidAccount?: boolean,
+          organizationsInvited?: OrganizationFilter,
+          organizationsInvitedFields?: ArgumentGroup<OrganizationField>,
+          notifications?: ArgumentGroup<NotificationFilter>,
+          notificationsEntities?: boolean,
+          notificationsDisplay?: boolean,
+          notificationsLimit?: number,
+          notificationFields?: ArgumentGroup<NotificationField>,
+          notificationMemberCreator?: boolean,
+          notificationMemberCreatorFields?: ArgumentGroup<MemberField>,
+          notificationBefore?: ?string,
+          notificationSince?: ?string,
+          tokens?: AllOrNone,
+          paidAccount?: boolean,
+          boardBackgrounds?: ArgumentGroup<BoardBackgroundFilter>,
+          customBoardBackgrounds?: AllOrNone,
+          customStickers?: AllOrNone,
+          customEmoji?: AllOrNone,
+          fields?: ArgumentGroup<MemberEveryField>,
+        }
+      | {
+          // This is the only option if calling from a different resource.
+          fields?: ArgumentGroup<MemberEveryField>,
+        },
   ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
@@ -356,11 +348,17 @@ export default class Member extends BaseResource {
   }
 
   boardBackgrounds(backgroundId?: string = '') {
-    return new BoardBackground(this.config, `${this.routePath}/boardBackgrounds/${backgroundId}`);
+    return new BoardBackground(
+      this.config,
+      `${this.routePath}/boardBackgrounds/${backgroundId}`,
+    );
   }
 
   boardStars(boardStarId?: string = '') {
-    return new BoardStar(this.config, `${this.routePath}/boardStars/${boardStarId}`);
+    return new BoardStar(
+      this.config,
+      `${this.routePath}/boardStars/${boardStarId}`,
+    );
   }
 
   boards() {
@@ -377,24 +375,27 @@ export default class Member extends BaseResource {
 
   customBoardBackgrounds(backgroundId?: string = '') {
     return new BoardBackground(
-      this.config, `${this.routePath}/customBoardBackgrounds/${backgroundId}`);
+      this.config,
+      `${this.routePath}/customBoardBackgrounds/${backgroundId}`,
+    );
   }
 
   customEmoji(customEmojiId?: string = '') {
-    return new CustomEmoji(this.config, `${this.routePath}/customEmoji/${customEmojiId}`);
+    return new CustomEmoji(
+      this.config,
+      `${this.routePath}/customEmoji/${customEmojiId}`,
+    );
   }
 
   customStickers(customStickerId?: string = '') {
-    return new Sticker(this.config, `${this.routePath}/customStickers/${customStickerId}`);
+    return new Sticker(
+      this.config,
+      `${this.routePath}/customStickers/${customStickerId}`,
+    );
   }
 
   /* istanbul ignore next: Requires Business Class subscription */
-  getDeltas(
-    queryArgs: {
-      tags: string,
-      ixLastUpdate: number,
-    },
-  ): Promise<any> {
+  getDeltas(queryArgs: { tags: string, ixLastUpdate: number }): Promise<any> {
     return this.httpGet('/deltas', queryArgs);
   }
 
@@ -408,31 +409,34 @@ export default class Member extends BaseResource {
 
   organizationsInvited() {
     return new Organization(
-      this.config, `${this.routePath}/organizationsInvited`);
+      this.config,
+      `${this.routePath}/organizationsInvited`,
+    );
   }
 
   savedSearches(savedSearchId?: string = '') {
-    return new SavedSearch(this.config, `${this.routePath}/savedSearches/${savedSearchId}`);
+    return new SavedSearch(
+      this.config,
+      `${this.routePath}/savedSearches/${savedSearchId}`,
+    );
   }
 
   tokens() {
     return new Token(this.config, `${this.routePath}/tokens`);
   }
 
-  updateMember(
-    queryArgs?: {
-      fullName?: string,
-      initials?: string,
-      username?: string,
-      bio?: string,
-      avatarSource?: AvatarSourceField,
-      prefs?: {
-        colorBlind?: boolean,
-        locale?: string,
-        minutesBetweenSummaries?: number,
-      },
+  updateMember(queryArgs?: {
+    fullName?: string,
+    initials?: string,
+    username?: string,
+    bio?: string,
+    avatarSource?: AvatarSourceField,
+    prefs?: {
+      colorBlind?: boolean,
+      locale?: string,
+      minutesBetweenSummaries?: number,
     },
-  ): Promise<any> {
+  }): Promise<any> {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
 
@@ -492,13 +496,11 @@ export default class Member extends BaseResource {
    * @example PUT /1/organizations/:organizationId/members
    * @see {@link https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members}
    */
-  addMember(
-    queryArgs: {
-      email: string,
-      fullName: string,
-      type?: MemberType
-    },
-  ): Promise<any> {
+  addMember(queryArgs: {
+    email: string,
+    fullName: string,
+    type?: MemberType,
+  }): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 

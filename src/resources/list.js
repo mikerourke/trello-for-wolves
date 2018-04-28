@@ -12,7 +12,13 @@ import type {
   PositionNumbered,
 } from '../types';
 
-export const listFieldMap = generateTypeMap('closed', 'idBoard', 'name', 'pos', 'subscribed');
+export const listFieldMap = generateTypeMap(
+  'closed',
+  'idBoard',
+  'name',
+  'pos',
+  'subscribed',
+);
 export type ListField = $Keys<typeof listFieldMap>;
 
 export const listFilterMap = generateTypeMap('all', 'closed', 'none', 'open');
@@ -22,26 +28,22 @@ export type ListFilter = $Keys<typeof listFilterMap>;
  * @namespace List
  */
 export default class List extends BaseResource {
-  getLists(
-    queryArgs?: {
-      cards?: CardFilter,
-      cardFields?: ArgumentGroup<CardField>,
-      filter?: ListFilter,
-      fields?: ArgumentGroup<ListField>,
-    },
-  ): Promise<any> {
+  getLists(queryArgs?: {
+    cards?: CardFilter,
+    cardFields?: ArgumentGroup<CardField>,
+    filter?: ListFilter,
+    fields?: ArgumentGroup<ListField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getList(
-    queryArgs?: {
-      cards?: CardFilter,
-      cardFields?: ArgumentGroup<CardField>,
-      board?: boolean,
-      boardFields?: ArgumentGroup<BoardField>,
-      fields?: ArgumentGroup<ListField>,
-    },
-  ): Promise<any> {
+  getList(queryArgs?: {
+    cards?: CardFilter,
+    cardFields?: ArgumentGroup<CardField>,
+    board?: boolean,
+    boardFields?: ArgumentGroup<BoardField>,
+    fields?: ArgumentGroup<ListField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -65,15 +67,13 @@ export default class List extends BaseResource {
     return new Card(this.config, `${this.routePath}/cards`);
   }
 
-  updateList(
-    queryArgs?: {
-      name?: string,
-      closed?: boolean,
-      idBoard?: string,
-      pos?: PositionNumbered,
-      subscribed?: boolean,
-    },
-  ): Promise<any> {
+  updateList(queryArgs?: {
+    name?: string,
+    closed?: boolean,
+    idBoard?: string,
+    pos?: PositionNumbered,
+    subscribed?: boolean,
+  }): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
@@ -102,14 +102,12 @@ export default class List extends BaseResource {
     return this.httpPut('/subscribed', { value });
   }
 
-  addList(
-    queryArgs: {
-      name: string,
-      idBoard?: string,
-      idListSource?: string,
-      pos?: PositionNumbered,
-    },
-  ): Promise<any> {
+  addList(queryArgs: {
+    name: string,
+    idBoard?: string,
+    idListSource?: string,
+    pos?: PositionNumbered,
+  }): Promise<any> {
     let updatedArgs = queryArgs;
     if (this.routePathElements[0] === 'boards') {
       updatedArgs = { ...queryArgs, idBoard: this.routePathElements[1] };
@@ -121,12 +119,7 @@ export default class List extends BaseResource {
     return this.httpPost('/archiveAllCards');
   }
 
-  moveAllCards(
-    queryArgs: {
-      idBoard: string,
-      idList: string,
-    },
-  ): Promise<any> {
+  moveAllCards(queryArgs: { idBoard: string, idList: string }): Promise<any> {
     return this.httpPost('/moveAllCards', queryArgs);
   }
 }

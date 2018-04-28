@@ -61,42 +61,38 @@ type ReadFilter = $Keys<typeof readFilterMap>;
  * @namespace Notification
  */
 export default class Notification extends BaseResource {
-  getNotifications(
-    queryArgs?: {
-      entities?: boolean,
-      display?: boolean,
-      filter?: ArgumentGroup<NotificationFilter>,
-      readFilter?: ReadFilter,
-      fields?: ArgumentGroup<NotificationField>,
-      limit?: number,
-      page?: number,
-      before?: ?string,
-      since?: ?string,
-      memberCreator?: boolean,
-      memberCreatorFields?: ArgumentGroup<MemberField>,
-    },
-  ): Promise<any> {
+  getNotifications(queryArgs?: {
+    entities?: boolean,
+    display?: boolean,
+    filter?: ArgumentGroup<NotificationFilter>,
+    readFilter?: ReadFilter,
+    fields?: ArgumentGroup<NotificationField>,
+    limit?: number,
+    page?: number,
+    before?: ?string,
+    since?: ?string,
+    memberCreator?: boolean,
+    memberCreatorFields?: ArgumentGroup<MemberField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getNotification(
-    queryArgs?: {
-      display?: boolean,
-      entities?: boolean,
-      fields?: ArgumentGroup<NotificationField>,
-      memberCreator?: boolean,
-      memberCreatorFields?: ArgumentGroup<MemberField>,
-      board?: boolean,
-      boardFields?: ArgumentGroup<BoardField>,
-      list?: boolean,
-      card?: boolean,
-      cardFields?: ArgumentGroup<CardField>,
-      organization?: boolean,
-      organizationFields?: ArgumentGroup<OrganizationField>,
-      member?: boolean,
-      memberFields?: ArgumentGroup<MemberField>,
-    },
-  ): Promise<any> {
+  getNotification(queryArgs?: {
+    display?: boolean,
+    entities?: boolean,
+    fields?: ArgumentGroup<NotificationField>,
+    memberCreator?: boolean,
+    memberCreatorFields?: ArgumentGroup<MemberField>,
+    board?: boolean,
+    boardFields?: ArgumentGroup<BoardField>,
+    list?: boolean,
+    card?: boolean,
+    cardFields?: ArgumentGroup<CardField>,
+    organization?: boolean,
+    organizationFields?: ArgumentGroup<OrganizationField>,
+    member?: boolean,
+    memberFields?: ArgumentGroup<MemberField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -142,11 +138,7 @@ export default class Notification extends BaseResource {
     return new Organization(this.config, `${this.routePath}/organization`);
   }
 
-  updateNotification(
-    queryArgs?: {
-      unread?: boolean,
-    },
-  ): Promise<any> {
+  updateNotification(queryArgs?: { unread?: boolean }): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 

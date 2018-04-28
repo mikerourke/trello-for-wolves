@@ -26,14 +26,12 @@ export default class Webhook extends BaseResource {
     return this.httpGet(`/${field}`);
   }
 
-  updateWebhook(
-    queryArgs?: {
-      description?: string,
-      callbackURL?: string,
-      idModel?: string,
-      active?: boolean,
-    },
-  ): Promise<any> {
+  updateWebhook(queryArgs?: {
+    description?: string,
+    callbackURL?: string,
+    idModel?: string,
+    active?: boolean,
+  }): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
@@ -53,13 +51,11 @@ export default class Webhook extends BaseResource {
     return this.httpPut('/idModel', { value });
   }
 
-  addWebhook(
-    queryArgs: {
-      description?: string,
-      callbackURL: string,
-      idModel: string,
-    },
-  ): Promise<any> {
+  addWebhook(queryArgs: {
+    description?: string,
+    callbackURL: string,
+    idModel: string,
+  }): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 

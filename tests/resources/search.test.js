@@ -16,7 +16,8 @@ describe('SRC | Search Resource', function() {
   });
 
   after(function(done) {
-    logger.writeResultsToFile('search')
+    logger
+      .writeResultsToFile('search')
       .then(() => done())
       .catch(error => done(error));
   });
@@ -25,45 +26,49 @@ describe('SRC | Search Resource', function() {
 
   describe('SRC-G | Search GET requests', function() {
     it('SRC-G-01-T01 | performs a partial Search on my Boards', function(done) {
-      trello.search().performSearch({
-        query: 'BRD',
-        idBoards: 'mine',
-        partial: true,
-      })
+      trello
+        .search()
+        .performSearch({
+          query: 'BRD',
+          idBoards: 'mine',
+          partial: true,
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('SRC-G-01-T02 | performs a partial Search on all Boards with limit of 10', function(done) {
-      trello.search().performSearch({
-        query: 'trello',
-        modelTypes: 'boards',
-        boardsLimit: 10,
-        partial: true,
-      })
+      trello
+        .search()
+        .performSearch({
+          query: 'trello',
+          modelTypes: 'boards',
+          boardsLimit: 10,
+          partial: true,
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('SRC-G-02-T01 | performs a Search for Members with default limit of 8', function(done) {
-      trello.search().searchMembers({
-        query: 'mike',
-      })
+      trello
+        .search()
+        .searchMembers({
+          query: 'mike',
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('SRC-G-02-T02 | performs a Search for Members with limit of 20', function(done) {
-      trello.search().searchMembers({
-        query: 'mike',
-        limit: 20,
-      })
+      trello
+        .search()
+        .searchMembers({
+          query: 'mike',
+          limit: 20,
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
   });
 });

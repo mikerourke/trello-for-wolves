@@ -40,7 +40,6 @@ export const organizationFieldMap = generateTypeMap(
 );
 export type OrganizationField = $Keys<typeof organizationFieldMap>;
 
-
 export const organizationFilterMap = generateTypeMap(
   'all',
   'members',
@@ -52,8 +51,14 @@ export type OrganizationFilter = $Keys<typeof organizationFilterMap>;
 export const boardVisibilityFilterMap = generateTypeMap('admin', 'none', 'org');
 type BoardVisibilityFilter = $Keys<typeof boardVisibilityFilterMap>;
 
-export const boardVisibilityRestrictionLevelMap = generateTypeMap('org', 'private', 'public');
-type BoardVisibilityRestrictionLevel = $Keys<typeof boardVisibilityRestrictionLevelMap>;
+export const boardVisibilityRestrictionLevelMap = generateTypeMap(
+  'org',
+  'private',
+  'public',
+);
+type BoardVisibilityRestrictionLevel = $Keys<
+  typeof boardVisibilityRestrictionLevelMap,
+>;
 
 class Pref extends BaseResource {
   /* istanbul ignore next: Requires Business Class subscription */
@@ -103,51 +108,49 @@ class Pref extends BaseResource {
  * @namespace Organization
  */
 export default class Organization extends BaseResource {
-  getOrganizations(
-    queryArgs?: {
-      filter?: ArgumentGroup<OrganizationFilter>,
-      fields?: ArgumentGroup<OrganizationField>,
-      paidAccount?: boolean,
-    },
-  ): Promise<any> {
+  getOrganizations(queryArgs?: {
+    filter?: ArgumentGroup<OrganizationFilter>,
+    fields?: ArgumentGroup<OrganizationField>,
+    paidAccount?: boolean,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getOrganization(
-    queryArgs?: {
-      actions?: ArgumentGroup<ActionFilter>,
-      actionsEntities?: boolean,
-      actionsDisplay?: boolean,
-      actionsLimit?: number,
-      actionFields?: ArgumentGroup<ActionField>,
-      memberships?: ArgumentGroup<MembershipFilter>,
-      membershipsMember?: boolean,
-      membershipsMemberFields?: ArgumentGroup<MemberField>,
-      members?: MemberFilter,
-      memberFields?: ArgumentGroup<MemberField>,
-      memberActivity?: boolean,
-      membersInvited?: MemberFilter,
-      membersInvitedFields?: ArgumentGroup<MemberField>,
-      pluginData?: boolean,
-      boards?: ArgumentGroup<BoardFilter>,
-      boardFields?: ArgumentGroup<BoardField>,
-      boardActions?: ArgumentGroup<ActionFilter>,
-      boardActionsEntities?: boolean,
-      boardActionsDisplay?: boolean,
-      boardActionsFormat?: Format,
-      boardActionsSince?: FilterDate,
-      boardActionsLimit?: number,
-      boardActionFields?: ArgumentGroup<ActionField>,
-      boardLists?: ArgumentGroup<ListFilter>,
-      boardPluginData?: boolean,
-      paidAccount?: boolean,
-      fields?: ArgumentGroup<OrganizationField>,
-    },
-  ): Promise<any> {
+  getOrganization(queryArgs?: {
+    actions?: ArgumentGroup<ActionFilter>,
+    actionsEntities?: boolean,
+    actionsDisplay?: boolean,
+    actionsLimit?: number,
+    actionFields?: ArgumentGroup<ActionField>,
+    memberships?: ArgumentGroup<MembershipFilter>,
+    membershipsMember?: boolean,
+    membershipsMemberFields?: ArgumentGroup<MemberField>,
+    members?: MemberFilter,
+    memberFields?: ArgumentGroup<MemberField>,
+    memberActivity?: boolean,
+    membersInvited?: MemberFilter,
+    membersInvitedFields?: ArgumentGroup<MemberField>,
+    pluginData?: boolean,
+    boards?: ArgumentGroup<BoardFilter>,
+    boardFields?: ArgumentGroup<BoardField>,
+    boardActions?: ArgumentGroup<ActionFilter>,
+    boardActionsEntities?: boolean,
+    boardActionsDisplay?: boolean,
+    boardActionsFormat?: Format,
+    boardActionsSince?: FilterDate,
+    boardActionsLimit?: number,
+    boardActionFields?: ArgumentGroup<ActionField>,
+    boardLists?: ArgumentGroup<ListFilter>,
+    boardPluginData?: boolean,
+    paidAccount?: boolean,
+    fields?: ArgumentGroup<OrganizationField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getOrganizationsFilteredBy(filter: ArgumentGroup<OrganizationFilter>): Promise<any> {
+  getOrganizationsFilteredBy(
+    filter: ArgumentGroup<OrganizationFilter>,
+  ): Promise<any> {
     return this.httpGet('/', { filter });
   }
 
@@ -164,12 +167,7 @@ export default class Organization extends BaseResource {
   }
 
   /* istanbul ignore next: Requires Business Class subscription */
-  getDeltas(
-    queryArgs: {
-      tags: string,
-      ixLastUpdate: number,
-    },
-  ): Promise<any> {
+  getDeltas(queryArgs: { tags: string, ixLastUpdate: number }): Promise<any> {
     return this.httpGet('/deltas', queryArgs);
   }
 
@@ -182,7 +180,10 @@ export default class Organization extends BaseResource {
   }
 
   memberships(membershipId?: string = '') {
-    return new Membership(this.config, `${this.routePath}/memberships/${membershipId}`);
+    return new Membership(
+      this.config,
+      `${this.routePath}/memberships/${membershipId}`,
+    );
   }
 
   getPluginData(): Promise<any> {
@@ -194,26 +195,24 @@ export default class Organization extends BaseResource {
     return this.httpGet('/tags');
   }
 
-  updateOrganization(
-    queryArgs?: {
-      prefs?: {
-        associatedDomain?: string,
-        externalMembersDisabled?: boolean,
-        googleAppsVersion?: number,
-        orgInviteRestrict?: string,
-        permissionLevel?: PermissionLevel,
-        boardVisibilityRestrict?: {
-          orgRestriction?: BoardVisibilityFilter,
-          privateRestriction?: BoardVisibilityFilter,
-          publicRestriction?: BoardVisibilityFilter,
-        },
+  updateOrganization(queryArgs?: {
+    prefs?: {
+      associatedDomain?: string,
+      externalMembersDisabled?: boolean,
+      googleAppsVersion?: number,
+      orgInviteRestrict?: string,
+      permissionLevel?: PermissionLevel,
+      boardVisibilityRestrict?: {
+        orgRestriction?: BoardVisibilityFilter,
+        privateRestriction?: BoardVisibilityFilter,
+        publicRestriction?: BoardVisibilityFilter,
       },
-      name?: string,
-      displayName?: string,
-      desc?: string,
-      website?: ?string,
     },
-  ): Promise<any> {
+    name?: string,
+    displayName?: string,
+    desc?: string,
+    website?: ?string,
+  }): Promise<any> {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
 
@@ -237,14 +236,12 @@ export default class Organization extends BaseResource {
     return this.httpPut('/website', { value });
   }
 
-  addOrganization(
-    queryArgs?: {
-      name?: string,
-      displayName?: string,
-      desc?: string,
-      website?: string,
-    },
-  ): Promise<any> {
+  addOrganization(queryArgs?: {
+    name?: string,
+    displayName?: string,
+    desc?: string,
+    website?: string,
+  }): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 

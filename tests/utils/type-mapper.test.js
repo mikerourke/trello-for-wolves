@@ -4,7 +4,7 @@ describe('GTM | Generate Type Map', function() {
   it('GTM-T01 | generates a type map given a single argument', function() {
     const result = generateTypeMap('oneValue');
     const expected = { oneValue: 'oneValue' };
-    expect(result).to.deep.equal(expected)
+    expect(result).to.deep.equal(expected);
   });
 
   it('GTM-T02 | generates a type map given multiple arguments', function() {
@@ -14,6 +14,6 @@ describe('GTM | Generate Type Map', function() {
       twoValue: 'twoValue',
       threeValue: 'threeValue',
     };
-    expect(result).to.deep.equal(expected)
+    expect(result).to.deep.equal(expected);
   });
 });

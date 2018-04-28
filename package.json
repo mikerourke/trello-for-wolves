@@ -31,6 +31,7 @@
     "cleanup": "rimraf .nyc_output && rimraf coverage && rimraf lib",
     "predoc": "rimraf docs/",
     "doc": "apidoc -i internals/api-docs/ -o docs/",
+    "flow": "flow check",
     "lint": "eslint src --color || exit 0",
     "presetup": "node internals/scripts/pre-setup.js",
     "setup": "yarn cache clean && yarn install",
@@ -40,7 +41,8 @@
     "coverage": "cross-env NODE_ENV=test nyc report --reporter=text-lcov | coveralls",
     "coverage:local": "cross-env NODE_ENV=test nyc report --reporter=html ",
     "test:log": "cross-env LOG_TEST_RESULTS=true yarn test",
-    "test:save": "cross-env SAVE_TEST_RESULTS=true yarn test"
+    "test:save": "cross-env SAVE_TEST_RESULTS=true yarn test",
+    "prettier": "prettier --config .prettierrc 'tests/**/*.js' 'src/**/*.js' --write"
   },
   "files": [
     "lib",
@@ -57,7 +59,7 @@
   "devDependencies": {
     "apidoc": "^0.17.6",
     "babel-cli": "^6.24.1",
-    "babel-eslint": "^7.2.3",
+    "babel-eslint": "^8.2.3",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
@@ -70,17 +72,18 @@
     "chalk": "^2.0.1",
     "coveralls": "^3.0.0",
     "cross-env": "^5.0.0",
-    "dotenv": "^4.0.0",
+    "dotenv": "^5.0.1",
     "eslint": "^4.0.0",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-flowtype": "^2.33.0",
     "eslint-plugin-import": "^2.2.0",
-    "flow-bin": "^0.57.3",
+    "flow-bin": "^0.71.0",
     "flow-copy-source": "^1.1.0",
     "jsonfile": "^4.0.0",
     "mocha": "^3.4.2",
     "mocha-lcov-reporter": "^1.3.0",
     "nyc": "^11.0.3",
+    "prettier": "^1.12.1",
     "rimraf": "^2.6.1"
   },
   "apidoc": {

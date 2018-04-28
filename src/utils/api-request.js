@@ -44,32 +44,45 @@ const performApiRequest = (
   backoffTime: number,
   maxWaitingTime: number,
   queryArgs?: Object,
-): Promise<any> => new Promise((resolve, reject) => {
-  // One more check is done to ensure there are no consecutive slashes.
-  const requestUrl = `api.trello.com/1/${endpoint}`.replace(/\/+/g, '/');
+): Promise<any> =>
+  new Promise((resolve, reject) => {
+    // One more check is done to ensure there are no consecutive slashes.
+    const requestUrl = `api.trello.com/1/${endpoint}`.replace(/\/+/g, '/');
 
-  // Build the configuration object for sending the request.
-  const requestConfig = getRequestConfig(httpMethod, requestUrl, queryArgs);
+    // Build the configuration object for sending the request.
+    const requestConfig = getRequestConfig(httpMethod, requestUrl, queryArgs);
 
-  const limiter = new RequestRateLimiter({
-    backoffTime,
-    maxWaitingTime,
+    const limiter = new RequestRateLimiter({
+      backoffTime,
+      maxWaitingTime,
+    });
+
+    limiter.request(requestConfig, (error, response) => {
+      /* instanbul ignore next */
+      if (error)
+        reject(
+          new Error(`Error performing request: ${error}`),
+        ); /* instanbul ignore if */
+
+      /* instanbul ignore next */
+      if (!response)
+        reject(
+          new Error('No response present when performing request.'),
+        ); /* instanbul ignore if */
+
+      const {
+        statusCode /* instanbul ignore next */ = 400,
+        body,
+        ...responseData
+      } = response;
+      if (statusCode > 299 || statusCode < 200) {
+        reject(
+          new ApiCallResponseError(statusCode, httpMethod, requestUrl, body),
+        );
+      }
+      // The "body" key is changed to "data" to maintain backwards compatibility with Axios
+      resolve({ ...responseData, statusCode, data: body });
+    });
   });
-
-  limiter.request(requestConfig, (error, response) => {
-    /* instanbul ignore next */
-    if (error) reject(new Error(`Error performing request: ${error}`)); /* instanbul ignore if */
-
-    /* instanbul ignore next */
-    if (!response) reject(new Error('No response present when performing request.')); /* instanbul ignore if */
-
-    const { statusCode /* instanbul ignore next */ = 400, body, ...responseData } = response;
-    if (statusCode > 299 || statusCode < 200) {
-      reject(new ApiCallResponseError(statusCode, httpMethod, requestUrl, body));
-    }
-    // The "body" key is changed to "data" to maintain backwards compatibility with Axios
-    resolve({ ...responseData, statusCode, data: body });
-  });
-});
 
 export default performApiRequest;

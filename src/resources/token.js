@@ -3,10 +3,7 @@ import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
 import Member from './member';
 import Webhook from './webhook';
-import type {
-  AllOrNone,
-  ArgumentGroup,
-} from '../types';
+import type { AllOrNone, ArgumentGroup } from '../types';
 
 export const tokenFieldMap = generateTypeMap(
   'dateCreated',
@@ -21,21 +18,17 @@ export type TokenField = $Keys<typeof tokenFieldMap>;
  * @namespace Token
  */
 export default class Token extends BaseResource {
-  getTokens(
-    queryArgs?: {
-      filter?: AllOrNone,
-      webhooks?: boolean,
-    },
-  ): Promise<any> {
+  getTokens(queryArgs?: {
+    filter?: AllOrNone,
+    webhooks?: boolean,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getToken(
-    queryArgs?: {
-      fields?: ArgumentGroup<TokenField>,
-      webhooks?: boolean,
-    },
-  ): Promise<any> {
+  getToken(queryArgs?: {
+    fields?: ArgumentGroup<TokenField>,
+    webhooks?: boolean,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 

@@ -27,64 +27,60 @@ export const enterpriseFieldMap = generateTypeMap(
   'memberIds',
   'orgIds',
 );
-type EnterpriseField = $Keys<typeof enterpriseFieldMap>
+type EnterpriseField = $Keys<typeof enterpriseFieldMap>;
 
-export const sortOrderMap = generateTypeMap('id', 'ascending', 'descending', 'asc', 'desc');
+export const sortOrderMap = generateTypeMap(
+  'id',
+  'ascending',
+  'descending',
+  'asc',
+  'desc',
+);
 type SortOrder = $Keys<typeof sortOrderMap>;
 
 /**
  * @namespace Enterprise
  */
 export default class Enterprise extends BaseResource {
-  getEnterprise(
-    queryArgs?: {
-      fields?: ArgumentGroup<EnterpriseField>,
-      members?: MemberFilter,
-      memberFields?: MemberEnterpriseOnlyField,
-      memberFilter?: 'none' | string,
-      memberSortBy?: 'none' | string,
-      memberSortOrder?: SortOrder,
-      memberStartIndex?: number,
-      memberCount?: number,
-      organizations?: OrganizationFilter,
-      organizationFields?: ArgumentGroup<OrganizationField>,
-      organizationPaidAccounts?: boolean,
-      organizationMemberships?: Combination<MembershipFilter>,
-    },
-  ): Promise<any> {
+  getEnterprise(queryArgs?: {
+    fields?: ArgumentGroup<EnterpriseField>,
+    members?: MemberFilter,
+    memberFields?: MemberEnterpriseOnlyField,
+    memberFilter?: 'none' | string,
+    memberSortBy?: 'none' | string,
+    memberSortOrder?: SortOrder,
+    memberStartIndex?: number,
+    memberCount?: number,
+    organizations?: OrganizationFilter,
+    organizationFields?: ArgumentGroup<OrganizationField>,
+    organizationPaidAccounts?: boolean,
+    organizationMemberships?: Combination<MembershipFilter>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getAdmins(
-    queryArgs?: {
-      fields: 'fullName' | 'userName',
-    },
-  ): Promise<any> {
+  getAdmins(queryArgs?: { fields: 'fullName' | 'userName' }): Promise<any> {
     return this.httpGet('/admins', queryArgs);
   }
 
-  getSignupUrl(
-    queryArgs?: {
-      authenticate?: boolean,
-      confirmationAccepted?: boolean,
-      returnUrl?: 'none' | string,
-    },
-  ): Promise<any> {
+  getSignupUrl(queryArgs?: {
+    authenticate?: boolean,
+    confirmationAccepted?: boolean,
+    returnUrl?: 'none' | string,
+  }): Promise<any> {
     return this.httpGet('/signupUrl', queryArgs);
   }
 
-  getMembers(
-    queryArgs?: {
-      fields?: Combination<EnterpriseField>,
-      filter?: string,
-      sortBy?: 'none' | string,
-      sortOrder?: SortOrder,
-      startIndex?: number,
-      count?: number,
-      organizationFields?: ArgumentGroup<OrganizationField>,
-      boardFields?: ArgumentGroup<BoardField>,
-    },
-  ): Promise<any> {
+  getMembers(queryArgs?: {
+    fields?: Combination<EnterpriseField>,
+    filter?: string,
+    sortBy?: 'none' | string,
+    sortOrder?: SortOrder,
+    startIndex?: number,
+    count?: number,
+    organizationFields?: ArgumentGroup<OrganizationField>,
+    boardFields?: ArgumentGroup<BoardField>,
+  }): Promise<any> {
     return this.httpGet('/members', queryArgs);
   }
 
@@ -122,11 +118,9 @@ export default class Enterprise extends BaseResource {
     return this.httpPut(`/admins/${memberId}`);
   }
 
-  addToken(
-    queryArgs?: {
-      expiration: 'none' | '1hour' | '1day' | '30days' | 'never',
-    },
-  ): Promise<any> {
+  addToken(queryArgs?: {
+    expiration: 'none' | '1hour' | '1day' | '30days' | 'never',
+  }): Promise<any> {
     return this.httpPost('/tokens', queryArgs);
   }
 

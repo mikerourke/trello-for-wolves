@@ -34,7 +34,7 @@ const getQueryStringForNestedArgs = (
     throw new Error('Separator must be specified for child args');
   }
 
-  Object.keys(childGroup).forEach((childKey) => {
+  Object.keys(childGroup).forEach(childKey => {
     const childArgKey = `${childName}${separator}${childKey}`;
     const childValue = childGroup[childKey];
     const childArgValue: string = (childValue: any);
@@ -135,11 +135,9 @@ const getKeyForQueryString = (key: string): string => {
  * @param {Object} queryArgs Argument(s) used to build query string.
  * @returns {string} Query string for the request.
  */
-const stringifyQueryArgs = (
-  queryArgs: Object,
-): string => {
+const stringifyQueryArgs = (queryArgs: Object): string => {
   let queryArgsString = '';
-  Object.keys(queryArgs).forEach((queryArgKey) => {
+  Object.keys(queryArgs).forEach(queryArgKey => {
     const value = queryArgs[queryArgKey];
     // If the value of the entry is an object (rather than a value), the
     // corresponding child properties need to be combined for the URL string.
@@ -153,7 +151,8 @@ const stringifyQueryArgs = (
     } else {
       // Ensure the separator key specified for handling nested args isn't
       // present in the query string.
-      if (queryArgKey !== 'separator') { // eslint-disable-line no-lonely-if
+      if (queryArgKey !== 'separator') {
+        // eslint-disable-line no-lonely-if
         const argKey = getKeyForQueryString(queryArgKey);
         const argValue = (value: any);
         queryArgsString = `${queryArgsString}${argKey}=${argValue}&`;

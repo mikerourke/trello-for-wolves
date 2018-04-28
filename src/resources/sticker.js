@@ -1,10 +1,7 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
-import type {
-  AllOrNone,
-  ArgumentGroup,
-} from '../types';
+import type { AllOrNone, ArgumentGroup } from '../types';
 
 export const stickerFieldMap = generateTypeMap(
   'image',
@@ -25,49 +22,49 @@ type CustomStickerField = $Keys<typeof customStickerFieldMap>;
  */
 export default class Sticker extends BaseResource {
   getStickers(
-    queryArgs?: {
-      // Arguments for "/stickers":
-      fields?: ArgumentGroup<StickerField>,
-    } | {
-      // Arguments for "/customStickers":
-      filter?: AllOrNone,
-    },
+    queryArgs?:
+      | {
+          // Arguments for "/stickers":
+          fields?: ArgumentGroup<StickerField>,
+        }
+      | {
+          // Arguments for "/customStickers":
+          filter?: AllOrNone,
+        },
   ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
   getSticker(
-    queryArgs?: {
-      // Arguments for "/stickers":
-      fields?: ArgumentGroup<StickerField>,
-    } | {
-      // Arguments for "/customStickers":
-      fields?: ArgumentGroup<CustomStickerField>,
-    },
+    queryArgs?:
+      | {
+          // Arguments for "/stickers":
+          fields?: ArgumentGroup<StickerField>,
+        }
+      | {
+          // Arguments for "/customStickers":
+          fields?: ArgumentGroup<CustomStickerField>,
+        },
   ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  updateSticker(
-    queryArgs?: {
-      top?: number,
-      left?: number,
-      zIndex?: number,
-      rotate?: number,
-    },
-  ): Promise<any> {
+  updateSticker(queryArgs?: {
+    top?: number,
+    left?: number,
+    zIndex?: number,
+    rotate?: number,
+  }): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
-  addSticker(
-    queryArgs: {
-      image: string,
-      top: number,
-      left: number,
-      zIndex: number,
-      rotate?: number,
-    },
-  ): Promise<any> {
+  addSticker(queryArgs: {
+    image: string,
+    top: number,
+    left: number,
+    zIndex: number,
+    rotate?: number,
+  }): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 

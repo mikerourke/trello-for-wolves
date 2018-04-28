@@ -11,10 +11,7 @@ class BaseError extends Error {
    * @param {string} message Error message to display to the user.
    * @param {string} [errorName='BaseError'] Name of the error being thrown.
    */
-  constructor(
-    message: string,
-    errorName?: string = 'BaseError',
-  ) {
+  constructor(message: string, errorName?: string = 'BaseError') {
     super(message);
     this.message = message;
     this.name = errorName;
@@ -101,8 +98,7 @@ export class NumberBoundsError extends BaseError {
     minValue?: number = -1,
     maxValue?: number = Infinity,
   ) {
-    const message =
-      `Parameter ${fieldName} must be between ${minValue} and ${maxValue}.`;
+    const message = `Parameter ${fieldName} must be between ${minValue} and ${maxValue}.`;
     super(message, 'NumberBoundsError');
   }
 }
@@ -171,10 +167,7 @@ export class InvalidBooleanError extends InvalidTypeError {
    * @param {string} helpUrl Link to the Trello API reference with a
    *    description of the endpoint.
    */
-  constructor(
-    fieldName: string,
-    helpUrl: string,
-  ) {
+  constructor(fieldName: string, helpUrl: string) {
     super(fieldName, 'boolean', helpUrl, 'InvalidBooleanError');
   }
 }
@@ -192,10 +185,7 @@ export class InvalidNumberError extends InvalidTypeError {
    * @param {string} helpUrl Link to the Trello API reference with a
    *    description of the endpoint.
    */
-  constructor(
-    fieldName: string,
-    helpUrl: string,
-  ) {
+  constructor(fieldName: string, helpUrl: string) {
     super(fieldName, 'number', helpUrl, 'InvalidNumberError');
   }
 }
@@ -213,10 +203,7 @@ export class InvalidStringError extends InvalidTypeError {
    * @param {string} helpUrl Link to the Trello API reference with a
    *    description of the endpoint.
    */
-  constructor(
-    fieldName: string,
-    helpUrl: string,
-  ) {
+  constructor(fieldName: string, helpUrl: string) {
     super(fieldName, 'string', helpUrl, 'InvalidStringError');
   }
 }

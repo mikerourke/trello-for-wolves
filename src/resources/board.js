@@ -70,14 +70,20 @@ export const boardFilterMap = generateTypeMap(
 );
 export type BoardFilter = $Keys<typeof boardFilterMap>;
 
-export const boardMemberTypeMap = generateTypeMap('admin', 'normal', 'observer');
+export const boardMemberTypeMap = generateTypeMap(
+  'admin',
+  'normal',
+  'observer',
+);
 export type BoardMemberType = $Keys<typeof boardMemberTypeMap>;
 
 export const boardStarsFilterMap = generateTypeMap('none', 'mine');
 export type BoardStarsFilter = $Keys<typeof boardStarsFilterMap>;
 
 export const boardPermissionLevelMap = generateTypeMap('org');
-type BoardPermissionLevel = PermissionLevel | $Keys<typeof boardPermissionLevelMap>;
+type BoardPermissionLevel =
+  | PermissionLevel
+  | $Keys<typeof boardPermissionLevelMap>;
 
 export const groupPermissionMap = generateTypeMap(
   'disabled',
@@ -91,7 +97,12 @@ type GroupPermission = $Keys<typeof groupPermissionMap>;
 export const invitationMap = generateTypeMap('admins', 'members');
 type Invitation = $Keys<typeof invitationMap>;
 
-export const powerUpMap = generateTypeMap('calendar', 'cardAging', 'recap', 'voting');
+export const powerUpMap = generateTypeMap(
+  'calendar',
+  'cardAging',
+  'recap',
+  'voting',
+);
 type PowerUp = $Keys<typeof powerUpMap>;
 
 class MyPref extends BaseResource {
@@ -176,72 +187,72 @@ class Pref extends BaseResource {
  * @namespace Board
  */
 export default class Board extends BaseResource {
-  getBoards(
-    queryArgs?: {
-      filter?: ArgumentGroup<BoardFilter>,
-      fields?: ArgumentGroup<BoardField>,
-      actions?: ArgumentGroup<ActionFilter>,
-      actionsEntities?: boolean,
-      actionsLimit?: number,
-      actionsFormat?: Format,
-      actionsSince?: FilterDate,
-      actionFields?: ArgumentGroup<ActionField>,
-      memberships?: ArgumentGroup<MembershipFilter>,
-      organization?: boolean,
-      organizationFields?: ArgumentGroup<OrganizationField>,
-      lists?: ListFilter,
-    },
-  ): Promise<any> {
+  getBoards(queryArgs?: {
+    filter?: ArgumentGroup<BoardFilter>,
+    fields?: ArgumentGroup<BoardField>,
+    actions?: ArgumentGroup<ActionFilter>,
+    actionsEntities?: boolean,
+    actionsLimit?: number,
+    actionsFormat?: Format,
+    actionsSince?: FilterDate,
+    actionFields?: ArgumentGroup<ActionField>,
+    memberships?: ArgumentGroup<MembershipFilter>,
+    organization?: boolean,
+    organizationFields?: ArgumentGroup<OrganizationField>,
+    lists?: ListFilter,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
   getBoard(
-    queryArgs?: {
-      actions?: ArgumentGroup<ActionFilter>,
-      actionsEntities?: boolean,
-      actionsDisplay?: boolean,
-      actionsFormat?: Format,
-      actionsSince?: FilterDate,
-      actionsLimit?: number,
-      actionFields?: ArgumentGroup<ActionField>,
-      actionMember?: boolean,
-      actionMemberFields?: ArgumentGroup<MemberField>,
-      actionMemberCreator?: boolean,
-      actionMemberCreatorFields?: ArgumentGroup<MemberField>,
-      cards?: CardFilter,
-      cardFields?: ArgumentGroup<CardField>,
-      cardAttachments?: AttachmentFilter,
-      cardAttachmentFields?: ArgumentGroup<AttachmentField>,
-      cardChecklists?: AllOrNone,
-      cardPluginData?: boolean,
-      cardStickers?: boolean,
-      boardStars?: BoardStarsFilter,
-      labels?: AllOrNone,
-      labelFields?: ArgumentGroup<LabelField>,
-      labelsLimit?: number,
-      lists?: ListFilter,
-      listFields?: ArgumentGroup<ListField>,
-      memberships?: ArgumentGroup<MembershipFilter>,
-      membershipsMember?: boolean,
-      membershipsMemberFields?: ArgumentGroup<MemberField>,
-      members?: MemberFilter,
-      memberFields?: ArgumentGroup<MemberField>,
-      membersInvited?: MemberFilter,
-      membersInvitedFields?: ArgumentGroup<MemberField>,
-      pluginData?: boolean,
-      checklists?: AllOrNone,
-      checklistFields?: ArgumentGroup<ChecklistField>,
-      organization?: boolean,
-      organizationFields?: ArgumentGroup<OrganizationField>,
-      organizationMemberships?: ArgumentGroup<MembershipFilter>,
-      organizationPluginData?: boolean,
-      myPrefs?: boolean,
-      tags?: boolean,
-      fields?: ArgumentGroup<BoardField>,
-    } | {
-      // This is the only option if calling from a different resource.
-      fields?: ArgumentGroup<BoardField>,
-    },
+    queryArgs?:
+      | {
+          actions?: ArgumentGroup<ActionFilter>,
+          actionsEntities?: boolean,
+          actionsDisplay?: boolean,
+          actionsFormat?: Format,
+          actionsSince?: FilterDate,
+          actionsLimit?: number,
+          actionFields?: ArgumentGroup<ActionField>,
+          actionMember?: boolean,
+          actionMemberFields?: ArgumentGroup<MemberField>,
+          actionMemberCreator?: boolean,
+          actionMemberCreatorFields?: ArgumentGroup<MemberField>,
+          cards?: CardFilter,
+          cardFields?: ArgumentGroup<CardField>,
+          cardAttachments?: AttachmentFilter,
+          cardAttachmentFields?: ArgumentGroup<AttachmentField>,
+          cardChecklists?: AllOrNone,
+          cardPluginData?: boolean,
+          cardStickers?: boolean,
+          boardStars?: BoardStarsFilter,
+          labels?: AllOrNone,
+          labelFields?: ArgumentGroup<LabelField>,
+          labelsLimit?: number,
+          lists?: ListFilter,
+          listFields?: ArgumentGroup<ListField>,
+          memberships?: ArgumentGroup<MembershipFilter>,
+          membershipsMember?: boolean,
+          membershipsMemberFields?: ArgumentGroup<MemberField>,
+          members?: MemberFilter,
+          memberFields?: ArgumentGroup<MemberField>,
+          membersInvited?: MemberFilter,
+          membersInvitedFields?: ArgumentGroup<MemberField>,
+          pluginData?: boolean,
+          checklists?: AllOrNone,
+          checklistFields?: ArgumentGroup<ChecklistField>,
+          organization?: boolean,
+          organizationFields?: ArgumentGroup<OrganizationField>,
+          organizationMemberships?: ArgumentGroup<MembershipFilter>,
+          organizationPluginData?: boolean,
+          myPrefs?: boolean,
+          tags?: boolean,
+          fields?: ArgumentGroup<BoardField>,
+        }
+      | {
+          // This is the only option if calling from a different resource.
+          fields?: ArgumentGroup<BoardField>,
+        },
   ): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
@@ -258,11 +269,7 @@ export default class Board extends BaseResource {
     return new Action(this.config, `${this.routePath}/actions`);
   }
 
-  getBoardStars(
-    queryArgs?: {
-      filter?: BoardStarsFilter,
-    },
-  ): Promise<any> {
+  getBoardStars(queryArgs?: { filter?: BoardStarsFilter }): Promise<any> {
     return this.httpGet('/boardStars', queryArgs);
   }
 
@@ -275,12 +282,7 @@ export default class Board extends BaseResource {
   }
 
   /* istanbul ignore next: Requires Business Class subscription */
-  getDeltas(
-    queryArgs: {
-      tags: string,
-      ixLastUpdate: number,
-    },
-  ): Promise<any> {
+  getDeltas(queryArgs: { tags: string, ixLastUpdate: number }): Promise<any> {
     return this.httpGet('/deltas', queryArgs);
   }
 
@@ -306,7 +308,10 @@ export default class Board extends BaseResource {
   }
 
   memberships(membershipId?: string = '') {
-    return new Membership(this.config, `${this.routePath}/memberships/${membershipId}`);
+    return new Membership(
+      this.config,
+      `${this.routePath}/memberships/${membershipId}`,
+    );
   }
 
   myPrefs() {
@@ -321,34 +326,32 @@ export default class Board extends BaseResource {
     return this.httpGet('/pluginData');
   }
 
-  updateBoard(
-    queryArgs?: {
-      name?: string,
-      desc?: string,
-      closed?: boolean,
-      subscribed?: boolean,
-      idOrganization?: string,
-      prefs?: {
-        permissionLevel?: BoardPermissionLevel,
-        selfJoin?: boolean,
-        cardCovers?: boolean,
-        invitations?: Invitation,
-        voting?: GroupPermission,
-        comments?: GroupPermission,
-        background?: string,
-        cardAging?: CardAging,
-        calendarFeedEnabled?: boolean,
-      },
-      labelNames?: {
-        green?: string,
-        yellow?: string,
-        orange?: string,
-        red?: string,
-        purple?: string,
-        blue?: string,
-      },
+  updateBoard(queryArgs?: {
+    name?: string,
+    desc?: string,
+    closed?: boolean,
+    subscribed?: boolean,
+    idOrganization?: string,
+    prefs?: {
+      permissionLevel?: BoardPermissionLevel,
+      selfJoin?: boolean,
+      cardCovers?: boolean,
+      invitations?: Invitation,
+      voting?: GroupPermission,
+      comments?: GroupPermission,
+      background?: string,
+      cardAging?: CardAging,
+      calendarFeedEnabled?: boolean,
     },
-  ): Promise<any> {
+    labelNames?: {
+      green?: string,
+      yellow?: string,
+      orange?: string,
+      red?: string,
+      purple?: string,
+      blue?: string,
+    },
+  }): Promise<any> {
     return this.httpPut('/', { ...queryArgs, separator: '/' });
   }
 
@@ -364,10 +367,7 @@ export default class Board extends BaseResource {
     return this.httpPut('/idOrganization', { value: organizationId });
   }
 
-  updateLabelNameForColor(
-    labelColor: LabelColor,
-    value: string,
-  ): Promise<any> {
+  updateLabelNameForColor(labelColor: LabelColor, value: string): Promise<any> {
     return this.httpPut(`/labelNames/${labelColor}`, { value });
   }
 
@@ -383,28 +383,26 @@ export default class Board extends BaseResource {
     return this.httpPut('/subscribed', { value });
   }
 
-  addBoard(
-    queryArgs: {
-      name: string,
-      defaultLabels?: boolean,
-      defaultLists?: boolean,
-      desc?: string,
-      idOrganization?: string,
-      idBoardSource?: string,
-      keepFromSource?: ArgumentGroup<KeepFromSourceField>,
-      powerUps?: ArgumentGroup<PowerUp>,
-      prefs?: {
-        permissionLevel?: PermissionLevel,
-        voting?: GroupPermission,
-        comments?: GroupPermission,
-        invitations?: Invitation,
-        selfJoin?: boolean,
-        cardCovers?: boolean,
-        background?: string,
-        cardAging?: CardAging,
-      },
+  addBoard(queryArgs: {
+    name: string,
+    defaultLabels?: boolean,
+    defaultLists?: boolean,
+    desc?: string,
+    idOrganization?: string,
+    idBoardSource?: string,
+    keepFromSource?: ArgumentGroup<KeepFromSourceField>,
+    powerUps?: ArgumentGroup<PowerUp>,
+    prefs?: {
+      permissionLevel?: PermissionLevel,
+      voting?: GroupPermission,
+      comments?: GroupPermission,
+      invitations?: Invitation,
+      selfJoin?: boolean,
+      cardCovers?: boolean,
+      background?: string,
+      cardAging?: CardAging,
     },
-  ): Promise<any> {
+  }): Promise<any> {
     return this.httpPost('/', { ...queryArgs, separator: '_' });
   }
 

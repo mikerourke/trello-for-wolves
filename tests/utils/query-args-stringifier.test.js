@@ -54,7 +54,8 @@ describe('QAS | Query Args Stringifier', function() {
       memberFields: 'bio,fullName',
     };
     const actualValue = stringifyQueryArgs(queryArgs);
-    const expectedValue = 'actions=copyBoard,copyCard&member_fields=bio,fullName&';
+    const expectedValue =
+      'actions=copyBoard,copyCard&member_fields=bio,fullName&';
     expect(actualValue).to.equal(expectedValue);
   });
 
@@ -182,7 +183,7 @@ describe('QAS | Query Args Stringifier', function() {
       startIndex: 0,
     };
     const actualValue = stringifyQueryArgs(queryArgs);
-    const expectedValue = 'sortBy=0&sortOrder=0&startIndex=0&'
+    const expectedValue = 'sortBy=0&sortOrder=0&startIndex=0&';
     expect(actualValue).to.equal(expectedValue);
   });
 });

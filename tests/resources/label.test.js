@@ -23,7 +23,8 @@ describe('LBL | Label Resource', function() {
   });
 
   after(function(done) {
-    logger.writeResultsToFile('label')
+    logger
+      .writeResultsToFile('label')
       .then(() => done())
       .catch(error => done(error));
   });
@@ -35,19 +36,22 @@ describe('LBL | Label Resource', function() {
       setTimeout(() => done(), testDelay);
     });
 
-    it('LBL-G-01-T01 | gets a Label', (done) => {
-      trello.labels(labelId).getLabel()
+    it('LBL-G-01-T01 | gets a Label', done => {
+      trello
+        .labels(labelId)
+        .getLabel()
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LBL-G-01-T02 | gets a Label with all arguments', function(done) {
-      trello.labels(labelId).getLabel({
-        fields: 'all',
-      })
+      trello
+        .labels(labelId)
+        .getLabel({
+          fields: 'all',
+        })
         .then(logResponse)
-        .then((response) => {
+        .then(response => {
           labelData = response.data || {};
           assert.isDefined(response.data);
           done();
@@ -56,26 +60,32 @@ describe('LBL | Label Resource', function() {
     });
 
     it('LBL-G-03-T01 | gets the associated Board', function(done) {
-      trello.labels(labelId).board().getBoard()
+      trello
+        .labels(labelId)
+        .board()
+        .getBoard()
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LBL-G-03-T02 | gets only the specified fields for the associated Board', function(done) {
-      trello.labels(labelId).board().getBoard({
-        fields: ['desc', 'name'],
-      })
+      trello
+        .labels(labelId)
+        .board()
+        .getBoard({
+          fields: ['desc', 'name'],
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LBL-G-04-T01 | gets the value of the name field of the associated Board', function(done) {
-      trello.labels(labelId).board().getFieldValue('name')
+      trello
+        .labels(labelId)
+        .board()
+        .getFieldValue('name')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
   });
 
@@ -85,26 +95,29 @@ describe('LBL | Label Resource', function() {
     });
 
     it('LBL-U-01-T01 | updates a Label', function(done) {
-      trello.labels(labelId).updateLabel({
-        name: 'LBL-U-01-T01',
-      })
+      trello
+        .labels(labelId)
+        .updateLabel({
+          name: 'LBL-U-01-T01',
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LBL-U-02-T01 | updates the color of a Label', function(done) {
-      trello.labels(labelId).updateColor('blue')
+      trello
+        .labels(labelId)
+        .updateColor('blue')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LBL-U-03-T01 | updates the name of a Label', function(done) {
-      trello.labels(labelId).updateName('LBL-U-03-T01')
+      trello
+        .labels(labelId)
+        .updateName('LBL-U-03-T01')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
   });
 });

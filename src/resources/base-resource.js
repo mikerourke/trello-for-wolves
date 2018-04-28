@@ -20,11 +20,7 @@ export default class BaseResource {
    *    update.
    * @constructor
    */
-  constructor(
-    config: Config,
-    routePath: string,
-    associationId?: string = '',
-  ) {
+  constructor(config: Config, routePath: string, associationId?: string = '') {
     this.config = config;
     this.routePath = routePath;
     this.associationId = associationId;
@@ -46,10 +42,7 @@ export default class BaseResource {
    *    the request.
    * @returns {string} Endpoint for performing the request.
    */
-  getEndpoint(
-    pathVariables: string,
-    queryArgs?: Object = {},
-  ): string {
+  getEndpoint(pathVariables: string, queryArgs?: Object = {}): string {
     // Check if queryArgs were specified to ensure the stringify function is only called if
     // necessary.
     let argsToUse = queryArgs;
@@ -92,34 +85,28 @@ export default class BaseResource {
   ): Promise<any> {
     const endpoint = this.getEndpoint(pathVariables, queryArgs);
     const { backoffTime = 3, maxWaitingTime = 300 } = this.config;
-    return performApiRequest(httpMethod, endpoint, backoffTime, maxWaitingTime, queryArgs);
+    return performApiRequest(
+      httpMethod,
+      endpoint,
+      backoffTime,
+      maxWaitingTime,
+      queryArgs,
+    );
   }
 
-  httpGet(
-    pathVariables: string,
-    queryArgs?: Object,
-  ): Promise<Object> {
+  httpGet(pathVariables: string, queryArgs?: Object): Promise<Object> {
     return this.performRequest('get', pathVariables, queryArgs);
   }
 
-  httpPut(
-    pathVariables: string,
-    queryArgs?: Object,
-  ): Promise<Object> {
+  httpPut(pathVariables: string, queryArgs?: Object): Promise<Object> {
     return this.performRequest('put', pathVariables, queryArgs);
   }
 
-  httpPost(
-    pathVariables: string,
-    queryArgs?: Object,
-  ): Promise<Object> {
+  httpPost(pathVariables: string, queryArgs?: Object): Promise<Object> {
     return this.performRequest('post', pathVariables, queryArgs);
   }
 
-  httpDelete(
-    pathVariables: string,
-    queryArgs?: Object,
-  ): Promise<Object> {
+  httpDelete(pathVariables: string, queryArgs?: Object): Promise<Object> {
     return this.performRequest('delete', pathVariables, queryArgs);
   }
 }

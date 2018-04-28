@@ -12,12 +12,15 @@ describe('Manual Tests', function() {
   it.skip('posts a text file attachment to a Card using streams', function(done) {
     const textFilePath = `${assetsDir}/file.txt`;
     const fileStream = fs.createReadStream(textFilePath);
-    trello.cards('[CARD_ID]').attachments().uploadAttachment({
-      file: fileStream,
-      name: 'Hooray.txt',
-      mimeType: 'text/plain'
-    })
-      .then((response) => {
+    trello
+      .cards('[CARD_ID]')
+      .attachments()
+      .uploadAttachment({
+        file: fileStream,
+        name: 'Hooray.txt',
+        mimeType: 'text/plain',
+      })
+      .then(response => {
         assert.isDefined(response.data);
         done();
       })
@@ -27,7 +30,7 @@ describe('Manual Tests', function() {
   it('ARQ-EXECUTE-T03 | fails gracefully when an error occurs', function(done) {
     performApiRequest('yep', '1', 3, 300)
       .then(response => done())
-      .catch((error) => {
+      .catch(error => {
         // console.log(error);
         expect(error.name).to.equal('ApiCallResponseError');
         done();

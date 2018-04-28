@@ -6,14 +6,14 @@ import Card from './card';
 import List from './list';
 import Member from './member';
 import Organization from './organization';
-import type {
-  ArgumentGroup,
-  FilterDate,
-  Format,
-  MemberField,
-} from '../types';
+import type { ArgumentGroup, FilterDate, Format, MemberField } from '../types';
 
-export const actionFieldMap = generateTypeMap('data', 'date', 'idMemberCreator', 'type');
+export const actionFieldMap = generateTypeMap(
+  'data',
+  'date',
+  'idMemberCreator',
+  'type',
+);
 export type ActionField = $Keys<typeof actionFieldMap>;
 
 // These actions only apply to List resources:
@@ -79,38 +79,34 @@ export type ActionFilter = ActionListFilter & $Keys<typeof actionFilterMap>;
  * @namespace Action
  */
 export default class Action extends BaseResource {
-  getActions(
-    queryArgs?: {
-      entities?: boolean,
-      display?: boolean,
-      filter?: ArgumentGroup<ActionFilter>,
-      fields?: ArgumentGroup<ActionField>,
-      limit?: number,
-      format?: Format,
-      since?: FilterDate,
-      before?: FilterDate,
-      page?: number, // Not allowed for Card resources
-      idModels?: string,
-      member?: boolean,
-      memberFields?: ArgumentGroup<MemberField>,
-      memberCreator?: boolean,
-      memberCreatorFields?: ArgumentGroup<MemberField>,
-    },
-  ): Promise<any> {
+  getActions(queryArgs?: {
+    entities?: boolean,
+    display?: boolean,
+    filter?: ArgumentGroup<ActionFilter>,
+    fields?: ArgumentGroup<ActionField>,
+    limit?: number,
+    format?: Format,
+    since?: FilterDate,
+    before?: FilterDate,
+    page?: number, // Not allowed for Card resources
+    idModels?: string,
+    member?: boolean,
+    memberFields?: ArgumentGroup<MemberField>,
+    memberCreator?: boolean,
+    memberCreatorFields?: ArgumentGroup<MemberField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getAction(
-    queryArgs?: {
-      display?: boolean,
-      entities?: boolean,
-      fields?: ArgumentGroup<ActionField>,
-      member?: boolean,
-      memberFields?: ArgumentGroup<MemberField>,
-      memberCreator?: boolean,
-      memberCreatorFields?: ArgumentGroup<MemberField>,
-    },
-  ): Promise<any> {
+  getAction(queryArgs?: {
+    display?: boolean,
+    entities?: boolean,
+    fields?: ArgumentGroup<ActionField>,
+    member?: boolean,
+    memberFields?: ArgumentGroup<MemberField>,
+    memberCreator?: boolean,
+    memberCreatorFields?: ArgumentGroup<MemberField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -147,15 +143,10 @@ export default class Action extends BaseResource {
   }
 
   organization() {
-    return new Organization(
-      this.config, `${this.routePath}/organization`);
+    return new Organization(this.config, `${this.routePath}/organization`);
   }
 
-  updateAction(
-    queryArgs?: {
-      text?: string,
-    },
-  ): Promise<any> {
+  updateAction(queryArgs?: { text?: string }): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 

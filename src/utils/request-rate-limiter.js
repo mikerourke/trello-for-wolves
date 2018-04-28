@@ -15,12 +15,7 @@ export default class RequestRateLimiter {
   backoffTimer: any;
   request: Function;
 
-  constructor(
-    options: {
-      backoffTime: number,
-      maxWaitingTime: number,
-    },
-  ) {
+  constructor(options: { backoffTime: number, maxWaitingTime: number }) {
     const { backoffTime, maxWaitingTime } = options;
     this.backoffTime = backoffTime;
     this.bucket = new LeakyBucket({
@@ -45,7 +40,8 @@ export default class RequestRateLimiter {
           this.handleError(config, callback);
         } else {
           /* istanbul ignore if */
-          if (typeof config !== 'object' && this.isConfigAFunction(config)) { // eslint-disable-line
+          if (typeof config !== 'object' && this.isConfigAFunction(config)) {
+            // eslint-disable-line
             config(null, () => {
               this.backoff(() => executeRequest(null, config));
             });
@@ -60,7 +56,8 @@ export default class RequestRateLimiter {
 
   /* istanbul ignore next */
   handleError(config: Object | Function, callback: Function): void {
-    const errorMessage = 'The request was not executed because it would not be scheduled within ' +
+    const errorMessage =
+      'The request was not executed because it would not be scheduled within ' +
       'the max waiting time!';
     /* istanbul ignore if */
     if (typeof config !== 'object' && this.isConfigAFunction(config)) {
@@ -84,13 +81,14 @@ export default class RequestRateLimiter {
 
       this.bucket.pause(this.backoffTime);
     }
-    this.bucket.reAdd((error) => {
+    this.bucket.reAdd(error => {
       /* istanbul ignore if */
       if (error) {
         this.handleError(config, callback);
       } else {
         /* istanbul ignore if */
-        if (typeof config !== 'object' && this.isConfigAFunction(config)) { // eslint-disable-line
+        if (typeof config !== 'object' && this.isConfigAFunction(config)) {
+          // eslint-disable-line
           config();
         } else {
           this.performRequest(config, callback);
@@ -99,10 +97,7 @@ export default class RequestRateLimiter {
     });
   }
 
-  performRequest(
-    config: Object | Function,
-    callback: Function,
-  ): void {
+  performRequest(config: Object | Function, callback: Function): void {
     request(config, (error, response) => {
       /* istanbul ignore if */
       if (error) {

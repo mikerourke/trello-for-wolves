@@ -23,7 +23,8 @@ describe('LST | List Resource', function() {
   });
 
   after(function(done) {
-    logger.writeResultsToFile('list')
+    logger
+      .writeResultsToFile('list')
       .then(() => done())
       .catch(error => done(error));
   });
@@ -35,34 +36,38 @@ describe('LST | List Resource', function() {
       setTimeout(() => done(), testDelay);
     });
 
-    it('LST-G-01-T01 | gets a List', (done) => {
-      trello.lists(listId).getList()
+    it('LST-G-01-T01 | gets a List', done => {
+      trello
+        .lists(listId)
+        .getList()
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-G-01-T02 | gets a List with some arguments', function(done) {
-      trello.lists(listId).getList({
-        cards: 'all',
-        board: true,
-        fields: 'all',
-      })
+      trello
+        .lists(listId)
+        .getList({
+          cards: 'all',
+          board: true,
+          fields: 'all',
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-G-01-T03 | gets a List with all arguments', function(done) {
-      trello.lists(listId).getList({
-        cards: 'all',
-        cardFields: 'all',
-        board: true,
-        boardFields: 'all',
-        fields: 'all',
-      })
+      trello
+        .lists(listId)
+        .getList({
+          cards: 'all',
+          cardFields: 'all',
+          board: true,
+          boardFields: 'all',
+          fields: 'all',
+        })
         .then(logResponse)
-        .then((response) => {
+        .then(response => {
           listData = response.data || {};
           assert.isDefined(response.data);
           done();
@@ -71,75 +76,92 @@ describe('LST | List Resource', function() {
     });
 
     it('LST-G-02-T01 | gets the value of the name field for the List', function(done) {
-      trello.lists(listId).getFieldValue('name')
+      trello
+        .lists(listId)
+        .getFieldValue('name')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-G-03-T01 | gets the associated Actions', function(done) {
-      trello.lists(listId).actions().getActions()
+      trello
+        .lists(listId)
+        .actions()
+        .getActions()
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-G-03-T02 | gets the 10 Actions with filter applied', function(done) {
-      trello.lists(listId).actions().getActions({
-        filter: 'all',
-        limit: 10,
-      })
+      trello
+        .lists(listId)
+        .actions()
+        .getActions({
+          filter: 'all',
+          limit: 10,
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-G-04-T01 | gets the associated Board', function(done) {
-      trello.lists(listId).board().getBoard()
+      trello
+        .lists(listId)
+        .board()
+        .getBoard()
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-G-04-T02 | gets only the specified fields for the associated Board', function(done) {
-      trello.lists(listId).board().getBoard({
-        fields: ['desc', 'name'],
-      })
+      trello
+        .lists(listId)
+        .board()
+        .getBoard({
+          fields: ['desc', 'name'],
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-G-05-T01 | gets the value of the name field of the associated Board', function(done) {
-      trello.lists(listId).board().getFieldValue('name')
+      trello
+        .lists(listId)
+        .board()
+        .getFieldValue('name')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-G-06-T01 | gets the associated Cards', function(done) {
-      trello.lists(listId).cards().getCards()
+      trello
+        .lists(listId)
+        .cards()
+        .getCards()
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-G-06-T02 | gets only the specified fields for the associated Cards', function(done) {
-      trello.lists(listId).cards().getCards({
-        fields: ['name', 'pos'],
-      })
+      trello
+        .lists(listId)
+        .cards()
+        .getCards({
+          fields: ['name', 'pos'],
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-G-07-T01 | gets only the closed Cards with filter applied', function(done) {
-      trello.lists(listId).cards().getCards({
-        filter: 'closed',
-      })
+      trello
+        .lists(listId)
+        .cards()
+        .getCards({
+          filter: 'closed',
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
   });
 
@@ -149,21 +171,23 @@ describe('LST | List Resource', function() {
     });
 
     it('LST-U-01-T01 | updates a List', function(done) {
-      trello.lists(listId).updateList({
-        name: 'LST-U-01-T01',
-        closed: false,
-        pos: 'bottom',
-      })
+      trello
+        .lists(listId)
+        .updateList({
+          name: 'LST-U-01-T01',
+          closed: false,
+          pos: 'bottom',
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-U-02-T01 | updates the closed status of a List', function(done) {
-      trello.lists(listId).updateClosedStatus(false)
+      trello
+        .lists(listId)
+        .updateClosedStatus(false)
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-U-03-T01 | moves the List to a different Board', function(done) {
@@ -171,31 +195,35 @@ describe('LST | List Resource', function() {
         done(new Error('Board not found for List.'));
       }
       const boardId = resources.board.id;
-      trello.lists(listId).moveToBoard(boardId)
+      trello
+        .lists(listId)
+        .moveToBoard(boardId)
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-U-04-T01 | updates the name of a List', function(done) {
-      trello.lists(listId).updateName('LST-U-04-T01')
+      trello
+        .lists(listId)
+        .updateName('LST-U-04-T01')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-U-05-T01 | updates the position of a List', function(done) {
-      trello.lists(listId).updatePosition('top')
+      trello
+        .lists(listId)
+        .updatePosition('top')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('LST-U-06-T01 | updates the subscribed status of a List', function(done) {
-      trello.lists(listId).updateSubscribed(true)
+      trello
+        .lists(listId)
+        .updateSubscribed(true)
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
   });
 });

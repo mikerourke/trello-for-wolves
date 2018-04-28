@@ -1,5 +1,5 @@
 // @flow
-import { generateTypeMap } from "./utils/type-mapper";
+import { generateTypeMap } from './utils/type-mapper';
 export type * from './resources/action';
 export type * from './resources/attachment';
 export type * from './resources/base-resource';
@@ -39,7 +39,7 @@ export type Format = $Keys<typeof formatMap>;
 export const httpMethodMap = generateTypeMap('get', 'put', 'post', 'delete');
 export type HttpMethod = $Keys<typeof httpMethodMap>;
 
-export const keepFromSourceFieldMap= generateTypeMap(
+export const keepFromSourceFieldMap = generateTypeMap(
   'attachments',
   'checklists',
   'comments',

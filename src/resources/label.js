@@ -19,26 +19,23 @@ export const labelColorMap = generateTypeMap(
 );
 export type LabelColor = $Keys<typeof labelColorMap>;
 
-export const labelFieldMap = generateTypeMap('color', 'idBoard', 'name', 'uses');
+export const labelFieldMap = generateTypeMap(
+  'color',
+  'idBoard',
+  'name',
+  'uses',
+);
 export type LabelField = $Keys<typeof labelFieldMap>;
 
 /**
  * @namespace Label
  */
 export default class Label extends BaseResource {
-  getLabels(
-    queryArgs?: {
-      fields?: ArgumentGroup<LabelField>,
-    },
-  ): Promise<any> {
+  getLabels(queryArgs?: { fields?: ArgumentGroup<LabelField> }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getLabel(
-    queryArgs?: {
-      fields?: ArgumentGroup<LabelField>,
-    },
-  ): Promise<any> {
+  getLabel(queryArgs?: { fields?: ArgumentGroup<LabelField> }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -46,12 +43,10 @@ export default class Label extends BaseResource {
     return new Board(this.config, `${this.routePath}/board`);
   }
 
-  updateLabel(
-    queryArgs?: {
-      name?: string,
-      color?: ?LabelColor,
-    },
-  ): Promise<any> {
+  updateLabel(queryArgs?: {
+    name?: string,
+    color?: ?LabelColor,
+  }): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
@@ -63,13 +58,11 @@ export default class Label extends BaseResource {
     return this.httpPut('/name', { value });
   }
 
-  addLabel(
-    queryArgs: {
-      name: string,
-      color: ?LabelColor,
-      idBoard?: string,
-    },
-  ): Promise<any> {
+  addLabel(queryArgs: {
+    name: string,
+    color: ?LabelColor,
+    idBoard?: string,
+  }): Promise<any> {
     let updatedArgs = queryArgs;
     if (this.routePathElements[0] === 'boards') {
       updatedArgs = { ...queryArgs, idBoard: this.routePathElements[1] };

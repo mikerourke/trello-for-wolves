@@ -19,7 +19,7 @@ describe.skip('ARQ | API Request', function() {
           name: BOARD_NAME,
           defaultLabels: false,
           defaultLists: false,
-        })
+        });
         boardId = newBoard.id;
         assert.isDefined(newBoard);
       } catch (e) {
@@ -29,9 +29,12 @@ describe.skip('ARQ | API Request', function() {
 
     it('ARQ-SETUP-T02 | creates a List on a Board for testing rate limits', async () => {
       try {
-        const { data: newList } = await trello.boards(boardId).lists().addList({
-          name: LIST_NAME,
-        });
+        const { data: newList } = await trello
+          .boards(boardId)
+          .lists()
+          .addList({
+            name: LIST_NAME,
+          });
         listId = newList.id;
         assert.isDefined(newList);
       } catch (e) {
@@ -50,10 +53,15 @@ describe.skip('ARQ | API Request', function() {
       this.timeout(0);
       let queuedRequests = [];
       for (let i = 0; i < 110; i++) {
-        queuedRequests.push(trello.lists(listId).cards().addCard({ name: `(1) CARD-${i}` }));
+        queuedRequests.push(
+          trello
+            .lists(listId)
+            .cards()
+            .addCard({ name: `(1) CARD-${i}` }),
+        );
       }
       Promise.all(queuedRequests)
-        .then((responses) => {
+        .then(responses => {
           expect(responses.length).to.equal(110);
           done();
         })
@@ -62,12 +70,17 @@ describe.skip('ARQ | API Request', function() {
 
     it('ARQ-EXECUTE-T02 | deletes 110 Cards in a List to validate rate limiter', function(done) {
       this.timeout(0);
-      trello.lists(listId).cards().getCards({ fields: 'idList' })
-        .then((response) => {
+      trello
+        .lists(listId)
+        .cards()
+        .getCards({ fields: 'idList' })
+        .then(response => {
           const cardIds = response.data.map(item => item.id);
-          const deletionRequests = cardIds.map(cardId => trello.cards(cardId).deleteCard());
+          const deletionRequests = cardIds.map(cardId =>
+            trello.cards(cardId).deleteCard(),
+          );
           Promise.all(deletionRequests)
-            .then((responses) => {
+            .then(responses => {
               expect(responses.length).to.equal(110);
               done();
             })
@@ -83,9 +96,10 @@ describe.skip('ARQ | API Request', function() {
     });
 
     it('ARQ-TEARDOWN-T01 | closes the board', function(done) {
-      trello.boards(boardId).updateClosedStatus(true)
-        .should.eventually.be.fulfilled
-        .notify(done);
+      trello
+        .boards(boardId)
+        .updateClosedStatus(true)
+        .should.eventually.be.fulfilled.notify(done);
     });
   });
 });

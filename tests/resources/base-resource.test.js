@@ -24,8 +24,7 @@ describe('BASE | Base Resource', function() {
         const actualValue = baseEntity.getEndpoint('/', {
           actionsFormat: 'count',
         });
-        const expectedValue =
-          `/cards/${cardId}?actions_format=count&${authSuffix}`;
+        const expectedValue = `/cards/${cardId}?actions_format=count&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -33,8 +32,7 @@ describe('BASE | Base Resource', function() {
         const actualValue = baseEntity.getEndpoint('/', {
           actionsEntities: true,
         });
-        const expectedValue =
-          `/cards/${cardId}?actions_entities=true&${authSuffix}`;
+        const expectedValue = `/cards/${cardId}?actions_entities=true&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -42,8 +40,7 @@ describe('BASE | Base Resource', function() {
         const actualValue = baseEntity.getEndpoint('/', {
           actions: ['copyBoard', 'copyCard'],
         });
-        const expectedValue =
-          `/cards/${cardId}?actions=copyBoard,copyCard&${authSuffix}`;
+        const expectedValue = `/cards/${cardId}?actions=copyBoard,copyCard&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -54,8 +51,7 @@ describe('BASE | Base Resource', function() {
           },
           separator: '/',
         });
-        const expectedValue =
-          `/cards/${cardId}?prefs/selfJoin=true&${authSuffix}`;
+        const expectedValue = `/cards/${cardId}?prefs/selfJoin=true&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -81,7 +77,9 @@ describe('BASE | Base Resource', function() {
     describe('BASE-EB-PY | With Parent', function() {
       before(function() {
         baseEntity = new BaseResource(
-          config, `/boards/${boardId}/cards/${cardId}`);
+          config,
+          `/boards/${boardId}/cards/${cardId}`,
+        );
       });
 
       it('BASE-EB-PY-T01 | builds an endpoint with the root path', function() {
@@ -94,8 +92,7 @@ describe('BASE | Base Resource', function() {
         const actualValue = baseEntity.getEndpoint('/', {
           actionsFormat: 'count',
         });
-        const expectedValue =
-          `/boards/${boardId}/cards/${cardId}?actions_format=count&${authSuffix}`;
+        const expectedValue = `/boards/${boardId}/cards/${cardId}?actions_format=count&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -103,8 +100,7 @@ describe('BASE | Base Resource', function() {
         const actualValue = baseEntity.getEndpoint('/', {
           actionsEntities: true,
         });
-        const expectedValue =
-          `/boards/${boardId}/cards/${cardId}?actions_entities=true&${authSuffix}`;
+        const expectedValue = `/boards/${boardId}/cards/${cardId}?actions_entities=true&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -112,8 +108,7 @@ describe('BASE | Base Resource', function() {
         const actualValue = baseEntity.getEndpoint('/', {
           actions: ['copyBoard', 'copyCard'],
         });
-        const expectedValue =
-          `/boards/${boardId}/cards/${cardId}?actions=copyBoard,copyCard&${authSuffix}`;
+        const expectedValue = `/boards/${boardId}/cards/${cardId}?actions=copyBoard,copyCard&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 
@@ -124,8 +119,7 @@ describe('BASE | Base Resource', function() {
           },
           separator: '/',
         });
-        const expectedValue =
-          `/boards/${boardId}/cards/${cardId}?prefs/selfJoin=true&${authSuffix}`;
+        const expectedValue = `/boards/${boardId}/cards/${cardId}?prefs/selfJoin=true&${authSuffix}`;
         expect(actualValue).to.equal(expectedValue);
       });
 

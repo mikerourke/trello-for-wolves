@@ -66,61 +66,63 @@ export const cardFieldMap = generateTypeMap(
 );
 export type CardField = $Keys<typeof cardFieldMap>;
 
-export const cardFilterMap = generateTypeMap('all', 'closed', 'none', 'open', 'visible');
+export const cardFilterMap = generateTypeMap(
+  'all',
+  'closed',
+  'none',
+  'open',
+  'visible',
+);
 export type CardFilter = $Keys<typeof cardFilterMap>;
 
 /**
  * @namespace Card
  */
 export default class Card extends BaseResource {
-  getCards(
-    queryArgs?: {
-      actions?: ArgumentGroup<ActionFilter>,
-      attachments?: AttachmentFilter,
-      attachmentFields?: ArgumentGroup<AttachmentField>,
-      stickers?: boolean,
-      members?: boolean,
-      memberFields?: ArgumentGroup<MemberField>,
-      checkItemStates?: boolean,
-      checklists?: AllOrNone,
-      limit?: number,
-      since?: ?Date,
-      before?: ?Date,
-      filter?: CardFilter,
-      fields?: ArgumentGroup<CardField>,
-    },
-  ): Promise<any> {
+  getCards(queryArgs?: {
+    actions?: ArgumentGroup<ActionFilter>,
+    attachments?: AttachmentFilter,
+    attachmentFields?: ArgumentGroup<AttachmentField>,
+    stickers?: boolean,
+    members?: boolean,
+    memberFields?: ArgumentGroup<MemberField>,
+    checkItemStates?: boolean,
+    checklists?: AllOrNone,
+    limit?: number,
+    since?: ?Date,
+    before?: ?Date,
+    filter?: CardFilter,
+    fields?: ArgumentGroup<CardField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getCard(
-    queryArgs?: {
-      actions?: ArgumentGroup<ActionFilter>,
-      actionsEntities?: boolean,
-      actionsDisplay?: boolean,
-      actionsLimit?: number,
-      actionFields?: ArgumentGroup<ActionField>,
-      actionMemberCreatorFields?: ArgumentGroup<MemberField>,
-      attachments?: AttachmentFilter,
-      attachmentFields?: ArgumentGroup<AttachmentField>,
-      members?: boolean,
-      memberFields?: ArgumentGroup<MemberField>,
-      membersVoted?: boolean,
-      memberVotedFields?: ArgumentGroup<MemberField>,
-      checkItemStates?: boolean,
-      checkItemStateFields?: ArgumentGroup<CheckItemStateField>,
-      checklists?: AllOrNone,
-      checklistFields?: ArgumentGroup<ChecklistField>,
-      board?: boolean,
-      boardFields?: ArgumentGroup<BoardField>,
-      list?: boolean,
-      listFields?: ArgumentGroup<ListField>,
-      pluginData?: boolean,
-      stickers?: boolean,
-      stickerFields?: ArgumentGroup<StickerField>,
-      fields?: ArgumentGroup<CardField>,
-    },
-  ): Promise<any> {
+  getCard(queryArgs?: {
+    actions?: ArgumentGroup<ActionFilter>,
+    actionsEntities?: boolean,
+    actionsDisplay?: boolean,
+    actionsLimit?: number,
+    actionFields?: ArgumentGroup<ActionField>,
+    actionMemberCreatorFields?: ArgumentGroup<MemberField>,
+    attachments?: AttachmentFilter,
+    attachmentFields?: ArgumentGroup<AttachmentField>,
+    members?: boolean,
+    memberFields?: ArgumentGroup<MemberField>,
+    membersVoted?: boolean,
+    memberVotedFields?: ArgumentGroup<MemberField>,
+    checkItemStates?: boolean,
+    checkItemStateFields?: ArgumentGroup<CheckItemStateField>,
+    checklists?: AllOrNone,
+    checklistFields?: ArgumentGroup<ChecklistField>,
+    board?: boolean,
+    boardFields?: ArgumentGroup<BoardField>,
+    list?: boolean,
+    listFields?: ArgumentGroup<ListField>,
+    pluginData?: boolean,
+    stickers?: boolean,
+    stickerFields?: ArgumentGroup<StickerField>,
+    fields?: ArgumentGroup<CardField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
@@ -137,7 +139,10 @@ export default class Card extends BaseResource {
   }
 
   attachments(attachmentId?: string = '') {
-    return new Attachment(this.config, `${this.routePath}/attachments/${attachmentId}`);
+    return new Attachment(
+      this.config,
+      `${this.routePath}/attachments/${attachmentId}`,
+    );
   }
 
   board() {
@@ -149,15 +154,24 @@ export default class Card extends BaseResource {
   }
 
   checklist(checklistId: string) {
-    return new Checklist(this.config, `${this.routePath}/checklist/${checklistId}`);
+    return new Checklist(
+      this.config,
+      `${this.routePath}/checklist/${checklistId}`,
+    );
   }
 
   checklists(checklistId?: string = '') {
-    return new Checklist(this.config, `${this.routePath}/checklists/${checklistId}`);
+    return new Checklist(
+      this.config,
+      `${this.routePath}/checklists/${checklistId}`,
+    );
   }
 
   checkItem(checkItemId: string) {
-    return new CheckItem(this.config, `${this.routePath}/checkItem/${checkItemId}`);
+    return new CheckItem(
+      this.config,
+      `${this.routePath}/checkItem/${checkItemId}`,
+    );
   }
 
   comments(commentId?: string = '') {
@@ -188,22 +202,20 @@ export default class Card extends BaseResource {
     return new Sticker(this.config, `${this.routePath}/stickers/${stickerId}`);
   }
 
-  updateCard(
-    queryArgs?: {
-      name?: string,
-      desc?: string,
-      closed?: boolean,
-      idMembers?: Array<string>,
-      idAttachmentCover?: string,
-      idList?: string,
-      idLabels?: Array<string>,
-      idBoard?: string,
-      pos?: PositionNumbered,
-      due?: ?Date,
-      dueComplete?: boolean,
-      subscribed?: boolean,
-    },
-  ): Promise<any> {
+  updateCard(queryArgs?: {
+    name?: string,
+    desc?: string,
+    closed?: boolean,
+    idMembers?: Array<string>,
+    idAttachmentCover?: string,
+    idList?: string,
+    idLabels?: Array<string>,
+    idBoard?: string,
+    pos?: PositionNumbered,
+    due?: ?Date,
+    dueComplete?: boolean,
+    subscribed?: boolean,
+  }): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
@@ -262,27 +274,29 @@ export default class Card extends BaseResource {
   }
 
   addCard(
-    queryArgs: {
-      idList: string,
-      name?: string,
-      desc?: string,
-      pos?: PositionNumbered,
-      due?: ?Date,
-      dueComplete?: boolean,
-      idMembers?: Array<string>,
-      idLabels?: Array<string>,
-      urlSource?: ?string,
-      fileSource?: Object,
-      idCardSource?: string,
-      keepFromSource?: KeepFromSourceField | Array<KeepFromSourceField>,
-    } | {
-      // These are for adding a card from a List.
-      name: string,
-      desc?: string,
-      labels?: ArgumentGroup<LabelColor>,
-      idMembers?: Array<string>,
-      due?: ?Date,
-    },
+    queryArgs:
+      | {
+          idList: string,
+          name?: string,
+          desc?: string,
+          pos?: PositionNumbered,
+          due?: ?Date,
+          dueComplete?: boolean,
+          idMembers?: Array<string>,
+          idLabels?: Array<string>,
+          urlSource?: ?string,
+          fileSource?: Object,
+          idCardSource?: string,
+          keepFromSource?: KeepFromSourceField | Array<KeepFromSourceField>,
+        }
+      | {
+          // These are for adding a card from a List.
+          name: string,
+          desc?: string,
+          labels?: ArgumentGroup<LabelColor>,
+          idMembers?: Array<string>,
+          due?: ?Date,
+        },
   ): Promise<any> {
     return this.httpPost('/', queryArgs);
   }

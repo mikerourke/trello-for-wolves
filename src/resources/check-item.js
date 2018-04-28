@@ -1,16 +1,22 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
 import BaseResource from './base-resource';
-import type {
-  AllOrNone,
-  ArgumentGroup,
-  PositionNumbered,
-} from '../types';
+import type { AllOrNone, ArgumentGroup, PositionNumbered } from '../types';
 
-export const checkItemFieldMap = generateTypeMap('name', 'nameData', 'pos', 'state');
+export const checkItemFieldMap = generateTypeMap(
+  'name',
+  'nameData',
+  'pos',
+  'state',
+);
 export type CheckItemField = $Keys<typeof checkItemFieldMap>;
 
-export const checkItemStateMap = generateTypeMap('complete', 'false', 'incomplete', 'true');
+export const checkItemStateMap = generateTypeMap(
+  'complete',
+  'false',
+  'incomplete',
+  'true',
+);
 export type CheckItemState = $Keys<typeof checkItemStateMap>;
 
 export const checkItemStateFieldMap = generateTypeMap('idCheckItem', 'state');
@@ -20,39 +26,31 @@ export type CheckItemStateField = $Keys<typeof checkItemStateFieldMap>;
  * @namespace CheckItem
  */
 export default class CheckItem extends BaseResource {
-  getCheckItems(
-    queryArgs?: {
-      filter?: AllOrNone,
-      fields?: ArgumentGroup<CheckItemField>,
-    },
-  ): Promise<any> {
+  getCheckItems(queryArgs?: {
+    filter?: AllOrNone,
+    fields?: ArgumentGroup<CheckItemField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getCheckItem(
-    queryArgs?: {
-      fields?: ArgumentGroup<CheckItemField>,
-    },
-  ): Promise<any> {
+  getCheckItem(queryArgs?: {
+    fields?: ArgumentGroup<CheckItemField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getCheckItemStates(
-    queryArgs?: {
-      fields?: ArgumentGroup<CheckItemStateField>,
-    },
-  ): Promise<any> {
+  getCheckItemStates(queryArgs?: {
+    fields?: ArgumentGroup<CheckItemStateField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  updateCheckItem(
-    queryArgs?: {
-      name?: string,
-      state?: CheckItemState,
-      pos?: PositionNumbered,
-      idChecklist?: ?string,
-    },
-  ): Promise<any> {
+  updateCheckItem(queryArgs?: {
+    name?: string,
+    state?: CheckItemState,
+    pos?: PositionNumbered,
+    idChecklist?: ?string,
+  }): Promise<any> {
     return this.httpPut('/', queryArgs);
   }
 
@@ -68,13 +66,11 @@ export default class CheckItem extends BaseResource {
     return this.httpPut('/state', { value });
   }
 
-  addCheckItem(
-    queryArgs: {
-      name: string,
-      pos?: PositionNumbered,
-      checked?: boolean,
-    },
-  ): Promise<any> {
+  addCheckItem(queryArgs: {
+    name: string,
+    pos?: PositionNumbered,
+    checked?: boolean,
+  }): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 

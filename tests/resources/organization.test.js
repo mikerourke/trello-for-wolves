@@ -24,7 +24,8 @@ describe('ORG | Organization Resource', function() {
   });
 
   after(function(done) {
-    logger.writeResultsToFile('organization')
+    logger
+      .writeResultsToFile('organization')
       .then(() => done())
       .catch(error => done(error));
   });
@@ -37,58 +38,64 @@ describe('ORG | Organization Resource', function() {
     });
 
     it('ORG-G-01-T01 | gets an Organization', function(done) {
-      trello.organizations(orgId).getOrganization()
+      trello
+        .organizations(orgId)
+        .getOrganization()
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-01-T02 | gets an Organization with some arguments', function(done) {
-      trello.organizations(orgId).getOrganization({
-        actions: 'none',
-        members: 'all',
-        memberFields: ['fullName', 'username'],
-      })
+      trello
+        .organizations(orgId)
+        .getOrganization({
+          actions: 'none',
+          members: 'all',
+          memberFields: ['fullName', 'username'],
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-01-T03 | gets an Organization with all arguments', function(done) {
-      trello.organizations(orgId).getOrganization({
-        actions: 'createOrganization',
-        actionsEntities: true,
-        actionsDisplay: true,
-        actionsLimit: 20,
-        actionFields: ['date', 'type'],
-        memberships: 'all',
-        membershipsMember: true,
-        membershipsMemberFields: ['fullName', 'username'],
-        members: 'all',
-        memberFields: 'all',
-        memberActivity: false,
-        membersInvited: 'all',
-        membersInvitedFields: ['fullName', 'username'],
-        pluginData: true,
-        boards: 'all',
-        boardFields: 'all',
-        boardActions: 'none',
-        boardActionsEntities: true,
-        boardActionsDisplay: true,
-        boardActionsFormat: 'minimal',
-        boardActionsSince: null,
-        boardActionsLimit: 20,
-        boardActionFields: ['date', 'type'],
-        boardLists: 'all',
-        boardPluginData: false,
-        paidAccount: false,
-        fields: 'all',
-      })
+      trello
+        .organizations(orgId)
+        .getOrganization({
+          actions: 'createOrganization',
+          actionsEntities: true,
+          actionsDisplay: true,
+          actionsLimit: 20,
+          actionFields: ['date', 'type'],
+          memberships: 'all',
+          membershipsMember: true,
+          membershipsMemberFields: ['fullName', 'username'],
+          members: 'all',
+          memberFields: 'all',
+          memberActivity: false,
+          membersInvited: 'all',
+          membersInvitedFields: ['fullName', 'username'],
+          pluginData: true,
+          boards: 'all',
+          boardFields: 'all',
+          boardActions: 'none',
+          boardActionsEntities: true,
+          boardActionsDisplay: true,
+          boardActionsFormat: 'minimal',
+          boardActionsSince: null,
+          boardActionsLimit: 20,
+          boardActionFields: ['date', 'type'],
+          boardLists: 'all',
+          boardPluginData: false,
+          paidAccount: false,
+          fields: 'all',
+        })
         .then(logResponse)
-        .then((response) => {
+        .then(response => {
           const { data } = response;
           orgData = data || {};
-          testMember = data.members.find(member => member.id === resources.member.id);
+          testMember = data.members.find(
+            member => member.id === resources.member.id,
+          );
           assert.isDefined(data);
           done();
         })
@@ -96,40 +103,49 @@ describe('ORG | Organization Resource', function() {
     });
 
     it('ORG-G-02-T01 | gets the value of the name field for the Organization', function(done) {
-      trello.organizations(orgId).getFieldValue('name')
+      trello
+        .organizations(orgId)
+        .getFieldValue('name')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-03-T01 | gets the associated Actions', function(done) {
-      trello.organizations(orgId).actions().getActions()
+      trello
+        .organizations(orgId)
+        .actions()
+        .getActions()
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-04-T01 | gets the associated Boards', function(done) {
-      trello.organizations(orgId).boards().getBoards()
+      trello
+        .organizations(orgId)
+        .boards()
+        .getBoards()
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-04-T02 | gets the specified fields for the associated Boards', function(done) {
-      trello.organizations(orgId).boards().getBoards({
-        fields: ['name', 'pos'],
-      })
+      trello
+        .organizations(orgId)
+        .boards()
+        .getBoards({
+          fields: ['name', 'pos'],
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-05-T01 | gets only the open Boards with filter applied', function(done) {
-      trello.organizations(orgId).boards().getBoardsFilteredBy('open')
+      trello
+        .organizations(orgId)
+        .boards()
+        .getBoardsFilteredBy('open')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     /**
@@ -137,36 +153,43 @@ describe('ORG | Organization Resource', function() {
      * @reason Business Class account required
      */
     it.skip('ORG-G-06-T01 | gets the associated Deltas', function(done) {
-      trello.organizations(orgId).getDeltas({
-        tags: 'tag?',
-        ixLastUpdate: 1,
-      })
+      trello
+        .organizations(orgId)
+        .getDeltas({
+          tags: 'tag?',
+          ixLastUpdate: 1,
+        })
         .then(logResponse)
-        .should.eventually.be.rejected
-        .notify(done);
+        .should.eventually.be.rejected.notify(done);
     });
 
     it('ORG-G-07-T01 | gets the associated Members', function(done) {
-      trello.organizations(orgId).members().getMembers()
+      trello
+        .organizations(orgId)
+        .members()
+        .getMembers()
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-07-T02 | gets the specified fields for the associated Members', function(done) {
-      trello.organizations(orgId).members().getMembers({
-        fields: ['fullName', 'initials'],
-      })
+      trello
+        .organizations(orgId)
+        .members()
+        .getMembers({
+          fields: ['fullName', 'initials'],
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-08-T01 | gets only the normal Members with filter applied', function(done) {
-      trello.organizations(orgId).members().getMembersFilteredBy('normal')
+      trello
+        .organizations(orgId)
+        .members()
+        .getMembersFilteredBy('normal')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-09-T01 | gets the associated Cards for the specified Member', function(done) {
@@ -175,51 +198,64 @@ describe('ORG | Organization Resource', function() {
       if (!memberId) {
         done(new Error('Member Id not found.'));
       }
-      trello.organizations(orgId).members(memberId).cards().getCards()
+      trello
+        .organizations(orgId)
+        .members(memberId)
+        .cards()
+        .getCards()
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-10-T01 | gets the associated Members Invited', function(done) {
-      trello.organizations(orgId).membersInvited().getMembers()
+      trello
+        .organizations(orgId)
+        .membersInvited()
+        .getMembers()
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-10-T02 | gets the specified fields for the associated Members Invited', function(done) {
-      trello.organizations(orgId).membersInvited().getMembers({
-        fields: ['email', 'fullName', 'username'],
-      })
+      trello
+        .organizations(orgId)
+        .membersInvited()
+        .getMembers({
+          fields: ['email', 'fullName', 'username'],
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-11-T01 | gets the value of the fullName field for the associated Members Invited', function(done) {
-      trello.organizations(orgId).membersInvited().getFieldValue('fullName')
+      trello
+        .organizations(orgId)
+        .membersInvited()
+        .getFieldValue('fullName')
         .then(logResponse)
-        .should.eventually.be.rejected
-        .notify(done);
+        .should.eventually.be.rejected.notify(done);
     });
 
     it('ORG-G-12-T01 | gets the associated Memberships', function(done) {
-      trello.organizations(orgId).memberships().getMemberships({
-        filter: 'me',
-      })
+      trello
+        .organizations(orgId)
+        .memberships()
+        .getMemberships({
+          filter: 'me',
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-12-T02 | gets only the specified Member fields for the associated Memberships', function(done) {
-      trello.organizations(orgId).memberships().getMemberships({
-        memberFields: ['status', 'username'],
-      })
+      trello
+        .organizations(orgId)
+        .memberships()
+        .getMemberships({
+          memberFields: ['status', 'username'],
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-13-T01 | gets the associated Membership with the specified Id', function(done) {
@@ -227,17 +263,20 @@ describe('ORG | Organization Resource', function() {
       if (!membershipId) {
         done(new Error('Membership Id not found.'));
       }
-      trello.organizations(orgId).memberships(membershipId).getMembership()
+      trello
+        .organizations(orgId)
+        .memberships(membershipId)
+        .getMembership()
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-G-14-T01 | gets the associated Plugin Data', function(done) {
-      trello.organizations(orgId).getPluginData()
+      trello
+        .organizations(orgId)
+        .getPluginData()
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     /**
@@ -245,10 +284,11 @@ describe('ORG | Organization Resource', function() {
      * @reason Business Class account required
      */
     it.skip('ORG-G-15-T01 | gets the associated Tags', function(done) {
-      trello.organizations(orgId).getTags()
+      trello
+        .organizations(orgId)
+        .getTags()
         .then(logResponse)
-        .should.eventually.be.rejected
-        .notify(done);
+        .should.eventually.be.rejected.notify(done);
     });
   });
 
@@ -258,27 +298,30 @@ describe('ORG | Organization Resource', function() {
     });
 
     it('ORG-U-01-T01 | updates an Organization', function(done) {
-      trello.organizations(orgId).updateOrganization({
-        displayName: 'ORG-U-01-T01',
-        desc: 'This is a test organization.'
-      })
+      trello
+        .organizations(orgId)
+        .updateOrganization({
+          displayName: 'ORG-U-01-T01',
+          desc: 'This is a test organization.',
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-U-02-T01 | updates the description', function(done) {
-      trello.organizations(orgId).updateDescription('ORG-U-02-T01')
+      trello
+        .organizations(orgId)
+        .updateDescription('ORG-U-02-T01')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-U-03-T01 | updates the display name', function(done) {
-      trello.organizations(orgId).updateDisplayName('ORG-U-03-T01')
+      trello
+        .organizations(orgId)
+        .updateDisplayName('ORG-U-03-T01')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     /**
@@ -287,13 +330,15 @@ describe('ORG | Organization Resource', function() {
 
     it('ORG-U-05-T01 | updates the type for an associated Member', function(done) {
       if (!testMember) {
-        done(new Error('Member not found.'))
+        done(new Error('Member not found.'));
       }
       const memberId = testMember.id;
-      trello.organizations(orgId).members(memberId).updateMemberType('normal')
+      trello
+        .organizations(orgId)
+        .members(memberId)
+        .updateMemberType('normal')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-U-06-T01 | updates the deactivated status of an associated Member', function(done) {
@@ -301,10 +346,12 @@ describe('ORG | Organization Resource', function() {
       if (username === process.env.TRELLO_MEMBER_USERNAME.toString()) {
         done(new Error('Cannot change deactivated status of administrator.'));
       }
-      trello.organizations(orgId).members(id).updateDeactivatedStatus(false)
+      trello
+        .organizations(orgId)
+        .members(id)
+        .updateDeactivatedStatus(false)
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-U-07-T01 | updates the associated Membership with the specified Id', function(done) {
@@ -312,12 +359,14 @@ describe('ORG | Organization Resource', function() {
       if (!membership) {
         done(new Error('Membership not found.'));
       }
-      trello.organizations(orgId).memberships(membership.id).updateMembership({
-        type: membership.memberType,
-      })
+      trello
+        .organizations(orgId)
+        .memberships(membership.id)
+        .updateMembership({
+          type: membership.memberType,
+        })
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-U-08-T01 | updates the name of the Organization', function(done) {
@@ -325,10 +374,11 @@ describe('ORG | Organization Resource', function() {
         done(new Error('Organization name not found.'));
       }
       const orgName = orgData.name;
-      trello.organizations(orgId).updateName(orgName)
+      trello
+        .organizations(orgId)
+        .updateName(orgName)
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     /**
@@ -336,10 +386,12 @@ describe('ORG | Organization Resource', function() {
      * @reason Requires googleApps Permission
      */
     it.skip('ORG-U-09-T01 | updates the associated domain preference', function(done) {
-      trello.organizations(orgId).prefs().updateAssociatedDomain('')
+      trello
+        .organizations(orgId)
+        .prefs()
+        .updateAssociatedDomain('')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     /**
@@ -347,10 +399,12 @@ describe('ORG | Organization Resource', function() {
      * @reason Requires restrictVis Permission
      */
     it.skip('ORG-U-10-T01 | updates the board visibility preference for org', function(done) {
-      trello.organizations(orgId).prefs().updateBoardVisibilityRestriction('org', 'org')
+      trello
+        .organizations(orgId)
+        .prefs()
+        .updateBoardVisibilityRestriction('org', 'org')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     /**
@@ -358,10 +412,12 @@ describe('ORG | Organization Resource', function() {
      * @reason Requires restrictVis Permission
      */
     it.skip('ORG-U-11-T01 | updates the board visibility preference for private', function(done) {
-      trello.organizations(orgId).prefs().updateBoardVisibilityRestriction('private', 'admin')
+      trello
+        .organizations(orgId)
+        .prefs()
+        .updateBoardVisibilityRestriction('private', 'admin')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     /**
@@ -369,10 +425,12 @@ describe('ORG | Organization Resource', function() {
      * @reason Requires restrictVis Permission
      */
     it.skip('ORG-U-12-T01 | updates the board visibility preference for public', function(done) {
-      trello.organizations(orgId).prefs().updateBoardVisibilityRestriction('public', 'admin')
+      trello
+        .organizations(orgId)
+        .prefs()
+        .updateBoardVisibilityRestriction('public', 'admin')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     /**
@@ -380,10 +438,12 @@ describe('ORG | Organization Resource', function() {
      * @reason Requires disableExternalMembers Permission
      */
     it.skip('ORG-U-13-T01 | updates the external members disabled preference', function(done) {
-      trello.organizations(orgId).prefs().updateExternalMembersDisabled(true)
+      trello
+        .organizations(orgId)
+        .prefs()
+        .updateExternalMembersDisabled(true)
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     /**
@@ -391,10 +451,12 @@ describe('ORG | Organization Resource', function() {
      * @reason Requires googleApps Permission
      */
     it.skip('ORG-U-14-T01 | updates the Google Apps version preference', function(done) {
-      trello.organizations(orgId).prefs().updateGoogleAppsVersion(true)
+      trello
+        .organizations(orgId)
+        .prefs()
+        .updateGoogleAppsVersion(true)
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     /**
@@ -402,24 +464,29 @@ describe('ORG | Organization Resource', function() {
      * @reason Sends Email
      */
     it.skip('ORG-U-15-T01 | updates the org invite restriction preference', function(done) {
-      trello.organizations(orgId).prefs().updateOrgInviteRestrict('')
+      trello
+        .organizations(orgId)
+        .prefs()
+        .updateOrgInviteRestrict('')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-U-16-T01 | updates the permission level preference', function(done) {
-      trello.organizations(orgId).prefs().updatePermissionLevel('private')
+      trello
+        .organizations(orgId)
+        .prefs()
+        .updatePermissionLevel('private')
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
     it('ORG-U-17-T01 | updates the website', function(done) {
-      trello.organizations(orgId).updateWebsite(null)
+      trello
+        .organizations(orgId)
+        .updateWebsite(null)
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
   });
 });

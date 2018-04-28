@@ -22,37 +22,35 @@ export type MembershipFilter = $Keys<typeof membershipFilterMap>;
  * @namespace Membership
  */
 export default class Membership extends BaseResource {
-  getMemberships(
-    queryArgs?: {
-      filter?: ArgumentGroup<MembershipFilter>,
-      member?: boolean,
-      // Member Fields are only allowed when called from a Board:
-      memberFields?: ArgumentGroup<MemberField>,
-    },
-  ): Promise<any> {
+  getMemberships(queryArgs?: {
+    filter?: ArgumentGroup<MembershipFilter>,
+    member?: boolean,
+    // Member Fields are only allowed when called from a Board:
+    memberFields?: ArgumentGroup<MemberField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getMembership(
-    queryArgs?: {
-      member?: boolean,
-      // Member Fields are only allowed when called from a Board:
-      memberFields?: ArgumentGroup<MemberField>,
-    },
-  ): Promise<any> {
+  getMembership(queryArgs?: {
+    member?: boolean,
+    // Member Fields are only allowed when called from a Board:
+    memberFields?: ArgumentGroup<MemberField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
   updateMembership(
-    queryArgs: {
-      // When called from a Board:
-      type: BoardMemberType,
-      fields?: ArgumentGroup<MemberField>,
-    } | {
-      // When called from Member or Organization:
-      type: MemberType,
-      fields?: ArgumentGroup<MemberField>,
-    },
+    queryArgs:
+      | {
+          // When called from a Board:
+          type: BoardMemberType,
+          fields?: ArgumentGroup<MemberField>,
+        }
+      | {
+          // When called from Member or Organization:
+          type: MemberType,
+          fields?: ArgumentGroup<MemberField>,
+        },
   ): Promise<any> {
     return this.httpPut('/', queryArgs);
   }

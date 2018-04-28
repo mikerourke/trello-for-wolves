@@ -36,31 +36,25 @@ export type AttachmentField = $Keys<typeof attachmentFieldMap>;
  * @namespace Attachment
  */
 export default class Attachment extends BaseResource {
-  getAttachments(
-    queryArgs?: {
-      fields?: ArgumentGroup<AttachmentField>,
-      filter?: ArgumentGroup<AttachmentFilter>,
-    },
-  ): Promise<any> {
+  getAttachments(queryArgs?: {
+    fields?: ArgumentGroup<AttachmentField>,
+    filter?: ArgumentGroup<AttachmentFilter>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  getAttachment(
-    queryArgs?: {
-      fields?: ArgumentGroup<AttachmentField>,
-    },
-  ): Promise<any> {
+  getAttachment(queryArgs?: {
+    fields?: ArgumentGroup<AttachmentField>,
+  }): Promise<any> {
     return this.httpGet('/', queryArgs);
   }
 
-  uploadAttachment(
-    queryArgs?: {
-      file?: Object,
-      url?: string,
-      name?: string,
-      mimeType?: MimeType | string,
-    },
-  ): Promise<any> {
+  uploadAttachment(queryArgs?: {
+    file?: Object,
+    url?: string,
+    name?: string,
+    mimeType?: MimeType | string,
+  }): Promise<any> {
     return this.httpPost('/', queryArgs);
   }
 

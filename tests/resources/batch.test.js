@@ -16,7 +16,8 @@ describe('BTC | Batch Resource', function() {
   });
 
   after(function(done) {
-    logger.writeResultsToFile('batch')
+    logger
+      .writeResultsToFile('batch')
       .then(() => done())
       .catch(error => done(error));
   });
@@ -30,24 +31,26 @@ describe('BTC | Batch Resource', function() {
       }
     });
 
-    it('BTC-G-01-T01 | performs a batch request when passed correct URLs', function (done) {
-      trello.batch().makeRequests([
-        `/boards/${resources.board.id}`,
-        `/cards/${resources.card.id}`
-      ])
+    it('BTC-G-01-T01 | performs a batch request when passed correct URLs', function(done) {
+      trello
+        .batch()
+        .makeRequests([
+          `/boards/${resources.board.id}`,
+          `/cards/${resources.card.id}`,
+        ])
         .then(logResponse)
-        .should.eventually.be.fulfilled
-        .notify(done);
+        .should.eventually.be.fulfilled.notify(done);
     });
 
-    it('BTC-G-01-T02 | fails gracefully when passed an invalid URL', function (done) {
-      trello.batch().makeRequests([
-        `/boards${resources.board.id}`, // Note the missing slash.
-        `/cards/${resources.card.id}`
-      ])
+    it('BTC-G-01-T02 | fails gracefully when passed an invalid URL', function(done) {
+      trello
+        .batch()
+        .makeRequests([
+          `/boards${resources.board.id}`, // Note the missing slash.
+          `/cards/${resources.card.id}`,
+        ])
         .then(logResponse)
-        .should.eventually.be.rejected
-        .notify(done);
+        .should.eventually.be.rejected.notify(done);
     });
   });
 });
