@@ -153,13 +153,6 @@
       "flowtype/use-flow-type": "warn"
     }
   },
-  "eslintIgnore": [
-    "internals/",
-    "docs/",
-    "src/types.js",
-    "tests/",
-    "lib/"
-  ],
   "nyc": {
     "check-coverage": true,
     "include": [

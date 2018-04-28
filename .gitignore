@@ -40,3 +40,4 @@ coverage/
 .env
 ids.json
 resources.json
+testing.js
