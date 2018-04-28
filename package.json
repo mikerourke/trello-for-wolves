@@ -26,7 +26,7 @@
     "build:clean": "rimraf lib",
     "build:lib": "cross-env NODE_ENV=production babel -d lib src --ignore src/types.js",
     "build:flowcopy": "flow-copy-source -v src lib",
-    "build:flowcheck": "flow check --include lib",
+    "build:flowcheck": "flow lib/index.js.flow",
     "build": "yarn build:clean && yarn build:lib && yarn build:flowcopy && yarn build:flowcheck",
     "cleanup": "rimraf .nyc_output && rimraf coverage && rimraf lib",
     "predoc": "rimraf docs/",
