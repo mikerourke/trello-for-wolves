@@ -1,5 +1,4 @@
 // @flow
-import { generateTypeMap } from '../utils/typeMapper';
 import BaseResource from './baseResource';
 import Board from './board';
 import Card from './card';
@@ -14,48 +13,43 @@ import type {
   OrganizationField,
 } from '../types';
 
-export const notificationFieldMap = generateTypeMap(
-  'data',
-  'date',
-  'idMemberCreator',
-  'type',
-  'unread',
-);
-export type NotificationField = $Keys<typeof notificationFieldMap>;
+export type NotificationField =
+  | 'data'
+  | 'date'
+  | 'idMemberCreator'
+  | 'type'
+  | 'unread';
 
-export const notificationFilterMap = generateTypeMap(
-  'addAdminToBoard',
-  'addAdminToOrganization',
-  'addedAttachmentToCard',
-  'addedMemberToCard',
-  'addedToBoard',
-  'addedToCard',
-  'addedToOrganization',
-  'cardDueSoon',
-  'changeCard',
-  'closeBoard',
-  'commentCard',
-  'createdCard',
-  'declinedInvitationToBoard',
-  'declinedInvitationToOrganization',
-  'invitedToBoard',
-  'invitedToOrganization',
-  'makeAdminOfBoard',
-  'makeAdminOfOrganization',
-  'memberJoinedTrello',
-  'mentionedOnCard',
-  'removedFromBoard',
-  'removedFromCard',
-  'removedFromOrganization',
-  'removedMemberFromCard',
-  'unconfirmedInvitedToBoard',
-  'unconfirmedInvitedToOrganization',
-  'updateCheckItemStateOnCard',
-);
-export type NotificationFilter = $Keys<typeof notificationFilterMap>;
+export type NotificationFilter =
+  | 'addAdminToBoard'
+  | 'addAdminToOrganization'
+  | 'addedAttachmentToCard'
+  | 'addedMemberToCard'
+  | 'addedToBoard'
+  | 'addedToCard'
+  | 'addedToOrganization'
+  | 'cardDueSoon'
+  | 'changeCard'
+  | 'closeBoard'
+  | 'commentCard'
+  | 'createdCard'
+  | 'declinedInvitationToBoard'
+  | 'declinedInvitationToOrganization'
+  | 'invitedToBoard'
+  | 'invitedToOrganization'
+  | 'makeAdminOfBoard'
+  | 'makeAdminOfOrganization'
+  | 'memberJoinedTrello'
+  | 'mentionedOnCard'
+  | 'removedFromBoard'
+  | 'removedFromCard'
+  | 'removedFromOrganization'
+  | 'removedMemberFromCard'
+  | 'unconfirmedInvitedToBoard'
+  | 'unconfirmedInvitedToOrganization'
+  | 'updateCheckItemStateOnCard';
 
-export const readFilterMap = generateTypeMap('all', 'read', 'unread');
-type ReadFilter = $Keys<typeof readFilterMap>;
+type ReadFilter = 'all' | 'read' | 'unread';
 
 /**
  * @namespace Notification

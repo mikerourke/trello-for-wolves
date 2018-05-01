@@ -1,26 +1,12 @@
 // @flow
-import { generateTypeMap } from '../utils/typeMapper';
 import BaseResource from './baseResource';
 import type { AllOrNone, ArgumentGroup, PositionNumbered } from '../types';
 
-export const checkItemFieldMap = generateTypeMap(
-  'name',
-  'nameData',
-  'pos',
-  'state',
-);
-export type CheckItemField = $Keys<typeof checkItemFieldMap>;
+export type CheckItemField = 'name' | 'nameData' | 'pos' | 'state';
 
-export const checkItemStateMap = generateTypeMap(
-  'complete',
-  'false',
-  'incomplete',
-  'true',
-);
-export type CheckItemState = $Keys<typeof checkItemStateMap>;
+export type CheckItemState = 'complete' | 'false' | 'incomplete' | 'true';
 
-export const checkItemStateFieldMap = generateTypeMap('idCheckItem', 'state');
-export type CheckItemStateField = $Keys<typeof checkItemStateFieldMap>;
+export type CheckItemStateField = 'idCheckItem' | 'state';
 
 /**
  * @namespace CheckItem

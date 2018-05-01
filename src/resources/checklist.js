@@ -1,5 +1,4 @@
 // @flow
-import { generateTypeMap } from '../utils/typeMapper';
 import BaseResource from './baseResource';
 import Board from './board';
 import Card from './card';
@@ -13,13 +12,7 @@ import type {
   PositionNumbered,
 } from '../types';
 
-export const checklistFieldMap = generateTypeMap(
-  'idBoard',
-  'idCard',
-  'name',
-  'pos',
-);
-export type ChecklistField = $Keys<typeof checklistFieldMap>;
+export type ChecklistField = 'idBoard' | 'idCard' | 'name' | 'pos';
 
 /**
  * @namespace Checklist

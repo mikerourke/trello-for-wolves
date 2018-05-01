@@ -1,18 +1,15 @@
 // @flow
-import { generateTypeMap } from '../utils/typeMapper';
 import BaseResource from './baseResource';
 import Member from './member';
 import Webhook from './webhook';
 import type { AllOrNone, ArgumentGroup } from '../types';
 
-export const tokenFieldMap = generateTypeMap(
-  'dateCreated',
-  'dateExpires',
-  'idMember',
-  'identifier',
-  'permissions',
-);
-export type TokenField = $Keys<typeof tokenFieldMap>;
+export type TokenField =
+  | 'dateCreated'
+  | 'dateExpires'
+  | 'idMember'
+  | 'identifier'
+  | 'permissions';
 
 /**
  * @namespace Token

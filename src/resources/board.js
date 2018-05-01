@@ -1,5 +1,4 @@
 // @flow
-import { generateTypeMap } from '../utils/typeMapper';
 import BaseResource from './baseResource';
 import Action from './action';
 import Card from './card';
@@ -35,75 +34,48 @@ import type {
   Position,
 } from '../types';
 
-export const boardFieldMap = generateTypeMap(
-  'closed',
-  'dateLastActivity',
-  'dateLastView',
-  'desc',
-  'descData',
-  'idOrganization',
-  'invitations',
-  'invited',
-  'labelNames',
-  'memberships',
-  'name',
-  'pinned',
-  'powerUps',
-  'prefs',
-  'shortLink',
-  'shortUrl',
-  'starred',
-  'subscribed',
-  'url',
-);
-export type BoardField = $Keys<typeof boardFieldMap>;
+export type BoardField =
+  | 'closed'
+  | 'dateLastActivity'
+  | 'dateLastView'
+  | 'desc'
+  | 'descData'
+  | 'idOrganization'
+  | 'invitations'
+  | 'invited'
+  | 'labelNames'
+  | 'memberships'
+  | 'name'
+  | 'pinned'
+  | 'powerUps'
+  | 'prefs'
+  | 'shortLink'
+  | 'shortUrl'
+  | 'starred'
+  | 'subscribed'
+  | 'url';
 
-export const boardFilterMap = generateTypeMap(
-  'closed',
-  'members',
-  'open',
-  'organization',
-  'pinned',
-  'public',
-  'starred',
-  'unpinned',
-);
-export type BoardFilter = $Keys<typeof boardFilterMap>;
+export type BoardFilter =
+  | 'closed'
+  | 'members'
+  | 'open'
+  | 'organization'
+  | 'pinned'
+  | 'public'
+  | 'starred'
+  | 'unpinned';
 
-export const boardMemberTypeMap = generateTypeMap(
-  'admin',
-  'normal',
-  'observer',
-);
-export type BoardMemberType = $Keys<typeof boardMemberTypeMap>;
+export type BoardMemberType = 'admin' | 'normal' | 'observer';
 
-export const boardStarsFilterMap = generateTypeMap('none', 'mine');
-export type BoardStarsFilter = $Keys<typeof boardStarsFilterMap>;
+export type BoardStarsFilter = 'none' | 'mine';
 
-export const boardPermissionLevelMap = generateTypeMap('org');
-type BoardPermissionLevel =
-  | PermissionLevel
-  | $Keys<typeof boardPermissionLevelMap>;
+type BoardPermissionLevel = PermissionLevel | 'org';
 
-export const groupPermissionMap = generateTypeMap(
-  'disabled',
-  'members',
-  'observers',
-  'org',
-  'public',
-);
-type GroupPermission = $Keys<typeof groupPermissionMap>;
+type GroupPermission = 'disabled' | 'members' | 'observers' | 'org' | 'public';
 
-export const invitationMap = generateTypeMap('admins', 'members');
-type Invitation = $Keys<typeof invitationMap>;
+type Invitation = 'admins' | 'members';
 
-export const powerUpMap = generateTypeMap(
-  'calendar',
-  'cardAging',
-  'recap',
-  'voting',
-);
-type PowerUp = $Keys<typeof powerUpMap>;
+type PowerUp = 'calendar' | 'cardAging' | 'recap' | 'voting';
 
 class MyPref extends BaseResource {
   getMyPrefs(): Promise<any> {

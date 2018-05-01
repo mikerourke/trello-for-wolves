@@ -1,14 +1,7 @@
 // @flow
-import { generateTypeMap } from '../utils/typeMapper';
 import BaseResource from './baseResource';
 
-export const wehookFieldMap = generateTypeMap(
-  'active',
-  'callbackURL',
-  'description',
-  'idModel',
-);
-export type WebhookField = $Keys<typeof wehookFieldMap>;
+export type WebhookField = 'active' | 'callbackURL' | 'description' | 'idModel';
 
 /**
  * @namespace Webhook

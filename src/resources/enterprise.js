@@ -1,5 +1,4 @@
 // @flow
-import { generateTypeMap } from '../utils/typeMapper';
 import BaseResource from './baseResource';
 import type {
   ArgumentGroup,
@@ -13,30 +12,21 @@ import type {
 
 type Combination<T> = T | Array<T>;
 
-export const enterpriseFieldMap = generateTypeMap(
-  'id',
-  'name',
-  'displayName',
-  'prefs',
-  'ssoActivationFailed',
-  'idAdmins',
-  'memberIds',
-  'orgIds',
-  'products',
-  'userTypes',
-  'memberIds',
-  'orgIds',
-);
-type EnterpriseField = $Keys<typeof enterpriseFieldMap>;
+type EnterpriseField =
+  | 'id'
+  | 'name'
+  | 'displayName'
+  | 'prefs'
+  | 'ssoActivationFailed'
+  | 'idAdmins'
+  | 'memberIds'
+  | 'orgIds'
+  | 'products'
+  | 'userTypes'
+  | 'memberIds'
+  | 'orgIds';
 
-export const sortOrderMap = generateTypeMap(
-  'id',
-  'ascending',
-  'descending',
-  'asc',
-  'desc',
-);
-type SortOrder = $Keys<typeof sortOrderMap>;
+type SortOrder = 'id' | 'ascending' | 'descending' | 'asc' | 'desc';
 
 /**
  * @namespace Enterprise

@@ -1,5 +1,4 @@
 // @flow
-import { generateTypeMap } from '../utils/typeMapper';
 import BaseResource from './baseResource';
 import type {
   ArgumentGroup,
@@ -8,15 +7,13 @@ import type {
   MemberType,
 } from '../types';
 
-export const membershipFilterMap = generateTypeMap(
-  'active',
-  'admin',
-  'deactivated',
-  'me',
-  'none',
-  'normal',
-);
-export type MembershipFilter = $Keys<typeof membershipFilterMap>;
+export type MembershipFilter =
+  | 'active'
+  | 'admin'
+  | 'deactivated'
+  | 'me'
+  | 'none'
+  | 'normal';
 
 /**
  * @namespace Membership

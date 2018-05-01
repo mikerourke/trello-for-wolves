@@ -1,36 +1,33 @@
 // @flow
-import { generateTypeMap } from '../utils/typeMapper';
 import BaseResource from './baseResource';
 import type { ArgumentGroup, MimeType } from '../types';
 
 export type AttachmentFilter = boolean | 'cover';
 
-export const attachmentFieldMap = generateTypeMap(
+export type AttachmentField =
   // Size of the attached file in bytes.
-  'bytes',
+  | 'bytes'
   // The date the file was attached to the card.
-  'date',
+  | 'date'
   // The hex color that is used as the background when the attachment is made
   // the card cover.
-  'edgeColor',
+  | 'edgeColor'
   // Id of the user who added the attachment.
-  'idMember',
+  | 'idMember'
   // A boolean indicating whether this was uploaded by a user on the
   // web/mobile client or whether it was added via the API.
-  'isUpload',
+  | 'isUpload'
   // The mimeType of the file.
-  'mimeType',
+  | 'mimeType'
   // The name of the file.
-  'name',
+  | 'name'
   // When an image is uploaded via the web client, Trello creates a number of
   // preview thumbnails for it so that it can use the appropriately sized one
   // given the right context. "previews" will return an object containing
   // information about the previews generated for this attachment.
-  'previews',
+  | 'previews'
   // The URL to the attachment in Trello's static assets.
-  'url',
-);
-export type AttachmentField = $Keys<typeof attachmentFieldMap>;
+  | 'url';
 
 /**
  * @namespace Attachment

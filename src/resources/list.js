@@ -1,5 +1,4 @@
 // @flow
-import { generateTypeMap } from '../utils/typeMapper';
 import BaseResource from './baseResource';
 import Action from './action';
 import Board from './board';
@@ -12,17 +11,9 @@ import type {
   PositionNumbered,
 } from '../types';
 
-export const listFieldMap = generateTypeMap(
-  'closed',
-  'idBoard',
-  'name',
-  'pos',
-  'subscribed',
-);
-export type ListField = $Keys<typeof listFieldMap>;
+export type ListField = 'closed' | 'idBoard' | 'name' | 'pos' | 'subscribed';
 
-export const listFilterMap = generateTypeMap('all', 'closed', 'none', 'open');
-export type ListFilter = $Keys<typeof listFilterMap>;
+export type ListFilter = 'all' | 'closed' | 'none' | 'open';
 
 /**
  * @namespace List

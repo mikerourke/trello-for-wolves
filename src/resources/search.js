@@ -1,5 +1,4 @@
 // @flow
-import { generateTypeMap } from '../utils/typeMapper';
 import BaseResource from './baseResource';
 import type {
   ArgumentGroup,
@@ -10,14 +9,12 @@ import type {
   OrganizationField,
 } from '../types';
 
-export const modelTypeMap = generateTypeMap(
-  'actions',
-  'boards',
-  'cards',
-  'members',
-  'organizations',
-);
-export type ModelType = $Keys<typeof modelTypeMap>;
+export type ModelType =
+  | 'actions'
+  | 'boards'
+  | 'cards'
+  | 'members'
+  | 'organizations';
 
 /**
  * @namespace Search

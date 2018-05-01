@@ -1,5 +1,4 @@
 // @flow
-import { generateTypeMap } from '../utils/typeMapper';
 import BaseResource from './baseResource';
 import Action from './action';
 import Attachment from './attachment';
@@ -29,51 +28,41 @@ import type {
   StickerField,
 } from '../types';
 
-export const cardAgingMap = generateTypeMap('pirate', 'regular');
-export type CardAging = $Keys<typeof cardAgingMap>;
+export type CardAging = 'pirate' | 'regular';
 
-export const cardFieldMap = generateTypeMap(
-  'badges',
-  'checkItemStates',
-  'closed',
+export type CardField =
+  | 'badges'
+  | 'checkItemStates'
+  | 'closed'
   // The datetime of the last activity on the card. Note: There are activities
   // that update dateLastActivity that do not create a corresponding action.
   // For instance, updating the name field of a checklist item on a card does
   // not create an action but does update the card and board's
   // dateLastActivity value.
-  'dateLastActivity',
-  'desc',
-  'descData',
-  'due',
-  'dueComplete',
-  'email',
-  'idAttachmentCover',
-  'idBoard',
-  'idChecklists',
-  'idLabels',
-  'idList',
-  'idMembers',
-  'idMembersVoted',
-  'idShort',
-  'labels',
-  'manualCoverAttachment',
-  'name',
-  'pos',
-  'shortLink',
-  'shortUrl',
-  'subscribed',
-  'url',
-);
-export type CardField = $Keys<typeof cardFieldMap>;
+  | 'dateLastActivity'
+  | 'desc'
+  | 'descData'
+  | 'due'
+  | 'dueComplete'
+  | 'email'
+  | 'idAttachmentCover'
+  | 'idBoard'
+  | 'idChecklists'
+  | 'idLabels'
+  | 'idList'
+  | 'idMembers'
+  | 'idMembersVoted'
+  | 'idShort'
+  | 'labels'
+  | 'manualCoverAttachment'
+  | 'name'
+  | 'pos'
+  | 'shortLink'
+  | 'shortUrl'
+  | 'subscribed'
+  | 'url';
 
-export const cardFilterMap = generateTypeMap(
-  'all',
-  'closed',
-  'none',
-  'open',
-  'visible',
-);
-export type CardFilter = $Keys<typeof cardFilterMap>;
+export type CardFilter = 'all' | 'closed' | 'none' | 'open' | 'visible';
 
 /**
  * @namespace Card
