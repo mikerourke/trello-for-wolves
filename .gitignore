@@ -31,7 +31,6 @@ dictionaries
 
 # Other
 output/
-docs/
 lib/
 tests/results/
 coverage/
