@@ -1,4 +1,4 @@
-import BaseResource from '../../src/resources/base-resource';
+import BaseResource from '../../src/resources/baseResource';
 
 describe('BASE | Base Resource', function() {
   const boardId = 'BoArDiD';

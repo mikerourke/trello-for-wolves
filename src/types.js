@@ -1,11 +1,11 @@
 // @flow
-import { generateTypeMap } from './utils/type-mapper';
+import { generateTypeMap } from './utils/typeMapper';
 export type * from './resources/action';
 export type * from './resources/attachment';
-export type * from './resources/base-resource';
+export type * from './resources/baseResource';
 export type * from './resources/board';
 export type * from './resources/card';
-export type * from './resources/check-item';
+export type * from './resources/checkItem';
 export type * from './resources/checklist';
 export type * from './resources/label';
 export type * from './resources/list';

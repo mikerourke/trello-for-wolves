@@ -1,10 +1,10 @@
 // @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
+import { generateTypeMap } from '../utils/typeMapper';
+import BaseResource from './baseResource';
 import Action from './action';
 import Attachment from './attachment';
 import Board from './board';
-import CheckItem from './check-item';
+import CheckItem from './checkItem';
 import Checklist from './checklist';
 import Comment from './comment';
 import Label from './label';

@@ -1,6 +1,6 @@
 // @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
+import { generateTypeMap } from '../utils/typeMapper';
+import BaseResource from './baseResource';
 import Action from './action';
 import Board from './board';
 import Member from './member';

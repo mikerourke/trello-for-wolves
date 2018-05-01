@@ -1,6 +1,6 @@
 // @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
+import { generateTypeMap } from '../utils/typeMapper';
+import BaseResource from './baseResource';
 import type { ArgumentGroup, MimeType } from '../types';
 
 export type AttachmentFilter = boolean | 'cover';

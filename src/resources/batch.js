@@ -1,5 +1,5 @@
 // @flow
-import BaseResource from './base-resource';
+import BaseResource from './baseResource';
 
 /**
  * @namespace Batch

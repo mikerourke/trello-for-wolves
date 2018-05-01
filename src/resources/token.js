@@ -1,6 +1,6 @@
 // @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
+import { generateTypeMap } from '../utils/typeMapper';
+import BaseResource from './baseResource';
 import Member from './member';
 import Webhook from './webhook';
 import type { AllOrNone, ArgumentGroup } from '../types';

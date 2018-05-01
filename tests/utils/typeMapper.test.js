@@ -1,4 +1,4 @@
-import { generateTypeMap } from '../../src/utils/type-mapper';
+import { generateTypeMap } from '../../src/utils/typeMapper';
 
 describe('GTM | Generate Type Map', function() {
   it('GTM-T01 | generates a type map given a single argument', function() {

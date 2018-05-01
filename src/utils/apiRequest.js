@@ -1,6 +1,6 @@
 // @flow
 import { ApiCallResponseError } from '../utils/errors';
-import RequestRateLimiter from '../utils/request-rate-limiter';
+import RequestRateLimiter from './requestRateLimiter';
 import type { HttpMethod } from '../types';
 
 const getRequestConfig = (

@@ -1,4 +1,4 @@
-import stringifyQueryArgs from '../../src/utils/query-args-stringifier';
+import stringifyQueryArgs from '../../src/utils/queryArgsStringifier';
 
 describe('QAS | Query Args Stringifier', function() {
   it('QAS-T01 | stringifies query args with a single string arg', function() {

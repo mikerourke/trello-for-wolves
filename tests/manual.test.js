@@ -1,6 +1,6 @@
 import fs from 'fs';
 import Trello from '../src/index';
-import performApiRequest from '../src/utils/api-request';
+import performApiRequest from '../src/utils/apiRequest';
 
 describe('Manual Tests', function() {
   let trello;
