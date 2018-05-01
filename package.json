@@ -30,7 +30,7 @@
     "build": "yarn build:clean && yarn build:lib && yarn build:flowcopy && yarn build:flowcheck",
     "cleanup": "rimraf .nyc_output && rimraf coverage && rimraf lib",
     "predoc": "rimraf docs/",
-    "doc": "apidoc -i internals/api-docs/ -o docs/",
+    "doc": "apidoc -i src/ -o docs/",
     "flow": "flow check",
     "lint": "eslint src --color || exit 0",
     "presetup": "node internals/scripts/pre-setup.js",

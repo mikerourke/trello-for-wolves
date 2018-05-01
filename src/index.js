@@ -16,6 +16,18 @@ import Type from './resources/type';
 import Webhook from './resources/webhook';
 import type { Config } from './types';
 
+/**
+ * @apiDefine read Read access rights needed.
+ */
+
+/**
+ * @apiDefine write Write access rights needed.
+ */
+
+/**
+ * @apiDefine owner Owner access rights needed.
+ */
+
 export default class Trello {
   config: Config;
 
