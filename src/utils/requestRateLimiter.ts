@@ -1,6 +1,5 @@
-// @flow
 /**
- * This code was taken from the request-rate-limiter library on npm.  I added Flow
+ * This code was taken from the request-rate-limiter library on npm.  I added TypeScript
  *    typing and removed some of the logging functionality.  I copied it over because
  *    the library is using an old version of the request library that is insecure.
  * @see https://www.npmjs.com/package/request-rate-limiter
@@ -10,12 +9,12 @@ import request from 'request';
 import LeakyBucket from 'leaky-bucket';
 
 export default class RequestRateLimiter {
-  bucket: Object;
+  bucket: any;
   backoffTime: number;
   backoffTimer: any;
-  request: Function;
+  request: any;
 
-  constructor(options: { backoffTime: number, maxWaitingTime: number }) {
+  constructor(options: { backoffTime: number; maxWaitingTime: number }) {
     const { backoffTime, maxWaitingTime } = options;
     this.backoffTime = backoffTime;
     this.bucket = new LeakyBucket({
@@ -26,22 +25,18 @@ export default class RequestRateLimiter {
     this.assignRequest();
   }
 
-  /* istanbul ignore next */
-  isConfigAFunction(config: Object | Function): boolean {
+  isConfigAFunction(config: any): boolean {
     return !!(config && config.constructor && config.call && config.apply);
   }
 
   assignRequest(): void {
-    this.request = asyncMethod((requestConfig, callback) => {
-      const executeRequest = (error, executeCallback) => {
+    this.request = asyncMethod((requestConfig: any, callback: any) => {
+      const executeRequest = (error: any, executeCallback: any) => {
         const config = executeCallback || requestConfig;
-        /* istanbul ignore if */
         if (error) {
           this.handleError(config, callback);
         } else {
-          /* istanbul ignore if */
           if (typeof config !== 'object' && this.isConfigAFunction(config)) {
-            // eslint-disable-line
             config(null, () => {
               this.backoff(() => executeRequest(null, config));
             });
@@ -70,9 +65,9 @@ export default class RequestRateLimiter {
 
   backoff(
     /* istanbul ignore next */
-    config?: Object | Function = {},
+    config: any = {},
     /* istanbul ignore next */
-    callback?: Function = () => {},
+    callback: () => void = () => null,
   ): void {
     if (!this.backoffTimer) {
       this.backoffTimer = setTimeout(() => {
@@ -81,14 +76,11 @@ export default class RequestRateLimiter {
 
       this.bucket.pause(this.backoffTime);
     }
-    this.bucket.reAdd(error => {
-      /* istanbul ignore if */
+    this.bucket.reAdd((error: Error) => {
       if (error) {
         this.handleError(config, callback);
       } else {
-        /* istanbul ignore if */
         if (typeof config !== 'object' && this.isConfigAFunction(config)) {
-          // eslint-disable-line
           config();
         } else {
           this.performRequest(config, callback);
@@ -97,9 +89,8 @@ export default class RequestRateLimiter {
     });
   }
 
-  performRequest(config: Object | Function, callback: Function): void {
-    request(config, (error, response) => {
-      /* istanbul ignore if */
+  performRequest(config: any, callback: any): void {
+    request(config, (error: Error, response: any) => {
       if (error) {
         callback(error);
       } else if (response.statusCode === 429) {

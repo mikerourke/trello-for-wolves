@@ -1,14 +1,13 @@
-// @flow
-import { ApiCallResponseError } from '../utils/errors';
+import { ApiCallResponseError } from './errors';
 import RequestRateLimiter from './requestRateLimiter';
-import type { HttpMethod } from '../types';
+import { HttpMethod } from '../types';
 
 const getRequestConfig = (
   httpMethod: HttpMethod,
   requestUrl: string,
-  queryArgs?: Object = {},
-): Object => {
-  let requestConfig = {
+  queryArgs: any = {},
+): object => {
+  let requestConfig: any = {
     method: httpMethod,
     url: `https://${requestUrl}`,
     json: true,
@@ -16,7 +15,7 @@ const getRequestConfig = (
 
   if (queryArgs.file && queryArgs.file.readable) {
     const fileName = queryArgs.name || 'file';
-    let formData = {
+    let formData: any = {
       name: fileName,
       file: queryArgs.file,
     };
@@ -34,7 +33,7 @@ const getRequestConfig = (
  * @param {string} endpoint Endpoint for API request.
  * @param {number} backoffTime Seconds to wait before retrying API request.
  * @param {number} maxWaitingTime Seconds to wait before throwing error for API request.
- * @param {Object} [queryArgs={}] Arguments for building the querystring.
+ * @param {object} [queryArgs={}] Arguments for building the querystring.
  * @returns {Promise}
  * @private
  */
@@ -43,7 +42,7 @@ const performApiRequest = (
   endpoint: string,
   backoffTime: number,
   maxWaitingTime: number,
-  queryArgs?: Object,
+  queryArgs?: object,
 ): Promise<any> =>
   new Promise((resolve, reject) => {
     // One more check is done to ensure there are no consecutive slashes.
@@ -57,24 +56,14 @@ const performApiRequest = (
       maxWaitingTime,
     });
 
-    limiter.request(requestConfig, (error, response) => {
-      /* instanbul ignore next */
-      if (error)
-        reject(
-          new Error(`Error performing request: ${error}`),
-        ); /* instanbul ignore if */
+    limiter.request(requestConfig, (error: Error, response: any) => {
+      if (error) reject(new Error(`Error performing request: ${error}`));
 
-      /* instanbul ignore next */
-      if (!response)
-        reject(
-          new Error('No response present when performing request.'),
-        ); /* instanbul ignore if */
+      if (!response) {
+        reject(new Error('No response present when performing request.'));
+      }
 
-      const {
-        statusCode /* instanbul ignore next */ = 400,
-        body,
-        ...responseData
-      } = response;
+      const { statusCode = 400, body, ...responseData } = response;
       if (statusCode > 299 || statusCode < 200) {
         reject(
           new ApiCallResponseError(statusCode, httpMethod, requestUrl, body),

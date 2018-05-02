@@ -1,10 +1,8 @@
-// @flow
 import snakeCase from 'lodash.snakecase';
 
 /**
  * Returns a string to append to the query string that accommodates for nested
- *    entities.  These need to be un-nested to successfully perform the API
- *    call.
+ *    entities.  These need to be un-nested to successfully perform the API call.
  * @example
  *   Given:
  *    queryArgs = {
@@ -17,12 +15,12 @@ import snakeCase from 'lodash.snakecase';
  *  Output: prefs/invitations=admins&prefs/selfJoin=true
  *
  * @param {string} childName Name of the key containing children.
- * @param {Object} queryArgs Arguments to parse.
+ * @param {object} queryArgs Arguments to parse.
  * @returns {string} URL string in correct format.
  */
 const getQueryStringForNestedArgs = (
   childName: string,
-  queryArgs: Object,
+  queryArgs: any,
 ): string => {
   let childUrlString = '';
   const childGroup = queryArgs[childName];
@@ -36,8 +34,7 @@ const getQueryStringForNestedArgs = (
 
   Object.keys(childGroup).forEach(childKey => {
     const childArgKey = `${childName}${separator}${childKey}`;
-    const childValue = childGroup[childKey];
-    const childArgValue: string = (childValue: any);
+    const childArgValue = childGroup[childKey];
     childUrlString = `${childUrlString}${childArgKey}=${childArgValue}&`;
   });
 
@@ -94,7 +91,6 @@ const getKeyForQueryString = (key: string): string => {
   }
 
   // Ensure this doesn't get converted to one word.
-  /* istanbul ignore if */
   if (key === 'cardBoard') {
     return 'card_board';
   }
@@ -103,8 +99,7 @@ const getKeyForQueryString = (key: string): string => {
 
   // These are fields that have been recased to ensure all the other words
   // are separated by underscores, but only part of the key needs to be
-  // changed.  The Instanbul ignore statements are present because I can't test
-  // Enterprise routes.
+  // changed.
   if (recasedKey.includes('member_creator')) {
     recasedKey = recasedKey.replace('_creator', 'Creator');
   } else if (recasedKey.includes('_voted')) {
@@ -132,18 +127,17 @@ const getKeyForQueryString = (key: string): string => {
 /**
  * Creates the query string that will be appended to the endpoint path to
  *    perform the request to the Trello API.
- * @param {Object} queryArgs Argument(s) used to build query string.
+ * @param {object} queryArgs Argument(s) used to build query string.
  * @returns {string} Query string for the request.
  */
 const stringifyQueryArgs = (queryArgs: Object): string => {
   let queryArgsString = '';
-  Object.keys(queryArgs).forEach(queryArgKey => {
+  Object.keys(queryArgs).forEach((queryArgKey: string) => {
     const value = queryArgs[queryArgKey];
     // If the value of the entry is an object (rather than a value), the
     // corresponding child properties need to be combined for the URL string.
     if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
-      const childName = (queryArgKey: string);
-      const nestedString = getQueryStringForNestedArgs(childName, queryArgs);
+      const nestedString = getQueryStringForNestedArgs(queryArgKey, queryArgs);
       queryArgsString = `${queryArgsString}${nestedString}&`;
 
       // These are simple key/value pairs in which the value is a string or
@@ -154,8 +148,7 @@ const stringifyQueryArgs = (queryArgs: Object): string => {
       if (queryArgKey !== 'separator') {
         // eslint-disable-line no-lonely-if
         const argKey = getKeyForQueryString(queryArgKey);
-        const argValue = (value: any);
-        queryArgsString = `${queryArgsString}${argKey}=${argValue}&`;
+        queryArgsString = `${queryArgsString}${argKey}=${value}&`;
       }
     }
   });
