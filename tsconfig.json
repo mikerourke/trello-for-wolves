@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "outDir": "./lib/",
+    "module": "commonjs",
+    "target": "es5",
+    "lib": [
+      "esnext",
+      "es2015",
+      "es2017.object"
+    ],
+    "sourceMap": true,
+    "allowJs": true,
+    "moduleResolution": "node",
+    "rootDirs": [
+      "src"
+    ],
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "pretty": true,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "typeRoots": [
+      "./typings", "./node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+      "*": ["./typings/*"]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "acceptance-tests",
+    "jest"
+  ]
+}

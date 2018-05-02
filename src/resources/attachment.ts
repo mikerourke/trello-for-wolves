@@ -1,6 +1,5 @@
-// @flow
 import BaseResource from './baseResource';
-import type { ArgumentGroup, MimeType } from '../types';
+import { ArgumentGroup, MimeType } from '../types';
 
 export type AttachmentFilter = boolean | 'cover';
 
@@ -33,29 +32,21 @@ export type AttachmentField =
  * @namespace Attachment
  */
 export default class Attachment extends BaseResource {
-  getAttachments(queryArgs?: {
-    fields?: ArgumentGroup<AttachmentField>,
-    filter?: ArgumentGroup<AttachmentFilter>,
-  }): Promise<any> {
-    return this.httpGet('/', queryArgs);
-  }
+  public getAttachments = (queryArgs?: {
+    fields?: ArgumentGroup<AttachmentField>;
+    filter?: ArgumentGroup<AttachmentFilter>;
+  }): Promise<any> => this.httpGet('/', queryArgs);
 
-  getAttachment(queryArgs?: {
-    fields?: ArgumentGroup<AttachmentField>,
-  }): Promise<any> {
-    return this.httpGet('/', queryArgs);
-  }
+  public getAttachment = (queryArgs?: {
+    fields?: ArgumentGroup<AttachmentField>;
+  }): Promise<any> => this.httpGet('/', queryArgs);
 
-  uploadAttachment(queryArgs?: {
-    file?: Object,
-    url?: string,
-    name?: string,
-    mimeType?: MimeType | string,
-  }): Promise<any> {
-    return this.httpPost('/', queryArgs);
-  }
+  public uploadAttachment = (queryArgs?: {
+    file?: Object;
+    url?: string;
+    name?: string;
+    mimeType?: MimeType | string;
+  }): Promise<any> => this.httpPost('/', queryArgs);
 
-  deleteAttachment(): Promise<any> {
-    return this.httpDelete('/');
-  }
+  public deleteAttachment = (): Promise<any> => this.httpDelete('/');
 }

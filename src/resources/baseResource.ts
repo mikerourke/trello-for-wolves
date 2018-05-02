@@ -1,8 +1,7 @@
-// @flow
 import { stringify } from 'qs';
 import stringifyQueryArgs from '../utils/queryArgsStringifier';
 import performApiRequest from '../utils/apiRequest';
-import type { Config, HttpMethod } from '../types';
+import { Config, HttpMethod } from '../types';
 
 /**
  * Base class for resources.
@@ -20,7 +19,7 @@ export default class BaseResource {
    *    update.
    * @constructor
    */
-  constructor(config: Config, routePath: string, associationId?: string = '') {
+  constructor(config: Config, routePath: string, associationId: string = '') {
     this.config = config;
     this.routePath = routePath;
     this.associationId = associationId;
@@ -29,7 +28,6 @@ export default class BaseResource {
     // zero:
     this.routePathElements = this.routePath.split('/');
 
-    /* istanbul ignore next */
     if (!this.routePathElements[0].length) {
       this.routePathElements.shift();
     }
@@ -38,18 +36,18 @@ export default class BaseResource {
   /**
    * Constructs the endpoint for performing the API request.
    * @param {string} pathVariables Path to append to the route path.
-   * @param {Object} [queryArgs={}] Optional arguments specified for performing
+   * @param {object} [queryArgs={}] Optional arguments specified for performing
    *    the request.
    * @returns {string} Endpoint for performing the request.
    */
-  getEndpoint(pathVariables: string, queryArgs?: Object = {}): string {
+  private getEndpoint(pathVariables: string, queryArgs: object = {}): string {
     // Check if queryArgs were specified to ensure the stringify function is only called if
     // necessary.
     let argsToUse = queryArgs;
     let hasQueryArgs = false;
     if (Object.keys(argsToUse).length !== 0) {
       // We don't want to attempt to stringify the 'file' query arg.
-      const { file, ...otherArgs } = queryArgs; // eslint-disable-line
+      const { file, ...otherArgs } = queryArgs as any;
       argsToUse = otherArgs;
       hasQueryArgs = true;
     }
@@ -75,13 +73,13 @@ export default class BaseResource {
    * Performs the request to the Trello API.
    * @param {HttpMethod} httpMethod Method to perform (GET, DELETE, POST, PUT).
    * @param {string} pathVariables Path to append to end of resource path.
-   * @param {Object} queryArgs Query args to build the final endpoint.
+   * @param {object} queryArgs Query args to build the final endpoint.
    * @returns {Promise}
    */
-  performRequest(
+  private performRequest(
     httpMethod: HttpMethod,
     pathVariables: string,
-    queryArgs?: Object,
+    queryArgs?: object,
   ): Promise<any> {
     const endpoint = this.getEndpoint(pathVariables, queryArgs);
     const { backoffTime = 3, maxWaitingTime = 300 } = this.config;
@@ -94,19 +92,23 @@ export default class BaseResource {
     );
   }
 
-  httpGet(pathVariables: string, queryArgs?: Object): Promise<Object> {
-    return this.performRequest('get', pathVariables, queryArgs);
-  }
+  public httpGet = (
+    pathVariables: string,
+    queryArgs?: object,
+  ): Promise<object> => this.performRequest('get', pathVariables, queryArgs);
 
-  httpPut(pathVariables: string, queryArgs?: Object): Promise<Object> {
-    return this.performRequest('put', pathVariables, queryArgs);
-  }
+  public httpPut = (
+    pathVariables: string,
+    queryArgs?: object,
+  ): Promise<object> => this.performRequest('put', pathVariables, queryArgs);
 
-  httpPost(pathVariables: string, queryArgs?: Object): Promise<Object> {
-    return this.performRequest('post', pathVariables, queryArgs);
-  }
+  public httpPost = (
+    pathVariables: string,
+    queryArgs?: object,
+  ): Promise<object> => this.performRequest('post', pathVariables, queryArgs);
 
-  httpDelete(pathVariables: string, queryArgs?: Object): Promise<Object> {
-    return this.performRequest('delete', pathVariables, queryArgs);
-  }
+  public httpDelete = (
+    pathVariables: string,
+    queryArgs?: object,
+  ): Promise<object> => this.performRequest('delete', pathVariables, queryArgs);
 }

@@ -52,7 +52,7 @@ export default class Logger {
   /**
    * Removes the key and token suffix from the route path prior to assigning
    *    it to the value of endpoint.
-   * @param {Object} response Response object from the API call.
+   * @param {object} response Response object from the API call.
    * @returns {string}
    * @private
    */
@@ -68,7 +68,7 @@ export default class Logger {
 
   /**
    * Extrapolates the endpoint and data from the API response.
-   * @param {Object} response Response object from the API call.
+   * @param {object} response Response object from the API call.
    * @private
    */
   /* istanbul ignore next */
@@ -152,7 +152,7 @@ export default class Logger {
   /**
    * Parses the response from the API call, extrapolates the pertinent data,
    *    logs to the console (if required), and stores the results.
-   * @param {Object} response Response object from API call.
+   * @param {object} response Response object from API call.
    * @returns {Promise}
    */
   processResponse(response) {

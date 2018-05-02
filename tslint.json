@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "tslint-config-airbnb-base"
+  ],
+  "jsRules": {},
+  "rules": {
+    "no-console": [
+      true,
+      "log",
+      "debug",
+      "time",
+      "timeEnd",
+      "trace"
+    ],
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "no-magic-numbers": false,
+    "ter-arrow-parens": [true, "as-needed"],
+    "ter-max-len": [
+      true,
+      {
+        "tabWidth": 2,
+        "ignoreTemplateLiterals": true,
+        "ignoreComments": true,
+        "ignorePattern": "^import |^export {(.*?)}|http/g",
+        "ignoreStrings": true
+      }
+    ],
+    "ter-indent": false
+  }
+}
