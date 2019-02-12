@@ -309,6 +309,9 @@ export default class Board extends BaseResource {
     };
   }): Promise<any> => this.httpPost('/', { ...queryArgs, separator: '_' });
 
+  public removeBoard = (id: string): Promise<any> =>
+    this.httpDelete('/', { id });
+
   public generateCalendarKey = (): Promise<any> =>
     this.httpPost('/calendarKey/generate');
 
