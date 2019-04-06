@@ -169,7 +169,7 @@ export default class Organization extends BaseResource {
     displayName?: string;
     desc?: string;
     website?: string;
-  }): Promise<any> => this.httpPost('/', queryArgs);
+  }): Promise<any> => this.httpPost('/', { ...queryArgs, separator: '/' });
 
   public uploadLogo = (file: Object): Promise<any> =>
     this.httpPost('/logo', { file });
