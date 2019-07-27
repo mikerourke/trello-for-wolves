@@ -223,7 +223,7 @@ export default class Card extends BaseResource {
           idMembers?: Array<string>;
           due?: Date | null;
         },
-  ): Promise<any> => this.httpPost('/', queryArgs);
+  ): Promise<any> => this.httpPost('/', { ...queryArgs, separator: '/' });
 
   public associateLabel = (labelId: string): Promise<any> =>
     this.httpPost('/idLabels', { value: labelId });
