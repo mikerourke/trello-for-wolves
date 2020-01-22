@@ -3,7 +3,7 @@
   "version": "1.5.3",
   "description": "Node.js wrapper for Trello API...for wolves.",
   "engines": {
-    "node": ">=6.11.0"
+    "node": ">=12"
   },
   "main": "lib/index.js",
   "repository": {
@@ -82,13 +82,6 @@
     "mocha-lcov-reporter": "^1.3.0",
     "nyc": "^11.0.3",
     "rimraf": "^2.6.1"
-  },
-  "apidoc": {
-    "name": "Trello for Wolves",
-    "version": "1.0.0",
-    "description": "Node.js wrapper for the Trello API",
-    "title": "Trello for Wolves",
-    "url": "https://api.trello.com/1"
   },
   "eslintConfig": {
     "parser": "babel-eslint",
