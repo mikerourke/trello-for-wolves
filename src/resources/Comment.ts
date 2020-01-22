@@ -1,12 +1,12 @@
 // @flow
-import BaseResource from './base-resource';
+import BaseResource from './BaseResource';
 import type {
   ActionField,
   ArgumentGroup,
   FilterDate,
   Format,
   MemberField,
-} from '../types';
+} from '../typeDefs';
 
 /**
  * @namespace Comment

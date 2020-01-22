@@ -1,6 +1,6 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
+import BaseResource from './BaseResource';
 
 export const wehookFieldMap = generateTypeMap(
   'active',

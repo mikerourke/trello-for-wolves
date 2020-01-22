@@ -1,6 +1,6 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
+import BaseResource from './BaseResource';
 import type {
   ArgumentGroup,
   BoardField,
@@ -9,7 +9,7 @@ import type {
   MembershipFilter,
   OrganizationField,
   OrganizationFilter,
-} from '../types';
+} from '../typeDefs';
 
 type Combination<T> = T | Array<T>;
 

@@ -1,9 +1,9 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
-import Board from './board';
-import Card from './card';
-import CheckItem from './check-item';
+import BaseResource from './BaseResource';
+import Board from './Board';
+import Card from './Card';
+import CheckItem from './CheckItem';
 import type {
   AllOrNone,
   ArgumentGroup,
@@ -11,7 +11,7 @@ import type {
   CardFilter,
   CheckItemField,
   PositionNumbered,
-} from '../types';
+} from '../typeDefs';
 
 export const checklistFieldMap = generateTypeMap('idBoard', 'idCard', 'name', 'pos');
 export type ChecklistField = $Keys<typeof checklistFieldMap>;

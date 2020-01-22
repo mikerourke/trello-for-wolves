@@ -1,18 +1,18 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
-import Board from './board';
-import Card from './card';
-import List from './list';
-import Member from './member';
-import Organization from './organization';
+import BaseResource from './BaseResource';
+import Board from './Board';
+import Card from './Card';
+import List from './List';
+import Member from './Member';
+import Organization from './Organization';
 import type {
   ArgumentGroup,
   BoardField,
   CardField,
   MemberField,
   OrganizationField,
-} from '../types';
+} from '../typeDefs';
 
 export const notificationFieldMap = generateTypeMap(
   'data',

@@ -1,8 +1,8 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
-import Board from './board';
-import type { ArgumentGroup } from '../types';
+import BaseResource from './BaseResource';
+import Board from './Board';
+import type { ArgumentGroup } from '../typeDefs';
 
 export const labelColorMap = generateTypeMap(
   'blue',

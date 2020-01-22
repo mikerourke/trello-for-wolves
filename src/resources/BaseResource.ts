@@ -2,7 +2,7 @@
 import { stringify } from 'qs';
 import stringifyQueryArgs from '../utils/queryArgsStringifier';
 import performApiRequest from '../utils/apiRequest';
-import type { Config, HttpMethod } from '../types';
+import type { Config, HttpMethod } from '../typeDefs';
 
 /**
  * Base class for resources.

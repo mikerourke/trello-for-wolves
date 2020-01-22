@@ -1,14 +1,14 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
-import Action from './action';
-import Card from './card';
-import Checklist from './checklist';
-import Label from './label';
-import List from './list';
-import Member from './member';
-import Membership from './membership';
-import Organization from './organization';
+import BaseResource from './BaseResource';
+import Action from './Action';
+import Card from './Card';
+import Checklist from './Checklist';
+import Label from './Label';
+import List from './List';
+import Member from './Member';
+import Membership from './Membership';
+import Organization from './Organization';
 import type {
   ActionField,
   ActionFilter,
@@ -33,7 +33,7 @@ import type {
   OrganizationField,
   PermissionLevel,
   Position,
-} from '../types';
+} from '../typeDefs';
 
 export const boardFieldMap = generateTypeMap(
   'closed',

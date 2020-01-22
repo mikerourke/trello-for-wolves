@@ -1,12 +1,12 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
-import Member from './member';
-import Webhook from './webhook';
+import BaseResource from './BaseResource';
+import Member from './Member';
+import Webhook from './Webhook';
 import type {
   AllOrNone,
   ArgumentGroup,
-} from '../types';
+} from '../typeDefs';
 
 export const tokenFieldMap = generateTypeMap(
   'dateCreated',

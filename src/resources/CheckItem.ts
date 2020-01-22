@@ -1,11 +1,11 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
+import BaseResource from './BaseResource';
 import type {
   AllOrNone,
   ArgumentGroup,
   PositionNumbered,
-} from '../types';
+} from '../typeDefs';
 
 export const checkItemFieldMap = generateTypeMap('name', 'nameData', 'pos', 'state');
 export type CheckItemField = $Keys<typeof checkItemFieldMap>;

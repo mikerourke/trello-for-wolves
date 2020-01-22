@@ -1,16 +1,16 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
-import Action from './action';
-import Board from './board';
-import Card from './card';
+import BaseResource from './BaseResource';
+import Action from './Action';
+import Board from './Board';
+import Card from './Card';
 import type {
   ArgumentGroup,
   BoardField,
   CardField,
   CardFilter,
   PositionNumbered,
-} from '../types';
+} from '../typeDefs';
 
 export const listFieldMap = generateTypeMap('closed', 'idBoard', 'name', 'pos', 'subscribed');
 export type ListField = $Keys<typeof listFieldMap>;

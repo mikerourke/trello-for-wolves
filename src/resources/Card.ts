@@ -1,16 +1,16 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
-import Action from './action';
-import Attachment from './attachment';
-import Board from './board';
-import CheckItem from './check-item';
-import Checklist from './checklist';
-import Comment from './comment';
-import Label from './label';
-import List from './list';
-import Member from './member';
-import Sticker from './sticker';
+import BaseResource from './BaseResource';
+import Action from './Action';
+import Attachment from './Attachment';
+import Board from './Board';
+import CheckItem from './CheckItem';
+import Checklist from './Checklist';
+import Comment from './Comment';
+import Label from './Label';
+import List from './List';
+import Member from './Member';
+import Sticker from './Sticker';
 import type {
   ActionField,
   ActionFilter,
@@ -27,7 +27,7 @@ import type {
   MemberField,
   PositionNumbered,
   StickerField,
-} from '../types';
+} from '../typeDefs';
 
 export const cardAgingMap = generateTypeMap('pirate', 'regular');
 export type CardAging = $Keys<typeof cardAgingMap>;

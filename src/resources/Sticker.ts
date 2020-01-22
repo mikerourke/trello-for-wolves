@@ -1,10 +1,10 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
+import BaseResource from './BaseResource';
 import type {
   AllOrNone,
   ArgumentGroup,
-} from '../types';
+} from '../typeDefs';
 
 export const stickerFieldMap = generateTypeMap(
   'image',

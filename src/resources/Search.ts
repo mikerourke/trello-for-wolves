@@ -1,6 +1,6 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
+import BaseResource from './BaseResource';
 import type {
   ArgumentGroup,
   AttachmentFilter,
@@ -8,7 +8,7 @@ import type {
   CardField,
   MemberField,
   OrganizationField,
-} from '../types';
+} from '../typeDefs';
 
 export const modelTypeMap = generateTypeMap(
   'actions',

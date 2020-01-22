@@ -1,5 +1,7 @@
 import fetch from "cross-fetch";
 
+type HttpMethod = "get" | "put" | "post" | "delete";
+
 /**
  * Returns a resolved Promise with the results of the Trello API call.
  * @param httpMethod Method associated with the request.
@@ -10,7 +12,7 @@ import fetch from "cross-fetch";
  * @private
  */
 export async function performApiRequest<TQueryArgs>(
-  httpMethod: string,
+  httpMethod: HttpMethod,
   endpoint: string,
   backoffTime: number,
   maxRetryAttempts: number,
@@ -50,7 +52,7 @@ function pause(duration: number): Promise<void> {
 
 // FIXME: This needs to be updated for the Fetch API.
 function getFetchConfig<TQueryArgs>(
-  httpMethod: string,
+  httpMethod: HttpMethod,
   requestUrl: string,
   queryArgs: TQueryArgs | {} = {},
 ): object {

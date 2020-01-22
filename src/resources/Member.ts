@@ -1,13 +1,13 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
-import Action from './action';
-import Board from './board';
-import Card from './card';
-import Notification from './notification';
-import Organization from './organization';
-import Sticker from './sticker';
-import Token from './token';
+import BaseResource from './BaseResource';
+import Action from './Action';
+import Board from './Board';
+import Card from './Card';
+import Notification from './Notification';
+import Organization from './Organization';
+import Sticker from './Sticker';
+import Token from './Token';
 import type {
   ActionField,
   ActionFilter,
@@ -28,7 +28,7 @@ import type {
   OrganizationField,
   OrganizationFilter,
   PositionNumbered,
-} from '../types';
+} from '../typeDefs';
 
 export const avatarSourceFieldMap = generateTypeMap('gravatar', 'none', 'upload');
 export type AvatarSourceField = $Keys<typeof avatarSourceFieldMap>;

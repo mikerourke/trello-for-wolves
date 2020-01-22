@@ -1,10 +1,10 @@
 // @flow
 import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './base-resource';
-import Action from './action';
-import Board from './board';
-import Member from './member';
-import Membership from './membership';
+import BaseResource from './BaseResource';
+import Action from './Action';
+import Board from './Board';
+import Member from './Member';
+import Membership from './Membership';
 import type {
   ActionField,
   ActionFilter,
@@ -18,7 +18,7 @@ import type {
   MemberFilter,
   MembershipFilter,
   PermissionLevel,
-} from '../types';
+} from '../typeDefs';
 
 export const organizationFieldMap = generateTypeMap(
   'billableMemberCount',
