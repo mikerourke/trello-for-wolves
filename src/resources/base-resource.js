@@ -1,7 +1,7 @@
 // @flow
 import { stringify } from 'qs';
-import stringifyQueryArgs from '../utils/query-args-stringifier';
-import performApiRequest from '../utils/api-request';
+import stringifyQueryArgs from '../utils/queryArgsStringifier';
+import performApiRequest from '../utils/apiRequest';
 import type { Config, HttpMethod } from '../types';
 
 /**
