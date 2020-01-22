@@ -12,13 +12,16 @@ export function stringifyQueryArgs<TQueryArgs>(
 ): string {
   let queryArgsString = "";
 
-  Object.keys(queryArgs).forEach(queryArgKey => {
-    const value = queryArgs[queryArgKey];
+  for (const [queryArgKey, queryArgValue] of Object.entries(queryArgs)) {
     // If the value of the entry is an object (rather than a value), the
     // corresponding child properties need to be combined for the URL string.
-    if (typeof value === "object" && !Array.isArray(value) && value !== null) {
+    if (
+      typeof queryArgValue === "object" &&
+      !Array.isArray(queryArgValue) &&
+      queryArgValue !== null
+    ) {
       const nestedString = getQueryStringForNestedArgs(queryArgKey, queryArgs);
-      queryArgsString = `${queryArgsString}${nestedString}&`;
+      queryArgsString += `${nestedString}&`;
 
       // These are simple key/value pairs in which the value is a string or
       // number.
@@ -26,12 +29,11 @@ export function stringifyQueryArgs<TQueryArgs>(
       // Ensure the separator key specified for handling nested args isn't
       // present in the query string.
       if (queryArgKey !== "separator") {
-        // eslint-disable-line no-lonely-if
         const argKey = getKeyForQueryString(queryArgKey);
-        queryArgsString = `${queryArgsString}${argKey}=${value}&`;
+        queryArgsString += `${argKey}=${queryArgValue}&`;
       }
     }
-  });
+  }
 
   // Ensure there is no double ampersand in the query string.  This may
   // occur due to the string being constructed manually.
@@ -66,13 +68,12 @@ function getQueryStringForNestedArgs<TQueryArgs>(
     separator = queryArgs.separator;
   }
 
-  Object.keys(childGroup).forEach(childKey => {
+  for (const [childKey, childValue] of Object.entries(childGroup)) {
     const childArgKey = `${childName}${separator}${childKey}`;
-    const childValue = childGroup[childKey];
-    childUrlString = `${childUrlString}${childArgKey}=${childValue}&`;
-  });
+    childUrlString += `${childArgKey}=${childValue}&`;
+  }
 
-  // Remove the trailing ampersand.
+  // Remove the trailing ampersand:
   return childUrlString.slice(0, -1);
 }
 
