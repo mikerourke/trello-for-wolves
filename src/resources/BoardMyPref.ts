@@ -13,7 +13,7 @@ export class BoardMyPref extends BaseResource {
   /**
    * @example
    * PUT > .../boards/[boardId]/myPrefs/idEmailList?value=[emailListId]&key=...
-   * @see {@link https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-myprefs-idemaillist}
+   * @see https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-myprefs-idemaillist
    */
   public moveToEmailList(emailListId: string): Promise<unknown> {
     return this.httpPut("/idEmailList", { value: emailListId });

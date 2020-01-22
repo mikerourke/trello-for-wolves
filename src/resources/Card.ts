@@ -212,7 +212,7 @@ export class Card extends BaseResource {
   /**
    * Update the Id of the image attachment of this card to use as its cover.
    * @example PUT /1/cards/:cardId/idAttachmentCover
-   * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idattachmentcover}
+   * @see https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idattachmentcover
    */
   public updateAttachmentCoverImage(
     idAttachmentCover: string,
