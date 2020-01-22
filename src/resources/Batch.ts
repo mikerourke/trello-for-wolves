@@ -1,11 +1,7 @@
-// @flow
-import BaseResource from './BaseResource';
+import { BaseResource } from "./BaseResource";
 
-/**
- * @namespace Batch
- */
-export default class Batch extends BaseResource {
-  makeRequests(urls: Array<string>): Promise<any> {
-    return this.httpGet('/', { urls });
+export class Batch extends BaseResource {
+  public makeRequests(urls: string[]): Promise<unknown> {
+    return this.httpGet("/", { urls });
   }
 }

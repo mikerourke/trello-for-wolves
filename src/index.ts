@@ -1,18 +1,18 @@
-import Action from "./resources/Action";
-import Batch from "./resources/Batch";
-import Board from "./resources/Board";
-import Card from "./resources/Card";
-import Checklist from "./resources/Checklist";
-import Enterprise from "./resources/Enterprise";
-import Label from "./resources/Label";
-import List from "./resources/List";
-import Member from "./resources/Member";
-import Notification from "./resources/Notification";
-import Organization from "./resources/Organization";
-import Search from "./resources/Search";
-import Token from "./resources/Token";
-import Type from "./resources/Type";
-import Webhook from "./resources/Webhook";
+import { Action } from "./resources/Action";
+import { Batch } from "./resources/Batch";
+import { Board } from "./resources/Board";
+import { Card } from "./resources/Card";
+import { Checklist } from "./resources/Checklist";
+import { Enterprise } from "./resources/Enterprise";
+import { Label } from "./resources/Label";
+import { List } from "./resources/List";
+import { Member } from "./resources/Member";
+import { Notification } from "./resources/Notification";
+import { Organization } from "./resources/Organization";
+import { Search } from "./resources/Search";
+import { Token } from "./resources/Token";
+import { Type } from "./resources/Type";
+import { Webhook } from "./resources/Webhook";
 import { Config } from "./typeDefs";
 
 export class Trello {

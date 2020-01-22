@@ -1,83 +1,67 @@
-// @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './BaseResource';
-import Board from './Board';
-import type { ArgumentGroup } from '../typeDefs';
+import { BaseResource } from "./BaseResource";
+import { Board } from "./Board";
+import { ArgumentGroup } from "../typeDefs";
 
-export const labelColorMap = generateTypeMap(
-  'blue',
-  'green',
-  'orange',
-  'purple',
-  'red',
-  'yellow',
+export type LabelColor =
+  | "blue"
+  | "green"
+  | "orange"
+  | "purple"
+  | "red"
+  | "yellow"
   // These colors are also available, they're just not documented:
-  'sky',
-  'lime',
-  'pink',
-  'black',
-);
-export type LabelColor = $Keys<typeof labelColorMap>;
+  | "sky"
+  | "lime"
+  | "pink"
+  | "black";
 
-export const labelFieldMap = generateTypeMap('color', 'idBoard', 'name', 'uses');
-export type LabelField = $Keys<typeof labelFieldMap>;
+export type LabelField = "color" | "idBoard" | "name" | "uses";
 
-/**
- * @namespace Label
- */
-export default class Label extends BaseResource {
-  getLabels(
-    queryArgs?: {
-      fields?: ArgumentGroup<LabelField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+export class Label extends BaseResource {
+  public getLabels(options?: {
+    fields?: ArgumentGroup<LabelField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getLabel(
-    queryArgs?: {
-      fields?: ArgumentGroup<LabelField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+  public getLabel(options?: {
+    fields?: ArgumentGroup<LabelField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  board() {
+  public board(): Board {
     return new Board(this.config, `${this.routePath}/board`);
   }
 
-  updateLabel(
-    queryArgs?: {
-      name?: string,
-      color?: ?LabelColor,
-    },
-  ): Promise<any> {
-    return this.httpPut('/', queryArgs);
+  public updateLabel(options?: {
+    name?: string;
+    color?: LabelColor | null;
+  }): Promise<unknown> {
+    return this.httpPut("/", options);
   }
 
-  updateColor(value: ?LabelColor): Promise<any> {
-    return this.httpPut('/color', { value });
+  public updateColor(value: LabelColor | null): Promise<unknown> {
+    return this.httpPut("/color", { value });
   }
 
-  updateName(value: string): Promise<any> {
-    return this.httpPut('/name', { value });
+  public updateName(value: string): Promise<unknown> {
+    return this.httpPut("/name", { value });
   }
 
-  addLabel(
-    queryArgs: {
-      name: string,
-      color: ?LabelColor,
-      idBoard?: string,
-    },
-  ): Promise<any> {
-    let updatedArgs = queryArgs;
-    if (this.routePathElements[0] === 'boards') {
-      updatedArgs = { ...queryArgs, idBoard: this.routePathElements[1] };
+  public addLabel(options: {
+    name: string;
+    color: LabelColor | null;
+    idBoard?: string;
+  }): Promise<unknown> {
+    let updatedArgs = options;
+    if (this.routePathElements[0] === "boards") {
+      updatedArgs = { ...options, idBoard: this.routePathElements[1] };
     }
-    return this.httpPost('/', updatedArgs);
+    return this.httpPost("/", updatedArgs);
   }
 
-  deleteLabel(): Promise<any> {
-    return this.httpDelete('/');
+  public deleteLabel(): Promise<unknown> {
+    return this.httpDelete("/");
   }
 }

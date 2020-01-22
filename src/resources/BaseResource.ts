@@ -1,62 +1,79 @@
-// @flow
-import { stringify } from 'qs';
-import stringifyQueryArgs from '../utils/queryArgsStringifier';
-import performApiRequest from '../utils/apiRequest';
-import type { Config, HttpMethod } from '../typeDefs';
+import { stringify } from "qs";
+import { performApiRequest, HttpMethod } from "../utils/apiRequest";
+import { stringifyQueryArgs } from "../utils/queryArgsStringifier";
+import { Config } from "../typeDefs";
 
 /**
  * Base class for resources.
  */
-export default class BaseResource {
-  config: Config;
-  routePath: string;
-  routePathElements: Array<string>;
-  associationId: string;
+export class BaseResource {
+  protected routePathElements: string[];
 
   /**
-   * @param {Config} config Config object containing Trello API key and token.
-   * @param {string} routePath Route path for performing the request.
-   * @param {string} associationId Id number of the associated resource to
-   *    update.
+   * @param config Config object containing Trello API key and token.
+   * @param routePath Route path for performing the request.
+   * @param associationId Id number of the associated resource to update.
    * @constructor
    */
   constructor(
-    config: Config,
-    routePath: string,
-    associationId?: string = '',
+    protected config: Config,
+    protected routePath: string,
+    protected associationId: string = "",
   ) {
-    this.config = config;
-    this.routePath = routePath;
-    this.associationId = associationId;
+    // Ensure that the first element in the array has a length greater than zero:
+    this.routePathElements = this.routePath.split("/");
 
-    // Ensure that the first element in the array has a length greater than
-    // zero:
-    this.routePathElements = this.routePath.split('/');
-
-    /* istanbul ignore next */
-    if (!this.routePathElements[0].length) {
+    if (this.routePathElements[0].length !== 0) {
       this.routePathElements.shift();
     }
   }
 
+  protected httpGet<TQueryArgs = {}>(
+    pathVariables: string,
+    queryArgs?: TQueryArgs,
+  ): Promise<unknown> {
+    return this.performRequest("get", pathVariables, queryArgs);
+  }
+
+  protected httpPut<TQueryArgs = {}>(
+    pathVariables: string,
+    queryArgs?: TQueryArgs,
+  ): Promise<unknown> {
+    return this.performRequest("put", pathVariables, queryArgs);
+  }
+
+  protected httpPost<TQueryArgs = {}>(
+    pathVariables: string,
+    queryArgs?: TQueryArgs,
+  ): Promise<unknown> {
+    return this.performRequest("post", pathVariables, queryArgs);
+  }
+
+  protected httpDelete<TQueryArgs = {}>(
+    pathVariables: string,
+    queryArgs?: TQueryArgs,
+  ): Promise<unknown> {
+    return this.performRequest("delete", pathVariables, queryArgs);
+  }
+
   /**
    * Constructs the endpoint for performing the API request.
-   * @param {string} pathVariables Path to append to the route path.
-   * @param {Object} [queryArgs={}] Optional arguments specified for performing
-   *    the request.
-   * @returns {string} Endpoint for performing the request.
+   * @param pathVariables Path to append to the route path.
+   * @param [queryArgs={}] Optional arguments specified for performing the request.
    */
-  getEndpoint(
+  private getEndpoint<TQueryArgs = {}>(
     pathVariables: string,
-    queryArgs?: Object = {},
+    queryArgs: TQueryArgs | {} = {},
   ): string {
-    // Check if queryArgs were specified to ensure the stringify function is only called if
-    // necessary.
-    let argsToUse = queryArgs;
+    // Check if queryArgs were specified to ensure the stringify function is
+    // only called if necessary.
+    let argsToUse = queryArgs as any;
     let hasQueryArgs = false;
+
     if (Object.keys(argsToUse).length !== 0) {
       // We don't want to attempt to stringify the 'file' query arg.
-      const { file, ...otherArgs } = queryArgs; // eslint-disable-line
+      // @ts-ignore
+      const { file, ...otherArgs } = queryArgs;
       argsToUse = otherArgs;
       hasQueryArgs = true;
     }
@@ -66,11 +83,11 @@ export default class BaseResource {
     const basePath = `${this.routePath}${pathVariables}`;
 
     // Remove any consecutive and trailing slashes.
-    const sanitizedPath = basePath.replace(/\/+/g, '/').replace(/\/+$/, '');
+    const sanitizedPath = basePath.replace(/\/+/g, "/").replace(/\/+$/, "");
 
     // If queryArgs were provided, build the corresponding querystring to
     // include the specified arguments.
-    const queryString = hasQueryArgs ? stringifyQueryArgs(argsToUse) : '';
+    const queryString = hasQueryArgs ? stringifyQueryArgs(argsToUse) : "";
 
     // Ensure the key and token is appended to the end of the querystring.
     const { key, token } = this.config;
@@ -80,46 +97,23 @@ export default class BaseResource {
 
   /**
    * Performs the request to the Trello API.
-   * @param {HttpMethod} httpMethod Method to perform (GET, DELETE, POST, PUT).
-   * @param {string} pathVariables Path to append to end of resource path.
-   * @param {Object} queryArgs Query args to build the final endpoint.
-   * @returns {Promise}
+   * @param httpMethod Method to perform (GET, DELETE, POST, PUT).
+   * @param pathVariables Path to append to end of resource path.
+   * @param queryArgs Query args to build the final endpoint.
    */
-  performRequest(
+  private performRequest<TQueryArgs>(
     httpMethod: HttpMethod,
     pathVariables: string,
-    queryArgs?: Object,
-  ): Promise<any> {
+    queryArgs?: TQueryArgs,
+  ): Promise<unknown> {
     const endpoint = this.getEndpoint(pathVariables, queryArgs);
-    const { backoffTime = 3, maxWaitingTime = 300 } = this.config;
-    return performApiRequest(httpMethod, endpoint, backoffTime, maxWaitingTime, queryArgs);
-  }
-
-  httpGet(
-    pathVariables: string,
-    queryArgs?: Object,
-  ): Promise<Object> {
-    return this.performRequest('get', pathVariables, queryArgs);
-  }
-
-  httpPut(
-    pathVariables: string,
-    queryArgs?: Object,
-  ): Promise<Object> {
-    return this.performRequest('put', pathVariables, queryArgs);
-  }
-
-  httpPost(
-    pathVariables: string,
-    queryArgs?: Object,
-  ): Promise<Object> {
-    return this.performRequest('post', pathVariables, queryArgs);
-  }
-
-  httpDelete(
-    pathVariables: string,
-    queryArgs?: Object,
-  ): Promise<Object> {
-    return this.performRequest('delete', pathVariables, queryArgs);
+    const { backoffTime = 3000, maxRetryAttempts = 5 } = this.config;
+    return performApiRequest(
+      httpMethod,
+      endpoint,
+      backoffTime,
+      maxRetryAttempts,
+      queryArgs,
+    );
   }
 }

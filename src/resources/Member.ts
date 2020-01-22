@@ -1,555 +1,351 @@
-// @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './BaseResource';
-import Action from './Action';
-import Board from './Board';
-import Card from './Card';
-import Notification from './Notification';
-import Organization from './Organization';
-import Sticker from './Sticker';
-import Token from './Token';
-import type {
-  ActionField,
-  ActionFilter,
-  AllOrNone,
-  ArgumentGroup,
-  AttachmentField,
-  AttachmentFilter,
-  BoardField,
-  BoardFilter,
-  CardField,
-  CardFilter,
-  FilterDate,
-  Format,
-  ListFilter,
-  MembershipFilter,
+import { BaseResource } from "./BaseResource";
+import { Action, ActionField, ActionFilter } from "./Action";
+import { AttachmentField, AttachmentFilter } from "./Attachment";
+import { Board, BoardField, BoardFilter } from "./Board";
+import { BoardBackground, BoardBackgroundFilter } from "./BoardBackground";
+import { BoardStar } from "./BoardStar";
+import { Card, CardField, CardFilter } from "./Card";
+import { CustomEmoji } from "./CustomEmoji";
+import { ListFilter } from "./List";
+import { MemberPref } from "./MemberPref";
+import { MembershipFilter } from "./Membership";
+import {
+  Notification,
   NotificationField,
   NotificationFilter,
+} from "./Notification";
+import {
+  Organization,
   OrganizationField,
   OrganizationFilter,
-  PositionNumbered,
-} from '../typeDefs';
+} from "./Organization";
+import { SavedSearch } from "./SavedSearch";
+import { Sticker } from "./Sticker";
+import { Token } from "./Token";
+import { AllOrNone, ArgumentGroup, FilterDate, Format } from "../typeDefs";
 
-export const avatarSourceFieldMap = generateTypeMap('gravatar', 'none', 'upload');
-export type AvatarSourceField = $Keys<typeof avatarSourceFieldMap>;
+export type AvatarSourceField = "gravatar" | "none" | "upload";
 
-export const memberEnterpriseOnlyField = generateTypeMap(
-  'avatarHash',
-  'fullName',
-  'initials',
-  'username',
-);
-export type MemberEnterpriseOnlyField = $Keys<typeof memberEnterpriseOnlyField>;
+export type MemberEnterpriseOnlyField =
+  | "avatarHash"
+  | "fullName"
+  | "initials"
+  | "username";
 
-const memberFieldMap = generateTypeMap(
-  'bio',
-  'bioData',
-  'confirmed',
-  'idPremOrgsAdmin',
-  'memberType',
-  'products',
-  'status',
-  'url',
-);
-export type MemberField = MemberEnterpriseOnlyField & $Keys<typeof memberFieldMap>;
+type SingleMemberField =
+  | "bio"
+  | "bioData"
+  | "confirmed"
+  | "idPremOrgsAdmin"
+  | "memberType"
+  | "products"
+  | "status"
+  | "url";
 
-export const memberOtherFieldsMap = generateTypeMap(
-  'avatarSource',
-  'email',
-  'gravatarHash',
-  'idBoards',
-  'idBoardsPinned',
-  'idOrganizations',
-  'loginTypes',
-  'oneTimeMessageDismissed',
-  'prefs',
-  'premiumFeatures',
-  'trophies',
-  'uploadedAvatarHash',
-);
-export type MemberEveryField = MemberField & $Keys<typeof memberOtherFieldsMap>;
+export type MemberField = MemberEnterpriseOnlyField & SingleMemberField;
 
-export const memberFilterMap = generateTypeMap('admins', 'all', 'none', 'normal', 'owners');
-export type MemberFilter = $Keys<typeof memberFilterMap>;
+export type MemberOtherField =
+  | "avatarSource"
+  | "email"
+  | "gravatarHash"
+  | "idBoards"
+  | "idBoardsPinned"
+  | "idOrganizations"
+  | "loginTypes"
+  | "oneTimeMessageDismissed"
+  | "prefs"
+  | "premiumFeatures"
+  | "trophies"
+  | "uploadedAvatarHash";
 
-export const memberTypeMap = generateTypeMap('admin', 'normal');
-export type MemberType = $Keys<typeof memberTypeMap>;
+export type MemberEveryField = MemberField & MemberOtherField;
 
-export const boardBackgroundBrightnessMap = generateTypeMap('dark', 'light', 'unknown');
-type BoardBackgroundBrightness = $Keys<typeof boardBackgroundBrightnessMap>;
+export type MemberFilter = "admins" | "all" | "none" | "normal" | "owners";
 
-export const boardBackgroundFieldMap = generateTypeMap(
-  'brightness',
-  'fullSizeUrl',
-  'scaled',
-  'tile',
-);
-type BoardBackgroundField = $Keys<typeof boardBackgroundFieldMap>;
+export type MemberType = "admin" | "normal";
 
-export const boardBackgroundFilterMap = generateTypeMap(
-  'all',
-  'custom',
-  'default',
-  'none',
-  'premium',
-);
-type BoardBackgroundFilter = $Keys<typeof boardBackgroundFilterMap>;
-
-export const customEmojiFieldMap = generateTypeMap('name', 'url');
-type CustomEmojiField = $Keys<typeof customEmojiFieldMap>;
-
-/**
- * This class handles both the "boardBackground" and "customBoardBackground"
- *    resources.  For "customBoardBackgrounds", the resource path is overridden
- *    when an instance is created in the Member class.
- */
-class BoardBackground extends BaseResource {
-  getBoardBackgrounds(
-    queryArgs?: {
-      // boardBackgrounds:
-      filter?: BoardBackgroundFilter,
-    } | {
-      // customBoardBackgrounds:
-      filter?: AllOrNone
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+export class Member extends BaseResource {
+  public getMembers(options?: {
+    fields?: ArgumentGroup<MemberEveryField>;
+    limit?: number;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getBoardBackground(
-    queryArgs?: {
-      fields?: ArgumentGroup<BoardBackgroundField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+  public getMember(
+    options?:
+      | {
+          actions?: ArgumentGroup<ActionFilter>;
+          actionsEntities?: boolean;
+          actionsDisplay?: boolean;
+          actionsLimit?: number;
+          actionFields?: ArgumentGroup<ActionField>;
+          actionsSince?: FilterDate;
+          actionBefore?: Date | null;
+          cards?: CardFilter;
+          cardFields?: ArgumentGroup<CardField>;
+          cardMembers?: boolean;
+          cardMemberFields?: ArgumentGroup<MemberField>;
+          cardAttachments?: AttachmentFilter;
+          cardAttachmentFields?: ArgumentGroup<AttachmentField>;
+          cardStickers?: boolean;
+          boards?: ArgumentGroup<BoardFilter>;
+          boardFields?: ArgumentGroup<BoardField>;
+          boardActions?: ArgumentGroup<ActionFilter>;
+          boardActionsEntities?: boolean;
+          boardActionsDisplay?: boolean;
+          boardActionsFormat?: Format;
+          boardActionsSince?: FilterDate;
+          boardActionsLimit?: number;
+          boardActionFields?: ArgumentGroup<ActionField>;
+          boardLists?: ArgumentGroup<ListFilter>;
+          boardMemberships?: ArgumentGroup<MembershipFilter>;
+          boardOrganization?: boolean;
+          boardOrganizationFields?: ArgumentGroup<OrganizationField>;
+          boardsInvited?: ArgumentGroup<BoardFilter>;
+          boardsInvitedFields?: ArgumentGroup<BoardField>;
+          boardStars?: boolean;
+          savedSearches?: boolean;
+          organizations?: ArgumentGroup<OrganizationFilter>;
+          organizationFields?: ArgumentGroup<OrganizationField>;
+          organizationPaidAccount?: boolean;
+          organizationsInvited?: OrganizationFilter;
+          organizationsInvitedFields?: ArgumentGroup<OrganizationField>;
+          notifications?: ArgumentGroup<NotificationFilter>;
+          notificationsEntities?: boolean;
+          notificationsDisplay?: boolean;
+          notificationsLimit?: number;
+          notificationFields?: ArgumentGroup<NotificationField>;
+          notificationMemberCreator?: boolean;
+          notificationMemberCreatorFields?: ArgumentGroup<MemberField>;
+          notificationBefore?: string | null;
+          notificationSince?: string | null;
+          tokens?: AllOrNone;
+          paidAccount?: boolean;
+          boardBackgrounds?: ArgumentGroup<BoardBackgroundFilter>;
+          customBoardBackgrounds?: AllOrNone;
+          customStickers?: AllOrNone;
+          customEmoji?: AllOrNone;
+          fields?: ArgumentGroup<MemberEveryField>;
+        }
+      | {
+          // This is the only option if calling from a different resource.
+          fields?: ArgumentGroup<MemberEveryField>;
+        },
+  ): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  updateBoardBackground(
-    queryArgs?: {
-      tile?: boolean,
-      brightness?: BoardBackgroundBrightness,
-    },
-  ): Promise<any> {
-    return this.httpPut('/', queryArgs);
+  public getMembersFilteredBy(filter: MemberFilter): Promise<unknown> {
+    return this.httpGet("/", { filter });
   }
 
-  uploadBoardBackground(file: Object): Promise<any> {
-    return this.httpPost('/', { file });
-  }
-
-  deleteBoardBackground(): Promise<any> {
-    return this.httpDelete('/');
-  }
-}
-
-class BoardStar extends BaseResource {
-  getBoardStars(): Promise<any> {
-    return this.httpGet('/');
-  }
-
-  getBoardStar(): Promise<any> {
-    return this.httpGet('/');
-  }
-
-  updateBoardStar(
-    queryArgs?: {
-      pos?: PositionNumbered,
-    },
-  ): Promise<any> {
-    return this.httpPut('/', queryArgs);
-  }
-
-  moveBoardStarToBoard(idBoard: string): Promise<any> {
-    return this.httpPut('/idBoard', { value: idBoard });
-  }
-
-  updatePosition(value: PositionNumbered): Promise<any> {
-    return this.httpPut('/pos', { value });
-  }
-
-  addBoardStar(
-    queryArgs: {
-      idBoard: string,
-      pos: PositionNumbered,
-    },
-  ): Promise<any> {
-    return this.httpPost('/', queryArgs);
-  }
-
-  deleteBoardStar(): Promise<any> {
-    return this.httpDelete('/');
-  }
-}
-
-class CustomEmoji extends BaseResource {
-  getCustomEmojis(
-    queryArgs?: {
-      filter?: AllOrNone,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
-  }
-
-  getCustomEmoji(
-    queryArgs?: {
-      fields?: ArgumentGroup<CustomEmojiField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
-  }
-
-  uploadCustomEmoji(
-    queryArgs: {
-      name: string,
-      file: Object,
-    },
-  ): Promise<any> {
-    return this.httpPost('/', queryArgs);
-  }
-}
-
-class Pref extends BaseResource {
-  updateColorBlind(value: boolean): Promise<any> {
-    return this.httpPut('/colorBlind', { value });
-  }
-
-  updateLocale(value: string): Promise<any> {
-    return this.httpPut('/locale', { value });
-  }
-
-  updateMinutesBetweenSummaries(value: number): Promise<any> {
-    return this.httpPut('/minutesBetweenSummaries', { value });
-  }
-}
-
-class SavedSearch extends BaseResource {
-  getSavedSearches(): Promise<any> {
-    return this.httpGet('/');
-  }
-
-  getSavedSearch(): Promise<any> {
-    return this.httpGet('/');
-  }
-
-  updateSavedSearch(
-    queryArgs?: {
-      name?: string,
-      query?: string,
-      pos?: PositionNumbered,
-    },
-  ): Promise<any> {
-    return this.httpPut('/', queryArgs);
-  }
-
-  updateName(value: string): Promise<any> {
-    return this.httpPut('/name', { value });
-  }
-
-  updatePosition(value: PositionNumbered): Promise<any> {
-    return this.httpPut('/pos', { value });
-  }
-
-  updateQuery(value: string): Promise<any> {
-    return this.httpPut('/query', { value });
-  }
-
-  addSavedSearch(
-    queryArgs: {
-      name: string,
-      query: string,
-      pos: PositionNumbered,
-    },
-  ): Promise<any> {
-    return this.httpPost('/', queryArgs);
-  }
-
-  deleteSavedSearch(): Promise<any> {
-    return this.httpDelete('/');
-  }
-}
-
-/**
- * @namespace Member
- */
-export default class Member extends BaseResource {
-  getMembers(
-    queryArgs?: {
-      fields?: ArgumentGroup<MemberEveryField>,
-      limit?: number,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
-  }
-
-  getMember(
-    queryArgs?: {
-      actions?: ArgumentGroup<ActionFilter>,
-      actionsEntities?: boolean,
-      actionsDisplay?: boolean,
-      actionsLimit?: number,
-      actionFields?: ArgumentGroup<ActionField>,
-      actionsSince?: FilterDate,
-      actionBefore?: ?Date,
-      cards?: CardFilter,
-      cardFields?: ArgumentGroup<CardField>,
-      cardMembers?: boolean,
-      cardMemberFields?: ArgumentGroup<MemberField>,
-      cardAttachments?: AttachmentFilter,
-      cardAttachmentFields?: ArgumentGroup<AttachmentField>,
-      cardStickers?: boolean,
-      boards?: ArgumentGroup<BoardFilter>,
-      boardFields?: ArgumentGroup<BoardField>,
-      boardActions?: ArgumentGroup<ActionFilter>,
-      boardActionsEntities?: boolean,
-      boardActionsDisplay?: boolean,
-      boardActionsFormat?: Format,
-      boardActionsSince?: FilterDate,
-      boardActionsLimit?: number,
-      boardActionFields?: ArgumentGroup<ActionField>,
-      boardLists?: ArgumentGroup<ListFilter>,
-      boardMemberships?: ArgumentGroup<MembershipFilter>,
-      boardOrganization?: boolean,
-      boardOrganizationFields?: ArgumentGroup<OrganizationField>,
-      boardsInvited?: ArgumentGroup<BoardFilter>,
-      boardsInvitedFields?: ArgumentGroup<BoardField>,
-      boardStars?: boolean,
-      savedSearches?: boolean,
-      organizations?: ArgumentGroup<OrganizationFilter>,
-      organizationFields?: ArgumentGroup<OrganizationField>,
-      organizationPaidAccount?: boolean,
-      organizationsInvited?: OrganizationFilter,
-      organizationsInvitedFields?: ArgumentGroup<OrganizationField>,
-      notifications?: ArgumentGroup<NotificationFilter>,
-      notificationsEntities?: boolean,
-      notificationsDisplay?: boolean,
-      notificationsLimit?: number,
-      notificationFields?: ArgumentGroup<NotificationField>,
-      notificationMemberCreator?: boolean,
-      notificationMemberCreatorFields?: ArgumentGroup<MemberField>,
-      notificationBefore?: ?string,
-      notificationSince?: ?string,
-      tokens?: AllOrNone,
-      paidAccount?: boolean,
-      boardBackgrounds?: ArgumentGroup<BoardBackgroundFilter>,
-      customBoardBackgrounds?: AllOrNone,
-      customStickers?: AllOrNone,
-      customEmoji?: AllOrNone,
-      fields?: ArgumentGroup<MemberEveryField>,
-    } | {
-      // This is the only option if calling from a different resource.
-      fields?: ArgumentGroup<MemberEveryField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
-  }
-
-  getMembersFilteredBy(filter: MemberFilter): Promise<any> {
-    return this.httpGet('/', { filter });
-  }
-
-  getFieldValue(field: MemberEveryField): Promise<any> {
+  public getFieldValue(field: MemberEveryField): Promise<unknown> {
     return this.httpGet(`/${field}`);
   }
 
-  actions() {
+  public actions(): Action {
     return new Action(this.config, `${this.routePath}/actions`);
   }
 
-  boardBackgrounds(backgroundId?: string = '') {
-    return new BoardBackground(this.config, `${this.routePath}/boardBackgrounds/${backgroundId}`);
+  public boardBackgrounds(backgroundId: string = ""): BoardBackground {
+    return new BoardBackground(
+      this.config,
+      `${this.routePath}/boardBackgrounds/${backgroundId}`,
+    );
   }
 
-  boardStars(boardStarId?: string = '') {
-    return new BoardStar(this.config, `${this.routePath}/boardStars/${boardStarId}`);
+  public boardStars(boardStarId: string = ""): BoardStar {
+    return new BoardStar(
+      this.config,
+      `${this.routePath}/boardStars/${boardStarId}`,
+    );
   }
 
-  boards() {
+  public boards(): Board {
     return new Board(this.config, `${this.routePath}/boards`);
   }
 
-  boardsInvited() {
+  public boardsInvited(): Board {
     return new Board(this.config, `${this.routePath}/boardsInvited`);
   }
 
-  cards() {
+  public cards(): Card {
     return new Card(this.config, `${this.routePath}/cards`);
   }
 
-  customBoardBackgrounds(backgroundId?: string = '') {
+  public customBoardBackgrounds(backgroundId: string = ""): BoardBackground {
     return new BoardBackground(
-      this.config, `${this.routePath}/customBoardBackgrounds/${backgroundId}`);
+      this.config,
+      `${this.routePath}/customBoardBackgrounds/${backgroundId}`,
+    );
   }
 
-  customEmoji(customEmojiId?: string = '') {
-    return new CustomEmoji(this.config, `${this.routePath}/customEmoji/${customEmojiId}`);
+  public customEmoji(customEmojiId: string = ""): CustomEmoji {
+    return new CustomEmoji(
+      this.config,
+      `${this.routePath}/customEmoji/${customEmojiId}`,
+    );
   }
 
-  customStickers(customStickerId?: string = '') {
-    return new Sticker(this.config, `${this.routePath}/customStickers/${customStickerId}`);
+  public customStickers(customStickerId: string = ""): Sticker {
+    return new Sticker(
+      this.config,
+      `${this.routePath}/customStickers/${customStickerId}`,
+    );
   }
 
-  /* istanbul ignore next: Requires Business Class subscription */
-  getDeltas(
-    queryArgs: {
-      tags: string,
-      ixLastUpdate: number,
-    },
-  ): Promise<any> {
-    return this.httpGet('/deltas', queryArgs);
+  public getDeltas(options: {
+    tags: string;
+    ixLastUpdate: number;
+  }): Promise<unknown> {
+    return this.httpGet("/deltas", options);
   }
 
-  notifications() {
+  public notifications(): Notification {
     return new Notification(this.config, `${this.routePath}/notifications`);
   }
 
-  organizations() {
+  public organizations(): Organization {
     return new Organization(this.config, `${this.routePath}/organizations`);
   }
 
-  organizationsInvited() {
+  public organizationsInvited(): Organization {
     return new Organization(
-      this.config, `${this.routePath}/organizationsInvited`);
+      this.config,
+      `${this.routePath}/organizationsInvited`,
+    );
   }
 
-  savedSearches(savedSearchId?: string = '') {
-    return new SavedSearch(this.config, `${this.routePath}/savedSearches/${savedSearchId}`);
+  public savedSearches(savedSearchId: string = ""): SavedSearch {
+    return new SavedSearch(
+      this.config,
+      `${this.routePath}/savedSearches/${savedSearchId}`,
+    );
   }
 
-  tokens() {
+  public tokens(): Token {
     return new Token(this.config, `${this.routePath}/tokens`);
   }
 
-  updateMember(
-    queryArgs?: {
-      fullName?: string,
-      initials?: string,
-      username?: string,
-      bio?: string,
-      avatarSource?: AvatarSourceField,
-      prefs?: {
-        colorBlind?: boolean,
-        locale?: string,
-        minutesBetweenSummaries?: number,
-      },
-    },
-  ): Promise<any> {
-    return this.httpPut('/', { ...queryArgs, separator: '/' });
+  public updateMember(options?: {
+    fullName?: string;
+    initials?: string;
+    username?: string;
+    bio?: string;
+    avatarSource?: AvatarSourceField;
+    prefs?: {
+      colorBlind?: boolean;
+      locale?: string;
+      minutesBetweenSummaries?: number;
+    };
+  }): Promise<unknown> {
+    return this.httpPut("/", { ...options, separator: "/" });
   }
 
-  updateAvatarSource(value: AvatarSourceField): Promise<any> {
-    return this.httpPut('/avatarSource', { value });
+  public updateAvatarSource(value: AvatarSourceField): Promise<unknown> {
+    return this.httpPut("/avatarSource", { value });
   }
 
-  updateBio(value: string): Promise<any> {
-    return this.httpPut('/bio', { value });
+  public updateBio(value: string): Promise<unknown> {
+    return this.httpPut("/bio", { value });
   }
 
-  updateFullName(value: string): Promise<any> {
-    return this.httpPut('/fullName', { value });
+  public updateFullName(value: string): Promise<unknown> {
+    return this.httpPut("/fullName", { value });
   }
 
-  updateInitials(value: string): Promise<any> {
-    return this.httpPut('/initials', { value });
+  public updateInitials(value: string): Promise<unknown> {
+    return this.httpPut("/initials", { value });
   }
 
-  prefs() {
-    return new Pref(this.config, `${this.routePath}/prefs`);
+  public prefs(): MemberPref {
+    return new MemberPref(this.config, `${this.routePath}/prefs`);
   }
 
-  updateUsername(value: string): Promise<any> {
-    return this.httpPut('/username', { value });
+  public updateUsername(value: string): Promise<unknown> {
+    return this.httpPut("/username", { value });
   }
 
   /**
-   * Updates the deactivated status for a member associated with an
-   *    Organization.
+   * Updates the deactivated status for a member associated with an Organization.
    * @memberOf Organization
    * @example PUT /1/organizations/:organizationId/members/:memberId
-   * @see {@link https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember-deactivated}
+   * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember-deactivated
    */
-  updateDeactivatedStatus(value: boolean): Promise<any> {
-    return this.httpPut('/deactivated', { value });
+  public updateDeactivatedStatus(value: boolean): Promise<unknown> {
+    return this.httpPut("/deactivated", { value });
   }
 
   /**
-   * Updates the member type for a member associated with a Board or
-   *    Organization.
+   * Updates the member type for a member associated with a Board or Organization.
    * @memberOf Board
    * @example PUT /1/boards/:boardId/members/:memberId
-   * @see {@link https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-members-idmember}
+   * @see https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-members-idmember
    *
    * @memberOf Organization
    * @example PUT /1/organizations/:organizationId/members/:memberId
-   * @see {@link https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember}
+   * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember
    */
-  updateMemberType(type: MemberType): Promise<any> {
-    return this.httpPut('/', { type });
+  public updateMemberType(type: MemberType): Promise<unknown> {
+    return this.httpPut("/", { type });
   }
 
   /**
    * Adds a member to an Organization.
    * @memberOf Organization
    * @example PUT /1/organizations/:organizationId/members
-   * @see {@link https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members}
+   * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members
    */
-  addMember(
-    queryArgs: {
-      email: string,
-      fullName: string,
-      type?: MemberType
-    },
-  ): Promise<any> {
-    return this.httpPut('/', queryArgs);
+  public addMember(options: {
+    email: string;
+    fullName: string;
+    type?: MemberType;
+  }): Promise<unknown> {
+    return this.httpPut("/", options);
   }
 
-  /* istanbul ignore next: I never ran this test because I don't want to mess with my Avatar. */
-  uploadAvatar(file: Object): Promise<any> {
-    return this.httpPost('/avatar', { file });
+  public uploadAvatar(file: any): Promise<unknown> {
+    return this.httpPost("/avatar", { file });
   }
 
-  /* istanbul ignore next: I need to determine a message type for this. */
-  dismissOneTimeMessages(value: string): Promise<any> {
-    return this.httpPost('/oneTimeMessagesDismissed', { value });
+  public dismissOneTimeMessages(value: string): Promise<unknown> {
+    return this.httpPost("/oneTimeMessagesDismissed", { value });
   }
 
   /**
    * Deletes a member created for a Board.
-   * @memberOf Board
    * @example DELETE /1/boards/:boardId/members/:memberId
-   * @see {@link https://developers.trello.com/advanced-reference/board#delete-1-boards-board-id-members-idmember}
+   * @see https://developers.trello.com/advanced-reference/board#delete-1-boards-board-id-members-idmember
    */
   /* istanbul ignore next: This passed, I don't want to keep creating and deleting members. */
-  deleteMember(): Promise<any> {
-    return this.httpDelete('/');
+  public deleteMember(): Promise<unknown> {
+    return this.httpDelete("/");
   }
 
   /**
-   * Removes a member's association with an Organization, doesn't
-   *    actually delete it.
-   * @memberOf Organization
+   * Removes a member's association with an Organization, doesn't actually delete it.
    * @example DELETE /1/organizations/:organizationId/members/:memberId
-   * @see {@link https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember}
+   * @see https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember
    */
-  dissociateMember(): Promise<any> {
-    return this.httpDelete('/');
+  public dissociateMember(): Promise<unknown> {
+    return this.httpDelete("/");
   }
 
   /**
-   * This will remove a member from your Organization AND remove the member
-   *    from all Boards associated with an Organization.
+   * This will remove a member from your Organization AND remove the member from
+   * all Boards associated with an Organization.
    * @memberOf Organization
    * @example DELETE /1/organizations/:organizationId/members/:memberId/all
-   * @see {@link https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember-all}
+   * @see https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember-all
    */
-  /* istanbul ignore next: Requires Business Class. */
-  dissociateMemberFromAll(): Promise<any> {
-    return this.httpDelete('/all');
+  public dissociateMemberFromAll(): Promise<unknown> {
+    return this.httpDelete("/all");
   }
 
-  /* istanbul ignore next: Requires special permissions */
-  updateVote(isVoting: boolean): Promise<any> {
+  public updateVote(isVoting: boolean): Promise<unknown> {
     if (isVoting) {
-      return this.httpPost('/', { value: this.associationId });
+      return this.httpPost("/", { value: this.associationId });
     }
     return this.httpDelete(`/${this.associationId}`);
   }

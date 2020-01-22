@@ -1,81 +1,70 @@
-// @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './BaseResource';
-import type {
-  AllOrNone,
-  ArgumentGroup,
-} from '../typeDefs';
+import { BaseResource } from "./BaseResource";
+import { AllOrNone, ArgumentGroup } from "../typeDefs";
 
-export const stickerFieldMap = generateTypeMap(
-  'image',
-  'imageScaled',
-  'imageUrl',
-  'left',
-  'rotate',
-  'top',
-  'zIndex',
-);
-export type StickerField = $Keys<typeof stickerFieldMap>;
+export type StickerField =
+  | "image"
+  | "imageScaled"
+  | "imageUrl"
+  | "left"
+  | "rotate"
+  | "top"
+  | "zIndex";
 
-export const customStickerFieldMap = generateTypeMap('scaled', 'url');
-type CustomStickerField = $Keys<typeof customStickerFieldMap>;
+export type CustomStickerField = "scaled" | "url";
 
-/**
- * @namespace Sticker
- */
-export default class Sticker extends BaseResource {
-  getStickers(
-    queryArgs?: {
-      // Arguments for "/stickers":
-      fields?: ArgumentGroup<StickerField>,
-    } | {
-      // Arguments for "/customStickers":
-      filter?: AllOrNone,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+export class Sticker extends BaseResource {
+  public getStickers(
+    options?:
+      | {
+          // Arguments for "/stickers":
+          fields?: ArgumentGroup<StickerField>;
+        }
+      | {
+          // Arguments for "/customStickers":
+          filter?: AllOrNone;
+        },
+  ): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getSticker(
-    queryArgs?: {
-      // Arguments for "/stickers":
-      fields?: ArgumentGroup<StickerField>,
-    } | {
-      // Arguments for "/customStickers":
-      fields?: ArgumentGroup<CustomStickerField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+  public getSticker(
+    options?:
+      | {
+          // Arguments for "/stickers":
+          fields?: ArgumentGroup<StickerField>;
+        }
+      | {
+          // Arguments for "/customStickers":
+          fields?: ArgumentGroup<CustomStickerField>;
+        },
+  ): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  updateSticker(
-    queryArgs?: {
-      top?: number,
-      left?: number,
-      zIndex?: number,
-      rotate?: number,
-    },
-  ): Promise<any> {
-    return this.httpPut('/', queryArgs);
+  public updateSticker(options?: {
+    top?: number;
+    left?: number;
+    zIndex?: number;
+    rotate?: number;
+  }): Promise<unknown> {
+    return this.httpPut("/", options);
   }
 
-  addSticker(
-    queryArgs: {
-      image: string,
-      top: number,
-      left: number,
-      zIndex: number,
-      rotate?: number,
-    },
-  ): Promise<any> {
-    return this.httpPost('/', queryArgs);
+  public addSticker(options: {
+    image: string;
+    top: number;
+    left: number;
+    zIndex: number;
+    rotate?: number;
+  }): Promise<unknown> {
+    return this.httpPost("/", options);
   }
 
-  uploadSticker(file: Object): Promise<any> {
-    return this.httpPost('/', { file });
+  public uploadSticker(file: File): Promise<unknown> {
+    return this.httpPost("/", { file });
   }
 
-  deleteSticker(): Promise<any> {
-    return this.httpDelete('/');
+  public deleteSticker(): Promise<unknown> {
+    return this.httpDelete("/");
   }
 }

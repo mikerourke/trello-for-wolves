@@ -1,11 +1,7 @@
-// @flow
-import BaseResource from './BaseResource';
+import { BaseResource } from "./BaseResource";
 
-/**
- * @namespace Type
- */
-export default class Type extends BaseResource {
-  getType(teamOrUserId: string): Promise<any> {
+export class Type extends BaseResource {
+  public getType(teamOrUserId: string): Promise<unknown> {
     return this.httpGet(`/${teamOrUserId}`);
   }
 }

@@ -1,103 +1,88 @@
-// @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './BaseResource';
-import Board from './Board';
-import Card from './Card';
-import CheckItem from './CheckItem';
-import type {
-  AllOrNone,
-  ArgumentGroup,
-  CardField,
-  CardFilter,
-  CheckItemField,
-  PositionNumbered,
-} from '../typeDefs';
+import { BaseResource } from "./BaseResource";
+import { Board } from "./Board";
+import { Card, CardField, CardFilter } from "./Card";
+import { CheckItem, CheckItemField } from "./CheckItem";
+import { AllOrNone, ArgumentGroup, PositionNumbered } from "../typeDefs";
 
-export const checklistFieldMap = generateTypeMap('idBoard', 'idCard', 'name', 'pos');
-export type ChecklistField = $Keys<typeof checklistFieldMap>;
+export type ChecklistField = "idBoard" | "idCard" | "name" | "pos";
 
-/**
- * @namespace Checklist
- */
-export default class Checklist extends BaseResource {
-  getChecklists(
-    queryArgs?: {
-      cards?: CardFilter,
-      cardFields?: ArgumentGroup<CardField>,
-      checkItems?: AllOrNone,
-      checkItemFields?: ArgumentGroup<CheckItemField>,
-      filter?: AllOrNone,
-      fields?: ArgumentGroup<ChecklistField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+export class Checklist extends BaseResource {
+  public getChecklists(options?: {
+    cards?: CardFilter;
+    cardFields?: ArgumentGroup<CardField>;
+    checkItems?: AllOrNone;
+    checkItemFields?: ArgumentGroup<CheckItemField>;
+    filter?: AllOrNone;
+    fields?: ArgumentGroup<ChecklistField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getChecklist(
-    queryArgs?: {
-      cards?: CardFilter,
-      cardFields?: ArgumentGroup<CardField>,
-      checkItems?: AllOrNone,
-      checkItemFields?: ArgumentGroup<CheckItemField>,
-      fields?: ArgumentGroup<ChecklistField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+  public getChecklist(options?: {
+    cards?: CardFilter;
+    cardFields?: ArgumentGroup<CardField>;
+    checkItems?: AllOrNone;
+    checkItemFields?: ArgumentGroup<CheckItemField>;
+    fields?: ArgumentGroup<ChecklistField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getFieldValue(field: ChecklistField): Promise<any> {
+  public getFieldValue(field: ChecklistField): Promise<unknown> {
     return this.httpGet(`/${field}`);
   }
 
-  board() {
+  public board(): Board {
     return new Board(this.config, `${this.routePath}/board`);
   }
 
-  cards() {
+  public cards(): Card {
     return new Card(this.config, `${this.routePath}/cards`);
   }
 
-  checkItem(checkItemId?: string = '') {
-    return new CheckItem(this.config, `${this.routePath}/checkItem/${checkItemId}`);
+  public checkItem(checkItemId: string = ""): CheckItem {
+    return new CheckItem(
+      this.config,
+      `${this.routePath}/checkItem/${checkItemId}`,
+    );
   }
 
-  checkItems(checkItemId?: string = '') {
-    return new CheckItem(this.config, `${this.routePath}/checkItems/${checkItemId}`);
+  public checkItems(checkItemId: string = ""): CheckItem {
+    return new CheckItem(
+      this.config,
+      `${this.routePath}/checkItems/${checkItemId}`,
+    );
   }
 
-  updateChecklist(
-    queryArgs?: {
-      name?: string,
-      pos?: PositionNumbered,
-    },
-  ): Promise<any> {
-    return this.httpPut('/', queryArgs);
+  public updateChecklist(options?: {
+    name?: string;
+    pos?: PositionNumbered;
+  }): Promise<unknown> {
+    return this.httpPut("/", options);
   }
 
-  updateName(value: string): Promise<any> {
-    return this.httpPut('/name', { value });
+  public updateName(value: string): Promise<unknown> {
+    return this.httpPut("/name", { value });
   }
 
-  updatePosition(value: PositionNumbered): Promise<any> {
-    return this.httpPut('/pos', { value });
+  public updatePosition(value: PositionNumbered): Promise<unknown> {
+    return this.httpPut("/pos", { value });
   }
 
-  addChecklist(
-    queryArgs: {
-      idCard?: string,
-      name?: string,
-      pos?: PositionNumbered,
-      idChecklistSource?: string,
-    },
-  ): Promise<any> {
-    let updatedArgs = queryArgs;
-    if (this.routePathElements[0] === 'cards') {
-      updatedArgs = { ...queryArgs, idCard: this.routePathElements[1] };
+  public addChecklist(options: {
+    idCard?: string;
+    name?: string;
+    pos?: PositionNumbered;
+    idChecklistSource?: string;
+  }): Promise<unknown> {
+    let updatedArgs = options;
+    if (this.routePathElements[0] === "cards") {
+      updatedArgs = { ...options, idCard: this.routePathElements[1] };
     }
-    return this.httpPost('/', updatedArgs);
+    return this.httpPost("/", updatedArgs);
   }
 
-  deleteChecklist(): Promise<any> {
-    return this.httpDelete('/');
+  public deleteChecklist(): Promise<unknown> {
+    return this.httpDelete("/");
   }
 }

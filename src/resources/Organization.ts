@@ -1,267 +1,189 @@
-// @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './BaseResource';
-import Action from './Action';
-import Board from './Board';
-import Member from './Member';
-import Membership from './Membership';
-import type {
-  ActionField,
-  ActionFilter,
+import { BaseResource } from "./BaseResource";
+import { Action, ActionField, ActionFilter } from "./Action";
+import { Board, BoardField, BoardFilter } from "./Board";
+import { ListFilter } from "./List";
+import { Member, MemberField, MemberFilter } from "./Member";
+import { Membership, MembershipFilter } from "./Membership";
+import { BoardVisibilityFilter, OrganizationPref } from "./OrganizationPref";
+import {
   ArgumentGroup,
-  BoardField,
-  BoardFilter,
   FilterDate,
   Format,
-  ListFilter,
-  MemberField,
-  MemberFilter,
-  MembershipFilter,
   PermissionLevel,
-} from '../typeDefs';
+} from "../typeDefs";
 
-export const organizationFieldMap = generateTypeMap(
-  'billableMemberCount',
-  'desc',
-  'descData',
-  'displayName',
-  'idBoards',
-  'invitations',
-  'invited',
-  'logoHash',
-  'memberships',
-  'name',
-  'powerUps',
-  'prefs',
-  'premiumFeatures',
-  'products',
-  'url',
-  'website',
-);
-export type OrganizationField = $Keys<typeof organizationFieldMap>;
+export type OrganizationField =
+  | "billableMemberCount"
+  | "desc"
+  | "descData"
+  | "displayName"
+  | "idBoards"
+  | "invitations"
+  | "invited"
+  | "logoHash"
+  | "memberships"
+  | "name"
+  | "powerUps"
+  | "prefs"
+  | "premiumFeatures"
+  | "products"
+  | "url"
+  | "website";
 
+export type OrganizationFilter = "all" | "members" | "none" | "public";
 
-export const organizationFilterMap = generateTypeMap(
-  'all',
-  'members',
-  'none',
-  'public',
-);
-export type OrganizationFilter = $Keys<typeof organizationFilterMap>;
-
-export const boardVisibilityFilterMap = generateTypeMap('admin', 'none', 'org');
-type BoardVisibilityFilter = $Keys<typeof boardVisibilityFilterMap>;
-
-export const boardVisibilityRestrictionLevelMap = generateTypeMap('org', 'private', 'public');
-type BoardVisibilityRestrictionLevel = $Keys<typeof boardVisibilityRestrictionLevelMap>;
-
-class Pref extends BaseResource {
-  /* istanbul ignore next: Requires Business Class subscription */
-  updateAssociatedDomain(value: string): Promise<any> {
-    return this.httpPut('/associatedDomain', { value });
+export class Organization extends BaseResource {
+  public getOrganizations(options?: {
+    filter?: ArgumentGroup<OrganizationFilter>;
+    fields?: ArgumentGroup<OrganizationField>;
+    paidAccount?: boolean;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  /* istanbul ignore next: Requires special permissions */
-  updateBoardVisibilityRestriction(
-    level: BoardVisibilityRestrictionLevel,
-    value: BoardVisibilityFilter,
-  ): Promise<any> {
-    return this.httpPut(`/boardVisibilityRestrict/${level}`, { value });
+  public getOrganization(options?: {
+    actions?: ArgumentGroup<ActionFilter>;
+    actionsEntities?: boolean;
+    actionsDisplay?: boolean;
+    actionsLimit?: number;
+    actionFields?: ArgumentGroup<ActionField>;
+    memberships?: ArgumentGroup<MembershipFilter>;
+    membershipsMember?: boolean;
+    membershipsMemberFields?: ArgumentGroup<MemberField>;
+    members?: MemberFilter;
+    memberFields?: ArgumentGroup<MemberField>;
+    memberActivity?: boolean;
+    membersInvited?: MemberFilter;
+    membersInvitedFields?: ArgumentGroup<MemberField>;
+    pluginData?: boolean;
+    boards?: ArgumentGroup<BoardFilter>;
+    boardFields?: ArgumentGroup<BoardField>;
+    boardActions?: ArgumentGroup<ActionFilter>;
+    boardActionsEntities?: boolean;
+    boardActionsDisplay?: boolean;
+    boardActionsFormat?: Format;
+    boardActionsSince?: FilterDate;
+    boardActionsLimit?: number;
+    boardActionFields?: ArgumentGroup<ActionField>;
+    boardLists?: ArgumentGroup<ListFilter>;
+    boardPluginData?: boolean;
+    paidAccount?: boolean;
+    fields?: ArgumentGroup<OrganizationField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  /* istanbul ignore next: Requires special permissions */
-  updateExternalMembersDisabled(value: boolean): Promise<any> {
-    return this.httpPut('/externalMembersDisabled', { value });
+  public getOrganizationsFilteredBy(
+    filter: ArgumentGroup<OrganizationFilter>,
+  ): Promise<unknown> {
+    return this.httpGet("/", { filter });
   }
 
-  /* istanbul ignore next: Requires special permissions */
-  updateGoogleAppsVersion(value: number): Promise<any> {
-    return this.httpPut('/googleAppsVersion', { value });
-  }
-
-  /* istanbul ignore next: Requires special permissions */
-  updateOrgInviteRestrict(value: string): Promise<any> {
-    return this.httpPut('/orgInviteRestrict', { value });
-  }
-
-  updatePermissionLevel(value: PermissionLevel): Promise<any> {
-    return this.httpPut('/permissionLevel', { value });
-  }
-
-  /* istanbul ignore next: Requires special permissions */
-  deleteAssociatedDomain(): Promise<any> {
-    return this.httpDelete('/associatedDomain');
-  }
-
-  /* istanbul ignore next: Requires special permissions */
-  deleteOrgInviteRestrict(emailAddress: string): Promise<any> {
-    return this.httpDelete('/orgInviteRestrict', { value: emailAddress });
-  }
-}
-
-/**
- * @namespace Organization
- */
-export default class Organization extends BaseResource {
-  getOrganizations(
-    queryArgs?: {
-      filter?: ArgumentGroup<OrganizationFilter>,
-      fields?: ArgumentGroup<OrganizationField>,
-      paidAccount?: boolean,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
-  }
-
-  getOrganization(
-    queryArgs?: {
-      actions?: ArgumentGroup<ActionFilter>,
-      actionsEntities?: boolean,
-      actionsDisplay?: boolean,
-      actionsLimit?: number,
-      actionFields?: ArgumentGroup<ActionField>,
-      memberships?: ArgumentGroup<MembershipFilter>,
-      membershipsMember?: boolean,
-      membershipsMemberFields?: ArgumentGroup<MemberField>,
-      members?: MemberFilter,
-      memberFields?: ArgumentGroup<MemberField>,
-      memberActivity?: boolean,
-      membersInvited?: MemberFilter,
-      membersInvitedFields?: ArgumentGroup<MemberField>,
-      pluginData?: boolean,
-      boards?: ArgumentGroup<BoardFilter>,
-      boardFields?: ArgumentGroup<BoardField>,
-      boardActions?: ArgumentGroup<ActionFilter>,
-      boardActionsEntities?: boolean,
-      boardActionsDisplay?: boolean,
-      boardActionsFormat?: Format,
-      boardActionsSince?: FilterDate,
-      boardActionsLimit?: number,
-      boardActionFields?: ArgumentGroup<ActionField>,
-      boardLists?: ArgumentGroup<ListFilter>,
-      boardPluginData?: boolean,
-      paidAccount?: boolean,
-      fields?: ArgumentGroup<OrganizationField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
-  }
-
-  getOrganizationsFilteredBy(filter: ArgumentGroup<OrganizationFilter>): Promise<any> {
-    return this.httpGet('/', { filter });
-  }
-
-  getFieldValue(field: OrganizationField): Promise<any> {
+  public getFieldValue(field: OrganizationField): Promise<unknown> {
     return this.httpGet(`/${field}`);
   }
 
-  actions() {
+  public actions(): Action {
     return new Action(this.config, `${this.routePath}/actions`);
   }
 
-  boards() {
+  public boards(): Board {
     return new Board(this.config, `${this.routePath}/boards`);
   }
 
-  /* istanbul ignore next: Requires Business Class subscription */
-  getDeltas(
-    queryArgs: {
-      tags: string,
-      ixLastUpdate: number,
-    },
-  ): Promise<any> {
-    return this.httpGet('/deltas', queryArgs);
+  public getDeltas(options: {
+    tags: string;
+    ixLastUpdate: number;
+  }): Promise<unknown> {
+    return this.httpGet("/deltas", options);
   }
 
-  members(memberId?: string = '') {
+  public members(memberId: string = ""): Member {
     return new Member(this.config, `${this.routePath}/members/${memberId}`);
   }
 
-  membersInvited() {
+  public membersInvited(): Member {
     return new Member(this.config, `${this.routePath}/membersInvited`);
   }
 
-  memberships(membershipId?: string = '') {
-    return new Membership(this.config, `${this.routePath}/memberships/${membershipId}`);
+  public memberships(membershipId: string = ""): Membership {
+    return new Membership(
+      this.config,
+      `${this.routePath}/memberships/${membershipId}`,
+    );
   }
 
-  getPluginData(): Promise<any> {
-    return this.httpGet('/pluginData');
+  public getPluginData(): Promise<unknown> {
+    return this.httpGet("/pluginData");
   }
 
-  /* istanbul ignore next: Requires Business Class subscription */
-  getTags(): Promise<any> {
-    return this.httpGet('/tags');
+  public getTags(): Promise<unknown> {
+    return this.httpGet("/tags");
   }
 
-  updateOrganization(
-    queryArgs?: {
-      prefs?: {
-        associatedDomain?: string,
-        externalMembersDisabled?: boolean,
-        googleAppsVersion?: number,
-        orgInviteRestrict?: string,
-        permissionLevel?: PermissionLevel,
-        boardVisibilityRestrict?: {
-          orgRestriction?: BoardVisibilityFilter,
-          privateRestriction?: BoardVisibilityFilter,
-          publicRestriction?: BoardVisibilityFilter,
-        },
-      },
-      name?: string,
-      displayName?: string,
-      desc?: string,
-      website?: ?string,
-    },
-  ): Promise<any> {
-    return this.httpPut('/', { ...queryArgs, separator: '/' });
+  public updateOrganization(options?: {
+    prefs?: {
+      associatedDomain?: string;
+      externalMembersDisabled?: boolean;
+      googleAppsVersion?: number;
+      orgInviteRestrict?: string;
+      permissionLevel?: PermissionLevel;
+      boardVisibilityRestrict?: {
+        orgRestriction?: BoardVisibilityFilter;
+        privateRestriction?: BoardVisibilityFilter;
+        publicRestriction?: BoardVisibilityFilter;
+      };
+    };
+    name?: string;
+    displayName?: string;
+    desc?: string;
+    website?: string | null;
+  }): Promise<unknown> {
+    return this.httpPut("/", { ...options, separator: "/" });
   }
 
-  updateDescription(value: string): Promise<any> {
-    return this.httpPut('/desc', { value });
+  public updateDescription(value: string): Promise<unknown> {
+    return this.httpPut("/desc", { value });
   }
 
-  updateDisplayName(value: string): Promise<any> {
-    return this.httpPut('/displayName', { value });
+  public updateDisplayName(value: string): Promise<unknown> {
+    return this.httpPut("/displayName", { value });
   }
 
-  updateName(value: string): Promise<any> {
-    return this.httpPut('/name', { value });
+  public updateName(value: string): Promise<unknown> {
+    return this.httpPut("/name", { value });
   }
 
-  prefs() {
-    return new Pref(this.config, `${this.routePath}/prefs`);
+  public prefs(): OrganizationPref {
+    return new OrganizationPref(this.config, `${this.routePath}/prefs`);
   }
 
-  updateWebsite(value: ?string): Promise<any> {
-    return this.httpPut('/website', { value });
+  public updateWebsite(value: string | null): Promise<unknown> {
+    return this.httpPut("/website", { value });
   }
 
-  addOrganization(
-    queryArgs?: {
-      name?: string,
-      displayName?: string,
-      desc?: string,
-      website?: string,
-    },
-  ): Promise<any> {
-    return this.httpPost('/', queryArgs);
+  public addOrganization(options?: {
+    name?: string;
+    displayName?: string;
+    desc?: string;
+    website?: string;
+  }): Promise<unknown> {
+    return this.httpPost("/", options);
   }
 
-  uploadLogo(file: Object): Promise<any> {
-    return this.httpPost('/logo', { file });
+  public uploadLogo(file: Record<string, any>): Promise<unknown> {
+    return this.httpPost("/logo", { file });
   }
 
-  /* istanbul ignore next: Requires Business Class subscription */
-  addTags(name: string): Promise<any> {
-    return this.httpPost('/tags', { name });
+  public addTags(name: string): Promise<unknown> {
+    return this.httpPost("/tags", { name });
   }
 
-  deleteOrganization(): Promise<any> {
-    return this.httpDelete('/');
+  public deleteOrganization(): Promise<unknown> {
+    return this.httpDelete("/");
   }
 
-  deleteLogo(): Promise<any> {
-    return this.httpDelete('/logo');
+  public deleteLogo(): Promise<unknown> {
+    return this.httpDelete("/logo");
   }
 }

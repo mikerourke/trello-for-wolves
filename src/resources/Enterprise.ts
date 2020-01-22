@@ -1,140 +1,116 @@
-// @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './BaseResource';
-import type {
-  ArgumentGroup,
-  BoardField,
-  MemberEnterpriseOnlyField,
-  MemberFilter,
-  MembershipFilter,
-  OrganizationField,
-  OrganizationFilter,
-} from '../typeDefs';
+import { BaseResource } from "./BaseResource";
+import { ArgumentGroup } from "../typeDefs";
+import { MemberEnterpriseOnlyField, MemberFilter } from "./Member";
+import { OrganizationField, OrganizationFilter } from "./Organization";
+import { MembershipFilter } from "./Membership";
+import { BoardField } from "./Board";
 
-type Combination<T> = T | Array<T>;
+type ValueOrArray<T> = Omit<ArgumentGroup<T>, "all">;
 
-export const enterpriseFieldMap = generateTypeMap(
-  'id',
-  'name',
-  'displayName',
-  'prefs',
-  'ssoActivationFailed',
-  'idAdmins',
-  'memberIds',
-  'orgIds',
-  'products',
-  'userTypes',
-  'memberIds',
-  'orgIds',
-);
-type EnterpriseField = $Keys<typeof enterpriseFieldMap>
+export type EnterpriseField =
+  | "id"
+  | "name"
+  | "displayName"
+  | "prefs"
+  | "ssoActivationFailed"
+  | "idAdmins"
+  | "products"
+  | "userTypes"
+  | "memberIds"
+  | "orgIds";
 
-export const sortOrderMap = generateTypeMap('id', 'ascending', 'descending', 'asc', 'desc');
-type SortOrder = $Keys<typeof sortOrderMap>;
+export type SortOrder = "id" | "ascending" | "descending" | "asc" | "desc";
 
-/**
- * @namespace Enterprise
- */
-export default class Enterprise extends BaseResource {
-  getEnterprise(
-    queryArgs?: {
-      fields?: ArgumentGroup<EnterpriseField>,
-      members?: MemberFilter,
-      memberFields?: MemberEnterpriseOnlyField,
-      memberFilter?: 'none' | string,
-      memberSortBy?: 'none' | string,
-      memberSortOrder?: SortOrder,
-      memberStartIndex?: number,
-      memberCount?: number,
-      organizations?: OrganizationFilter,
-      organizationFields?: ArgumentGroup<OrganizationField>,
-      organizationPaidAccounts?: boolean,
-      organizationMemberships?: Combination<MembershipFilter>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+export class Enterprise extends BaseResource {
+  public getEnterprise(options?: {
+    fields?: ArgumentGroup<EnterpriseField>;
+    members?: MemberFilter;
+    memberFields?: MemberEnterpriseOnlyField;
+    memberFilter?: "none" | string;
+    memberSortBy?: "none" | string;
+    memberSortOrder?: SortOrder;
+    memberStartIndex?: number;
+    memberCount?: number;
+    organizations?: OrganizationFilter;
+    organizationFields?: ArgumentGroup<OrganizationField>;
+    organizationPaidAccounts?: boolean;
+    organizationMemberships?: ValueOrArray<MembershipFilter>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getAdmins(
-    queryArgs?: {
-      fields: 'fullName' | 'userName',
-    },
-  ): Promise<any> {
-    return this.httpGet('/admins', queryArgs);
+  public getAdmins(options?: {
+    fields: "fullName" | "userName";
+  }): Promise<unknown> {
+    return this.httpGet("/admins", options);
   }
 
-  getSignupUrl(
-    queryArgs?: {
-      authenticate?: boolean,
-      confirmationAccepted?: boolean,
-      returnUrl?: 'none' | string,
-    },
-  ): Promise<any> {
-    return this.httpGet('/signupUrl', queryArgs);
+  public getSignupUrl(options?: {
+    authenticate?: boolean;
+    confirmationAccepted?: boolean;
+    returnUrl?: "none" | string;
+  }): Promise<unknown> {
+    return this.httpGet("/signupUrl", options);
   }
 
-  getMembers(
-    queryArgs?: {
-      fields?: Combination<EnterpriseField>,
-      filter?: string,
-      sortBy?: 'none' | string,
-      sortOrder?: SortOrder,
-      startIndex?: number,
-      count?: number,
-      organizationFields?: ArgumentGroup<OrganizationField>,
-      boardFields?: ArgumentGroup<BoardField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/members', queryArgs);
+  public getMembers(options?: {
+    fields?: ValueOrArray<EnterpriseField>;
+    filter?: string;
+    sortBy?: "none" | string;
+    sortOrder?: SortOrder;
+    startIndex?: number;
+    count?: number;
+    organizationFields?: ArgumentGroup<OrganizationField>;
+    boardFields?: ArgumentGroup<BoardField>;
+  }): Promise<unknown> {
+    return this.httpGet("/members", options);
   }
 
-  getMember(
+  public getMember(
     memberId: string,
-    queryArgs?: {
-      fields?: Combination<MemberEnterpriseOnlyField>,
-      organizationFields?: ArgumentGroup<OrganizationField>,
-      boardFields?: ArgumentGroup<BoardField>,
+    options?: {
+      fields?: ValueOrArray<MemberEnterpriseOnlyField>;
+      organizationFields?: ArgumentGroup<OrganizationField>;
+      boardFields?: ArgumentGroup<BoardField>;
     },
-  ): Promise<any> {
-    return this.httpGet(`/members/${memberId}`, queryArgs);
+  ): Promise<unknown> {
+    return this.httpGet(`/members/${memberId}`, options);
   }
 
-  getIfOrgTransferrable(orgId: string): Promise<any> {
+  public getIfOrgTransferrable(orgId: string): Promise<unknown> {
     return this.httpGet(`/transferrable/organization/${orgId}`);
   }
 
-  deactivateMember(
+  public deactivateMember(
     memberId: string,
-    queryArgs?: {
-      fields?: Combination<MemberEnterpriseOnlyField>,
-      organizationFields?: ArgumentGroup<OrganizationField>,
-      boardFields?: ArgumentGroup<BoardField>,
+    options?: {
+      fields?: ValueOrArray<MemberEnterpriseOnlyField>;
+      organizationFields?: ArgumentGroup<OrganizationField>;
+      boardFields?: ArgumentGroup<BoardField>;
     },
-  ): Promise<any> {
-    return this.httpPut(`/members/${memberId}/deactivated`, queryArgs);
+  ): Promise<unknown> {
+    return this.httpPut(`/members/${memberId}/deactivated`, options);
   }
 
-  transferToOrganization(orgId: string): Promise<any> {
-    return this.httpPut('/organizations', { idOrganization: orgId });
+  public transferToOrganization(orgId: string): Promise<unknown> {
+    return this.httpPut("/organizations", { idOrganization: orgId });
   }
 
-  addMemberAsAdmin(memberId: string): Promise<any> {
+  public addMemberAsAdmin(memberId: string): Promise<unknown> {
     return this.httpPut(`/admins/${memberId}`);
   }
 
-  addToken(
-    queryArgs?: {
-      expiration: 'none' | '1hour' | '1day' | '30days' | 'never',
-    },
-  ): Promise<any> {
-    return this.httpPost('/tokens', queryArgs);
+  public addToken(options?: {
+    expiration: "none" | "1hour" | "1day" | "30days" | "never";
+  }): Promise<unknown> {
+    return this.httpPost("/tokens", options);
   }
 
-  dissociateOrganization(orgId: string): Promise<any> {
+  public dissociateOrganization(orgId: string): Promise<unknown> {
     return this.httpDelete(`/organizations/${orgId}`);
   }
 
-  removeMemberFromAdmin(memberId: string): Promise<any> {
+  public removeMemberFromAdmin(memberId: string): Promise<unknown> {
     return this.httpDelete(`/admins/${memberId}`);
   }
 }

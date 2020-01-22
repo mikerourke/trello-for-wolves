@@ -1,64 +1,51 @@
-// @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './BaseResource';
-import type {
-  ArgumentGroup,
-  AttachmentFilter,
-  BoardField,
-  CardField,
-  MemberField,
-  OrganizationField,
-} from '../typeDefs';
+import { BaseResource } from "./BaseResource";
+import { AttachmentFilter } from "./Attachment";
+import { BoardField } from "./Board";
+import { CardField } from "./Card";
+import { MemberField } from "./Member";
+import { OrganizationField } from "./Organization";
+import { ArgumentGroup } from "../typeDefs";
 
-export const modelTypeMap = generateTypeMap(
-  'actions',
-  'boards',
-  'cards',
-  'members',
-  'organizations',
-);
-export type ModelType = $Keys<typeof modelTypeMap>;
+export type ModelType =
+  | "actions"
+  | "boards"
+  | "cards"
+  | "members"
+  | "organizations";
 
-/**
- * @namespace Search
- */
-export default class Search extends BaseResource {
-  performSearch(
-    queryArgs: {
-      query: string,
-      idBoards?: 'mine' | Array<string>,
-      idOrganizations?: Array<string>,
-      idCards?: Array<string>,
-      modelTypes?: ArgumentGroup<ModelType>,
-      boardFields?: ArgumentGroup<BoardField>,
-      boardsLimit?: number,
-      cardFields?: ArgumentGroup<CardField>,
-      cardsLimit?: number,
-      cardsPage?: number,
-      cardBoard?: boolean,
-      cardList?: boolean,
-      cardMembers?: boolean,
-      cardStickers?: boolean,
-      cardAttachments?: AttachmentFilter,
-      organizationFields?: ArgumentGroup<OrganizationField>,
-      organizationsLimit?: number,
-      memberFields?: ArgumentGroup<MemberField>,
-      membersLimit?: number,
-      partial?: boolean,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+export class Search extends BaseResource {
+  public performSearch(options: {
+    query: string;
+    idBoards?: "mine" | string[];
+    idOrganizations?: string[];
+    idCards?: string[];
+    modelTypes?: ArgumentGroup<ModelType>;
+    boardFields?: ArgumentGroup<BoardField>;
+    boardsLimit?: number;
+    cardFields?: ArgumentGroup<CardField>;
+    cardsLimit?: number;
+    cardsPage?: number;
+    cardBoard?: boolean;
+    cardList?: boolean;
+    cardMembers?: boolean;
+    cardStickers?: boolean;
+    cardAttachments?: AttachmentFilter;
+    organizationFields?: ArgumentGroup<OrganizationField>;
+    organizationsLimit?: number;
+    memberFields?: ArgumentGroup<MemberField>;
+    membersLimit?: number;
+    partial?: boolean;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  searchMembers(
-    queryArgs: {
-      query: string,
-      limit?: number,
-      idBoard?: ?string,
-      idOrganization?: ?string,
-      onlyOrgMembers?: boolean,
-    },
-  ): Promise<any> {
-    return this.httpGet('/members', queryArgs);
+  public searchMembers(options: {
+    query: string;
+    limit?: number;
+    idBoard?: string | null;
+    idOrganization?: string | null;
+    onlyOrgMembers?: boolean;
+  }): Promise<unknown> {
+    return this.httpGet("/members", options);
   }
 }

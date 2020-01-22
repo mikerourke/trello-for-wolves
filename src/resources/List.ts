@@ -1,132 +1,109 @@
-// @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './BaseResource';
-import Action from './Action';
-import Board from './Board';
-import Card from './Card';
-import type {
-  ArgumentGroup,
-  BoardField,
-  CardField,
-  CardFilter,
-  PositionNumbered,
-} from '../typeDefs';
+import { BaseResource } from "./BaseResource";
+import { Action } from "./Action";
+import { Board, BoardField } from "./Board";
+import { Card, CardField, CardFilter } from "./Card";
+import { ArgumentGroup, PositionNumbered } from "../typeDefs";
 
-export const listFieldMap = generateTypeMap('closed', 'idBoard', 'name', 'pos', 'subscribed');
-export type ListField = $Keys<typeof listFieldMap>;
+export type ListField = "closed" | "idBoard" | "name" | "pos" | "subscribed";
 
-export const listFilterMap = generateTypeMap('all', 'closed', 'none', 'open');
-export type ListFilter = $Keys<typeof listFilterMap>;
+export type ListFilter = "all" | "closed" | "none" | "open";
 
-/**
- * @namespace List
- */
-export default class List extends BaseResource {
-  getLists(
-    queryArgs?: {
-      cards?: CardFilter,
-      cardFields?: ArgumentGroup<CardField>,
-      filter?: ListFilter,
-      fields?: ArgumentGroup<ListField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+export class List extends BaseResource {
+  public getLists(options?: {
+    cards?: CardFilter;
+    cardFields?: ArgumentGroup<CardField>;
+    filter?: ListFilter;
+    fields?: ArgumentGroup<ListField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getList(
-    queryArgs?: {
-      cards?: CardFilter,
-      cardFields?: ArgumentGroup<CardField>,
-      board?: boolean,
-      boardFields?: ArgumentGroup<BoardField>,
-      fields?: ArgumentGroup<ListField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+  public getList(options?: {
+    cards?: CardFilter;
+    cardFields?: ArgumentGroup<CardField>;
+    board?: boolean;
+    boardFields?: ArgumentGroup<BoardField>;
+    fields?: ArgumentGroup<ListField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getListsFilteredBy(filter: ListFilter): Promise<any> {
-    return this.httpGet('/', { filter });
+  public getListsFilteredBy(filter: ListFilter): Promise<unknown> {
+    return this.httpGet("/", { filter });
   }
 
-  getFieldValue(field: ListField): Promise<any> {
+  public getFieldValue(field: ListField): Promise<unknown> {
     return this.httpGet(`/${field}`);
   }
 
-  actions() {
+  public actions(): Action {
     return new Action(this.config, `${this.routePath}/actions`);
   }
 
-  board() {
+  public board(): Board {
     return new Board(this.config, `${this.routePath}/board`);
   }
 
-  cards() {
+  public cards(): Card {
     return new Card(this.config, `${this.routePath}/cards`);
   }
 
-  updateList(
-    queryArgs?: {
-      name?: string,
-      closed?: boolean,
-      idBoard?: string,
-      pos?: PositionNumbered,
-      subscribed?: boolean,
-    },
-  ): Promise<any> {
-    return this.httpPut('/', queryArgs);
+  public updateList(options?: {
+    name?: string;
+    closed?: boolean;
+    idBoard?: string;
+    pos?: PositionNumbered;
+    subscribed?: boolean;
+  }): Promise<unknown> {
+    return this.httpPut("/", options);
   }
 
-  updateClosedStatus(value: boolean): Promise<any> {
-    return this.httpPut('/closed', { value });
+  public updateClosedStatus(value: boolean): Promise<unknown> {
+    return this.httpPut("/closed", { value });
   }
 
-  moveToBoard(
+  public moveToBoard(
     boardId: string,
-    queryArgs?: {
-      pos?: PositionNumbered,
+    options?: {
+      pos?: PositionNumbered;
     },
-  ): Promise<any> {
-    return this.httpPut('/', { value: boardId, ...queryArgs });
+  ): Promise<unknown> {
+    return this.httpPut("/", { value: boardId, ...options });
   }
 
-  updateName(value: string): Promise<any> {
-    return this.httpPut('/name', { value });
+  public updateName(value: string): Promise<unknown> {
+    return this.httpPut("/name", { value });
   }
 
-  updatePosition(value: PositionNumbered): Promise<any> {
-    return this.httpPut('/pos', { value });
+  public updatePosition(value: PositionNumbered): Promise<unknown> {
+    return this.httpPut("/pos", { value });
   }
 
-  updateSubscribed(value: boolean): Promise<any> {
-    return this.httpPut('/subscribed', { value });
+  public updateSubscribed(value: boolean): Promise<unknown> {
+    return this.httpPut("/subscribed", { value });
   }
 
-  addList(
-    queryArgs: {
-      name: string,
-      idBoard?: string,
-      idListSource?: string,
-      pos?: PositionNumbered,
-    },
-  ): Promise<any> {
-    let updatedArgs = queryArgs;
-    if (this.routePathElements[0] === 'boards') {
-      updatedArgs = { ...queryArgs, idBoard: this.routePathElements[1] };
+  public addList(options: {
+    name: string;
+    idBoard?: string;
+    idListSource?: string;
+    pos?: PositionNumbered;
+  }): Promise<unknown> {
+    let updatedArgs = options;
+    if (this.routePathElements[0] === "boards") {
+      updatedArgs = { ...options, idBoard: this.routePathElements[1] };
     }
-    return this.httpPost('/', updatedArgs);
+    return this.httpPost("/", updatedArgs);
   }
 
-  archiveAllCards(): Promise<any> {
-    return this.httpPost('/archiveAllCards');
+  public archiveAllCards(): Promise<unknown> {
+    return this.httpPost("/archiveAllCards");
   }
 
-  moveAllCards(
-    queryArgs: {
-      idBoard: string,
-      idList: string,
-    },
-  ): Promise<any> {
-    return this.httpPost('/moveAllCards', queryArgs);
+  public moveAllCards(options: {
+    idBoard: string;
+    idList: string;
+  }): Promise<unknown> {
+    return this.httpPost("/moveAllCards", options);
   }
 }

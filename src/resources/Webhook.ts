@@ -1,69 +1,54 @@
-// @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './BaseResource';
+import { BaseResource } from "./BaseResource";
 
-export const wehookFieldMap = generateTypeMap(
-  'active',
-  'callbackURL',
-  'description',
-  'idModel',
-);
-export type WebhookField = $Keys<typeof wehookFieldMap>;
+export type WebhookField = "active" | "callbackURL" | "description" | "idModel";
 
-/**
- * @namespace Webhook
- */
-export default class Webhook extends BaseResource {
-  getWebhooks(): Promise<any> {
-    return this.httpGet('/');
+export class Webhook extends BaseResource {
+  public getWebhooks(): Promise<unknown> {
+    return this.httpGet("/");
   }
 
-  getWebhook(): Promise<any> {
-    return this.httpGet('/');
+  public getWebhook(): Promise<unknown> {
+    return this.httpGet("/");
   }
 
-  getFieldValue(field: WebhookField): Promise<any> {
+  public getFieldValue(field: WebhookField): Promise<unknown> {
     return this.httpGet(`/${field}`);
   }
 
-  updateWebhook(
-    queryArgs?: {
-      description?: string,
-      callbackURL?: string,
-      idModel?: string,
-      active?: boolean,
-    },
-  ): Promise<any> {
-    return this.httpPut('/', queryArgs);
+  public updateWebhook(options?: {
+    description?: string;
+    callbackURL?: string;
+    idModel?: string;
+    active?: boolean;
+  }): Promise<unknown> {
+    return this.httpPut("/", options);
   }
 
-  updateActiveStatus(value: boolean): Promise<any> {
-    return this.httpPut('/active', { value });
+  public updateActiveStatus(value: boolean): Promise<unknown> {
+    return this.httpPut("/active", { value });
   }
 
-  updateCallbackUrl(value: string): Promise<any> {
-    return this.httpPut('/callbackURL', { value });
+  public updateCallbackUrl(value: string): Promise<unknown> {
+    return this.httpPut("/callbackURL", { value });
   }
 
-  updateDescription(value: string): Promise<any> {
-    return this.httpPut('/description', { value });
+  public updateDescription(value: string): Promise<unknown> {
+    return this.httpPut("/description", { value });
   }
 
-  associateWithModel(value: string): Promise<any> {
-    return this.httpPut('/idModel', { value });
+  public associateWithModel(value: string): Promise<unknown> {
+    return this.httpPut("/idModel", { value });
   }
 
-  addWebhook(
-    queryArgs: {
-      description?: string,
-      callbackURL: string,
-      idModel: string,
-    },
-  ): Promise<any> {
-    return this.httpPost('/', queryArgs);
+  public addWebhook(options: {
+    description?: string;
+    callbackURL: string;
+    idModel: string;
+  }): Promise<unknown> {
+    return this.httpPost("/", options);
   }
 
-  deleteWebhook(): Promise<any> {
-    return this.httpDelete('/');
+  public deleteWebhook(): Promise<unknown> {
+    return this.httpDelete("/");
   }
 }

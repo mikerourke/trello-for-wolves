@@ -1,70 +1,57 @@
-// @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './BaseResource';
-import type { ArgumentGroup, MimeType } from '../typeDefs';
+import { BaseResource } from "./BaseResource";
+import { ArgumentGroup, MimeType } from "../typeDefs";
 
-export type AttachmentFilter = boolean | 'cover';
+export type AttachmentFilter = boolean | "cover";
 
-export const attachmentFieldMap = generateTypeMap(
+export type AttachmentField =
   // Size of the attached file in bytes.
-  'bytes',
+  | "bytes"
   // The date the file was attached to the card.
-  'date',
+  | "date"
   // The hex color that is used as the background when the attachment is made
   // the card cover.
-  'edgeColor',
+  | "edgeColor"
   // Id of the user who added the attachment.
-  'idMember',
+  | "idMember"
   // A boolean indicating whether this was uploaded by a user on the
   // web/mobile client or whether it was added via the API.
-  'isUpload',
+  | "isUpload"
   // The mimeType of the file.
-  'mimeType',
+  | "mimeType"
   // The name of the file.
-  'name',
+  | "name"
   // When an image is uploaded via the web client, Trello creates a number of
   // preview thumbnails for it so that it can use the appropriately sized one
   // given the right context. "previews" will return an object containing
   // information about the previews generated for this attachment.
-  'previews',
+  | "previews"
   // The URL to the attachment in Trello's static assets.
-  'url',
-);
-export type AttachmentField = $Keys<typeof attachmentFieldMap>;
+  | "url";
 
-/**
- * @namespace Attachment
- */
-export default class Attachment extends BaseResource {
-  getAttachments(
-    queryArgs?: {
-      fields?: ArgumentGroup<AttachmentField>,
-      filter?: ArgumentGroup<AttachmentFilter>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+export class Attachment extends BaseResource {
+  public getAttachments(options?: {
+    fields?: ArgumentGroup<AttachmentField>;
+    filter?: ArgumentGroup<AttachmentFilter>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getAttachment(
-    queryArgs?: {
-      fields?: ArgumentGroup<AttachmentField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+  public getAttachment(options?: {
+    fields?: ArgumentGroup<AttachmentField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  uploadAttachment(
-    queryArgs?: {
-      file?: Object,
-      url?: string,
-      name?: string,
-      mimeType?: MimeType | string,
-    },
-  ): Promise<any> {
-    return this.httpPost('/', queryArgs);
+  public uploadAttachment(options?: {
+    file?: Record<string, unknown>;
+    url?: string;
+    name?: string;
+    mimeType?: MimeType | string;
+  }): Promise<unknown> {
+    return this.httpPost("/", options);
   }
 
-  deleteAttachment(): Promise<any> {
-    return this.httpDelete('/');
+  public deleteAttachment(): Promise<unknown> {
+    return this.httpDelete("/");
   }
 }

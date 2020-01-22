@@ -1,226 +1,212 @@
-// @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './BaseResource';
-import Action from './Action';
-import Attachment from './Attachment';
-import Board from './Board';
-import CheckItem from './CheckItem';
-import Checklist from './Checklist';
-import Comment from './Comment';
-import Label from './Label';
-import List from './List';
-import Member from './Member';
-import Sticker from './Sticker';
-import type {
-  ActionField,
-  ActionFilter,
+import { BaseResource } from "./BaseResource";
+import { Action, ActionField, ActionFilter } from "./Action";
+import { Attachment, AttachmentField, AttachmentFilter } from "./Attachment";
+import { Board, BoardField } from "./Board";
+import { CheckItem, CheckItemStateField } from "./CheckItem";
+import { Checklist, ChecklistField } from "./Checklist";
+import { Comment } from "./Comment";
+import { Label, LabelColor } from "./Label";
+import { List, ListField } from "./List";
+import { Member, MemberField } from "./Member";
+import { Sticker, StickerField } from "./Sticker";
+import {
   AllOrNone,
   ArgumentGroup,
-  AttachmentField,
-  AttachmentFilter,
-  BoardField,
-  CheckItemStateField,
-  ChecklistField,
   KeepFromSourceField,
-  LabelColor,
-  ListField,
-  MemberField,
   PositionNumbered,
-  StickerField,
-} from '../typeDefs';
+} from "../typeDefs";
 
-export const cardAgingMap = generateTypeMap('pirate', 'regular');
-export type CardAging = $Keys<typeof cardAgingMap>;
+export type CardAging = "pirate" | "regular";
 
-export const cardFieldMap = generateTypeMap(
-  'badges',
-  'checkItemStates',
-  'closed',
+export type CardField =
+  | "badges"
+  | "checkItemStates"
+  | "closed"
   // The datetime of the last activity on the card. Note: There are activities
   // that update dateLastActivity that do not create a corresponding action.
   // For instance, updating the name field of a checklist item on a card does
   // not create an action but does update the card and board's
   // dateLastActivity value.
-  'dateLastActivity',
-  'desc',
-  'descData',
-  'due',
-  'dueComplete',
-  'email',
-  'idAttachmentCover',
-  'idBoard',
-  'idChecklists',
-  'idLabels',
-  'idList',
-  'idMembers',
-  'idMembersVoted',
-  'idShort',
-  'labels',
-  'manualCoverAttachment',
-  'name',
-  'pos',
-  'shortLink',
-  'shortUrl',
-  'subscribed',
-  'url',
-);
-export type CardField = $Keys<typeof cardFieldMap>;
+  | "dateLastActivity"
+  | "desc"
+  | "descData"
+  | "due"
+  | "dueComplete"
+  | "email"
+  | "idAttachmentCover"
+  | "idBoard"
+  | "idChecklists"
+  | "idLabels"
+  | "idList"
+  | "idMembers"
+  | "idMembersVoted"
+  | "idShort"
+  | "labels"
+  | "manualCoverAttachment"
+  | "name"
+  | "pos"
+  | "shortLink"
+  | "shortUrl"
+  | "subscribed"
+  | "url";
 
-export const cardFilterMap = generateTypeMap('all', 'closed', 'none', 'open', 'visible');
-export type CardFilter = $Keys<typeof cardFilterMap>;
+export type CardFilter = "all" | "closed" | "none" | "open" | "visible";
 
-/**
- * @namespace Card
- */
-export default class Card extends BaseResource {
-  getCards(
-    queryArgs?: {
-      actions?: ArgumentGroup<ActionFilter>,
-      attachments?: AttachmentFilter,
-      attachmentFields?: ArgumentGroup<AttachmentField>,
-      stickers?: boolean,
-      members?: boolean,
-      memberFields?: ArgumentGroup<MemberField>,
-      checkItemStates?: boolean,
-      checklists?: AllOrNone,
-      limit?: number,
-      since?: ?Date,
-      before?: ?Date,
-      filter?: CardFilter,
-      fields?: ArgumentGroup<CardField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+export class Card extends BaseResource {
+  public getCards(options?: {
+    actions?: ArgumentGroup<ActionFilter>;
+    attachments?: AttachmentFilter;
+    attachmentFields?: ArgumentGroup<AttachmentField>;
+    stickers?: boolean;
+    members?: boolean;
+    memberFields?: ArgumentGroup<MemberField>;
+    checkItemStates?: boolean;
+    checklists?: AllOrNone;
+    limit?: number;
+    since?: Date | null;
+    before?: Date | null;
+    filter?: CardFilter;
+    fields?: ArgumentGroup<CardField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getCard(
-    queryArgs?: {
-      actions?: ArgumentGroup<ActionFilter>,
-      actionsEntities?: boolean,
-      actionsDisplay?: boolean,
-      actionsLimit?: number,
-      actionFields?: ArgumentGroup<ActionField>,
-      actionMemberCreatorFields?: ArgumentGroup<MemberField>,
-      attachments?: AttachmentFilter,
-      attachmentFields?: ArgumentGroup<AttachmentField>,
-      members?: boolean,
-      memberFields?: ArgumentGroup<MemberField>,
-      membersVoted?: boolean,
-      memberVotedFields?: ArgumentGroup<MemberField>,
-      checkItemStates?: boolean,
-      checkItemStateFields?: ArgumentGroup<CheckItemStateField>,
-      checklists?: AllOrNone,
-      checklistFields?: ArgumentGroup<ChecklistField>,
-      board?: boolean,
-      boardFields?: ArgumentGroup<BoardField>,
-      list?: boolean,
-      listFields?: ArgumentGroup<ListField>,
-      pluginData?: boolean,
-      stickers?: boolean,
-      stickerFields?: ArgumentGroup<StickerField>,
-      fields?: ArgumentGroup<CardField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+  public getCard(options?: {
+    actions?: ArgumentGroup<ActionFilter>;
+    actionsEntities?: boolean;
+    actionsDisplay?: boolean;
+    actionsLimit?: number;
+    actionFields?: ArgumentGroup<ActionField>;
+    actionMemberCreatorFields?: ArgumentGroup<MemberField>;
+    attachments?: AttachmentFilter;
+    attachmentFields?: ArgumentGroup<AttachmentField>;
+    members?: boolean;
+    memberFields?: ArgumentGroup<MemberField>;
+    membersVoted?: boolean;
+    memberVotedFields?: ArgumentGroup<MemberField>;
+    checkItemStates?: boolean;
+    checkItemStateFields?: ArgumentGroup<CheckItemStateField>;
+    checklists?: AllOrNone;
+    checklistFields?: ArgumentGroup<ChecklistField>;
+    board?: boolean;
+    boardFields?: ArgumentGroup<BoardField>;
+    list?: boolean;
+    listFields?: ArgumentGroup<ListField>;
+    pluginData?: boolean;
+    stickers?: boolean;
+    stickerFields?: ArgumentGroup<StickerField>;
+    fields?: ArgumentGroup<CardField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getCardsFilteredBy(filter: CardFilter): Promise<any> {
+  public getCardsFilteredBy(filter: CardFilter): Promise<unknown> {
     return this.httpGet(`/${filter}`);
   }
 
-  getFieldValue(field: CardField): Promise<any> {
+  public getFieldValue(field: CardField): Promise<unknown> {
     return this.httpGet(`/${field}`);
   }
 
-  actions() {
+  public actions(): Action {
     return new Action(this.config, `${this.routePath}/actions`);
   }
 
-  attachments(attachmentId?: string = '') {
-    return new Attachment(this.config, `${this.routePath}/attachments/${attachmentId}`);
+  public attachments(attachmentId: string = ""): Attachment {
+    return new Attachment(
+      this.config,
+      `${this.routePath}/attachments/${attachmentId}`,
+    );
   }
 
-  board() {
+  public board(): Board {
     return new Board(this.config, `${this.routePath}/board`);
   }
 
-  checkItemStates() {
+  public checkItemStates(): CheckItem {
     return new CheckItem(this.config, `${this.routePath}/checkItemStates`);
   }
 
-  checklist(checklistId: string) {
-    return new Checklist(this.config, `${this.routePath}/checklist/${checklistId}`);
+  public checklist(checklistId: string): Checklist {
+    return new Checklist(
+      this.config,
+      `${this.routePath}/checklist/${checklistId}`,
+    );
   }
 
-  checklists(checklistId?: string = '') {
-    return new Checklist(this.config, `${this.routePath}/checklists/${checklistId}`);
+  public checklists(checklistId: string = ""): Checklist {
+    return new Checklist(
+      this.config,
+      `${this.routePath}/checklists/${checklistId}`,
+    );
   }
 
-  checkItem(checkItemId: string) {
-    return new CheckItem(this.config, `${this.routePath}/checkItem/${checkItemId}`);
+  public checkItem(checkItemId: string): CheckItem {
+    return new CheckItem(
+      this.config,
+      `${this.routePath}/checkItem/${checkItemId}`,
+    );
   }
 
-  comments(commentId?: string = '') {
+  public comments(commentId: string = ""): Comment {
     return new Comment(this.config, `${this.routePath}/actions/${commentId}`);
   }
 
-  labels() {
+  public labels(): Label {
     return new Label(this.config, `${this.routePath}/labels`);
   }
 
-  list() {
+  public list(): List {
     return new List(this.config, `${this.routePath}/list`);
   }
 
-  members() {
+  public members(): Member {
     return new Member(this.config, `${this.routePath}/members`);
   }
 
-  membersVoted(memberId?: string = '') {
+  public membersVoted(memberId: string = ""): Member {
     return new Member(this.config, `${this.routePath}/membersVoted`, memberId);
   }
 
-  getPluginData(): Promise<any> {
-    return this.httpGet('/pluginData');
+  public getPluginData(): Promise<unknown> {
+    return this.httpGet("/pluginData");
   }
 
-  stickers(stickerId?: string = '') {
+  public stickers(stickerId: string = ""): Sticker {
     return new Sticker(this.config, `${this.routePath}/stickers/${stickerId}`);
   }
 
-  updateCard(
-    queryArgs?: {
-      name?: string,
-      desc?: string,
-      closed?: boolean,
-      idMembers?: Array<string>,
-      idAttachmentCover?: string,
-      idList?: string,
-      idLabels?: Array<string>,
-      idBoard?: string,
-      pos?: PositionNumbered,
-      due?: ?Date,
-      dueComplete?: boolean,
-      subscribed?: boolean,
-    },
-  ): Promise<any> {
-    return this.httpPut('/', queryArgs);
+  public updateCard(options?: {
+    name?: string;
+    desc?: string;
+    closed?: boolean;
+    idMembers?: string[];
+    idAttachmentCover?: string;
+    idList?: string;
+    idLabels?: string[];
+    idBoard?: string;
+    pos?: PositionNumbered;
+    due?: Date | null;
+    dueComplete?: boolean;
+    subscribed?: boolean;
+  }): Promise<unknown> {
+    return this.httpPut("/", options);
   }
 
-  updateClosedStatus(value: boolean): Promise<any> {
-    return this.httpPut('/closed', { value });
+  public updateClosedStatus(value: boolean): Promise<unknown> {
+    return this.httpPut("/closed", { value });
   }
 
-  updateDescription(value: string): Promise<any> {
-    return this.httpPut('/desc', { value });
+  public updateDescription(value: string): Promise<unknown> {
+    return this.httpPut("/desc", { value });
   }
 
-  updateDueDate(value: ?Date): Promise<any> {
-    return this.httpPut('/due', { value });
+  public updateDueDate(value: Date | null): Promise<unknown> {
+    return this.httpPut("/due", { value });
   }
 
-  updateDueComplete(value: boolean): Promise<any> {
-    return this.httpPut('/dueComplete', { value });
+  public updateDueComplete(value: boolean): Promise<unknown> {
+    return this.httpPut("/dueComplete", { value });
   }
 
   /**
@@ -228,87 +214,90 @@ export default class Card extends BaseResource {
    * @example PUT /1/cards/:cardId/idAttachmentCover
    * @see {@link https://developers.trello.com/advanced-reference/card#put-1-cards-card-id-or-shortlink-idattachmentcover}
    */
-  updateAttachmentCoverImage(idAttachmentCover: string): Promise<any> {
-    return this.httpPut('/idAttachmentCover', { value: idAttachmentCover });
+  public updateAttachmentCoverImage(
+    idAttachmentCover: string,
+  ): Promise<unknown> {
+    return this.httpPut("/idAttachmentCover", { value: idAttachmentCover });
   }
 
-  moveToBoard(
+  public moveToBoard(
     boardId: string,
-    queryArgs?: {
-      idList?: string,
+    options?: {
+      idList?: string;
     },
-  ): Promise<any> {
-    return this.httpPut('/idBoard', { value: boardId, ...queryArgs });
+  ): Promise<unknown> {
+    return this.httpPut("/idBoard", { value: boardId, ...options });
   }
 
-  moveToList(listId: string): Promise<any> {
-    return this.httpPut('/idList', { value: listId });
+  public moveToList(listId: string): Promise<unknown> {
+    return this.httpPut("/idList", { value: listId });
   }
 
-  associateMembers(memberIds: Array<string>): Promise<any> {
-    return this.httpPut('/idMembers', { value: memberIds });
+  public associateMembers(memberIds: string[]): Promise<unknown> {
+    return this.httpPut("/idMembers", { value: memberIds });
   }
 
-  updateName(value: string): Promise<any> {
-    return this.httpPut('/name', { value });
+  public updateName(value: string): Promise<unknown> {
+    return this.httpPut("/name", { value });
   }
 
-  updatePosition(value: PositionNumbered): Promise<any> {
-    return this.httpPut('/pos', { value });
+  public updatePosition(value: PositionNumbered): Promise<unknown> {
+    return this.httpPut("/pos", { value });
   }
 
-  updateSubscribed(value: boolean): Promise<any> {
-    return this.httpPut('/subscribed', { value });
+  public updateSubscribed(value: boolean): Promise<unknown> {
+    return this.httpPut("/subscribed", { value });
   }
 
-  addCard(
-    queryArgs: {
-      idList: string,
-      name?: string,
-      desc?: string,
-      pos?: PositionNumbered,
-      due?: ?Date,
-      dueComplete?: boolean,
-      idMembers?: Array<string>,
-      idLabels?: Array<string>,
-      urlSource?: ?string,
-      fileSource?: Object,
-      idCardSource?: string,
-      keepFromSource?: KeepFromSourceField | Array<KeepFromSourceField>,
-    } | {
-      // These are for adding a card from a List.
-      name: string,
-      desc?: string,
-      labels?: ArgumentGroup<LabelColor>,
-      idMembers?: Array<string>,
-      due?: ?Date,
-    },
-  ): Promise<any> {
-    return this.httpPost('/', queryArgs);
+  public addCard(
+    options:
+      | {
+          idList: string;
+          name?: string;
+          desc?: string;
+          pos?: PositionNumbered;
+          due?: Date | null;
+          dueComplete?: boolean;
+          idMembers?: string[];
+          idLabels?: string[];
+          urlSource?: string | null;
+          fileSource?: Record<string, any>;
+          idCardSource?: string;
+          keepFromSource?: KeepFromSourceField | KeepFromSourceField[];
+        }
+      | {
+          // These are for adding a card from a List.
+          name: string;
+          desc?: string;
+          labels?: ArgumentGroup<LabelColor>;
+          idMembers?: string[];
+          due?: Date | null;
+        },
+  ): Promise<unknown> {
+    return this.httpPost("/", options);
   }
 
-  associateLabel(labelId: string): Promise<any> {
-    return this.httpPost('/idLabels', { value: labelId });
+  public associateLabel(labelId: string): Promise<unknown> {
+    return this.httpPost("/idLabels", { value: labelId });
   }
 
-  /* istanbul ignore next: Requires special permissions */
-  associateMember(memberId: string): Promise<any> {
-    return this.httpPost('/idMembers', { value: memberId });
+  public associateMember(memberId: string): Promise<unknown> {
+    return this.httpPost("/idMembers", { value: memberId });
   }
 
-  markAssociatedNotificationsRead(): Promise<any> {
-    return this.httpPost('/markAssociatedNotificationsRead');
+  public markAssociatedNotificationsRead(): Promise<unknown> {
+    return this.httpPost("/markAssociatedNotificationsRead");
   }
 
-  deleteCard(): Promise<any> {
-    return this.httpDelete('/');
+  public deleteCard(): Promise<unknown> {
+    return this.httpDelete("/");
   }
 
-  dissociateMember(memberId: string): Promise<any> {
+  public dissociateMember(memberId: string): Promise<unknown> {
     return this.httpDelete(`/idMembers/${memberId}`);
   }
 
-  dissociateLabel(labelId: string): Promise<any> {
+  public dissociateLabel(labelId: string): Promise<unknown> {
     return this.httpDelete(`/idLabels/${labelId}`);
   }
 }

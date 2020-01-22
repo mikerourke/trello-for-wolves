@@ -1,58 +1,43 @@
-// @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './BaseResource';
-import Member from './Member';
-import Webhook from './Webhook';
-import type {
-  AllOrNone,
-  ArgumentGroup,
-} from '../typeDefs';
+import { BaseResource } from "./BaseResource";
+import { Member } from "./Member";
+import { Webhook } from "./Webhook";
+import { AllOrNone, ArgumentGroup } from "../typeDefs";
 
-export const tokenFieldMap = generateTypeMap(
-  'dateCreated',
-  'dateExpires',
-  'idMember',
-  'identifier',
-  'permissions',
-);
-export type TokenField = $Keys<typeof tokenFieldMap>;
+export type TokenField =
+  | "dateCreated"
+  | "dateExpires"
+  | "idMember"
+  | "identifier"
+  | "permissions";
 
-/**
- * @namespace Token
- */
-export default class Token extends BaseResource {
-  getTokens(
-    queryArgs?: {
-      filter?: AllOrNone,
-      webhooks?: boolean,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+export class Token extends BaseResource {
+  public getTokens(options?: {
+    filter?: AllOrNone;
+    webhooks?: boolean;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getToken(
-    queryArgs?: {
-      fields?: ArgumentGroup<TokenField>,
-      webhooks?: boolean,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+  public getToken(options?: {
+    fields?: ArgumentGroup<TokenField>;
+    webhooks?: boolean;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getFieldValue(field: TokenField): Promise<any> {
+  public getFieldValue(field: TokenField): Promise<unknown> {
     return this.httpGet(`/${field}`);
   }
 
-  member() {
+  public member(): Member {
     return new Member(this.config, `${this.routePath}/member`);
   }
 
-  webhooks(webhookId?: string = '') {
+  public webhooks(webhookId: string = ""): Webhook {
     return new Webhook(this.config, `${this.routePath}/webhooks/${webhookId}`);
   }
 
-  /* istanbul ignore next: This should pass, but if I delete my token, I can't keep testing. */
-  deleteToken(): Promise<any> {
-    return this.httpDelete('/');
+  public deleteToken(): Promise<unknown> {
+    return this.httpDelete("/");
   }
 }

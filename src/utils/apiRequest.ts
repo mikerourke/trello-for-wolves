@@ -1,6 +1,6 @@
 import fetch from "cross-fetch";
 
-type HttpMethod = "get" | "put" | "post" | "delete";
+export type HttpMethod = "get" | "put" | "post" | "delete";
 
 /**
  * Returns a resolved Promise with the results of the Trello API call.

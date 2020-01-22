@@ -1,88 +1,66 @@
-// @flow
-import { generateTypeMap } from '../utils/type-mapper';
-import BaseResource from './BaseResource';
-import type {
-  AllOrNone,
-  ArgumentGroup,
-  PositionNumbered,
-} from '../typeDefs';
+import { BaseResource } from "./BaseResource";
+import { AllOrNone, ArgumentGroup, PositionNumbered } from "../typeDefs";
 
-export const checkItemFieldMap = generateTypeMap('name', 'nameData', 'pos', 'state');
-export type CheckItemField = $Keys<typeof checkItemFieldMap>;
+export type CheckItemField = "name" | "nameData" | "pos" | "state";
 
-export const checkItemStateMap = generateTypeMap('complete', 'false', 'incomplete', 'true');
-export type CheckItemState = $Keys<typeof checkItemStateMap>;
+export type CheckItemState = "complete" | "false" | "incomplete" | "true";
 
-export const checkItemStateFieldMap = generateTypeMap('idCheckItem', 'state');
-export type CheckItemStateField = $Keys<typeof checkItemStateFieldMap>;
+export type CheckItemStateField = "idCheckItem" | "state";
 
-/**
- * @namespace CheckItem
- */
-export default class CheckItem extends BaseResource {
-  getCheckItems(
-    queryArgs?: {
-      filter?: AllOrNone,
-      fields?: ArgumentGroup<CheckItemField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+export class CheckItem extends BaseResource {
+  public getCheckItems(options?: {
+    filter?: AllOrNone;
+    fields?: ArgumentGroup<CheckItemField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getCheckItem(
-    queryArgs?: {
-      fields?: ArgumentGroup<CheckItemField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+  public getCheckItem(options?: {
+    fields?: ArgumentGroup<CheckItemField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  getCheckItemStates(
-    queryArgs?: {
-      fields?: ArgumentGroup<CheckItemStateField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', queryArgs);
+  public getCheckItemStates(options?: {
+    fields?: ArgumentGroup<CheckItemStateField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", options);
   }
 
-  updateCheckItem(
-    queryArgs?: {
-      name?: string,
-      state?: CheckItemState,
-      pos?: PositionNumbered,
-      idChecklist?: ?string,
-    },
-  ): Promise<any> {
-    return this.httpPut('/', queryArgs);
+  public updateCheckItem(options?: {
+    name?: string;
+    state?: CheckItemState;
+    pos?: PositionNumbered;
+    idChecklist?: string | null;
+  }): Promise<unknown> {
+    return this.httpPut("/", options);
   }
 
-  updateName(value: string): Promise<any> {
-    return this.httpPut('/name', { value });
+  public updateName(value: string): Promise<unknown> {
+    return this.httpPut("/name", { value });
   }
 
-  updatePosition(value: PositionNumbered): Promise<any> {
-    return this.httpPut('/pos', { value });
+  public updatePosition(value: PositionNumbered): Promise<unknown> {
+    return this.httpPut("/pos", { value });
   }
 
-  updateState(value: CheckItemState): Promise<any> {
-    return this.httpPut('/state', { value });
+  public updateState(value: CheckItemState): Promise<unknown> {
+    return this.httpPut("/state", { value });
   }
 
-  addCheckItem(
-    queryArgs: {
-      name: string,
-      pos?: PositionNumbered,
-      checked?: boolean,
-    },
-  ): Promise<any> {
-    return this.httpPost('/', queryArgs);
+  public addCheckItem(options: {
+    name: string;
+    pos?: PositionNumbered;
+    checked?: boolean;
+  }): Promise<unknown> {
+    return this.httpPost("/", options);
   }
 
-  convertToCard(): Promise<any> {
-    return this.httpPost('/convertToCard');
+  public convertToCard(): Promise<unknown> {
+    return this.httpPost("/convertToCard");
   }
 
-  deleteCheckItem(): Promise<any> {
-    return this.httpDelete('/');
+  public deleteCheckItem(): Promise<unknown> {
+    return this.httpDelete("/");
   }
 }

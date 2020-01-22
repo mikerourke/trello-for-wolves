@@ -1,49 +1,39 @@
-// @flow
-import BaseResource from './BaseResource';
-import type {
-  ActionField,
-  ArgumentGroup,
-  FilterDate,
-  Format,
-  MemberField,
-} from '../typeDefs';
+import { BaseResource } from "./BaseResource";
+import { ActionField } from "./Action";
+import { MemberField } from "./Member";
+import { ArgumentGroup, FilterDate, Format } from "../typeDefs";
 
-/**
- * @namespace Comment
- */
-export default class Comment extends BaseResource {
+export class Comment extends BaseResource {
   /**
    * This is the same as calling ...cards('cardId').actions().getActions({ filter: 'commentCard' }).
-   *    It's just a nice shortcut if you only need Comment actions.
+   * It's just a nice shortcut if you only need Comment actions.
    */
-  getComments(
-    queryArgs?: {
-      entities?: boolean,
-      display?: boolean,
-      fields?: ArgumentGroup<ActionField>,
-      limit?: number,
-      format?: Format,
-      since?: FilterDate,
-      before?: FilterDate,
-      idModels?: string,
-      member?: boolean,
-      memberFields?: ArgumentGroup<MemberField>,
-      memberCreator?: boolean,
-      memberCreatorFields?: ArgumentGroup<MemberField>,
-    },
-  ): Promise<any> {
-    return this.httpGet('/', { ...queryArgs, filter: 'commentCard' });
+  public getComments(queryArgs?: {
+    entities?: boolean;
+    display?: boolean;
+    fields?: ArgumentGroup<ActionField>;
+    limit?: number;
+    format?: Format;
+    since?: FilterDate;
+    before?: FilterDate;
+    idModels?: string;
+    member?: boolean;
+    memberFields?: ArgumentGroup<MemberField>;
+    memberCreator?: boolean;
+    memberCreatorFields?: ArgumentGroup<MemberField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", { ...queryArgs, filter: "commentCard" });
   }
 
-  updateComment(text: string): Promise<any> {
-    return this.httpPut('/comments', { text });
+  public updateComment(text: string): Promise<unknown> {
+    return this.httpPut("/comments", { text });
   }
 
-  addComment(text: string): Promise<any> {
-    return this.httpPost('/comments', { text });
+  public addComment(text: string): Promise<unknown> {
+    return this.httpPost("/comments", { text });
   }
 
-  deleteComment(): Promise<any> {
-    return this.httpDelete('/comments');
+  public deleteComment(): Promise<unknown> {
+    return this.httpDelete("/comments");
   }
 }
