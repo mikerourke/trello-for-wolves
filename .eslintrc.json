@@ -56,18 +56,11 @@
     ],
     "@typescript-eslint/no-var-requires": "off",
     "import/no-default-export": "error",
-    "import/no-unresolved": ["error", { "ignore": ["~/.*"] }],
     "import/order": [
       "error",
       {
         "alphabetize": { "order": "ignore" },
         "groups": ["builtin", "external", ["internal", "parent", "sibling"]],
-        "pathGroups": [
-          {
-            "pattern": "~/**",
-            "group": "internal"
-          }
-        ],
         "newlines-between": "never"
       }
     ],

@@ -1,6 +1,6 @@
 # Trello for Wolves
 
-[![Build Status](https://travis-ci.org/mikerourke/trello-for-wolves.svg?branch=master)](https://travis-ci.org/mikerourke/trello-for-wolves) [![Coverage Status](https://coveralls.io/repos/github/mikerourke/trello-for-wolves/badge.svg?branch=master)](https://coveralls.io/github/mikerourke/trello-for-wolves?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/mikerourke/trello-for-wolves/badge.svg?branch=master)](https://coveralls.io/github/mikerourke/trello-for-wolves?branch=master)
 
 Node.js wrapper around Trello API...for wolves.  Don't read too much in to the
 name, I just love wolves and everything else on npm with the word
@@ -64,7 +64,7 @@ make no more than 100 requests in 10 seconds per token or 300 requests in 10 sec
 added code to retry the request if a `429` error is returned. It waits about a second and retries
 the request.
 
-You can override the default `requestsPerSecond` (10) and `maxRetryAttempts` (5) with your
+You can override the default `backoffTime` (1000) and `maxRetryAttempts` (5) with your
 own options depending on your requirements.  You can pass them into the Trello constructor:
 ```typescript
 import Trello from "trello-for-wolves";
@@ -72,8 +72,8 @@ import Trello from "trello-for-wolves";
 const trello = new Trello({
   key: API_KEY,
   token: AUTH_TOKEN,
-  requestsPerSecond: 8,
-  maxRetryAttempts: 3,
+  backoffTime: 1000, // Amount of time to wait before attempting to make another API call.
+  maxRetryAttempts: 3, // Maximum amount of attempts to make before failing.
 });
 ```
 

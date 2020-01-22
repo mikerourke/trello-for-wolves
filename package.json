@@ -1,9 +1,9 @@
 {
   "name": "trello-for-wolves",
-  "version": "1.5.3",
+  "version": "2.0.0",
   "description": "Node.js wrapper for Trello API...for wolves.",
   "engines": {
-    "node": ">=12"
+    "node": ">=10"
   },
   "main": "lib/index.js",
   "repository": {
@@ -24,7 +24,7 @@
   "homepage": "https://github.com/mikerourke/trello-for-wolves#readme",
   "scripts": {
     "build:clean": "rimraf lib",
-    "cleanup": "rimraf .nyc_output && rimraf coverage && rimraf lib",
+    "cleanup": "rimraf coverage && rimraf lib",
     "lint": "eslint src --color || exit 0"
   },
   "files": [
@@ -33,6 +33,7 @@
     "LICENSE"
   ],
   "dependencies": {
+    "cross-fetch": "^3.0.4",
     "lodash.snakecase": "^4.1.1",
     "qs": "^6.9.1"
   },
