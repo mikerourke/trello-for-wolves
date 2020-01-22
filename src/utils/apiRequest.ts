@@ -1,6 +1,6 @@
 import fetch from "cross-fetch";
 
-export type HttpMethod = "get" | "put" | "post" | "delete";
+export type HttpMethod = "GET" | "PUT" | "POST" | "DELETE";
 
 /**
  * Returns a resolved Promise with the results of the Trello API call.
@@ -11,13 +11,19 @@ export type HttpMethod = "get" | "put" | "post" | "delete";
  * @param [queryArgs={}] Arguments for building the querystring.
  * @private
  */
-export async function performApiRequest<TQueryArgs>(
-  httpMethod: HttpMethod,
-  endpoint: string,
-  backoffTime: number,
-  maxRetryAttempts: number,
-  queryArgs?: TQueryArgs,
-): Promise<unknown> {
+export async function performApiRequest<TQueryArgs>({
+  httpMethod,
+  endpoint,
+  backoffTime,
+  maxRetryAttempts,
+  queryArgs,
+}: {
+  httpMethod: HttpMethod;
+  endpoint: string;
+  backoffTime: number;
+  maxRetryAttempts: number;
+  queryArgs?: TQueryArgs;
+}): Promise<unknown> {
   // One more check is done to ensure there are no consecutive slashes.
   const apiUrl = `https://api.trello.com/1${endpoint}`;
 

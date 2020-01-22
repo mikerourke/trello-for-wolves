@@ -20,7 +20,6 @@ export class BaseResource {
     protected routePath: string,
     protected associationId: string = "",
   ) {
-    // Ensure that the first element in the array has a length greater than zero:
     this.routePathElements = this.routePath.split("/");
 
     if (this.routePathElements[0].length !== 0) {
@@ -32,28 +31,50 @@ export class BaseResource {
     pathVariables: string,
     queryArgs?: TQueryArgs,
   ): Promise<unknown> {
-    return this.performRequest("get", pathVariables, queryArgs);
+    return this.performRequest("GET", pathVariables, queryArgs);
   }
 
   protected httpPut<TQueryArgs = {}>(
     pathVariables: string,
     queryArgs?: TQueryArgs,
   ): Promise<unknown> {
-    return this.performRequest("put", pathVariables, queryArgs);
+    return this.performRequest("PUT", pathVariables, queryArgs);
   }
 
   protected httpPost<TQueryArgs = {}>(
     pathVariables: string,
     queryArgs?: TQueryArgs,
   ): Promise<unknown> {
-    return this.performRequest("post", pathVariables, queryArgs);
+    return this.performRequest("POST", pathVariables, queryArgs);
   }
 
   protected httpDelete<TQueryArgs = {}>(
     pathVariables: string,
     queryArgs?: TQueryArgs,
   ): Promise<unknown> {
-    return this.performRequest("delete", pathVariables, queryArgs);
+    return this.performRequest("DELETE", pathVariables, queryArgs);
+  }
+
+  /**
+   * Performs the request to the Trello API.
+   * @param httpMethod Method to perform (GET, DELETE, POST, PUT).
+   * @param pathVariables Path to append to end of resource path.
+   * @param queryArgs Query args to build the final endpoint.
+   */
+  private performRequest<TQueryArgs>(
+    httpMethod: HttpMethod,
+    pathVariables: string,
+    queryArgs?: TQueryArgs,
+  ): Promise<unknown> {
+    const endpoint = this.getEndpoint(pathVariables, queryArgs);
+    const { backoffTime = 3000, maxRetryAttempts = 5 } = this.config;
+    return performApiRequest({
+      httpMethod,
+      endpoint,
+      backoffTime,
+      maxRetryAttempts,
+      queryArgs,
+    });
   }
 
   /**
@@ -93,27 +114,5 @@ export class BaseResource {
     const { key, token } = this.config;
     const authSuffix = stringify({ key, token });
     return `${sanitizedPath}?${queryString}${authSuffix}`;
-  }
-
-  /**
-   * Performs the request to the Trello API.
-   * @param httpMethod Method to perform (GET, DELETE, POST, PUT).
-   * @param pathVariables Path to append to end of resource path.
-   * @param queryArgs Query args to build the final endpoint.
-   */
-  private performRequest<TQueryArgs>(
-    httpMethod: HttpMethod,
-    pathVariables: string,
-    queryArgs?: TQueryArgs,
-  ): Promise<unknown> {
-    const endpoint = this.getEndpoint(pathVariables, queryArgs);
-    const { backoffTime = 3000, maxRetryAttempts = 5 } = this.config;
-    return performApiRequest(
-      httpMethod,
-      endpoint,
-      backoffTime,
-      maxRetryAttempts,
-      queryArgs,
-    );
   }
 }
