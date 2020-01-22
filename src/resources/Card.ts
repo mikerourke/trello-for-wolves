@@ -274,7 +274,7 @@ export class Card extends BaseResource {
           due?: Date | null;
         },
   ): Promise<unknown> {
-    return this.httpPost("/", options);
+    return this.httpPost("/", { ...options, separator: "/" });
   }
 
   public associateLabel(labelId: string): Promise<unknown> {

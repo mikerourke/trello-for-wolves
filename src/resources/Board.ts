@@ -289,6 +289,10 @@ export class Board extends BaseResource {
     return this.httpPost("/", { ...options, separator: "_" });
   }
 
+  public removeBoard(id: string): Promise<unknown> {
+    return this.httpDelete("/", { id });
+  }
+
   public generateCalendarKey(): Promise<unknown> {
     return this.httpPost("/calendarKey/generate");
   }

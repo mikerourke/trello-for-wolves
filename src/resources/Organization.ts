@@ -168,7 +168,7 @@ export class Organization extends BaseResource {
     desc?: string;
     website?: string;
   }): Promise<unknown> {
-    return this.httpPost("/", options);
+    return this.httpPost("/", { ...options, separator: "/" });
   }
 
   public uploadLogo(file: Record<string, any>): Promise<unknown> {
