@@ -37,78 +37,25 @@
     "qs": "^6.9.1"
   },
   "devDependencies": {
+    "@types/jest": "^24.9.0",
+    "@types/lodash.snakecase": "^4.1.6",
+    "@types/qs": "^6.9.0",
+    "@typescript-eslint/eslint-plugin": "^2.17.0",
+    "@typescript-eslint/parser": "^2.17.0",
     "cross-env": "^6.0.3",
     "dotenv": "^8.2.0",
-    "rimraf": "^3.0.0"
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-unicorn": "^15.0.1",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.0",
+    "ts-jest": "^24.3.0",
+    "typescript": "^3.7.5"
   },
-  "eslintConfig": {
-    "parser": "babel-eslint",
-    "extends": [
-      "eslint-config-airbnb-base",
-      "plugin:flowtype/recommended"
-    ],
-    "plugins": [
-      "import",
-      "flowtype"
-    ],
-    "settings": {
-      "ecmascript": 6
-    },
-    "parserOptions": {
-      "ecmaVersion": 6,
-      "sourceType": "module",
-      "ecmaFeatures": {
-        "arrowFunctions": true,
-        "binaryLiterals": true,
-        "blockBindings": true,
-        "classes": true,
-        "defaultParams": true,
-        "destructuring": true,
-        "forOf": true,
-        "modules": true,
-        "objectLiteralComputedProperties": true,
-        "objectLiteralDuplicateProperties": true,
-        "objectLiteralShorthandMethods": true,
-        "objectLiteralShorthandProperties": true,
-        "octalLiterals": true,
-        "regexUFlag": true,
-        "regexYFlag": true,
-        "spread": true,
-        "superInFunctions": true,
-        "templateStrings": true,
-        "unicodeCodePointEscapes": true,
-        "globalReturn": true
-      }
-    },
-    "env": {
-      "es6": true,
-      "node": true,
-      "mocha": true
-    },
-    "rules": {
-      "max-len": [
-        "error",
-        100,
-        2,
-        {
-          "ignoreComments": true,
-          "ignoreRegExpLiterals": true,
-          "ignoreStrings": true,
-          "ignoreTemplateLiterals": true,
-          "ignoreTrailingComments": true,
-          "ignoreUrls": true
-        }
-      ],
-      "class-methods-use-this": "off",
-      "flowtype/define-flow-type": "warn",
-      "flowtype/use-flow-type": "warn"
-    }
-  },
-  "eslintIgnore": [
-    "internals/",
-    "docs/",
-    "src/types.js",
-    "tests/",
-    "lib/"
-  ]
+  "prettier": {
+    "bracketSpacing": true,
+    "singleQuote": false,
+    "trailingComma": "all"
+  }
 }
