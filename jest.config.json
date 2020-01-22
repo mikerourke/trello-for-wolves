@@ -1,0 +1,18 @@
+{
+  "collectCoverageFrom": ["src/**/*.ts"],
+  "coveragePathIgnorePatterns": [
+    "/node_modules/",
+    "declarations.d.ts",
+    "jestHelpers.ts"
+  ],
+  "coverageReporters": ["lcov"],
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "roots": ["<rootDir>/src/"],
+  "setupFilesAfterEnv": ["<rootDir>/src/setupJest.ts"],
+  "testEnvironment": "node",
+  "testMatch": [
+    "<rootDir>/src/**/__tests__/**/*.ts",
+    "<rootDir>/src/**/?(*.)(spec|test).ts"
+  ],
+  "testURL": "http://localhost"
+}
