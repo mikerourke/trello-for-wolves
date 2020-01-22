@@ -10,10 +10,17 @@ export class BoardStar extends BaseResource {
     return this.httpGet("/");
   }
 
-  public updateBoardStar(options?: {
+  public addBoardStar(params: {
+    idBoard: string;
+    pos: PositionNumbered;
+  }): Promise<unknown> {
+    return this.httpPost("/", params);
+  }
+
+  public updateBoardStar(params?: {
     pos?: PositionNumbered;
   }): Promise<unknown> {
-    return this.httpPut("/", options);
+    return this.httpPut("/", params);
   }
 
   public moveBoardStarToBoard(idBoard: string): Promise<unknown> {
@@ -22,13 +29,6 @@ export class BoardStar extends BaseResource {
 
   public updatePosition(value: PositionNumbered): Promise<unknown> {
     return this.httpPut("/pos", { value });
-  }
-
-  public addBoardStar(options: {
-    idBoard: string;
-    pos: PositionNumbered;
-  }): Promise<unknown> {
-    return this.httpPost("/", options);
   }
 
   public deleteBoardStar(): Promise<unknown> {

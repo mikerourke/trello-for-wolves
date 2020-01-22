@@ -11,18 +11,18 @@ export type TokenField =
   | "permissions";
 
 export class Token extends BaseResource {
-  public getTokens(options?: {
+  public getTokens(params?: {
     filter?: AllOrNone;
     webhooks?: boolean;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public getToken(options?: {
+  public getToken(params?: {
     fields?: ArgumentGroup<TokenField>;
     webhooks?: boolean;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
   public getFieldValue(field: TokenField): Promise<unknown> {

@@ -23,7 +23,7 @@ export type BoardBackgroundFilter =
  */
 export class BoardBackground extends BaseResource {
   public getBoardBackgrounds(
-    options?:
+    params?:
       | {
           // boardBackgrounds:
           filter?: BoardBackgroundFilter;
@@ -33,24 +33,24 @@ export class BoardBackground extends BaseResource {
           filter?: AllOrNone;
         },
   ): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public getBoardBackground(options?: {
+  public getBoardBackground(params?: {
     fields?: ArgumentGroup<BoardBackgroundField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
-  }
-
-  public updateBoardBackground(options?: {
-    tile?: boolean;
-    brightness?: BoardBackgroundBrightness;
-  }): Promise<unknown> {
-    return this.httpPut("/", options);
+    return this.httpGet("/", params);
   }
 
   public uploadBoardBackground(file: any): Promise<unknown> {
     return this.httpPost("/", { file });
+  }
+
+  public updateBoardBackground(params?: {
+    tile?: boolean;
+    brightness?: BoardBackgroundBrightness;
+  }): Promise<unknown> {
+    return this.httpPut("/", params);
   }
 
   public deleteBoardBackground(): Promise<unknown> {

@@ -6,6 +6,7 @@ export type HttpMethod = "GET" | "PUT" | "POST" | "DELETE";
  * Returns a resolved Promise with the results of the Trello API call.
  * @param httpMethod Method associated with the request.
  * @param endpoint Endpoint for API request.
+ * @param body Contents of the request for the body.
  * @param backoffTime Amount of time to wait between API requests.
  * @param maxRetryAttempts Maximum number of attempts to retry requests.
  * @param [queryArgs={}] Arguments for building the querystring.
@@ -16,12 +17,14 @@ export async function performApiRequest<TQueryArgs>({
   endpoint,
   backoffTime,
   maxRetryAttempts,
+  body = null,
   queryArgs,
 }: {
   httpMethod: HttpMethod;
   endpoint: string;
   backoffTime: number;
   maxRetryAttempts: number;
+  body?: unknown | null;
   queryArgs?: TQueryArgs;
 }): Promise<unknown> {
   // One more check is done to ensure there are no consecutive slashes.
@@ -29,6 +32,9 @@ export async function performApiRequest<TQueryArgs>({
 
   // Build the configuration object for sending the request.
   const fetchConfig = getFetchConfig(httpMethod, apiUrl, queryArgs);
+  if (body !== null) {
+    (fetchConfig as any).body = JSON.stringify(body);
+  }
 
   const fetchWithRetries = async (
     attemptsRemaining: number,

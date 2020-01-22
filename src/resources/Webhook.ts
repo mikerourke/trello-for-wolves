@@ -15,13 +15,21 @@ export class Webhook extends BaseResource {
     return this.httpGet(`/${field}`);
   }
 
-  public updateWebhook(options?: {
+  public addWebhook(params: {
+    description?: string;
+    callbackURL: string;
+    idModel: string;
+  }): Promise<unknown> {
+    return this.httpPost("/", params);
+  }
+
+  public updateWebhook(params?: {
     description?: string;
     callbackURL?: string;
     idModel?: string;
     active?: boolean;
   }): Promise<unknown> {
-    return this.httpPut("/", options);
+    return this.httpPut("/", params);
   }
 
   public updateActiveStatus(value: boolean): Promise<unknown> {
@@ -38,14 +46,6 @@ export class Webhook extends BaseResource {
 
   public associateWithModel(value: string): Promise<unknown> {
     return this.httpPut("/idModel", { value });
-  }
-
-  public addWebhook(options: {
-    description?: string;
-    callbackURL: string;
-    idModel: string;
-  }): Promise<unknown> {
-    return this.httpPost("/", options);
   }
 
   public deleteWebhook(): Promise<unknown> {

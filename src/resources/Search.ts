@@ -14,7 +14,7 @@ export type ModelType =
   | "organizations";
 
 export class Search extends BaseResource {
-  public performSearch(options: {
+  public performSearch(params: {
     query: string;
     idBoards?: "mine" | string[];
     idOrganizations?: string[];
@@ -36,16 +36,16 @@ export class Search extends BaseResource {
     membersLimit?: number;
     partial?: boolean;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public searchMembers(options: {
+  public searchMembers(params: {
     query: string;
     limit?: number;
     idBoard?: string | null;
     idOrganization?: string | null;
     onlyOrgMembers?: boolean;
   }): Promise<unknown> {
-    return this.httpGet("/members", options);
+    return this.httpGet("/members", params);
   }
 }

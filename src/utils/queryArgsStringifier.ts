@@ -129,6 +129,10 @@ function getKeyForQueryString(key: string): string {
     return "card_board";
   }
 
+  if (key === "displayCardFront") {
+    return "display_cardFront";
+  }
+
   const recasedKey: string = snakeCase(key);
 
   // These are fields that have been re-cased to ensure all the other words

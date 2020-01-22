@@ -3,6 +3,7 @@ import { Batch } from "./resources/Batch";
 import { Board } from "./resources/Board";
 import { Card } from "./resources/Card";
 import { Checklist } from "./resources/Checklist";
+import { CustomField } from "./resources/CustomField";
 import { Enterprise } from "./resources/Enterprise";
 import { Label } from "./resources/Label";
 import { List } from "./resources/List";
@@ -42,7 +43,10 @@ export class Trello {
     return new Checklist(this.config, `/checklists/${checklistId}`);
   }
 
-  /* istanbul ignore next: I can't test these with my current membership level. */
+  public customField(customFieldId: string = ""): CustomField {
+    return new CustomField(this.config, `/customField/${customFieldId}`);
+  }
+
   public enterprises(enterpriseId: string = ""): Enterprise {
     return new Enterprise(this.config, `/enterprise/${enterpriseId}`);
   }

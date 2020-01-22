@@ -33,15 +33,15 @@ export type OrganizationField =
 export type OrganizationFilter = "all" | "members" | "none" | "public";
 
 export class Organization extends BaseResource {
-  public getOrganizations(options?: {
+  public getOrganizations(params?: {
     filter?: ArgumentGroup<OrganizationFilter>;
     fields?: ArgumentGroup<OrganizationField>;
     paidAccount?: boolean;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public getOrganization(options?: {
+  public getOrganization(params?: {
     actions?: ArgumentGroup<ActionFilter>;
     actionsEntities?: boolean;
     actionsDisplay?: boolean;
@@ -70,7 +70,7 @@ export class Organization extends BaseResource {
     paidAccount?: boolean;
     fields?: ArgumentGroup<OrganizationField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
   public getOrganizationsFilteredBy(
@@ -91,11 +91,11 @@ export class Organization extends BaseResource {
     return new Board(this.config, `${this.routePath}/boards`);
   }
 
-  public getDeltas(options: {
+  public getDeltas(params: {
     tags: string;
     ixLastUpdate: number;
   }): Promise<unknown> {
-    return this.httpGet("/deltas", options);
+    return this.httpGet("/deltas", params);
   }
 
   public members(memberId: string = ""): Member {
@@ -121,7 +121,24 @@ export class Organization extends BaseResource {
     return this.httpGet("/tags");
   }
 
-  public updateOrganization(options?: {
+  public addOrganization(params?: {
+    name?: string;
+    displayName?: string;
+    desc?: string;
+    website?: string;
+  }): Promise<unknown> {
+    return this.httpPost("/", { ...params, separator: "/" });
+  }
+
+  public uploadLogo(file: Record<string, any>): Promise<unknown> {
+    return this.httpPost("/logo", { file });
+  }
+
+  public addTags(name: string): Promise<unknown> {
+    return this.httpPost("/tags", { name });
+  }
+
+  public updateOrganization(params?: {
     prefs?: {
       associatedDomain?: string;
       externalMembersDisabled?: boolean;
@@ -139,7 +156,7 @@ export class Organization extends BaseResource {
     desc?: string;
     website?: string | null;
   }): Promise<unknown> {
-    return this.httpPut("/", { ...options, separator: "/" });
+    return this.httpPut("/", { ...params, separator: "/" });
   }
 
   public updateDescription(value: string): Promise<unknown> {
@@ -160,23 +177,6 @@ export class Organization extends BaseResource {
 
   public updateWebsite(value: string | null): Promise<unknown> {
     return this.httpPut("/website", { value });
-  }
-
-  public addOrganization(options?: {
-    name?: string;
-    displayName?: string;
-    desc?: string;
-    website?: string;
-  }): Promise<unknown> {
-    return this.httpPost("/", { ...options, separator: "/" });
-  }
-
-  public uploadLogo(file: Record<string, any>): Promise<unknown> {
-    return this.httpPost("/logo", { file });
-  }
-
-  public addTags(name: string): Promise<unknown> {
-    return this.httpPost("/tags", { name });
   }
 
   public deleteOrganization(): Promise<unknown> {

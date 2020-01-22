@@ -65,15 +65,15 @@ export type MemberFilter = "admins" | "all" | "none" | "normal" | "owners";
 export type MemberType = "admin" | "normal";
 
 export class Member extends BaseResource {
-  public getMembers(options?: {
+  public getMembers(params?: {
     fields?: ArgumentGroup<MemberEveryField>;
     limit?: number;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
   public getMember(
-    options?:
+    params?:
       | {
           actions?: ArgumentGroup<ActionFilter>;
           actionsEntities?: boolean;
@@ -133,7 +133,7 @@ export class Member extends BaseResource {
           fields?: ArgumentGroup<MemberEveryField>;
         },
   ): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
   public getMembersFilteredBy(filter: MemberFilter): Promise<unknown> {
@@ -195,11 +195,11 @@ export class Member extends BaseResource {
     );
   }
 
-  public getDeltas(options: {
+  public getDeltas(params: {
     tags: string;
     ixLastUpdate: number;
   }): Promise<unknown> {
-    return this.httpGet("/deltas", options);
+    return this.httpGet("/deltas", params);
   }
 
   public notifications(): Notification {
@@ -228,7 +228,7 @@ export class Member extends BaseResource {
     return new Token(this.config, `${this.routePath}/tokens`);
   }
 
-  public updateMember(options?: {
+  public updateMember(params?: {
     fullName?: string;
     initials?: string;
     username?: string;
@@ -240,7 +240,7 @@ export class Member extends BaseResource {
       minutesBetweenSummaries?: number;
     };
   }): Promise<unknown> {
-    return this.httpPut("/", { ...options, separator: "/" });
+    return this.httpPut("/", { ...params, separator: "/" });
   }
 
   public updateAvatarSource(value: AvatarSourceField): Promise<unknown> {
@@ -261,6 +261,24 @@ export class Member extends BaseResource {
 
   public prefs(): MemberPref {
     return new MemberPref(this.config, `${this.routePath}/prefs`);
+  }
+
+  /**
+   * Adds a member to an Organization.
+   * @memberOf Organization
+   * @example PUT /1/organizations/:organizationId/members
+   * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members
+   */
+  public addMember(params: {
+    email: string;
+    fullName: string;
+    type?: MemberType;
+  }): Promise<unknown> {
+    return this.httpPut("/", params);
+  }
+
+  public uploadAvatar(file: any): Promise<unknown> {
+    return this.httpPost("/avatar", { file });
   }
 
   public updateUsername(value: string): Promise<unknown> {
@@ -291,26 +309,15 @@ export class Member extends BaseResource {
     return this.httpPut("/", { type });
   }
 
-  /**
-   * Adds a member to an Organization.
-   * @memberOf Organization
-   * @example PUT /1/organizations/:organizationId/members
-   * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members
-   */
-  public addMember(options: {
-    email: string;
-    fullName: string;
-    type?: MemberType;
-  }): Promise<unknown> {
-    return this.httpPut("/", options);
-  }
-
-  public uploadAvatar(file: any): Promise<unknown> {
-    return this.httpPost("/avatar", { file });
-  }
-
   public dismissOneTimeMessages(value: string): Promise<unknown> {
     return this.httpPost("/oneTimeMessagesDismissed", { value });
+  }
+
+  public updateVote(isVoting: boolean): Promise<unknown> {
+    if (isVoting) {
+      return this.httpPost("/", { value: this.associationId });
+    }
+    return this.httpDelete(`/${this.associationId}`);
   }
 
   /**
@@ -318,7 +325,6 @@ export class Member extends BaseResource {
    * @example DELETE /1/boards/:boardId/members/:memberId
    * @see https://developers.trello.com/advanced-reference/board#delete-1-boards-board-id-members-idmember
    */
-  /* istanbul ignore next: This passed, I don't want to keep creating and deleting members. */
   public deleteMember(): Promise<unknown> {
     return this.httpDelete("/");
   }
@@ -341,12 +347,5 @@ export class Member extends BaseResource {
    */
   public dissociateMemberFromAll(): Promise<unknown> {
     return this.httpDelete("/all");
-  }
-
-  public updateVote(isVoting: boolean): Promise<unknown> {
-    if (isVoting) {
-      return this.httpPost("/", { value: this.associationId });
-    }
-    return this.httpDelete(`/${this.associationId}`);
   }
 }

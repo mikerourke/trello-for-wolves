@@ -13,55 +13,49 @@ export type StickerField =
 export type CustomStickerField = "scaled" | "url";
 
 export class Sticker extends BaseResource {
-  public getStickers(
-    options?:
-      | {
-          // Arguments for "/stickers":
-          fields?: ArgumentGroup<StickerField>;
-        }
-      | {
-          // Arguments for "/customStickers":
-          filter?: AllOrNone;
-        },
-  ): Promise<unknown> {
-    return this.httpGet("/", options);
-  }
-
-  public getSticker(
-    options?:
-      | {
-          // Arguments for "/stickers":
-          fields?: ArgumentGroup<StickerField>;
-        }
-      | {
-          // Arguments for "/customStickers":
-          fields?: ArgumentGroup<CustomStickerField>;
-        },
-  ): Promise<unknown> {
-    return this.httpGet("/", options);
-  }
-
-  public updateSticker(options?: {
-    top?: number;
-    left?: number;
-    zIndex?: number;
-    rotate?: number;
+  public getStickers(params?: {
+    fields?: ArgumentGroup<StickerField>;
   }): Promise<unknown> {
-    return this.httpPut("/", options);
+    return this.httpGet("/", params);
   }
 
-  public addSticker(options: {
+  public getCustomStickers(params?: { filter?: AllOrNone }): Promise<unknown> {
+    return this.httpGet("/", params);
+  }
+
+  public getSticker(params?: {
+    fields?: ArgumentGroup<StickerField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", params);
+  }
+
+  public getCustomSticker(params?: {
+    fields?: ArgumentGroup<CustomStickerField>;
+  }): Promise<unknown> {
+    return this.httpGet("/", params);
+  }
+
+  public addSticker(params: {
     image: string;
     top: number;
     left: number;
     zIndex: number;
     rotate?: number;
   }): Promise<unknown> {
-    return this.httpPost("/", options);
+    return this.httpPost("/", params);
   }
 
   public uploadSticker(file: File): Promise<unknown> {
     return this.httpPost("/", { file });
+  }
+
+  public updateSticker(params?: {
+    top?: number;
+    left?: number;
+    zIndex?: number;
+    rotate?: number;
+  }): Promise<unknown> {
+    return this.httpPut("/", params);
   }
 
   public deleteSticker(): Promise<unknown> {

@@ -7,7 +7,7 @@ import { AllOrNone, ArgumentGroup, PositionNumbered } from "../typeDefs";
 export type ChecklistField = "idBoard" | "idCard" | "name" | "pos";
 
 export class Checklist extends BaseResource {
-  public getChecklists(options?: {
+  public getChecklists(params?: {
     cards?: CardFilter;
     cardFields?: ArgumentGroup<CardField>;
     checkItems?: AllOrNone;
@@ -15,17 +15,17 @@ export class Checklist extends BaseResource {
     filter?: AllOrNone;
     fields?: ArgumentGroup<ChecklistField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public getChecklist(options?: {
+  public getChecklist(params?: {
     cards?: CardFilter;
     cardFields?: ArgumentGroup<CardField>;
     checkItems?: AllOrNone;
     checkItemFields?: ArgumentGroup<CheckItemField>;
     fields?: ArgumentGroup<ChecklistField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
   public getFieldValue(field: ChecklistField): Promise<unknown> {
@@ -54,11 +54,24 @@ export class Checklist extends BaseResource {
     );
   }
 
-  public updateChecklist(options?: {
+  public addChecklist(params: {
+    idCard?: string;
+    name?: string;
+    pos?: PositionNumbered;
+    idChecklistSource?: string;
+  }): Promise<unknown> {
+    let updatedArgs = params;
+    if (this.routePathElements[0] === "cards") {
+      updatedArgs = { ...params, idCard: this.routePathElements[1] };
+    }
+    return this.httpPost("/", updatedArgs);
+  }
+
+  public updateChecklist(params?: {
     name?: string;
     pos?: PositionNumbered;
   }): Promise<unknown> {
-    return this.httpPut("/", options);
+    return this.httpPut("/", params);
   }
 
   public updateName(value: string): Promise<unknown> {
@@ -67,19 +80,6 @@ export class Checklist extends BaseResource {
 
   public updatePosition(value: PositionNumbered): Promise<unknown> {
     return this.httpPut("/pos", { value });
-  }
-
-  public addChecklist(options: {
-    idCard?: string;
-    name?: string;
-    pos?: PositionNumbered;
-    idChecklistSource?: string;
-  }): Promise<unknown> {
-    let updatedArgs = options;
-    if (this.routePathElements[0] === "cards") {
-      updatedArgs = { ...options, idCard: this.routePathElements[1] };
-    }
-    return this.httpPost("/", updatedArgs);
   }
 
   public deleteChecklist(): Promise<unknown> {

@@ -10,12 +10,20 @@ export class SavedSearch extends BaseResource {
     return this.httpGet("/");
   }
 
-  public updateSavedSearch(options?: {
+  public addSavedSearch(params: {
+    name: string;
+    query: string;
+    pos: PositionNumbered;
+  }): Promise<unknown> {
+    return this.httpPost("/", params);
+  }
+
+  public updateSavedSearch(params?: {
     name?: string;
     query?: string;
     pos?: PositionNumbered;
   }): Promise<unknown> {
-    return this.httpPut("/", options);
+    return this.httpPut("/", params);
   }
 
   public updateName(value: string): Promise<unknown> {
@@ -28,14 +36,6 @@ export class SavedSearch extends BaseResource {
 
   public updateQuery(value: string): Promise<unknown> {
     return this.httpPut("/query", { value });
-  }
-
-  public addSavedSearch(options: {
-    name: string;
-    query: string;
-    pos: PositionNumbered;
-  }): Promise<unknown> {
-    return this.httpPost("/", options);
   }
 
   public deleteSavedSearch(): Promise<unknown> {

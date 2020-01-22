@@ -22,7 +22,7 @@ export type EnterpriseField =
 export type SortOrder = "id" | "ascending" | "descending" | "asc" | "desc";
 
 export class Enterprise extends BaseResource {
-  public getEnterprise(options?: {
+  public getEnterprise(params?: {
     fields?: ArgumentGroup<EnterpriseField>;
     members?: MemberFilter;
     memberFields?: MemberEnterpriseOnlyField;
@@ -36,24 +36,24 @@ export class Enterprise extends BaseResource {
     organizationPaidAccounts?: boolean;
     organizationMemberships?: ValueOrArray<MembershipFilter>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public getAdmins(options?: {
+  public getAdmins(params?: {
     fields: "fullName" | "userName";
   }): Promise<unknown> {
-    return this.httpGet("/admins", options);
+    return this.httpGet("/admins", params);
   }
 
-  public getSignupUrl(options?: {
+  public getSignupUrl(params?: {
     authenticate?: boolean;
     confirmationAccepted?: boolean;
     returnUrl?: "none" | string;
   }): Promise<unknown> {
-    return this.httpGet("/signupUrl", options);
+    return this.httpGet("/signupUrl", params);
   }
 
-  public getMembers(options?: {
+  public getMembers(params?: {
     fields?: ValueOrArray<EnterpriseField>;
     filter?: string;
     sortBy?: "none" | string;
@@ -63,18 +63,18 @@ export class Enterprise extends BaseResource {
     organizationFields?: ArgumentGroup<OrganizationField>;
     boardFields?: ArgumentGroup<BoardField>;
   }): Promise<unknown> {
-    return this.httpGet("/members", options);
+    return this.httpGet("/members", params);
   }
 
   public getMember(
     memberId: string,
-    options?: {
+    params?: {
       fields?: ValueOrArray<MemberEnterpriseOnlyField>;
       organizationFields?: ArgumentGroup<OrganizationField>;
       boardFields?: ArgumentGroup<BoardField>;
     },
   ): Promise<unknown> {
-    return this.httpGet(`/members/${memberId}`, options);
+    return this.httpGet(`/members/${memberId}`, params);
   }
 
   public getIfOrgTransferrable(orgId: string): Promise<unknown> {
@@ -83,13 +83,13 @@ export class Enterprise extends BaseResource {
 
   public deactivateMember(
     memberId: string,
-    options?: {
+    params?: {
       fields?: ValueOrArray<MemberEnterpriseOnlyField>;
       organizationFields?: ArgumentGroup<OrganizationField>;
       boardFields?: ArgumentGroup<BoardField>;
     },
   ): Promise<unknown> {
-    return this.httpPut(`/members/${memberId}/deactivated`, options);
+    return this.httpPut(`/members/${memberId}/deactivated`, params);
   }
 
   public transferToOrganization(orgId: string): Promise<unknown> {
@@ -100,10 +100,10 @@ export class Enterprise extends BaseResource {
     return this.httpPut(`/admins/${memberId}`);
   }
 
-  public addToken(options?: {
+  public addToken(params?: {
     expiration: "none" | "1hour" | "1day" | "30days" | "never";
   }): Promise<unknown> {
-    return this.httpPost("/tokens", options);
+    return this.httpPost("/tokens", params);
   }
 
   public dissociateOrganization(orgId: string): Promise<unknown> {

@@ -4,20 +4,20 @@ import { AllOrNone, ArgumentGroup } from "../typeDefs";
 export type CustomEmojiField = "name" | "url";
 
 export class CustomEmoji extends BaseResource {
-  public getCustomEmojis(options?: { filter?: AllOrNone }): Promise<unknown> {
-    return this.httpGet("/", options);
+  public getCustomEmojis(params?: { filter?: AllOrNone }): Promise<unknown> {
+    return this.httpGet("/", params);
   }
 
-  public getCustomEmoji(options?: {
+  public getCustomEmoji(params?: {
     fields?: ArgumentGroup<CustomEmojiField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public uploadCustomEmoji(options: {
+  public uploadCustomEmoji(params: {
     name: string;
     file: any;
   }): Promise<unknown> {
-    return this.httpPost("/", options);
+    return this.httpPost("/", params);
   }
 }

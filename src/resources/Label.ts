@@ -18,27 +18,39 @@ export type LabelColor =
 export type LabelField = "color" | "idBoard" | "name" | "uses";
 
 export class Label extends BaseResource {
-  public getLabels(options?: {
+  public getLabels(params?: {
     fields?: ArgumentGroup<LabelField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public getLabel(options?: {
+  public getLabel(params?: {
     fields?: ArgumentGroup<LabelField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
   public board(): Board {
     return new Board(this.config, `${this.routePath}/board`);
   }
 
-  public updateLabel(options?: {
+  public addLabel(params: {
+    name: string;
+    color: LabelColor | null;
+    idBoard?: string;
+  }): Promise<unknown> {
+    let updatedArgs = params;
+    if (this.routePathElements[0] === "boards") {
+      updatedArgs = { ...params, idBoard: this.routePathElements[1] };
+    }
+    return this.httpPost("/", updatedArgs);
+  }
+
+  public updateLabel(params?: {
     name?: string;
     color?: LabelColor | null;
   }): Promise<unknown> {
-    return this.httpPut("/", options);
+    return this.httpPut("/", params);
   }
 
   public updateColor(value: LabelColor | null): Promise<unknown> {
@@ -47,18 +59,6 @@ export class Label extends BaseResource {
 
   public updateName(value: string): Promise<unknown> {
     return this.httpPut("/name", { value });
-  }
-
-  public addLabel(options: {
-    name: string;
-    color: LabelColor | null;
-    idBoard?: string;
-  }): Promise<unknown> {
-    let updatedArgs = options;
-    if (this.routePathElements[0] === "boards") {
-      updatedArgs = { ...options, idBoard: this.routePathElements[1] };
-    }
-    return this.httpPost("/", updatedArgs);
   }
 
   public deleteLabel(): Promise<unknown> {

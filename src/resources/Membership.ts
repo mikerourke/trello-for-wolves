@@ -12,25 +12,25 @@ export type MembershipFilter =
   | "normal";
 
 export class Membership extends BaseResource {
-  public getMemberships(options?: {
+  public getMemberships(params?: {
     filter?: ArgumentGroup<MembershipFilter>;
     member?: boolean;
     // Member Fields are only allowed when called from a Board:
     memberFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public getMembership(options?: {
+  public getMembership(params?: {
     member?: boolean;
     // Member Fields are only allowed when called from a Board:
     memberFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
   public updateMembership(
-    options:
+    params:
       | {
           // When called from a Board:
           type: BoardMemberType;
@@ -42,6 +42,6 @@ export class Membership extends BaseResource {
           fields?: ArgumentGroup<MemberField>;
         },
   ): Promise<unknown> {
-    return this.httpPut("/", options);
+    return this.httpPut("/", params);
   }
 }

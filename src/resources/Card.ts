@@ -53,7 +53,7 @@ export type CardField =
 export type CardFilter = "all" | "closed" | "none" | "open" | "visible";
 
 export class Card extends BaseResource {
-  public getCards(options?: {
+  public getCards(params?: {
     actions?: ArgumentGroup<ActionFilter>;
     attachments?: AttachmentFilter;
     attachmentFields?: ArgumentGroup<AttachmentField>;
@@ -68,10 +68,10 @@ export class Card extends BaseResource {
     filter?: CardFilter;
     fields?: ArgumentGroup<CardField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public getCard(options?: {
+  public getCard(params?: {
     actions?: ArgumentGroup<ActionFilter>;
     actionsEntities?: boolean;
     actionsDisplay?: boolean;
@@ -97,7 +97,7 @@ export class Card extends BaseResource {
     stickerFields?: ArgumentGroup<StickerField>;
     fields?: ArgumentGroup<CardField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
   public getCardsFilteredBy(filter: CardFilter): Promise<unknown> {
@@ -176,7 +176,43 @@ export class Card extends BaseResource {
     return new Sticker(this.config, `${this.routePath}/stickers/${stickerId}`);
   }
 
-  public updateCard(options?: {
+  public addCard(
+    params:
+      | {
+          idList: string;
+          name?: string;
+          desc?: string;
+          pos?: PositionNumbered;
+          due?: Date | null;
+          dueComplete?: boolean;
+          idMembers?: string[];
+          idLabels?: string[];
+          urlSource?: string | null;
+          fileSource?: Record<string, any>;
+          idCardSource?: string;
+          keepFromSource?: KeepFromSourceField | KeepFromSourceField[];
+        }
+      | {
+          // These are for adding a card from a List.
+          name: string;
+          desc?: string;
+          labels?: ArgumentGroup<LabelColor>;
+          idMembers?: string[];
+          due?: Date | null;
+        },
+  ): Promise<unknown> {
+    return this.httpPost("/", { ...params, separator: "/" });
+  }
+
+  public associateLabel(labelId: string): Promise<unknown> {
+    return this.httpPost("/idLabels", { value: labelId });
+  }
+
+  public associateMember(memberId: string): Promise<unknown> {
+    return this.httpPost("/idMembers", { value: memberId });
+  }
+
+  public updateCard(params?: {
     name?: string;
     desc?: string;
     closed?: boolean;
@@ -190,7 +226,7 @@ export class Card extends BaseResource {
     dueComplete?: boolean;
     subscribed?: boolean;
   }): Promise<unknown> {
-    return this.httpPut("/", options);
+    return this.httpPut("/", params);
   }
 
   public updateClosedStatus(value: boolean): Promise<unknown> {
@@ -222,11 +258,11 @@ export class Card extends BaseResource {
 
   public moveToBoard(
     boardId: string,
-    options?: {
+    params?: {
       idList?: string;
     },
   ): Promise<unknown> {
-    return this.httpPut("/idBoard", { value: boardId, ...options });
+    return this.httpPut("/idBoard", { value: boardId, ...params });
   }
 
   public moveToList(listId: string): Promise<unknown> {
@@ -247,42 +283,6 @@ export class Card extends BaseResource {
 
   public updateSubscribed(value: boolean): Promise<unknown> {
     return this.httpPut("/subscribed", { value });
-  }
-
-  public addCard(
-    options:
-      | {
-          idList: string;
-          name?: string;
-          desc?: string;
-          pos?: PositionNumbered;
-          due?: Date | null;
-          dueComplete?: boolean;
-          idMembers?: string[];
-          idLabels?: string[];
-          urlSource?: string | null;
-          fileSource?: Record<string, any>;
-          idCardSource?: string;
-          keepFromSource?: KeepFromSourceField | KeepFromSourceField[];
-        }
-      | {
-          // These are for adding a card from a List.
-          name: string;
-          desc?: string;
-          labels?: ArgumentGroup<LabelColor>;
-          idMembers?: string[];
-          due?: Date | null;
-        },
-  ): Promise<unknown> {
-    return this.httpPost("/", { ...options, separator: "/" });
-  }
-
-  public associateLabel(labelId: string): Promise<unknown> {
-    return this.httpPost("/idLabels", { value: labelId });
-  }
-
-  public associateMember(memberId: string): Promise<unknown> {
-    return this.httpPost("/idMembers", { value: memberId });
   }
 
   public markAssociatedNotificationsRead(): Promise<unknown> {

@@ -30,29 +30,33 @@ export class BaseResource {
   protected httpGet<TQueryArgs = {}>(
     pathVariables: string,
     queryArgs?: TQueryArgs,
+    body?: unknown,
   ): Promise<unknown> {
-    return this.performRequest("GET", pathVariables, queryArgs);
+    return this.performRequest("GET", pathVariables, queryArgs, body);
   }
 
   protected httpPut<TQueryArgs = {}>(
     pathVariables: string,
     queryArgs?: TQueryArgs,
+    body?: unknown,
   ): Promise<unknown> {
-    return this.performRequest("PUT", pathVariables, queryArgs);
+    return this.performRequest("PUT", pathVariables, queryArgs, body);
   }
 
   protected httpPost<TQueryArgs = {}>(
     pathVariables: string,
     queryArgs?: TQueryArgs,
+    body?: unknown,
   ): Promise<unknown> {
-    return this.performRequest("POST", pathVariables, queryArgs);
+    return this.performRequest("POST", pathVariables, queryArgs, body);
   }
 
   protected httpDelete<TQueryArgs = {}>(
     pathVariables: string,
     queryArgs?: TQueryArgs,
+    body?: unknown,
   ): Promise<unknown> {
-    return this.performRequest("DELETE", pathVariables, queryArgs);
+    return this.performRequest("DELETE", pathVariables, queryArgs, body);
   }
 
   /**
@@ -60,17 +64,20 @@ export class BaseResource {
    * @param httpMethod Method to perform (GET, DELETE, POST, PUT).
    * @param pathVariables Path to append to end of resource path.
    * @param queryArgs Query args to build the final endpoint.
+   * @param body Body of the fetch call.
    */
   private performRequest<TQueryArgs>(
     httpMethod: HttpMethod,
     pathVariables: string,
     queryArgs?: TQueryArgs,
+    body?: unknown,
   ): Promise<unknown> {
     const endpoint = this.getEndpoint(pathVariables, queryArgs);
     const { backoffTime = 3000, maxRetryAttempts = 5 } = this.config;
     return performApiRequest({
       httpMethod,
       endpoint,
+      body,
       backoffTime,
       maxRetryAttempts,
       queryArgs,

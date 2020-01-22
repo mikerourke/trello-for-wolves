@@ -9,23 +9,23 @@ export type ListField = "closed" | "idBoard" | "name" | "pos" | "subscribed";
 export type ListFilter = "all" | "closed" | "none" | "open";
 
 export class List extends BaseResource {
-  public getLists(options?: {
+  public getLists(params?: {
     cards?: CardFilter;
     cardFields?: ArgumentGroup<CardField>;
     filter?: ListFilter;
     fields?: ArgumentGroup<ListField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public getList(options?: {
+  public getList(params?: {
     cards?: CardFilter;
     cardFields?: ArgumentGroup<CardField>;
     board?: boolean;
     boardFields?: ArgumentGroup<BoardField>;
     fields?: ArgumentGroup<ListField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
   public getListsFilteredBy(filter: ListFilter): Promise<unknown> {
@@ -48,14 +48,27 @@ export class List extends BaseResource {
     return new Card(this.config, `${this.routePath}/cards`);
   }
 
-  public updateList(options?: {
+  public addList(params: {
+    name: string;
+    idBoard?: string;
+    idListSource?: string;
+    pos?: PositionNumbered;
+  }): Promise<unknown> {
+    let updatedArgs = params;
+    if (this.routePathElements[0] === "boards") {
+      updatedArgs = { ...params, idBoard: this.routePathElements[1] };
+    }
+    return this.httpPost("/", updatedArgs);
+  }
+
+  public updateList(params?: {
     name?: string;
     closed?: boolean;
     idBoard?: string;
     pos?: PositionNumbered;
     subscribed?: boolean;
   }): Promise<unknown> {
-    return this.httpPut("/", options);
+    return this.httpPut("/", params);
   }
 
   public updateClosedStatus(value: boolean): Promise<unknown> {
@@ -64,11 +77,11 @@ export class List extends BaseResource {
 
   public moveToBoard(
     boardId: string,
-    options?: {
+    params?: {
       pos?: PositionNumbered;
     },
   ): Promise<unknown> {
-    return this.httpPut("/", { value: boardId, ...options });
+    return this.httpPut("/", { value: boardId, ...params });
   }
 
   public updateName(value: string): Promise<unknown> {
@@ -83,27 +96,14 @@ export class List extends BaseResource {
     return this.httpPut("/subscribed", { value });
   }
 
-  public addList(options: {
-    name: string;
-    idBoard?: string;
-    idListSource?: string;
-    pos?: PositionNumbered;
-  }): Promise<unknown> {
-    let updatedArgs = options;
-    if (this.routePathElements[0] === "boards") {
-      updatedArgs = { ...options, idBoard: this.routePathElements[1] };
-    }
-    return this.httpPost("/", updatedArgs);
-  }
-
   public archiveAllCards(): Promise<unknown> {
     return this.httpPost("/archiveAllCards");
   }
 
-  public moveAllCards(options: {
+  public moveAllCards(params: {
     idBoard: string;
     idList: string;
   }): Promise<unknown> {
-    return this.httpPost("/moveAllCards", options);
+    return this.httpPost("/moveAllCards", params);
   }
 }

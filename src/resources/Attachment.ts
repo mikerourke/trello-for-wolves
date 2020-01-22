@@ -29,26 +29,26 @@ export type AttachmentField =
   | "url";
 
 export class Attachment extends BaseResource {
-  public getAttachments(options?: {
+  public getAttachments(params?: {
     fields?: ArgumentGroup<AttachmentField>;
     filter?: ArgumentGroup<AttachmentFilter>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public getAttachment(options?: {
+  public getAttachment(params?: {
     fields?: ArgumentGroup<AttachmentField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public uploadAttachment(options?: {
+  public uploadAttachment(params?: {
     file?: Record<string, unknown>;
     url?: string;
     name?: string;
     mimeType?: MimeType | string;
   }): Promise<unknown> {
-    return this.httpPost("/", options);
+    return this.httpPost("/", params);
   }
 
   public deleteAttachment(): Promise<unknown> {

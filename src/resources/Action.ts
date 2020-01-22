@@ -66,9 +66,9 @@ type ActionSingleFilter =
 export type ActionFilter = ActionSingleFilter & ActionListFilter;
 
 export class Action extends BaseResource {
-  public getActions(options?: {
-    entities?: boolean;
+  public getActions(params?: {
     display?: boolean;
+    entities?: boolean;
     filter?: ArgumentGroup<ActionFilter>;
     fields?: ArgumentGroup<ActionField>;
     limit?: number;
@@ -82,10 +82,10 @@ export class Action extends BaseResource {
     memberCreator?: boolean;
     memberCreatorFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public getAction(options?: {
+  public getAction(params?: {
     display?: boolean;
     entities?: boolean;
     fields?: ArgumentGroup<ActionField>;
@@ -94,7 +94,7 @@ export class Action extends BaseResource {
     memberCreator?: boolean;
     memberCreatorFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
   public getFieldValue(field: ActionField): Promise<unknown> {
@@ -133,8 +133,8 @@ export class Action extends BaseResource {
     return new Organization(this.config, `${this.routePath}/organization`);
   }
 
-  public updateAction(options?: { text?: string }): Promise<unknown> {
-    return this.httpPut("/", options);
+  public updateAction(params?: { text?: string }): Promise<unknown> {
+    return this.httpPut("/", params);
   }
 
   public updateText(value: string): Promise<unknown> {

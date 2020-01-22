@@ -8,32 +8,44 @@ export type CheckItemState = "complete" | "false" | "incomplete" | "true";
 export type CheckItemStateField = "idCheckItem" | "state";
 
 export class CheckItem extends BaseResource {
-  public getCheckItems(options?: {
+  public getCheckItems(params?: {
     filter?: AllOrNone;
     fields?: ArgumentGroup<CheckItemField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public getCheckItem(options?: {
+  public getCheckItem(params?: {
     fields?: ArgumentGroup<CheckItemField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public getCheckItemStates(options?: {
+  public getCheckItemStates(params?: {
     fields?: ArgumentGroup<CheckItemStateField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public updateCheckItem(options?: {
+  public addCheckItem(params: {
+    name: string;
+    pos?: PositionNumbered;
+    checked?: boolean;
+  }): Promise<unknown> {
+    return this.httpPost("/", params);
+  }
+
+  public convertToCard(): Promise<unknown> {
+    return this.httpPost("/convertToCard");
+  }
+
+  public updateCheckItem(params?: {
     name?: string;
     state?: CheckItemState;
     pos?: PositionNumbered;
     idChecklist?: string | null;
   }): Promise<unknown> {
-    return this.httpPut("/", options);
+    return this.httpPut("/", params);
   }
 
   public updateName(value: string): Promise<unknown> {
@@ -46,18 +58,6 @@ export class CheckItem extends BaseResource {
 
   public updateState(value: CheckItemState): Promise<unknown> {
     return this.httpPut("/state", { value });
-  }
-
-  public addCheckItem(options: {
-    name: string;
-    pos?: PositionNumbered;
-    checked?: boolean;
-  }): Promise<unknown> {
-    return this.httpPost("/", options);
-  }
-
-  public convertToCard(): Promise<unknown> {
-    return this.httpPost("/convertToCard");
   }
 
   public deleteCheckItem(): Promise<unknown> {

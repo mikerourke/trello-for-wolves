@@ -10,11 +10,13 @@ import {
 import { BoardMyPref } from "./BoardMyPref";
 import { Card, CardAging, CardField, CardFilter } from "./Card";
 import { Checklist, ChecklistField } from "./Checklist";
+import { CustomField } from "./CustomField";
 import { Label, LabelColor, LabelField } from "./Label";
 import { List, ListField, ListFilter } from "./List";
 import { Member, MemberField, MemberFilter } from "./Member";
 import { Membership, MembershipFilter } from "./Membership";
 import { Organization, OrganizationField } from "./Organization";
+import { Plugin } from "./Plugin";
 import {
   AllOrNone,
   ArgumentGroup,
@@ -62,7 +64,7 @@ export type BoardStarsFilter = "none" | "mine";
 export type PowerUp = "calendar" | "cardAging" | "recap" | "voting";
 
 export class Board extends BaseResource {
-  public getBoards(options?: {
+  public getBoards(params?: {
     filter?: ArgumentGroup<BoardFilter>;
     fields?: ArgumentGroup<BoardField>;
     actions?: ArgumentGroup<ActionFilter>;
@@ -76,11 +78,11 @@ export class Board extends BaseResource {
     organizationFields?: ArgumentGroup<OrganizationField>;
     lists?: ListFilter;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
   public getBoard(
-    options?:
+    params?:
       | {
           actions?: ArgumentGroup<ActionFilter>;
           actionsEntities?: boolean;
@@ -129,7 +131,7 @@ export class Board extends BaseResource {
           fields?: ArgumentGroup<BoardField>;
         },
   ): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
   public getBoardsFilteredBy(
@@ -146,10 +148,14 @@ export class Board extends BaseResource {
     return new Action(this.config, `${this.routePath}/actions`);
   }
 
-  public getBoardStars(options?: {
+  public getBoardStars(params?: {
     filter?: BoardStarsFilter;
   }): Promise<unknown> {
-    return this.httpGet("/boardStars", options);
+    return this.httpGet("/boardStars", params);
+  }
+
+  public getBoardPlugins(): Promise<unknown> {
+    return this.httpGet("/boardPlugins");
   }
 
   public cards(cardId: string = ""): Card {
@@ -160,11 +166,15 @@ export class Board extends BaseResource {
     return new Checklist(this.config, `${this.routePath}/checklists`);
   }
 
-  public getDeltas(options: {
+  public customFields(): CustomField {
+    return new CustomField(this.config, `${this.routePath}/customFields`);
+  }
+
+  public getDeltas(params: {
     tags: string;
     ixLastUpdate: number;
   }): Promise<unknown> {
-    return this.httpGet("/deltas", options);
+    return this.httpGet("/deltas", params);
   }
 
   public getTags(): Promise<unknown> {
@@ -202,11 +212,54 @@ export class Board extends BaseResource {
     return new Organization(this.config, `${this.routePath}/organization`);
   }
 
-  public getPluginData(): Promise<unknown> {
-    return this.httpGet("/pluginData");
+  public plugins(): Plugin {
+    return new Plugin(this.config, `${this.routePath}/plugins`);
   }
 
-  public updateBoard(options?: {
+  public addBoard(params: {
+    name: string;
+    defaultLabels?: boolean;
+    defaultLists?: boolean;
+    desc?: string;
+    idOrganization?: string;
+    idBoardSource?: string;
+    keepFromSource?: ArgumentGroup<KeepFromSourceField>;
+    powerUps?: ArgumentGroup<PowerUp>;
+    prefs?: {
+      permissionLevel?: PermissionLevel;
+      voting?: GroupPermission;
+      comments?: GroupPermission;
+      invitations?: Invitation;
+      selfJoin?: boolean;
+      cardCovers?: boolean;
+      background?: string;
+      cardAging?: CardAging;
+    };
+  }): Promise<unknown> {
+    return this.httpPost("/", { ...params, separator: "_" });
+  }
+
+  public enableBoardPlugin(idPlugin: string): Promise<unknown> {
+    return this.httpPost("/boardPlugins", { idPlugin });
+  }
+
+  public addPowerUp(value: PowerUp): Promise<unknown> {
+    return this.httpPost("/powerUps", { value });
+  }
+
+  public addTags(value: string): Promise<unknown> {
+    return this.httpPost("/tags", { value });
+  }
+
+  public generateCalendarKey(): Promise<unknown> {
+    return this.httpPost("/calendarKey/generate");
+  }
+
+  public generateEmailKey(): Promise<unknown> {
+    return this.httpPost("/emailKey/generate");
+  }
+
+  public updateBoard(params?: {
     name?: string;
     desc?: string;
     closed?: boolean;
@@ -232,7 +285,7 @@ export class Board extends BaseResource {
       blue?: string;
     };
   }): Promise<unknown> {
-    return this.httpPut("/", { ...options, separator: "/" });
+    return this.httpPut("/", { ...params, separator: "/" });
   }
 
   public updateClosedStatus(value: boolean): Promise<unknown> {
@@ -266,51 +319,16 @@ export class Board extends BaseResource {
     return this.httpPut("/subscribed", { value });
   }
 
-  public addBoard(options: {
-    name: string;
-    defaultLabels?: boolean;
-    defaultLists?: boolean;
-    desc?: string;
-    idOrganization?: string;
-    idBoardSource?: string;
-    keepFromSource?: ArgumentGroup<KeepFromSourceField>;
-    powerUps?: ArgumentGroup<PowerUp>;
-    prefs?: {
-      permissionLevel?: PermissionLevel;
-      voting?: GroupPermission;
-      comments?: GroupPermission;
-      invitations?: Invitation;
-      selfJoin?: boolean;
-      cardCovers?: boolean;
-      background?: string;
-      cardAging?: CardAging;
-    };
-  }): Promise<unknown> {
-    return this.httpPost("/", { ...options, separator: "_" });
-  }
-
-  public removeBoard(id: string): Promise<unknown> {
-    return this.httpDelete("/", { id });
-  }
-
-  public generateCalendarKey(): Promise<unknown> {
-    return this.httpPost("/calendarKey/generate");
-  }
-
-  public generateEmailKey(): Promise<unknown> {
-    return this.httpPost("/emailKey/generate");
-  }
-
-  public addTags(value: string): Promise<unknown> {
-    return this.httpPost("/tags", { value });
-  }
-
   public markAsViewed(): Promise<unknown> {
     return this.httpPost("/markAsViewed");
   }
 
-  public addPowerUp(value: PowerUp): Promise<unknown> {
-    return this.httpPost("/powerUps", { value });
+  public deleteBoard(id: string): Promise<unknown> {
+    return this.httpDelete("/", { id });
+  }
+
+  public disableBoardPlugin(idPlugin: string): Promise<unknown> {
+    return this.httpDelete("/boardPlugins", { idPlugin });
   }
 
   public deletePowerUp(powerUp: PowerUp): Promise<unknown> {

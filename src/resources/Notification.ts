@@ -45,7 +45,7 @@ export type NotificationFilter =
 export type ReadFilter = "all" | "read" | "unread";
 
 export class Notification extends BaseResource {
-  public getNotifications(options?: {
+  public getNotifications(params?: {
     entities?: boolean;
     display?: boolean;
     filter?: ArgumentGroup<NotificationFilter>;
@@ -58,10 +58,10 @@ export class Notification extends BaseResource {
     memberCreator?: boolean;
     memberCreatorFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
-  public getNotification(options?: {
+  public getNotification(params?: {
     display?: boolean;
     entities?: boolean;
     fields?: ArgumentGroup<NotificationField>;
@@ -77,7 +77,7 @@ export class Notification extends BaseResource {
     member?: boolean;
     memberFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
-    return this.httpGet("/", options);
+    return this.httpGet("/", params);
   }
 
   public getNotificationsFilteredBy(
@@ -122,8 +122,8 @@ export class Notification extends BaseResource {
     return new Organization(this.config, `${this.routePath}/organization`);
   }
 
-  public updateNotification(options?: { unread?: boolean }): Promise<unknown> {
-    return this.httpPut("/", options);
+  public updateNotification(params?: { unread?: boolean }): Promise<unknown> {
+    return this.httpPut("/", params);
   }
 
   public updateUnreadStatus(value: boolean): Promise<unknown> {
