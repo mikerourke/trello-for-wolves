@@ -24,8 +24,10 @@
   "homepage": "https://github.com/mikerourke/trello-for-wolves#readme",
   "scripts": {
     "build:clean": "rimraf lib",
-    "cleanup": "rimraf coverage && rimraf lib",
-    "lint": "eslint src --color || exit 0"
+    "tidy": "rimraf coverage && rimraf lib",
+    "lint": "eslint -c .eslintrc.json --ext .ts src",
+    "prettier": "prettier --write \"src/**/*.ts\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit --skipLibCheck"
   },
   "files": [
     "lib",

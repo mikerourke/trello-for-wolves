@@ -8,7 +8,7 @@ export class Comment extends BaseResource {
    * This is the same as calling ...cards('cardId').actions().getActions({ filter: 'commentCard' }).
    * It's just a nice shortcut if you only need Comment actions.
    */
-  public getComments(queryArgs?: {
+  public getComments(options?: {
     entities?: boolean;
     display?: boolean;
     fields?: ArgumentGroup<ActionField>;
@@ -22,7 +22,7 @@ export class Comment extends BaseResource {
     memberCreator?: boolean;
     memberCreatorFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
-    return this.httpGet("/", { ...queryArgs, filter: "commentCard" });
+    return this.httpGet("/", { ...options, filter: "commentCard" });
   }
 
   public updateComment(text: string): Promise<unknown> {

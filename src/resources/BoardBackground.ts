@@ -25,13 +25,13 @@ export class BoardBackground extends BaseResource {
   public getBoardBackgrounds(
     options?:
       | {
-      // boardBackgrounds:
-      filter?: BoardBackgroundFilter;
-    }
+          // boardBackgrounds:
+          filter?: BoardBackgroundFilter;
+        }
       | {
-      // customBoardBackgrounds:
-      filter?: AllOrNone;
-    },
+          // customBoardBackgrounds:
+          filter?: AllOrNone;
+        },
   ): Promise<unknown> {
     return this.httpGet("/", options);
   }
