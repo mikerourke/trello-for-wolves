@@ -31,6 +31,7 @@ export class BaseResource {
     queryParamsByName?: QueryParamsByName,
     body?: unknown,
   ): Promise<unknown> {
+    console.log(endpoint);
     return this.performRequest("GET", endpoint, queryParamsByName, body);
   }
 

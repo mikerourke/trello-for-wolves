@@ -26,9 +26,10 @@ export async function fetchFromApi({
   const apiUrl = buildApiUrl(endpoint, queryParamsByName, key, token);
 
   // Build the configuration object for sending the request.
-  const fetchConfig = { method } as Record<string, string>;
-  if (body !== null) {
-    fetchConfig.body = JSON.stringify(body);
+  const fetchConfig = { method } as Record<string, string | FormData>;
+  const fetchBody = getFetchBody(queryParamsByName, body);
+  if (fetchBody !== null) {
+    fetchConfig.body = fetchBody;
   }
 
   const fetchWithRetries = async (
@@ -62,10 +63,8 @@ function buildApiUrl(
   apiKey: string,
   apiToken: string,
 ): string {
-  const apiUrl = `https://api.trello.com/1${endpoint}`;
-
   // Ensure there are no double or trailing slashes:
-  const sanitizedUrl = apiUrl.replace(/\/+/g, "/").replace(/\/+$/, "");
+  const sanitizedUrl = endpoint.replace(/\/+/g, "/").replace(/\/+$/, "");
 
   const validParamsByName = {
     ...queryParamsByName,
@@ -79,52 +78,33 @@ function buildApiUrl(
   }
   const queryString = stringifyQueryParams(validParamsByName);
 
-  return sanitizedUrl.concat("?", queryString);
+  return "https://api.trello.com/1".concat(sanitizedUrl, "?", queryString);
+}
+
+function getFetchBody(
+  queryParamsByName: QueryParamsByName,
+  body?: unknown | null,
+): FormData | string | null {
+  const validParamsByName = queryParamsByName as Record<string, string>;
+  if ("file" in validParamsByName) {
+    const formData = new FormData();
+    formData.append("file", validParamsByName.file);
+    formData.append("name", validParamsByName?.name ?? "file");
+
+    if ("mimeType" in validParamsByName) {
+      formData.append("mimeType", validParamsByName.mimeType);
+    }
+
+    return formData;
+  }
+
+  if (body !== null) {
+    return JSON.stringify(body);
+  }
+
+  return null;
 }
 
 function pause(duration: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, duration));
-}
-
-// FIXME: This needs to be updated for the Fetch API.
-// @ts-ignore
-function getFetchConfig<TQueryParams>( // eslint-disable-line @typescript-eslint/no-unused-vars
-  httpMethod: HttpMethod,
-  requestUrl: string,
-  queryParams: TQueryParams | {} = {},
-): object {
-  type RequestConfig = TQueryParams & {
-    method: string;
-    url: string;
-    json: boolean;
-    name?: string;
-    file?: {
-      readable: boolean;
-    };
-    mimeType?: string;
-  };
-
-  const requestConfig = {
-    method: httpMethod,
-    url: `https://${requestUrl}`,
-  } as Partial<Request>;
-
-  const validQueryParams = queryParams as any;
-
-  if (validQueryParams?.file?.readable) {
-    const fileName = validQueryParams?.name ?? "file";
-    const formData = {
-      name: fileName,
-      file: validQueryParams?.file,
-      mimeType: undefined,
-    } as RequestConfig;
-
-    if (validQueryParams.mimeType) {
-      formData.mimeType = validQueryParams.mimeType;
-    }
-
-    (requestConfig as any).formData = formData;
-  }
-
-  return requestConfig;
 }
