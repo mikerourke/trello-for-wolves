@@ -37,15 +37,15 @@ export class List extends BaseResource {
   }
 
   public actions(): Action {
-    return new Action(this.config, `${this.routePath}/actions`);
+    return new Action(this.config, `${this.baseEndpoint}/actions`);
   }
 
   public board(): Board {
-    return new Board(this.config, `${this.routePath}/board`);
+    return new Board(this.config, `${this.baseEndpoint}/board`);
   }
 
   public cards(): Card {
-    return new Card(this.config, `${this.routePath}/cards`);
+    return new Card(this.config, `${this.baseEndpoint}/cards`);
   }
 
   public addList(params: {
@@ -55,8 +55,8 @@ export class List extends BaseResource {
     pos?: PositionNumbered;
   }): Promise<unknown> {
     let updatedArgs = params;
-    if (this.routePathElements[0] === "boards") {
-      updatedArgs = { ...params, idBoard: this.routePathElements[1] };
+    if (this.endpointElements[0] === "boards") {
+      updatedArgs = { ...params, idBoard: this.endpointElements[1] };
     }
     return this.httpPost("/", updatedArgs);
   }

@@ -145,7 +145,7 @@ export class Board extends BaseResource {
   }
 
   public actions(): Action {
-    return new Action(this.config, `${this.routePath}/actions`);
+    return new Action(this.config, `${this.baseEndpoint}/actions`);
   }
 
   public getBoardStars(params?: {
@@ -159,15 +159,15 @@ export class Board extends BaseResource {
   }
 
   public cards(cardId: string = ""): Card {
-    return new Card(this.config, `${this.routePath}/cards/${cardId}`);
+    return new Card(this.config, `${this.baseEndpoint}/cards/${cardId}`);
   }
 
   public checklists(): Checklist {
-    return new Checklist(this.config, `${this.routePath}/checklists`);
+    return new Checklist(this.config, `${this.baseEndpoint}/checklists`);
   }
 
   public customFields(): CustomField {
-    return new CustomField(this.config, `${this.routePath}/customFields`);
+    return new CustomField(this.config, `${this.baseEndpoint}/customFields`);
   }
 
   public getDeltas(params: {
@@ -182,38 +182,38 @@ export class Board extends BaseResource {
   }
 
   public labels(labelId: string = ""): Label {
-    return new Label(this.config, `${this.routePath}/labels/${labelId}`);
+    return new Label(this.config, `${this.baseEndpoint}/labels/${labelId}`);
   }
 
   public lists(): List {
-    return new List(this.config, `${this.routePath}/lists`);
+    return new List(this.config, `${this.baseEndpoint}/lists`);
   }
 
   public members(memberId: string = ""): Member {
-    return new Member(this.config, `${this.routePath}/members/${memberId}`);
+    return new Member(this.config, `${this.baseEndpoint}/members/${memberId}`);
   }
 
   public membersInvited(): Member {
-    return new Member(this.config, `${this.routePath}/membersInvited`);
+    return new Member(this.config, `${this.baseEndpoint}/membersInvited`);
   }
 
   public memberships(membershipId: string = ""): Membership {
     return new Membership(
       this.config,
-      `${this.routePath}/memberships/${membershipId}`,
+      `${this.baseEndpoint}/memberships/${membershipId}`,
     );
   }
 
   public myPrefs(): BoardMyPref {
-    return new BoardMyPref(this.config, `${this.routePath}/myPrefs`);
+    return new BoardMyPref(this.config, `${this.baseEndpoint}/myPrefs`);
   }
 
   public organization(): Organization {
-    return new Organization(this.config, `${this.routePath}/organization`);
+    return new Organization(this.config, `${this.baseEndpoint}/organization`);
   }
 
   public plugins(): Plugin {
-    return new Plugin(this.config, `${this.routePath}/plugins`);
+    return new Plugin(this.config, `${this.baseEndpoint}/plugins`);
   }
 
   public addBoard(params: {
@@ -312,7 +312,7 @@ export class Board extends BaseResource {
   }
 
   public prefs(): BoardPref {
-    return new BoardPref(this.config, `${this.routePath}/prefs`);
+    return new BoardPref(this.config, `${this.baseEndpoint}/prefs`);
   }
 
   public updateSubscribed(value: boolean): Promise<unknown> {

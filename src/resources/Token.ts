@@ -30,11 +30,11 @@ export class Token extends BaseResource {
   }
 
   public member(): Member {
-    return new Member(this.config, `${this.routePath}/member`);
+    return new Member(this.config, `${this.baseEndpoint}/member`);
   }
 
   public webhooks(webhookId: string = ""): Webhook {
-    return new Webhook(this.config, `${this.routePath}/webhooks/${webhookId}`);
+    return new Webhook(this.config, `${this.baseEndpoint}/webhooks/${webhookId}`);
   }
 
   public deleteToken(): Promise<unknown> {

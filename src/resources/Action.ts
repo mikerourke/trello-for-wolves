@@ -102,11 +102,11 @@ export class Action extends BaseResource {
   }
 
   public board(): Board {
-    return new Board(this.config, `${this.routePath}/board`);
+    return new Board(this.config, `${this.baseEndpoint}/board`);
   }
 
   public card(): Card {
-    return new Card(this.config, `${this.routePath}/card`);
+    return new Card(this.config, `${this.baseEndpoint}/card`);
   }
 
   public getDisplay(): Promise<unknown> {
@@ -118,19 +118,19 @@ export class Action extends BaseResource {
   }
 
   public list(): List {
-    return new List(this.config, `${this.routePath}/list`);
+    return new List(this.config, `${this.baseEndpoint}/list`);
   }
 
   public member(): Member {
-    return new Member(this.config, `${this.routePath}/member`);
+    return new Member(this.config, `${this.baseEndpoint}/member`);
   }
 
   public memberCreator(): Member {
-    return new Member(this.config, `${this.routePath}/memberCreator`);
+    return new Member(this.config, `${this.baseEndpoint}/memberCreator`);
   }
 
   public organization(): Organization {
-    return new Organization(this.config, `${this.routePath}/organization`);
+    return new Organization(this.config, `${this.baseEndpoint}/organization`);
   }
 
   public updateAction(params?: { text?: string }): Promise<unknown> {

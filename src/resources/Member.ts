@@ -145,53 +145,53 @@ export class Member extends BaseResource {
   }
 
   public actions(): Action {
-    return new Action(this.config, `${this.routePath}/actions`);
+    return new Action(this.config, `${this.baseEndpoint}/actions`);
   }
 
   public boardBackgrounds(backgroundId: string = ""): BoardBackground {
     return new BoardBackground(
       this.config,
-      `${this.routePath}/boardBackgrounds/${backgroundId}`,
+      `${this.baseEndpoint}/boardBackgrounds/${backgroundId}`,
     );
   }
 
   public boardStars(boardStarId: string = ""): BoardStar {
     return new BoardStar(
       this.config,
-      `${this.routePath}/boardStars/${boardStarId}`,
+      `${this.baseEndpoint}/boardStars/${boardStarId}`,
     );
   }
 
   public boards(): Board {
-    return new Board(this.config, `${this.routePath}/boards`);
+    return new Board(this.config, `${this.baseEndpoint}/boards`);
   }
 
   public boardsInvited(): Board {
-    return new Board(this.config, `${this.routePath}/boardsInvited`);
+    return new Board(this.config, `${this.baseEndpoint}/boardsInvited`);
   }
 
   public cards(): Card {
-    return new Card(this.config, `${this.routePath}/cards`);
+    return new Card(this.config, `${this.baseEndpoint}/cards`);
   }
 
   public customBoardBackgrounds(backgroundId: string = ""): BoardBackground {
     return new BoardBackground(
       this.config,
-      `${this.routePath}/customBoardBackgrounds/${backgroundId}`,
+      `${this.baseEndpoint}/customBoardBackgrounds/${backgroundId}`,
     );
   }
 
   public customEmoji(customEmojiId: string = ""): CustomEmoji {
     return new CustomEmoji(
       this.config,
-      `${this.routePath}/customEmoji/${customEmojiId}`,
+      `${this.baseEndpoint}/customEmoji/${customEmojiId}`,
     );
   }
 
   public customStickers(customStickerId: string = ""): Sticker {
     return new Sticker(
       this.config,
-      `${this.routePath}/customStickers/${customStickerId}`,
+      `${this.baseEndpoint}/customStickers/${customStickerId}`,
     );
   }
 
@@ -203,29 +203,29 @@ export class Member extends BaseResource {
   }
 
   public notifications(): Notification {
-    return new Notification(this.config, `${this.routePath}/notifications`);
+    return new Notification(this.config, `${this.baseEndpoint}/notifications`);
   }
 
   public organizations(): Organization {
-    return new Organization(this.config, `${this.routePath}/organizations`);
+    return new Organization(this.config, `${this.baseEndpoint}/organizations`);
   }
 
   public organizationsInvited(): Organization {
     return new Organization(
       this.config,
-      `${this.routePath}/organizationsInvited`,
+      `${this.baseEndpoint}/organizationsInvited`,
     );
   }
 
   public savedSearches(savedSearchId: string = ""): SavedSearch {
     return new SavedSearch(
       this.config,
-      `${this.routePath}/savedSearches/${savedSearchId}`,
+      `${this.baseEndpoint}/savedSearches/${savedSearchId}`,
     );
   }
 
   public tokens(): Token {
-    return new Token(this.config, `${this.routePath}/tokens`);
+    return new Token(this.config, `${this.baseEndpoint}/tokens`);
   }
 
   public updateMember(params?: {
@@ -260,12 +260,11 @@ export class Member extends BaseResource {
   }
 
   public prefs(): MemberPref {
-    return new MemberPref(this.config, `${this.routePath}/prefs`);
+    return new MemberPref(this.config, `${this.baseEndpoint}/prefs`);
   }
 
   /**
    * Adds a member to an Organization.
-   * @memberOf Organization
    * @example PUT /1/organizations/:organizationId/members
    * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members
    */
@@ -287,7 +286,6 @@ export class Member extends BaseResource {
 
   /**
    * Updates the deactivated status for a member associated with an Organization.
-   * @memberOf Organization
    * @example PUT /1/organizations/:organizationId/members/:memberId
    * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember-deactivated
    */
@@ -297,11 +295,9 @@ export class Member extends BaseResource {
 
   /**
    * Updates the member type for a member associated with a Board or Organization.
-   * @memberOf Board
    * @example PUT /1/boards/:boardId/members/:memberId
    * @see https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-members-idmember
    *
-   * @memberOf Organization
    * @example PUT /1/organizations/:organizationId/members/:memberId
    * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember
    */
@@ -311,13 +307,6 @@ export class Member extends BaseResource {
 
   public dismissOneTimeMessages(value: string): Promise<unknown> {
     return this.httpPost("/oneTimeMessagesDismissed", { value });
-  }
-
-  public updateVote(isVoting: boolean): Promise<unknown> {
-    if (isVoting) {
-      return this.httpPost("/", { value: this.associationId });
-    }
-    return this.httpDelete(`/${this.associationId}`);
   }
 
   /**
@@ -341,7 +330,6 @@ export class Member extends BaseResource {
   /**
    * This will remove a member from your Organization AND remove the member from
    * all Boards associated with an Organization.
-   * @memberOf Organization
    * @example DELETE /1/organizations/:organizationId/members/:memberId/all
    * @see https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember-all
    */

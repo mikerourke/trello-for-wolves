@@ -84,11 +84,11 @@ export class Organization extends BaseResource {
   }
 
   public actions(): Action {
-    return new Action(this.config, `${this.routePath}/actions`);
+    return new Action(this.config, `${this.baseEndpoint}/actions`);
   }
 
   public boards(): Board {
-    return new Board(this.config, `${this.routePath}/boards`);
+    return new Board(this.config, `${this.baseEndpoint}/boards`);
   }
 
   public getDeltas(params: {
@@ -99,17 +99,17 @@ export class Organization extends BaseResource {
   }
 
   public members(memberId: string = ""): Member {
-    return new Member(this.config, `${this.routePath}/members/${memberId}`);
+    return new Member(this.config, `${this.baseEndpoint}/members/${memberId}`);
   }
 
   public membersInvited(): Member {
-    return new Member(this.config, `${this.routePath}/membersInvited`);
+    return new Member(this.config, `${this.baseEndpoint}/membersInvited`);
   }
 
   public memberships(membershipId: string = ""): Membership {
     return new Membership(
       this.config,
-      `${this.routePath}/memberships/${membershipId}`,
+      `${this.baseEndpoint}/memberships/${membershipId}`,
     );
   }
 
@@ -172,7 +172,7 @@ export class Organization extends BaseResource {
   }
 
   public prefs(): OrganizationPref {
-    return new OrganizationPref(this.config, `${this.routePath}/prefs`);
+    return new OrganizationPref(this.config, `${this.baseEndpoint}/prefs`);
   }
 
   public updateWebsite(value: string | null): Promise<unknown> {

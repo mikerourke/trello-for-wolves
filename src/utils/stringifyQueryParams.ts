@@ -1,52 +1,65 @@
 import snakeCase from "lodash.snakecase";
 
-type ValidQueryArgs<T> = T & { separator: string };
+type ValidQueryParams<T> = T & { separator: string };
+
+export type QueryParamsByName = Record<
+  string,
+  string | number | boolean | object | undefined | null
+>;
 
 /**
  * Creates the query string that will be appended to the endpoint path to perform
  * the request to the Trello API.
- * @param queryArgs Argument(s) used to build query string.
+ * @param queryParamsByName Argument(s) used to build query string.
  */
-export function stringifyQueryArgs<TQueryArgs>(
-  queryArgs: ValidQueryArgs<TQueryArgs>,
+export function stringifyQueryParams(
+  queryParamsByName: QueryParamsByName,
 ): string {
-  let queryArgsString = "";
+  const validParamsByName = queryParamsByName as ValidQueryParams<
+    QueryParamsByName
+  >;
+  let queryString = "";
 
-  for (const [queryArgKey, queryArgValue] of Object.entries(queryArgs)) {
+  for (const [queryParamKey, queryParamValue] of Object.entries(
+    validParamsByName,
+  )) {
     // If the value of the entry is an object (rather than a value), the
     // corresponding child properties need to be combined for the URL string.
     if (
-      typeof queryArgValue === "object" &&
-      !Array.isArray(queryArgValue) &&
-      queryArgValue !== null
+      typeof queryParamValue === "object" &&
+      !Array.isArray(queryParamValue) &&
+      queryParamValue !== null
     ) {
-      const nestedString = getQueryStringForNestedArgs(queryArgKey, queryArgs);
-      queryArgsString += `${nestedString}&`;
+      const nestedString = getQueryStringForNestedArgs(
+        queryParamKey,
+        validParamsByName,
+      );
+      queryString += `${nestedString}&`;
 
       // These are simple key/value pairs in which the value is a string or
       // number.
     } else {
       // Ensure the separator key specified for handling nested args isn't
       // present in the query string.
-      if (queryArgKey !== "separator") {
-        const argKey = getKeyForQueryString(queryArgKey);
-        queryArgsString += `${argKey}=${queryArgValue}&`;
+      if (queryParamKey !== "separator") {
+        const argKey = getKeyForQueryString(queryParamKey);
+        queryString += `${argKey}=${queryParamValue}&`;
       }
     }
   }
 
   // Ensure there is no double ampersand in the query string.  This may
   // occur due to the string being constructed manually.
-  return queryArgsString.replace("&&", "&");
+  return queryString.replace("&&", "&");
 }
 
 /**
  * Returns a string to append to the query string that accommodates for nested
  * entities. These need to be un-nested to successfully perform the API call.
  * @param childName Name of the key containing children.
- * @param queryArgs Arguments to parse.
+ * @param queryParams Arguments to parse.
  * @example
- *   queryArgs = {
+ *   queryParams = {
  *     prefs: {
  *       invitations: "admins"
  *       selfJoin: true,
@@ -56,16 +69,20 @@ export function stringifyQueryArgs<TQueryArgs>(
  *  // prefs/invitations=admins&prefs/selfJoin=true
  *
  */
-function getQueryStringForNestedArgs<TQueryArgs>(
+function getQueryStringForNestedArgs(
   childName: string,
-  queryArgs: ValidQueryArgs<TQueryArgs>,
+  queryParams: ValidQueryParams<QueryParamsByName>,
 ): string {
   let childUrlString = "";
-  const childGroup = queryArgs[childName];
+  const childGroup = queryParams[childName];
 
   let separator = "/";
-  if ("separator" in queryArgs) {
-    separator = queryArgs.separator;
+  if ("separator" in queryParams) {
+    separator = queryParams.separator;
+  }
+
+  if (typeof childGroup === "undefined" || childGroup === null) {
+    return "";
   }
 
   for (const [childKey, childValue] of Object.entries(childGroup)) {
@@ -79,7 +96,7 @@ function getQueryStringForNestedArgs<TQueryArgs>(
 
 /**
  * Returns the key for building the query string with the correct casing. The
- * "queryArgs" object passed into the request function has camel cased keys.
+ * "queryParams" object passed into the request function has camel cased keys.
  * The Trello API's keys are snake cased (with a few exceptions).
  * @param key Camel cased key.
  */

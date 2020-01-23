@@ -31,7 +31,7 @@ export class Label extends BaseResource {
   }
 
   public board(): Board {
-    return new Board(this.config, `${this.routePath}/board`);
+    return new Board(this.config, `${this.baseEndpoint}/board`);
   }
 
   public addLabel(params: {
@@ -40,8 +40,8 @@ export class Label extends BaseResource {
     idBoard?: string;
   }): Promise<unknown> {
     let updatedArgs = params;
-    if (this.routePathElements[0] === "boards") {
-      updatedArgs = { ...params, idBoard: this.routePathElements[1] };
+    if (this.endpointElements[0] === "boards") {
+      updatedArgs = { ...params, idBoard: this.endpointElements[1] };
     }
     return this.httpPost("/", updatedArgs);
   }

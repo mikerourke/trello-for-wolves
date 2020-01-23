@@ -109,63 +109,67 @@ export class Card extends BaseResource {
   }
 
   public actions(): Action {
-    return new Action(this.config, `${this.routePath}/actions`);
+    return new Action(this.config, `${this.baseEndpoint}/actions`);
   }
 
   public attachments(attachmentId: string = ""): Attachment {
     return new Attachment(
       this.config,
-      `${this.routePath}/attachments/${attachmentId}`,
+      `${this.baseEndpoint}/attachments/${attachmentId}`,
     );
   }
 
   public board(): Board {
-    return new Board(this.config, `${this.routePath}/board`);
+    return new Board(this.config, `${this.baseEndpoint}/board`);
   }
 
   public checkItemStates(): CheckItem {
-    return new CheckItem(this.config, `${this.routePath}/checkItemStates`);
+    return new CheckItem(this.config, `${this.baseEndpoint}/checkItemStates`);
   }
 
   public checklist(checklistId: string): Checklist {
     return new Checklist(
       this.config,
-      `${this.routePath}/checklist/${checklistId}`,
+      `${this.baseEndpoint}/checklist/${checklistId}`,
     );
   }
 
   public checklists(checklistId: string = ""): Checklist {
     return new Checklist(
       this.config,
-      `${this.routePath}/checklists/${checklistId}`,
+      `${this.baseEndpoint}/checklists/${checklistId}`,
     );
   }
 
   public checkItem(checkItemId: string): CheckItem {
     return new CheckItem(
       this.config,
-      `${this.routePath}/checkItem/${checkItemId}`,
+      `${this.baseEndpoint}/checkItem/${checkItemId}`,
     );
   }
 
   public comments(commentId: string = ""): Comment {
-    return new Comment(this.config, `${this.routePath}/actions/${commentId}`);
+    return new Comment(this.config, `${this.baseEndpoint}/actions/${commentId}`);
   }
 
   public labels(): Label {
-    return new Label(this.config, `${this.routePath}/labels`);
+    return new Label(this.config, `${this.baseEndpoint}/labels`);
   }
 
   public list(): List {
-    return new List(this.config, `${this.routePath}/list`);
+    return new List(this.config, `${this.baseEndpoint}/list`);
   }
 
   public members(): Member {
-    return new Member(this.config, `${this.routePath}/members`);
+    return new Member(this.config, `${this.baseEndpoint}/members`);
   }
 
-  public membersVoted(memberId: string = ""): Member {
-    return new Member(this.config, `${this.routePath}/membersVoted`, memberId);
+  public voteOnCard(idMember: string): Promise<unknown> {
+    return this.httpPost("/membersVoted", { value: idMember });
+  }
+
+  public removeVoteFromCard(idMember: string): Promise<unknown> {
+    return this.httpDelete(`/membersVoted/${idMember}`);
   }
 
   public getPluginData(): Promise<unknown> {
@@ -173,7 +177,7 @@ export class Card extends BaseResource {
   }
 
   public stickers(stickerId: string = ""): Sticker {
-    return new Sticker(this.config, `${this.routePath}/stickers/${stickerId}`);
+    return new Sticker(this.config, `${this.baseEndpoint}/stickers/${stickerId}`);
   }
 
   public addCard(
