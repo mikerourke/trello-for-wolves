@@ -12,32 +12,32 @@ export class Reaction extends BaseResource {
     locale: string;
     spritesheets?: boolean;
   }): Promise<unknown> {
-    return this.httpGet("/emoji", params);
+    return this.apiGet("/emoji", params);
   }
 
   public getReactions(params?: {
     member?: boolean;
     emoji?: boolean;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getReaction(params?: {
     member?: boolean;
     emoji?: boolean;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getReactionsSummary(): Promise<unknown> {
-    return this.httpGet("/reactionsSummary");
+    return this.apiGet("/reactionsSummary");
   }
 
   public addReaction(params: ReactionOptions): Promise<unknown> {
-    return this.httpPost("/", params);
+    return this.apiPost("/", params);
   }
 
   public deleteReaction(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 }

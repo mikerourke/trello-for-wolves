@@ -18,7 +18,7 @@ export class Membership extends BaseResource {
     // Member Fields are only allowed when called from a Board:
     memberFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getMembership(params?: {
@@ -26,7 +26,7 @@ export class Membership extends BaseResource {
     // Member Fields are only allowed when called from a Board:
     memberFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public updateMembership(
@@ -42,6 +42,6 @@ export class Membership extends BaseResource {
           fields?: ArgumentGroup<MemberField>;
         },
   ): Promise<unknown> {
-    return this.httpPut("/", params);
+    return this.apiPut("/", params);
   }
 }

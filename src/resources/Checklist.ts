@@ -15,7 +15,7 @@ export class Checklist extends BaseResource {
     filter?: AllOrNone;
     fields?: ArgumentGroup<ChecklistField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getChecklist(params?: {
@@ -25,11 +25,11 @@ export class Checklist extends BaseResource {
     checkItemFields?: ArgumentGroup<CheckItemField>;
     fields?: ArgumentGroup<ChecklistField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getFieldValue(field: ChecklistField): Promise<unknown> {
-    return this.httpGet(`/${field}`);
+    return this.apiGet(`/${field}`);
   }
 
   public board(): Board {
@@ -64,25 +64,25 @@ export class Checklist extends BaseResource {
     if (this.endpointElements[0] === "cards") {
       updatedArgs = { ...params, idCard: this.endpointElements[1] };
     }
-    return this.httpPost("/", updatedArgs);
+    return this.apiPost("/", updatedArgs);
   }
 
   public updateChecklist(params?: {
     name?: string;
     pos?: PositionNumbered;
   }): Promise<unknown> {
-    return this.httpPut("/", params);
+    return this.apiPut("/", params);
   }
 
   public updateName(value: string): Promise<unknown> {
-    return this.httpPut("/name", { value });
+    return this.apiPut("/name", { value });
   }
 
   public updatePosition(value: PositionNumbered): Promise<unknown> {
-    return this.httpPut("/pos", { value });
+    return this.apiPut("/pos", { value });
   }
 
   public deleteChecklist(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 }

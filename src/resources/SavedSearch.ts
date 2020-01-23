@@ -3,11 +3,11 @@ import { PositionNumbered } from "../typeDefs";
 
 export class SavedSearch extends BaseResource {
   public getSavedSearches(): Promise<unknown> {
-    return this.httpGet("/");
+    return this.apiGet("/");
   }
 
   public getSavedSearch(): Promise<unknown> {
-    return this.httpGet("/");
+    return this.apiGet("/");
   }
 
   public addSavedSearch(params: {
@@ -15,7 +15,7 @@ export class SavedSearch extends BaseResource {
     query: string;
     pos: PositionNumbered;
   }): Promise<unknown> {
-    return this.httpPost("/", params);
+    return this.apiPost("/", params);
   }
 
   public updateSavedSearch(params?: {
@@ -23,22 +23,22 @@ export class SavedSearch extends BaseResource {
     query?: string;
     pos?: PositionNumbered;
   }): Promise<unknown> {
-    return this.httpPut("/", params);
+    return this.apiPut("/", params);
   }
 
   public updateName(value: string): Promise<unknown> {
-    return this.httpPut("/name", { value });
+    return this.apiPut("/name", { value });
   }
 
   public updatePosition(value: PositionNumbered): Promise<unknown> {
-    return this.httpPut("/pos", { value });
+    return this.apiPut("/pos", { value });
   }
 
   public updateQuery(value: string): Promise<unknown> {
-    return this.httpPut("/query", { value });
+    return this.apiPut("/query", { value });
   }
 
   public deleteSavedSearch(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 }

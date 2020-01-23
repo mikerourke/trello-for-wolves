@@ -68,7 +68,7 @@ export class Card extends BaseResource {
     filter?: CardFilter;
     fields?: ArgumentGroup<CardField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getCard(params?: {
@@ -97,15 +97,15 @@ export class Card extends BaseResource {
     stickerFields?: ArgumentGroup<StickerField>;
     fields?: ArgumentGroup<CardField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getCardsFilteredBy(filter: CardFilter): Promise<unknown> {
-    return this.httpGet(`/${filter}`);
+    return this.apiGet(`/${filter}`);
   }
 
   public getFieldValue(field: CardField): Promise<unknown> {
-    return this.httpGet(`/${field}`);
+    return this.apiGet(`/${field}`);
   }
 
   public actions(): Action {
@@ -165,15 +165,15 @@ export class Card extends BaseResource {
   }
 
   public voteOnCard(idMember: string): Promise<unknown> {
-    return this.httpPost("/membersVoted", { value: idMember });
+    return this.apiPost("/membersVoted", { value: idMember });
   }
 
   public removeVoteFromCard(idMember: string): Promise<unknown> {
-    return this.httpDelete(`/membersVoted/${idMember}`);
+    return this.apiDelete(`/membersVoted/${idMember}`);
   }
 
   public getPluginData(): Promise<unknown> {
-    return this.httpGet("/pluginData");
+    return this.apiGet("/pluginData");
   }
 
   public stickers(stickerId: string = ""): Sticker {
@@ -205,15 +205,15 @@ export class Card extends BaseResource {
           due?: Date | null;
         },
   ): Promise<unknown> {
-    return this.httpPost("/", { ...params, separator: "/" });
+    return this.apiPost("/", { ...params, separator: "/" });
   }
 
   public associateLabel(labelId: string): Promise<unknown> {
-    return this.httpPost("/idLabels", { value: labelId });
+    return this.apiPost("/idLabels", { value: labelId });
   }
 
   public associateMember(memberId: string): Promise<unknown> {
-    return this.httpPost("/idMembers", { value: memberId });
+    return this.apiPost("/idMembers", { value: memberId });
   }
 
   public updateCard(params?: {
@@ -230,23 +230,23 @@ export class Card extends BaseResource {
     dueComplete?: boolean;
     subscribed?: boolean;
   }): Promise<unknown> {
-    return this.httpPut("/", params);
+    return this.apiPut("/", params);
   }
 
   public updateClosedStatus(value: boolean): Promise<unknown> {
-    return this.httpPut("/closed", { value });
+    return this.apiPut("/closed", { value });
   }
 
   public updateDescription(value: string): Promise<unknown> {
-    return this.httpPut("/desc", { value });
+    return this.apiPut("/desc", { value });
   }
 
   public updateDueDate(value: Date | null): Promise<unknown> {
-    return this.httpPut("/due", { value });
+    return this.apiPut("/due", { value });
   }
 
   public updateDueComplete(value: boolean): Promise<unknown> {
-    return this.httpPut("/dueComplete", { value });
+    return this.apiPut("/dueComplete", { value });
   }
 
   /**
@@ -257,7 +257,7 @@ export class Card extends BaseResource {
   public updateAttachmentCoverImage(
     idAttachmentCover: string,
   ): Promise<unknown> {
-    return this.httpPut("/idAttachmentCover", { value: idAttachmentCover });
+    return this.apiPut("/idAttachmentCover", { value: idAttachmentCover });
   }
 
   public moveToBoard(
@@ -266,42 +266,42 @@ export class Card extends BaseResource {
       idList?: string;
     },
   ): Promise<unknown> {
-    return this.httpPut("/idBoard", { value: boardId, ...params });
+    return this.apiPut("/idBoard", { value: boardId, ...params });
   }
 
   public moveToList(listId: string): Promise<unknown> {
-    return this.httpPut("/idList", { value: listId });
+    return this.apiPut("/idList", { value: listId });
   }
 
   public associateMembers(memberIds: string[]): Promise<unknown> {
-    return this.httpPut("/idMembers", { value: memberIds });
+    return this.apiPut("/idMembers", { value: memberIds });
   }
 
   public updateName(value: string): Promise<unknown> {
-    return this.httpPut("/name", { value });
+    return this.apiPut("/name", { value });
   }
 
   public updatePosition(value: PositionNumbered): Promise<unknown> {
-    return this.httpPut("/pos", { value });
+    return this.apiPut("/pos", { value });
   }
 
   public updateSubscribed(value: boolean): Promise<unknown> {
-    return this.httpPut("/subscribed", { value });
+    return this.apiPut("/subscribed", { value });
   }
 
   public markAssociatedNotificationsRead(): Promise<unknown> {
-    return this.httpPost("/markAssociatedNotificationsRead");
+    return this.apiPost("/markAssociatedNotificationsRead");
   }
 
   public deleteCard(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 
   public dissociateMember(memberId: string): Promise<unknown> {
-    return this.httpDelete(`/idMembers/${memberId}`);
+    return this.apiDelete(`/idMembers/${memberId}`);
   }
 
   public dissociateLabel(labelId: string): Promise<unknown> {
-    return this.httpDelete(`/idLabels/${labelId}`);
+    return this.apiDelete(`/idLabels/${labelId}`);
   }
 }

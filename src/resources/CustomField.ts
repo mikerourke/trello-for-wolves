@@ -25,19 +25,19 @@ export interface CustomFieldListOption {
 
 export class CustomField extends BaseResource {
   public getCustomFields(): Promise<unknown> {
-    return this.httpGet("/");
+    return this.apiGet("/");
   }
 
   public getCustomField(): Promise<unknown> {
-    return this.httpGet("/");
+    return this.apiGet("/");
   }
 
   public getOptions(): Promise<unknown> {
-    return this.httpGet("/options");
+    return this.apiGet("/options");
   }
 
   public getOptionsField(idCustomFieldOption: string): Promise<unknown> {
-    return this.httpGet(`/options/${idCustomFieldOption}`);
+    return this.apiGet(`/options/${idCustomFieldOption}`);
   }
 
   public addCustomField(params: {
@@ -50,11 +50,11 @@ export class CustomField extends BaseResource {
     displayCardFront?: boolean;
   }): Promise<unknown> {
     const body = this.getBodyWithDisplayCardFront(params);
-    return this.httpPost("/", {}, body);
+    return this.apiPost("/", {}, body);
   }
 
   public addCustomFieldOption(option: CustomFieldListOption): Promise<unknown> {
-    return this.httpPost("/options", {}, option);
+    return this.apiPost("/options", {}, option);
   }
 
   public updateCustomField(params: {
@@ -62,17 +62,17 @@ export class CustomField extends BaseResource {
     pos?: number;
     displayCardFront?: boolean;
   }): Promise<unknown> {
-    return this.httpPut("/", {}, params);
+    return this.apiPut("/", {}, params);
   }
 
   public deleteCustomField(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 
   public deleteCustomFieldOption(
     idCustomFieldOption: string,
   ): Promise<unknown> {
-    return this.httpDelete(`/options/${idCustomFieldOption}`);
+    return this.apiDelete(`/options/${idCustomFieldOption}`);
   }
 
   private getBodyWithDisplayCardFront<TParams>(

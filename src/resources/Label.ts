@@ -21,13 +21,13 @@ export class Label extends BaseResource {
   public getLabels(params?: {
     fields?: ArgumentGroup<LabelField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getLabel(params?: {
     fields?: ArgumentGroup<LabelField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public board(): Board {
@@ -43,25 +43,25 @@ export class Label extends BaseResource {
     if (this.endpointElements[0] === "boards") {
       updatedArgs = { ...params, idBoard: this.endpointElements[1] };
     }
-    return this.httpPost("/", updatedArgs);
+    return this.apiPost("/", updatedArgs);
   }
 
   public updateLabel(params?: {
     name?: string;
     color?: LabelColor | null;
   }): Promise<unknown> {
-    return this.httpPut("/", params);
+    return this.apiPut("/", params);
   }
 
   public updateColor(value: LabelColor | null): Promise<unknown> {
-    return this.httpPut("/color", { value });
+    return this.apiPut("/color", { value });
   }
 
   public updateName(value: string): Promise<unknown> {
-    return this.httpPut("/name", { value });
+    return this.apiPut("/name", { value });
   }
 
   public deleteLabel(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 }

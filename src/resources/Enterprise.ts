@@ -36,13 +36,13 @@ export class Enterprise extends BaseResource {
     organizationPaidAccounts?: boolean;
     organizationMemberships?: ValueOrArray<MembershipFilter>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getAdmins(params?: {
     fields: "fullName" | "userName";
   }): Promise<unknown> {
-    return this.httpGet("/admins", params);
+    return this.apiGet("/admins", params);
   }
 
   public getSignupUrl(params?: {
@@ -50,7 +50,7 @@ export class Enterprise extends BaseResource {
     confirmationAccepted?: boolean;
     returnUrl?: "none" | string;
   }): Promise<unknown> {
-    return this.httpGet("/signupUrl", params);
+    return this.apiGet("/signupUrl", params);
   }
 
   public getMembers(params?: {
@@ -63,7 +63,7 @@ export class Enterprise extends BaseResource {
     organizationFields?: ArgumentGroup<OrganizationField>;
     boardFields?: ArgumentGroup<BoardField>;
   }): Promise<unknown> {
-    return this.httpGet("/members", params);
+    return this.apiGet("/members", params);
   }
 
   public getMember(
@@ -74,11 +74,11 @@ export class Enterprise extends BaseResource {
       boardFields?: ArgumentGroup<BoardField>;
     },
   ): Promise<unknown> {
-    return this.httpGet(`/members/${memberId}`, params);
+    return this.apiGet(`/members/${memberId}`, params);
   }
 
   public getIfOrgTransferrable(orgId: string): Promise<unknown> {
-    return this.httpGet(`/transferrable/organization/${orgId}`);
+    return this.apiGet(`/transferrable/organization/${orgId}`);
   }
 
   public deactivateMember(
@@ -89,28 +89,28 @@ export class Enterprise extends BaseResource {
       boardFields?: ArgumentGroup<BoardField>;
     },
   ): Promise<unknown> {
-    return this.httpPut(`/members/${memberId}/deactivated`, params);
+    return this.apiPut(`/members/${memberId}/deactivated`, params);
   }
 
   public transferToOrganization(orgId: string): Promise<unknown> {
-    return this.httpPut("/organizations", { idOrganization: orgId });
+    return this.apiPut("/organizations", { idOrganization: orgId });
   }
 
   public addMemberAsAdmin(memberId: string): Promise<unknown> {
-    return this.httpPut(`/admins/${memberId}`);
+    return this.apiPut(`/admins/${memberId}`);
   }
 
   public addToken(params?: {
     expiration: "none" | "1hour" | "1day" | "30days" | "never";
   }): Promise<unknown> {
-    return this.httpPost("/tokens", params);
+    return this.apiPost("/tokens", params);
   }
 
   public dissociateOrganization(orgId: string): Promise<unknown> {
-    return this.httpDelete(`/organizations/${orgId}`);
+    return this.apiDelete(`/organizations/${orgId}`);
   }
 
   public removeMemberFromAdmin(memberId: string): Promise<unknown> {
-    return this.httpDelete(`/admins/${memberId}`);
+    return this.apiDelete(`/admins/${memberId}`);
   }
 }

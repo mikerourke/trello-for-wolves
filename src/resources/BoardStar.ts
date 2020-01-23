@@ -3,35 +3,35 @@ import { PositionNumbered } from "../typeDefs";
 
 export class BoardStar extends BaseResource {
   public getBoardStars(): Promise<unknown> {
-    return this.httpGet("/");
+    return this.apiGet("/");
   }
 
   public getBoardStar(): Promise<unknown> {
-    return this.httpGet("/");
+    return this.apiGet("/");
   }
 
   public addBoardStar(params: {
     idBoard: string;
     pos: PositionNumbered;
   }): Promise<unknown> {
-    return this.httpPost("/", params);
+    return this.apiPost("/", params);
   }
 
   public updateBoardStar(params?: {
     pos?: PositionNumbered;
   }): Promise<unknown> {
-    return this.httpPut("/", params);
+    return this.apiPut("/", params);
   }
 
   public moveBoardStarToBoard(idBoard: string): Promise<unknown> {
-    return this.httpPut("/idBoard", { value: idBoard });
+    return this.apiPut("/idBoard", { value: idBoard });
   }
 
   public updatePosition(value: PositionNumbered): Promise<unknown> {
-    return this.httpPut("/pos", { value });
+    return this.apiPut("/pos", { value });
   }
 
   public deleteBoardStar(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 }

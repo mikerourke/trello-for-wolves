@@ -12,19 +12,19 @@ export class CheckItem extends BaseResource {
     filter?: AllOrNone;
     fields?: ArgumentGroup<CheckItemField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getCheckItem(params?: {
     fields?: ArgumentGroup<CheckItemField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getCheckItemStates(params?: {
     fields?: ArgumentGroup<CheckItemStateField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public addCheckItem(params: {
@@ -32,11 +32,11 @@ export class CheckItem extends BaseResource {
     pos?: PositionNumbered;
     checked?: boolean;
   }): Promise<unknown> {
-    return this.httpPost("/", params);
+    return this.apiPost("/", params);
   }
 
   public convertToCard(): Promise<unknown> {
-    return this.httpPost("/convertToCard");
+    return this.apiPost("/convertToCard");
   }
 
   public updateCheckItem(params?: {
@@ -45,22 +45,22 @@ export class CheckItem extends BaseResource {
     pos?: PositionNumbered;
     idChecklist?: string | null;
   }): Promise<unknown> {
-    return this.httpPut("/", params);
+    return this.apiPut("/", params);
   }
 
   public updateName(value: string): Promise<unknown> {
-    return this.httpPut("/name", { value });
+    return this.apiPut("/name", { value });
   }
 
   public updatePosition(value: PositionNumbered): Promise<unknown> {
-    return this.httpPut("/pos", { value });
+    return this.apiPut("/pos", { value });
   }
 
   public updateState(value: CheckItemState): Promise<unknown> {
-    return this.httpPut("/state", { value });
+    return this.apiPut("/state", { value });
   }
 
   public deleteCheckItem(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 }

@@ -11,29 +11,29 @@ export interface PluginListingOptions {
 
 export class Plugin extends BaseResource {
   public getPlugins(params?: { filter?: PluginFilter }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getPlugin(): Promise<unknown> {
-    return this.httpGet("/");
+    return this.apiGet("/");
   }
 
   public getMemberPrivacy(): Promise<unknown> {
-    return this.httpGet(`/compliance/memberPrivacy`);
+    return this.apiGet(`/compliance/memberPrivacy`);
   }
 
   public addListing(params: PluginListingOptions): Promise<unknown> {
-    return this.httpPost("/listing/", {}, params);
+    return this.apiPost("/listing/", {}, params);
   }
 
   public updatePlugin(): Promise<unknown> {
-    return this.httpPut("/");
+    return this.apiPut("/");
   }
 
   public updateListing(
     idListing: string,
     params: PluginListingOptions,
   ): Promise<unknown> {
-    return this.httpPut(`/listing/${idListing}`, {}, params);
+    return this.apiPut(`/listing/${idListing}`, {}, params);
   }
 }

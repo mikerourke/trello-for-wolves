@@ -15,18 +15,18 @@ export class Token extends BaseResource {
     filter?: AllOrNone;
     webhooks?: boolean;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getToken(params?: {
     fields?: ArgumentGroup<TokenField>;
     webhooks?: boolean;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getFieldValue(field: TokenField): Promise<unknown> {
-    return this.httpGet(`/${field}`);
+    return this.apiGet(`/${field}`);
   }
 
   public member(): Member {
@@ -38,6 +38,6 @@ export class Token extends BaseResource {
   }
 
   public deleteToken(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 }

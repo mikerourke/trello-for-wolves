@@ -16,23 +16,23 @@ export class Sticker extends BaseResource {
   public getStickers(params?: {
     fields?: ArgumentGroup<StickerField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getCustomStickers(params?: { filter?: AllOrNone }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getSticker(params?: {
     fields?: ArgumentGroup<StickerField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getCustomSticker(params?: {
     fields?: ArgumentGroup<CustomStickerField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public addSticker(params: {
@@ -42,11 +42,11 @@ export class Sticker extends BaseResource {
     zIndex: number;
     rotate?: number;
   }): Promise<unknown> {
-    return this.httpPost("/", params);
+    return this.apiPost("/", params);
   }
 
   public uploadSticker(file: File): Promise<unknown> {
-    return this.httpPost("/", { file });
+    return this.apiPost("/", { file });
   }
 
   public updateSticker(params?: {
@@ -55,10 +55,10 @@ export class Sticker extends BaseResource {
     zIndex?: number;
     rotate?: number;
   }): Promise<unknown> {
-    return this.httpPut("/", params);
+    return this.apiPut("/", params);
   }
 
   public deleteSticker(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 }

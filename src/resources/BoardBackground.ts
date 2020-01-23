@@ -33,27 +33,27 @@ export class BoardBackground extends BaseResource {
           filter?: AllOrNone;
         },
   ): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getBoardBackground(params?: {
     fields?: ArgumentGroup<BoardBackgroundField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public uploadBoardBackground(file: any): Promise<unknown> {
-    return this.httpPost("/", { file });
+    return this.apiPost("/", { file });
   }
 
   public updateBoardBackground(params?: {
     tile?: boolean;
     brightness?: BoardBackgroundBrightness;
   }): Promise<unknown> {
-    return this.httpPut("/", params);
+    return this.apiPut("/", params);
   }
 
   public deleteBoardBackground(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 }

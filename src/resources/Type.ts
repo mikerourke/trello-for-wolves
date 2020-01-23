@@ -2,6 +2,6 @@ import { BaseResource } from "./BaseResource";
 
 export class Type extends BaseResource {
   public getType(teamOrUserId: string): Promise<unknown> {
-    return this.httpGet(`/${teamOrUserId}`);
+    return this.apiGet(`/${teamOrUserId}`);
   }
 }

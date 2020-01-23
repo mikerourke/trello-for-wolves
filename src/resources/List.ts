@@ -15,7 +15,7 @@ export class List extends BaseResource {
     filter?: ListFilter;
     fields?: ArgumentGroup<ListField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getList(params?: {
@@ -25,15 +25,15 @@ export class List extends BaseResource {
     boardFields?: ArgumentGroup<BoardField>;
     fields?: ArgumentGroup<ListField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getListsFilteredBy(filter: ListFilter): Promise<unknown> {
-    return this.httpGet("/", { filter });
+    return this.apiGet("/", { filter });
   }
 
   public getFieldValue(field: ListField): Promise<unknown> {
-    return this.httpGet(`/${field}`);
+    return this.apiGet(`/${field}`);
   }
 
   public actions(): Action {
@@ -58,7 +58,7 @@ export class List extends BaseResource {
     if (this.endpointElements[0] === "boards") {
       updatedArgs = { ...params, idBoard: this.endpointElements[1] };
     }
-    return this.httpPost("/", updatedArgs);
+    return this.apiPost("/", updatedArgs);
   }
 
   public updateList(params?: {
@@ -68,11 +68,11 @@ export class List extends BaseResource {
     pos?: PositionNumbered;
     subscribed?: boolean;
   }): Promise<unknown> {
-    return this.httpPut("/", params);
+    return this.apiPut("/", params);
   }
 
   public updateClosedStatus(value: boolean): Promise<unknown> {
-    return this.httpPut("/closed", { value });
+    return this.apiPut("/closed", { value });
   }
 
   public moveToBoard(
@@ -81,29 +81,29 @@ export class List extends BaseResource {
       pos?: PositionNumbered;
     },
   ): Promise<unknown> {
-    return this.httpPut("/", { value: boardId, ...params });
+    return this.apiPut("/", { value: boardId, ...params });
   }
 
   public updateName(value: string): Promise<unknown> {
-    return this.httpPut("/name", { value });
+    return this.apiPut("/name", { value });
   }
 
   public updatePosition(value: PositionNumbered): Promise<unknown> {
-    return this.httpPut("/pos", { value });
+    return this.apiPut("/pos", { value });
   }
 
   public updateSubscribed(value: boolean): Promise<unknown> {
-    return this.httpPut("/subscribed", { value });
+    return this.apiPut("/subscribed", { value });
   }
 
   public archiveAllCards(): Promise<unknown> {
-    return this.httpPost("/archiveAllCards");
+    return this.apiPost("/archiveAllCards");
   }
 
   public moveAllCards(params: {
     idBoard: string;
     idList: string;
   }): Promise<unknown> {
-    return this.httpPost("/moveAllCards", params);
+    return this.apiPost("/moveAllCards", params);
   }
 }

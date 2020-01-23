@@ -3,11 +3,11 @@ import { Position } from "../typeDefs";
 
 export class BoardMyPref extends BaseResource {
   public getMyPrefs(): Promise<unknown> {
-    return this.httpGet("/");
+    return this.apiGet("/");
   }
 
   public updateEmailPosition(value: Position): Promise<unknown> {
-    return this.httpPut("/emailPosition", { value });
+    return this.apiPut("/emailPosition", { value });
   }
 
   /**
@@ -16,26 +16,26 @@ export class BoardMyPref extends BaseResource {
    * @see https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-myprefs-idemaillist
    */
   public moveToEmailList(emailListId: string): Promise<unknown> {
-    return this.httpPut("/idEmailList", { value: emailListId });
+    return this.apiPut("/idEmailList", { value: emailListId });
   }
 
   public updateShowListGuide(value: boolean): Promise<unknown> {
-    return this.httpPut("/showListGuide", { value });
+    return this.apiPut("/showListGuide", { value });
   }
 
   public updateShowSidebar(value: boolean): Promise<unknown> {
-    return this.httpPut("/showSidebar", { value });
+    return this.apiPut("/showSidebar", { value });
   }
 
   public updateShowSidebarActivity(value: boolean): Promise<unknown> {
-    return this.httpPut("/showSidebarActivity", { value });
+    return this.apiPut("/showSidebarActivity", { value });
   }
 
   public updateShowSidebarBoardActions(value: boolean): Promise<unknown> {
-    return this.httpPut("/showSidebarBoardActions", { value });
+    return this.apiPut("/showSidebarBoardActions", { value });
   }
 
   public updateShowSidebarMembers(value: boolean): Promise<unknown> {
-    return this.httpPut("/showSidebarMembers", { value });
+    return this.apiPut("/showSidebarMembers", { value });
   }
 }

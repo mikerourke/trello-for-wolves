@@ -69,7 +69,7 @@ export class Member extends BaseResource {
     fields?: ArgumentGroup<MemberEveryField>;
     limit?: number;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getMember(
@@ -133,15 +133,15 @@ export class Member extends BaseResource {
           fields?: ArgumentGroup<MemberEveryField>;
         },
   ): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getMembersFilteredBy(filter: MemberFilter): Promise<unknown> {
-    return this.httpGet("/", { filter });
+    return this.apiGet("/", { filter });
   }
 
   public getFieldValue(field: MemberEveryField): Promise<unknown> {
-    return this.httpGet(`/${field}`);
+    return this.apiGet(`/${field}`);
   }
 
   public actions(): Action {
@@ -199,7 +199,7 @@ export class Member extends BaseResource {
     tags: string;
     ixLastUpdate: number;
   }): Promise<unknown> {
-    return this.httpGet("/deltas", params);
+    return this.apiGet("/deltas", params);
   }
 
   public notifications(): Notification {
@@ -240,23 +240,23 @@ export class Member extends BaseResource {
       minutesBetweenSummaries?: number;
     };
   }): Promise<unknown> {
-    return this.httpPut("/", { ...params, separator: "/" });
+    return this.apiPut("/", { ...params, separator: "/" });
   }
 
   public updateAvatarSource(value: AvatarSourceField): Promise<unknown> {
-    return this.httpPut("/avatarSource", { value });
+    return this.apiPut("/avatarSource", { value });
   }
 
   public updateBio(value: string): Promise<unknown> {
-    return this.httpPut("/bio", { value });
+    return this.apiPut("/bio", { value });
   }
 
   public updateFullName(value: string): Promise<unknown> {
-    return this.httpPut("/fullName", { value });
+    return this.apiPut("/fullName", { value });
   }
 
   public updateInitials(value: string): Promise<unknown> {
-    return this.httpPut("/initials", { value });
+    return this.apiPut("/initials", { value });
   }
 
   public prefs(): MemberPref {
@@ -273,15 +273,15 @@ export class Member extends BaseResource {
     fullName: string;
     type?: MemberType;
   }): Promise<unknown> {
-    return this.httpPut("/", params);
+    return this.apiPut("/", params);
   }
 
   public uploadAvatar(file: any): Promise<unknown> {
-    return this.httpPost("/avatar", { file });
+    return this.apiPost("/avatar", { file });
   }
 
   public updateUsername(value: string): Promise<unknown> {
-    return this.httpPut("/username", { value });
+    return this.apiPut("/username", { value });
   }
 
   /**
@@ -290,7 +290,7 @@ export class Member extends BaseResource {
    * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember-deactivated
    */
   public updateDeactivatedStatus(value: boolean): Promise<unknown> {
-    return this.httpPut("/deactivated", { value });
+    return this.apiPut("/deactivated", { value });
   }
 
   /**
@@ -302,11 +302,11 @@ export class Member extends BaseResource {
    * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember
    */
   public updateMemberType(type: MemberType): Promise<unknown> {
-    return this.httpPut("/", { type });
+    return this.apiPut("/", { type });
   }
 
   public dismissOneTimeMessages(value: string): Promise<unknown> {
-    return this.httpPost("/oneTimeMessagesDismissed", { value });
+    return this.apiPost("/oneTimeMessagesDismissed", { value });
   }
 
   /**
@@ -315,7 +315,7 @@ export class Member extends BaseResource {
    * @see https://developers.trello.com/advanced-reference/board#delete-1-boards-board-id-members-idmember
    */
   public deleteMember(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 
   /**
@@ -324,7 +324,7 @@ export class Member extends BaseResource {
    * @see https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember
    */
   public dissociateMember(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 
   /**
@@ -334,6 +334,6 @@ export class Member extends BaseResource {
    * @see https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember-all
    */
   public dissociateMemberFromAll(): Promise<unknown> {
-    return this.httpDelete("/all");
+    return this.apiDelete("/all");
   }
 }

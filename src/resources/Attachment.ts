@@ -33,13 +33,13 @@ export class Attachment extends BaseResource {
     fields?: ArgumentGroup<AttachmentField>;
     filter?: ArgumentGroup<AttachmentFilter>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getAttachment(params?: {
     fields?: ArgumentGroup<AttachmentField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public uploadAttachment(params?: {
@@ -48,10 +48,10 @@ export class Attachment extends BaseResource {
     name?: string;
     mimeType?: MimeType | string;
   }): Promise<unknown> {
-    return this.httpPost("/", params);
+    return this.apiPost("/", params);
   }
 
   public deleteAttachment(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 }

@@ -38,7 +38,7 @@ export class Organization extends BaseResource {
     fields?: ArgumentGroup<OrganizationField>;
     paidAccount?: boolean;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getOrganization(params?: {
@@ -70,17 +70,17 @@ export class Organization extends BaseResource {
     paidAccount?: boolean;
     fields?: ArgumentGroup<OrganizationField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getOrganizationsFilteredBy(
     filter: ArgumentGroup<OrganizationFilter>,
   ): Promise<unknown> {
-    return this.httpGet("/", { filter });
+    return this.apiGet("/", { filter });
   }
 
   public getFieldValue(field: OrganizationField): Promise<unknown> {
-    return this.httpGet(`/${field}`);
+    return this.apiGet(`/${field}`);
   }
 
   public actions(): Action {
@@ -95,7 +95,7 @@ export class Organization extends BaseResource {
     tags: string;
     ixLastUpdate: number;
   }): Promise<unknown> {
-    return this.httpGet("/deltas", params);
+    return this.apiGet("/deltas", params);
   }
 
   public members(memberId: string = ""): Member {
@@ -114,11 +114,11 @@ export class Organization extends BaseResource {
   }
 
   public getPluginData(): Promise<unknown> {
-    return this.httpGet("/pluginData");
+    return this.apiGet("/pluginData");
   }
 
   public getTags(): Promise<unknown> {
-    return this.httpGet("/tags");
+    return this.apiGet("/tags");
   }
 
   public addOrganization(params?: {
@@ -127,15 +127,15 @@ export class Organization extends BaseResource {
     desc?: string;
     website?: string;
   }): Promise<unknown> {
-    return this.httpPost("/", { ...params, separator: "/" });
+    return this.apiPost("/", { ...params, separator: "/" });
   }
 
   public uploadLogo(file: Record<string, any>): Promise<unknown> {
-    return this.httpPost("/logo", { file });
+    return this.apiPost("/logo", { file });
   }
 
   public addTags(name: string): Promise<unknown> {
-    return this.httpPost("/tags", { name });
+    return this.apiPost("/tags", { name });
   }
 
   public updateOrganization(params?: {
@@ -156,19 +156,19 @@ export class Organization extends BaseResource {
     desc?: string;
     website?: string | null;
   }): Promise<unknown> {
-    return this.httpPut("/", { ...params, separator: "/" });
+    return this.apiPut("/", { ...params, separator: "/" });
   }
 
   public updateDescription(value: string): Promise<unknown> {
-    return this.httpPut("/desc", { value });
+    return this.apiPut("/desc", { value });
   }
 
   public updateDisplayName(value: string): Promise<unknown> {
-    return this.httpPut("/displayName", { value });
+    return this.apiPut("/displayName", { value });
   }
 
   public updateName(value: string): Promise<unknown> {
-    return this.httpPut("/name", { value });
+    return this.apiPut("/name", { value });
   }
 
   public prefs(): OrganizationPref {
@@ -176,14 +176,14 @@ export class Organization extends BaseResource {
   }
 
   public updateWebsite(value: string | null): Promise<unknown> {
-    return this.httpPut("/website", { value });
+    return this.apiPut("/website", { value });
   }
 
   public deleteOrganization(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 
   public deleteLogo(): Promise<unknown> {
-    return this.httpDelete("/logo");
+    return this.apiDelete("/logo");
   }
 }

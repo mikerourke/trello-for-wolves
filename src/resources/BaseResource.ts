@@ -7,6 +7,7 @@ import { Config } from "../typeDefs";
 
 /**
  * Base class for resources.
+ * @class
  */
 export class BaseResource {
   protected endpointElements: string[];
@@ -24,7 +25,7 @@ export class BaseResource {
     }
   }
 
-  protected httpGet(
+  protected apiGet(
     endpoint: string,
     queryParamsByName?: QueryParamsByName,
     body?: unknown,
@@ -32,7 +33,7 @@ export class BaseResource {
     return this.performRequest("GET", endpoint, queryParamsByName, body);
   }
 
-  protected httpPut(
+  protected apiPut(
     endpoint: string,
     queryParamsByName?: QueryParamsByName,
     body?: unknown,
@@ -40,7 +41,7 @@ export class BaseResource {
     return this.performRequest("PUT", endpoint, queryParamsByName, body);
   }
 
-  protected httpPost(
+  protected apiPost(
     endpoint: string,
     queryParamsByName?: QueryParamsByName,
     body?: unknown,
@@ -48,7 +49,7 @@ export class BaseResource {
     return this.performRequest("POST", endpoint, queryParamsByName, body);
   }
 
-  protected httpDelete(
+  protected apiDelete(
     endpoint: string,
     queryParamsByName?: QueryParamsByName,
     body?: unknown,

@@ -7,37 +7,37 @@ export type BoardVisibilityRestrictionLevel = "org" | "private" | "public";
 
 export class OrganizationPref extends BaseResource {
   public updateAssociatedDomain(value: string): Promise<unknown> {
-    return this.httpPut("/associatedDomain", { value });
+    return this.apiPut("/associatedDomain", { value });
   }
 
   public updateBoardVisibilityRestriction(
     level: BoardVisibilityRestrictionLevel,
     value: BoardVisibilityFilter,
   ): Promise<unknown> {
-    return this.httpPut(`/boardVisibilityRestrict/${level}`, { value });
+    return this.apiPut(`/boardVisibilityRestrict/${level}`, { value });
   }
 
   public updateExternalMembersDisabled(value: boolean): Promise<unknown> {
-    return this.httpPut("/externalMembersDisabled", { value });
+    return this.apiPut("/externalMembersDisabled", { value });
   }
 
   public updateGoogleAppsVersion(value: number): Promise<unknown> {
-    return this.httpPut("/googleAppsVersion", { value });
+    return this.apiPut("/googleAppsVersion", { value });
   }
 
   public updateOrgInviteRestrict(value: string): Promise<unknown> {
-    return this.httpPut("/orgInviteRestrict", { value });
+    return this.apiPut("/orgInviteRestrict", { value });
   }
 
   public updatePermissionLevel(value: PermissionLevel): Promise<unknown> {
-    return this.httpPut("/permissionLevel", { value });
+    return this.apiPut("/permissionLevel", { value });
   }
 
   public deleteAssociatedDomain(): Promise<unknown> {
-    return this.httpDelete("/associatedDomain");
+    return this.apiDelete("/associatedDomain");
   }
 
   public deleteOrgInviteRestrict(emailAddress: string): Promise<unknown> {
-    return this.httpDelete("/orgInviteRestrict", { value: emailAddress });
+    return this.apiDelete("/orgInviteRestrict", { value: emailAddress });
   }
 }

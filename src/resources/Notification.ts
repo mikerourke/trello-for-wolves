@@ -58,7 +58,7 @@ export class Notification extends BaseResource {
     memberCreator?: boolean;
     memberCreatorFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getNotification(params?: {
@@ -77,17 +77,17 @@ export class Notification extends BaseResource {
     member?: boolean;
     memberFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getNotificationsFilteredBy(
     filter: ArgumentGroup<NotificationFilter>,
   ): Promise<unknown> {
-    return this.httpGet("/", { filter });
+    return this.apiGet("/", { filter });
   }
 
   public getFieldValue(field: NotificationField): Promise<unknown> {
-    return this.httpGet(`/${field}`);
+    return this.apiGet(`/${field}`);
   }
 
   public board(): Board {
@@ -99,11 +99,11 @@ export class Notification extends BaseResource {
   }
 
   public getDisplay(): Promise<unknown> {
-    return this.httpGet("/display");
+    return this.apiGet("/display");
   }
 
   public getEntities(): Promise<unknown> {
-    return this.httpGet("/entities");
+    return this.apiGet("/entities");
   }
 
   public list(): List {
@@ -123,14 +123,14 @@ export class Notification extends BaseResource {
   }
 
   public updateNotification(params?: { unread?: boolean }): Promise<unknown> {
-    return this.httpPut("/", params);
+    return this.apiPut("/", params);
   }
 
   public updateUnreadStatus(value: boolean): Promise<unknown> {
-    return this.httpPut("/unread", { value });
+    return this.apiPut("/unread", { value });
   }
 
   public markAllAsRead(): Promise<unknown> {
-    return this.httpPost("/all/read");
+    return this.apiPost("/all/read");
   }
 }

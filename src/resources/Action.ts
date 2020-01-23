@@ -8,7 +8,9 @@ import { ArgumentGroup, FilterDate, Format } from "../typeDefs";
 
 export type ActionField = "data" | "date" | "idMemberCreator" | "type";
 
-// These actions only apply to List resources:
+/**
+ * These actions only apply to List resources.
+ */
 export type ActionListFilter =
   | "commentCard"
   | "convertToCardFromCheckItem"
@@ -82,7 +84,7 @@ export class Action extends BaseResource {
     memberCreator?: boolean;
     memberCreatorFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getAction(params?: {
@@ -94,11 +96,11 @@ export class Action extends BaseResource {
     memberCreator?: boolean;
     memberCreatorFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getFieldValue(field: ActionField): Promise<unknown> {
-    return this.httpGet(`/${field}`);
+    return this.apiGet(`/${field}`);
   }
 
   public board(): Board {
@@ -110,11 +112,11 @@ export class Action extends BaseResource {
   }
 
   public getDisplay(): Promise<unknown> {
-    return this.httpGet("/display");
+    return this.apiGet("/display");
   }
 
   public getEntities(): Promise<unknown> {
-    return this.httpGet("/entities");
+    return this.apiGet("/entities");
   }
 
   public list(): List {
@@ -134,14 +136,14 @@ export class Action extends BaseResource {
   }
 
   public updateAction(params?: { text?: string }): Promise<unknown> {
-    return this.httpPut("/", params);
+    return this.apiPut("/", params);
   }
 
   public updateText(value: string): Promise<unknown> {
-    return this.httpPut("/text", { value });
+    return this.apiPut("/text", { value });
   }
 
   public deleteAction(): Promise<unknown> {
-    return this.httpDelete("/");
+    return this.apiDelete("/");
   }
 }

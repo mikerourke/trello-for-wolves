@@ -78,7 +78,7 @@ export class Board extends BaseResource {
     organizationFields?: ArgumentGroup<OrganizationField>;
     lists?: ListFilter;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getBoard(
@@ -131,17 +131,17 @@ export class Board extends BaseResource {
           fields?: ArgumentGroup<BoardField>;
         },
   ): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getBoardsFilteredBy(
     filter: ArgumentGroup<BoardFilter>,
   ): Promise<unknown> {
-    return this.httpGet("/", { filter });
+    return this.apiGet("/", { filter });
   }
 
   public getFieldValue(field: BoardField): Promise<unknown> {
-    return this.httpGet(`/${field}`);
+    return this.apiGet(`/${field}`);
   }
 
   public actions(): Action {
@@ -151,11 +151,11 @@ export class Board extends BaseResource {
   public getBoardStars(params?: {
     filter?: BoardStarsFilter;
   }): Promise<unknown> {
-    return this.httpGet("/boardStars", params);
+    return this.apiGet("/boardStars", params);
   }
 
   public getBoardPlugins(): Promise<unknown> {
-    return this.httpGet("/boardPlugins");
+    return this.apiGet("/boardPlugins");
   }
 
   public cards(cardId: string = ""): Card {
@@ -174,11 +174,11 @@ export class Board extends BaseResource {
     tags: string;
     ixLastUpdate: number;
   }): Promise<unknown> {
-    return this.httpGet("/deltas", params);
+    return this.apiGet("/deltas", params);
   }
 
   public getTags(): Promise<unknown> {
-    return this.httpGet("/idTags");
+    return this.apiGet("/idTags");
   }
 
   public labels(labelId: string = ""): Label {
@@ -236,27 +236,27 @@ export class Board extends BaseResource {
       cardAging?: CardAging;
     };
   }): Promise<unknown> {
-    return this.httpPost("/", { ...params, separator: "_" });
+    return this.apiPost("/", { ...params, separator: "_" });
   }
 
   public enableBoardPlugin(idPlugin: string): Promise<unknown> {
-    return this.httpPost("/boardPlugins", { idPlugin });
+    return this.apiPost("/boardPlugins", { idPlugin });
   }
 
   public addPowerUp(value: PowerUp): Promise<unknown> {
-    return this.httpPost("/powerUps", { value });
+    return this.apiPost("/powerUps", { value });
   }
 
   public addTags(value: string): Promise<unknown> {
-    return this.httpPost("/tags", { value });
+    return this.apiPost("/tags", { value });
   }
 
   public generateCalendarKey(): Promise<unknown> {
-    return this.httpPost("/calendarKey/generate");
+    return this.apiPost("/calendarKey/generate");
   }
 
   public generateEmailKey(): Promise<unknown> {
-    return this.httpPost("/emailKey/generate");
+    return this.apiPost("/emailKey/generate");
   }
 
   public updateBoard(params?: {
@@ -285,30 +285,30 @@ export class Board extends BaseResource {
       blue?: string;
     };
   }): Promise<unknown> {
-    return this.httpPut("/", { ...params, separator: "/" });
+    return this.apiPut("/", { ...params, separator: "/" });
   }
 
   public updateClosedStatus(value: boolean): Promise<unknown> {
-    return this.httpPut("/closed", { value });
+    return this.apiPut("/closed", { value });
   }
 
   public updateDescription(value: string): Promise<unknown> {
-    return this.httpPut("/desc", { value });
+    return this.apiPut("/desc", { value });
   }
 
   public moveToOrganization(organizationId: string): Promise<unknown> {
-    return this.httpPut("/idOrganization", { value: organizationId });
+    return this.apiPut("/idOrganization", { value: organizationId });
   }
 
   public updateLabelNameForColor(
     labelColor: LabelColor,
     value: string,
   ): Promise<unknown> {
-    return this.httpPut(`/labelNames/${labelColor}`, { value });
+    return this.apiPut(`/labelNames/${labelColor}`, { value });
   }
 
   public updateName(value: string): Promise<unknown> {
-    return this.httpPut("/name", { value });
+    return this.apiPut("/name", { value });
   }
 
   public prefs(): BoardPref {
@@ -316,22 +316,22 @@ export class Board extends BaseResource {
   }
 
   public updateSubscribed(value: boolean): Promise<unknown> {
-    return this.httpPut("/subscribed", { value });
+    return this.apiPut("/subscribed", { value });
   }
 
   public markAsViewed(): Promise<unknown> {
-    return this.httpPost("/markAsViewed");
+    return this.apiPost("/markAsViewed");
   }
 
   public deleteBoard(id: string): Promise<unknown> {
-    return this.httpDelete("/", { id });
+    return this.apiDelete("/", { id });
   }
 
   public disableBoardPlugin(idPlugin: string): Promise<unknown> {
-    return this.httpDelete("/boardPlugins", { idPlugin });
+    return this.apiDelete("/boardPlugins", { idPlugin });
   }
 
   public deletePowerUp(powerUp: PowerUp): Promise<unknown> {
-    return this.httpDelete(`/powerUps/${powerUp}`);
+    return this.apiDelete(`/powerUps/${powerUp}`);
   }
 }

@@ -36,7 +36,7 @@ export class Search extends BaseResource {
     membersLimit?: number;
     partial?: boolean;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public searchMembers(params: {
@@ -46,6 +46,6 @@ export class Search extends BaseResource {
     idOrganization?: string | null;
     onlyOrgMembers?: boolean;
   }): Promise<unknown> {
-    return this.httpGet("/members", params);
+    return this.apiGet("/members", params);
   }
 }

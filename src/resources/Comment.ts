@@ -22,18 +22,18 @@ export class Comment extends BaseResource {
     memberCreator?: boolean;
     memberCreatorFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
-    return this.httpGet("/", { ...params, filter: "commentCard" });
+    return this.apiGet("/", { ...params, filter: "commentCard" });
   }
 
   public addComment(text: string): Promise<unknown> {
-    return this.httpPost("/comments", { text });
+    return this.apiPost("/comments", { text });
   }
 
   public updateComment(text: string): Promise<unknown> {
-    return this.httpPut("/comments", { text });
+    return this.apiPut("/comments", { text });
   }
 
   public deleteComment(): Promise<unknown> {
-    return this.httpDelete("/comments");
+    return this.apiDelete("/comments");
   }
 }

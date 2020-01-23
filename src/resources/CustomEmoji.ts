@@ -5,19 +5,19 @@ export type CustomEmojiField = "name" | "url";
 
 export class CustomEmoji extends BaseResource {
   public getCustomEmojis(params?: { filter?: AllOrNone }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public getCustomEmoji(params?: {
     fields?: ArgumentGroup<CustomEmojiField>;
   }): Promise<unknown> {
-    return this.httpGet("/", params);
+    return this.apiGet("/", params);
   }
 
   public uploadCustomEmoji(params: {
     name: string;
     file: any;
   }): Promise<unknown> {
-    return this.httpPost("/", params);
+    return this.apiPost("/", params);
   }
 }
