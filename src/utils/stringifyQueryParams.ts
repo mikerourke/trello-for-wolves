@@ -1,11 +1,7 @@
 import snakeCase from "lodash.snakecase";
+import { QueryParamsByName } from "../typeDefs";
 
 type ValidQueryParams<T> = T & { separator: string };
-
-export type QueryParamsByName = Record<
-  string,
-  string | number | boolean | object | undefined | null
->;
 
 /**
  * Creates the query string that will be appended to the endpoint path to perform

@@ -1,9 +1,5 @@
-import {
-  fetchFromApi,
-  HttpMethod,
-  QueryParamsByName,
-} from "../utils/fetchFromApi";
-import { Config } from "../typeDefs";
+import { fetchFromApi, HttpMethod } from "../utils/fetchFromApi";
+import { Config, QueryParamsByName } from "../typeDefs";
 
 /**
  * Base class for resources.
@@ -23,6 +19,11 @@ export class BaseResource {
     if (this.endpointElements[0].length !== 0) {
       this.endpointElements.shift();
     }
+  }
+
+  protected get firstElement(): string {
+    const endpointElements = this.baseEndpoint.split("/");
+    return endpointElements[0].replace(/\//g, "");
   }
 
   protected apiGet(

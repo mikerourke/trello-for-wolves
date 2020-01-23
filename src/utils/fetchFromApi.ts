@@ -1,13 +1,8 @@
 import fetch from "cross-fetch";
-import {
-  QueryParamsByName,
-  stringifyQueryParams,
-} from "./stringifyQueryParams";
-import { Config } from "../typeDefs";
+import { stringifyQueryParams } from "./stringifyQueryParams";
+import { Config, QueryParamsByName } from "../typeDefs";
 
 export type HttpMethod = "GET" | "PUT" | "POST" | "DELETE";
-
-export { QueryParamsByName } from "./stringifyQueryParams";
 
 /**
  * Returns a resolved Promise with the results of the Trello API call.

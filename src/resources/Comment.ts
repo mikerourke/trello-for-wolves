@@ -9,18 +9,18 @@ export class Comment extends BaseResource {
    * It's just a nice shortcut if you only need Comment actions.
    */
   public getComments(params?: {
-    entities?: boolean;
-    display?: boolean;
-    fields?: ArgumentGroup<ActionField>;
-    limit?: number;
-    format?: Format;
-    since?: FilterDate;
     before?: FilterDate;
+    display?: boolean;
+    entities?: boolean;
+    fields?: ArgumentGroup<ActionField>;
+    format?: Format;
     idModels?: string;
+    limit?: number;
     member?: boolean;
-    memberFields?: ArgumentGroup<MemberField>;
     memberCreator?: boolean;
     memberCreatorFields?: ArgumentGroup<MemberField>;
+    memberFields?: ArgumentGroup<MemberField>;
+    since?: FilterDate;
   }): Promise<unknown> {
     return this.apiGet("/", { ...params, filter: "commentCard" });
   }

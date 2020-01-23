@@ -10,19 +10,19 @@ export type ListFilter = "all" | "closed" | "none" | "open";
 
 export class List extends BaseResource {
   public getLists(params?: {
-    cards?: CardFilter;
     cardFields?: ArgumentGroup<CardField>;
-    filter?: ListFilter;
+    cards?: CardFilter;
     fields?: ArgumentGroup<ListField>;
+    filter?: ListFilter;
   }): Promise<unknown> {
     return this.apiGet("/", params);
   }
 
   public getList(params?: {
-    cards?: CardFilter;
-    cardFields?: ArgumentGroup<CardField>;
     board?: boolean;
     boardFields?: ArgumentGroup<BoardField>;
+    cardFields?: ArgumentGroup<CardField>;
+    cards?: CardFilter;
     fields?: ArgumentGroup<ListField>;
   }): Promise<unknown> {
     return this.apiGet("/", params);
@@ -34,18 +34,6 @@ export class List extends BaseResource {
 
   public getFieldValue(field: ListField): Promise<unknown> {
     return this.apiGet(`/${field}`);
-  }
-
-  public actions(): Action {
-    return new Action(this.config, `${this.baseEndpoint}/actions`);
-  }
-
-  public board(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/board`);
-  }
-
-  public cards(): Card {
-    return new Card(this.config, `${this.baseEndpoint}/cards`);
   }
 
   public addList(params: {
@@ -62,9 +50,9 @@ export class List extends BaseResource {
   }
 
   public updateList(params?: {
-    name?: string;
     closed?: boolean;
     idBoard?: string;
+    name?: string;
     pos?: PositionNumbered;
     subscribed?: boolean;
   }): Promise<unknown> {
@@ -105,5 +93,17 @@ export class List extends BaseResource {
     idList: string;
   }): Promise<unknown> {
     return this.apiPost("/moveAllCards", params);
+  }
+
+  public actions(): Action {
+    return new Action(this.config, `${this.baseEndpoint}/actions`);
+  }
+
+  public board(): Board {
+    return new Board(this.config, `${this.baseEndpoint}/board`);
+  }
+
+  public cards(): Card {
+    return new Card(this.config, `${this.baseEndpoint}/cards`);
   }
 }

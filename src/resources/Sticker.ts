@@ -37,8 +37,8 @@ export class Sticker extends BaseResource {
 
   public addSticker(params: {
     image: string;
-    top: number;
     left: number;
+    top: number;
     zIndex: number;
     rotate?: number;
   }): Promise<unknown> {
@@ -50,10 +50,10 @@ export class Sticker extends BaseResource {
   }
 
   public updateSticker(params?: {
-    top?: number;
     left?: number;
-    zIndex?: number;
     rotate?: number;
+    top?: number;
+    zIndex?: number;
   }): Promise<unknown> {
     return this.apiPut("/", params);
   }

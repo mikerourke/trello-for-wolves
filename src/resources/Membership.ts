@@ -29,19 +29,15 @@ export class Membership extends BaseResource {
     return this.apiGet("/", params);
   }
 
-  public updateMembership(
-    params:
-      | {
-          // When called from a Board:
-          type: BoardMemberType;
-          fields?: ArgumentGroup<MemberField>;
-        }
-      | {
-          // When called from Member or Organization:
-          type: MemberType;
-          fields?: ArgumentGroup<MemberField>;
-        },
-  ): Promise<unknown> {
+  /**
+   * Use the BoardMemberType when calling this from a board and MemberType
+   * when calling from a member or organization.
+   */
+  public updateMembership(params: {
+    // When called from Member or Organization:
+    type: BoardMemberType | MemberType;
+    fields?: ArgumentGroup<MemberField>;
+  }): Promise<unknown> {
     return this.apiPut("/", params);
   }
 }

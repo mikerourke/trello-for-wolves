@@ -55,47 +55,47 @@ export type CardFilter = "all" | "closed" | "none" | "open" | "visible";
 export class Card extends BaseResource {
   public getCards(params?: {
     actions?: ArgumentGroup<ActionFilter>;
-    attachments?: AttachmentFilter;
     attachmentFields?: ArgumentGroup<AttachmentField>;
-    stickers?: boolean;
-    members?: boolean;
-    memberFields?: ArgumentGroup<MemberField>;
+    attachments?: AttachmentFilter;
+    before?: Date | null;
     checkItemStates?: boolean;
     checklists?: AllOrNone;
-    limit?: number;
-    since?: Date | null;
-    before?: Date | null;
-    filter?: CardFilter;
     fields?: ArgumentGroup<CardField>;
+    filter?: CardFilter;
+    limit?: number;
+    memberFields?: ArgumentGroup<MemberField>;
+    members?: boolean;
+    since?: Date | null;
+    stickers?: boolean;
   }): Promise<unknown> {
     return this.apiGet("/", params);
   }
 
   public getCard(params?: {
-    actions?: ArgumentGroup<ActionFilter>;
-    actionsEntities?: boolean;
-    actionsDisplay?: boolean;
-    actionsLimit?: number;
     actionFields?: ArgumentGroup<ActionField>;
     actionMemberCreatorFields?: ArgumentGroup<MemberField>;
-    attachments?: AttachmentFilter;
+    actions?: ArgumentGroup<ActionFilter>;
+    actionsDisplay?: boolean;
+    actionsEntities?: boolean;
+    actionsLimit?: number;
     attachmentFields?: ArgumentGroup<AttachmentField>;
-    members?: boolean;
-    memberFields?: ArgumentGroup<MemberField>;
-    membersVoted?: boolean;
-    memberVotedFields?: ArgumentGroup<MemberField>;
-    checkItemStates?: boolean;
-    checkItemStateFields?: ArgumentGroup<CheckItemStateField>;
-    checklists?: AllOrNone;
-    checklistFields?: ArgumentGroup<ChecklistField>;
+    attachments?: AttachmentFilter;
     board?: boolean;
     boardFields?: ArgumentGroup<BoardField>;
+    checkItemStateFields?: ArgumentGroup<CheckItemStateField>;
+    checkItemStates?: boolean;
+    checklistFields?: ArgumentGroup<ChecklistField>;
+    checklists?: AllOrNone;
+    fields?: ArgumentGroup<CardField>;
     list?: boolean;
     listFields?: ArgumentGroup<ListField>;
+    memberFields?: ArgumentGroup<MemberField>;
+    members?: boolean;
+    membersVoted?: boolean;
+    memberVotedFields?: ArgumentGroup<MemberField>;
     pluginData?: boolean;
-    stickers?: boolean;
     stickerFields?: ArgumentGroup<StickerField>;
-    fields?: ArgumentGroup<CardField>;
+    stickers?: boolean;
   }): Promise<unknown> {
     return this.apiGet("/", params);
   }
@@ -106,62 +106,6 @@ export class Card extends BaseResource {
 
   public getFieldValue(field: CardField): Promise<unknown> {
     return this.apiGet(`/${field}`);
-  }
-
-  public actions(): Action {
-    return new Action(this.config, `${this.baseEndpoint}/actions`);
-  }
-
-  public attachments(attachmentId: string = ""): Attachment {
-    return new Attachment(
-      this.config,
-      `${this.baseEndpoint}/attachments/${attachmentId}`,
-    );
-  }
-
-  public board(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/board`);
-  }
-
-  public checkItemStates(): CheckItem {
-    return new CheckItem(this.config, `${this.baseEndpoint}/checkItemStates`);
-  }
-
-  public checklist(checklistId: string): Checklist {
-    return new Checklist(
-      this.config,
-      `${this.baseEndpoint}/checklist/${checklistId}`,
-    );
-  }
-
-  public checklists(checklistId: string = ""): Checklist {
-    return new Checklist(
-      this.config,
-      `${this.baseEndpoint}/checklists/${checklistId}`,
-    );
-  }
-
-  public checkItem(checkItemId: string): CheckItem {
-    return new CheckItem(
-      this.config,
-      `${this.baseEndpoint}/checkItem/${checkItemId}`,
-    );
-  }
-
-  public comments(commentId: string = ""): Comment {
-    return new Comment(this.config, `${this.baseEndpoint}/actions/${commentId}`);
-  }
-
-  public labels(): Label {
-    return new Label(this.config, `${this.baseEndpoint}/labels`);
-  }
-
-  public list(): List {
-    return new List(this.config, `${this.baseEndpoint}/list`);
-  }
-
-  public members(): Member {
-    return new Member(this.config, `${this.baseEndpoint}/members`);
   }
 
   public voteOnCard(idMember: string): Promise<unknown> {
@@ -176,35 +120,21 @@ export class Card extends BaseResource {
     return this.apiGet("/pluginData");
   }
 
-  public stickers(stickerId: string = ""): Sticker {
-    return new Sticker(this.config, `${this.baseEndpoint}/stickers/${stickerId}`);
-  }
-
-  public addCard(
-    params:
-      | {
-          idList: string;
-          name?: string;
-          desc?: string;
-          pos?: PositionNumbered;
-          due?: Date | null;
-          dueComplete?: boolean;
-          idMembers?: string[];
-          idLabels?: string[];
-          urlSource?: string | null;
-          fileSource?: Record<string, any>;
-          idCardSource?: string;
-          keepFromSource?: KeepFromSourceField | KeepFromSourceField[];
-        }
-      | {
-          // These are for adding a card from a List.
-          name: string;
-          desc?: string;
-          labels?: ArgumentGroup<LabelColor>;
-          idMembers?: string[];
-          due?: Date | null;
-        },
-  ): Promise<unknown> {
+  public addCard(params: {
+    desc?: string;
+    due?: Date | null;
+    dueComplete?: boolean;
+    fileSource?: Record<string, any>;
+    idCardSource?: string;
+    idLabels?: string[];
+    idList?: string;
+    idMembers?: string[];
+    keepFromSource?: KeepFromSourceField | KeepFromSourceField[];
+    labels?: ArgumentGroup<LabelColor>;
+    name?: string;
+    pos?: PositionNumbered;
+    urlSource?: string | null;
+  }): Promise<unknown> {
     return this.apiPost("/", { ...params, separator: "/" });
   }
 
@@ -217,17 +147,17 @@ export class Card extends BaseResource {
   }
 
   public updateCard(params?: {
-    name?: string;
-    desc?: string;
     closed?: boolean;
-    idMembers?: string[];
-    idAttachmentCover?: string;
-    idList?: string;
-    idLabels?: string[];
-    idBoard?: string;
-    pos?: PositionNumbered;
+    desc?: string;
     due?: Date | null;
     dueComplete?: boolean;
+    idAttachmentCover?: string;
+    idBoard?: string;
+    idLabels?: string[];
+    idList?: string;
+    idMembers?: string[];
+    name?: string;
+    pos?: PositionNumbered;
     subscribed?: boolean;
   }): Promise<unknown> {
     return this.apiPut("/", params);
@@ -303,5 +233,71 @@ export class Card extends BaseResource {
 
   public dissociateLabel(labelId: string): Promise<unknown> {
     return this.apiDelete(`/idLabels/${labelId}`);
+  }
+
+  public actions(): Action {
+    return new Action(this.config, `${this.baseEndpoint}/actions`);
+  }
+
+  public attachments(attachmentId: string = ""): Attachment {
+    return new Attachment(
+      this.config,
+      `${this.baseEndpoint}/attachments/${attachmentId}`,
+    );
+  }
+
+  public board(): Board {
+    return new Board(this.config, `${this.baseEndpoint}/board`);
+  }
+
+  public checkItemStates(): CheckItem {
+    return new CheckItem(this.config, `${this.baseEndpoint}/checkItemStates`);
+  }
+
+  public checklist(checklistId: string): Checklist {
+    return new Checklist(
+      this.config,
+      `${this.baseEndpoint}/checklist/${checklistId}`,
+    );
+  }
+
+  public checklists(checklistId: string = ""): Checklist {
+    return new Checklist(
+      this.config,
+      `${this.baseEndpoint}/checklists/${checklistId}`,
+    );
+  }
+
+  public checkItem(checkItemId: string): CheckItem {
+    return new CheckItem(
+      this.config,
+      `${this.baseEndpoint}/checkItem/${checkItemId}`,
+    );
+  }
+
+  public comments(commentId: string = ""): Comment {
+    return new Comment(
+      this.config,
+      `${this.baseEndpoint}/actions/${commentId}`,
+    );
+  }
+
+  public labels(): Label {
+    return new Label(this.config, `${this.baseEndpoint}/labels`);
+  }
+
+  public list(): List {
+    return new List(this.config, `${this.baseEndpoint}/list`);
+  }
+
+  public members(): Member {
+    return new Member(this.config, `${this.baseEndpoint}/members`);
+  }
+
+  public stickers(stickerId: string = ""): Sticker {
+    return new Sticker(
+      this.config,
+      `${this.baseEndpoint}/stickers/${stickerId}`,
+    );
   }
 }

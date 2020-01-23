@@ -30,13 +30,9 @@ export class Label extends BaseResource {
     return this.apiGet("/", params);
   }
 
-  public board(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/board`);
-  }
-
   public addLabel(params: {
-    name: string;
     color: LabelColor | null;
+    name: string;
     idBoard?: string;
   }): Promise<unknown> {
     let updatedArgs = params;
@@ -47,8 +43,8 @@ export class Label extends BaseResource {
   }
 
   public updateLabel(params?: {
-    name?: string;
     color?: LabelColor | null;
+    name?: string;
   }): Promise<unknown> {
     return this.apiPut("/", params);
   }
@@ -63,5 +59,9 @@ export class Label extends BaseResource {
 
   public deleteLabel(): Promise<unknown> {
     return this.apiDelete("/");
+  }
+
+  public board(): Board {
+    return new Board(this.config, `${this.baseEndpoint}/board`);
   }
 }

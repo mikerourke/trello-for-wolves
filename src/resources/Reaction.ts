@@ -16,15 +16,15 @@ export class Reaction extends BaseResource {
   }
 
   public getReactions(params?: {
-    member?: boolean;
     emoji?: boolean;
+    member?: boolean;
   }): Promise<unknown> {
     return this.apiGet("/", params);
   }
 
   public getReaction(params?: {
-    member?: boolean;
     emoji?: boolean;
+    member?: boolean;
   }): Promise<unknown> {
     return this.apiGet("/", params);
   }
@@ -34,7 +34,7 @@ export class Reaction extends BaseResource {
   }
 
   public addReaction(params: ReactionOptions): Promise<unknown> {
-    return this.apiPost("/", params);
+    return this.apiPost("/", {}, params);
   }
 
   public deleteReaction(): Promise<unknown> {

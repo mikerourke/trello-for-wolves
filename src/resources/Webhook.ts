@@ -16,18 +16,18 @@ export class Webhook extends BaseResource {
   }
 
   public addWebhook(params: {
-    description?: string;
     callbackURL: string;
     idModel: string;
+    description?: string;
   }): Promise<unknown> {
     return this.apiPost("/", params);
   }
 
   public updateWebhook(params?: {
-    description?: string;
-    callbackURL?: string;
-    idModel?: string;
     active?: boolean;
+    callbackURL?: string;
+    description?: string;
+    idModel?: string;
   }): Promise<unknown> {
     return this.apiPut("/", params);
   }

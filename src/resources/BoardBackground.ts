@@ -22,17 +22,9 @@ export type BoardBackgroundFilter =
  * when an instance is created in the Member class.
  */
 export class BoardBackground extends BaseResource {
-  public getBoardBackgrounds(
-    params?:
-      | {
-          // boardBackgrounds:
-          filter?: BoardBackgroundFilter;
-        }
-      | {
-          // customBoardBackgrounds:
-          filter?: AllOrNone;
-        },
-  ): Promise<unknown> {
+  public getBoardBackgrounds(params?: {
+    filter?: AllOrNone | BoardBackgroundFilter;
+  }): Promise<unknown> {
     return this.apiGet("/", params);
   }
 
@@ -47,8 +39,8 @@ export class BoardBackground extends BaseResource {
   }
 
   public updateBoardBackground(params?: {
-    tile?: boolean;
     brightness?: BoardBackgroundBrightness;
+    tile?: boolean;
   }): Promise<unknown> {
     return this.apiPut("/", params);
   }

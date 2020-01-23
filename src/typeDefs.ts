@@ -28,6 +28,11 @@ export type Position = "bottom" | "top";
 
 export type PositionNumbered = Position | number;
 
+export type QueryParamsByName = Record<
+  string,
+  string | number | boolean | object | undefined | null
+>;
+
 /**
  * Types taken from MDN on 7/18/2017.  The list of all MIME types has about 1,600 items on it, so
  * if it isn't on the list, you can specify your own.

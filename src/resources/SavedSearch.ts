@@ -12,16 +12,16 @@ export class SavedSearch extends BaseResource {
 
   public addSavedSearch(params: {
     name: string;
-    query: string;
     pos: PositionNumbered;
+    query: string;
   }): Promise<unknown> {
     return this.apiPost("/", params);
   }
 
   public updateSavedSearch(params?: {
     name?: string;
-    query?: string;
     pos?: PositionNumbered;
+    query?: string;
   }): Promise<unknown> {
     return this.apiPut("/", params);
   }

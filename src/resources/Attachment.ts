@@ -44,9 +44,9 @@ export class Attachment extends BaseResource {
 
   public uploadAttachment(params?: {
     file?: Record<string, unknown>;
-    url?: string;
-    name?: string;
     mimeType?: MimeType | string;
+    name?: string;
+    url?: string;
   }): Promise<unknown> {
     return this.apiPost("/", params);
   }

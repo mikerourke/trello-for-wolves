@@ -9,8 +9,8 @@ export type CheckItemStateField = "idCheckItem" | "state";
 
 export class CheckItem extends BaseResource {
   public getCheckItems(params?: {
-    filter?: AllOrNone;
     fields?: ArgumentGroup<CheckItemField>;
+    filter?: AllOrNone;
   }): Promise<unknown> {
     return this.apiGet("/", params);
   }
@@ -29,8 +29,8 @@ export class CheckItem extends BaseResource {
 
   public addCheckItem(params: {
     name: string;
-    pos?: PositionNumbered;
     checked?: boolean;
+    pos?: PositionNumbered;
   }): Promise<unknown> {
     return this.apiPost("/", params);
   }
@@ -40,10 +40,10 @@ export class CheckItem extends BaseResource {
   }
 
   public updateCheckItem(params?: {
-    name?: string;
-    state?: CheckItemState;
-    pos?: PositionNumbered;
     idChecklist?: string | null;
+    name?: string;
+    pos?: PositionNumbered;
+    state?: CheckItemState;
   }): Promise<unknown> {
     return this.apiPut("/", params);
   }

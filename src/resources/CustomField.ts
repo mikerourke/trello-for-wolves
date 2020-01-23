@@ -19,8 +19,8 @@ type CustomFieldListOptionValue =
 
 export interface CustomFieldListOption {
   color: string;
-  value: CustomFieldListOptionValue;
   pos: number;
+  value: CustomFieldListOptionValue;
 }
 
 export class CustomField extends BaseResource {
@@ -44,10 +44,10 @@ export class CustomField extends BaseResource {
     idModel: string;
     modelType: string;
     name: string;
-    type: CustomFieldType;
-    options?: CustomFieldListOption[];
     pos: string;
+    type: CustomFieldType;
     displayCardFront?: boolean;
+    options?: CustomFieldListOption[];
   }): Promise<unknown> {
     const body = this.getBodyWithDisplayCardFront(params);
     return this.apiPost("/", {}, body);
@@ -58,9 +58,9 @@ export class CustomField extends BaseResource {
   }
 
   public updateCustomField(params: {
+    displayCardFront?: boolean;
     name?: string;
     pos?: number;
-    displayCardFront?: boolean;
   }): Promise<unknown> {
     return this.apiPut("/", {}, params);
   }

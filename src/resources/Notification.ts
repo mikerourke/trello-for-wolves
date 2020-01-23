@@ -46,36 +46,36 @@ export type ReadFilter = "all" | "read" | "unread";
 
 export class Notification extends BaseResource {
   public getNotifications(params?: {
-    entities?: boolean;
-    display?: boolean;
-    filter?: ArgumentGroup<NotificationFilter>;
-    readFilter?: ReadFilter;
-    fields?: ArgumentGroup<NotificationField>;
-    limit?: number;
-    page?: number;
     before?: string | null;
-    since?: string | null;
+    display?: boolean;
+    entities?: boolean;
+    fields?: ArgumentGroup<NotificationField>;
+    filter?: ArgumentGroup<NotificationFilter>;
+    limit?: number;
     memberCreator?: boolean;
     memberCreatorFields?: ArgumentGroup<MemberField>;
+    page?: number;
+    readFilter?: ReadFilter;
+    since?: string | null;
   }): Promise<unknown> {
     return this.apiGet("/", params);
   }
 
   public getNotification(params?: {
+    board?: boolean;
+    boardFields?: ArgumentGroup<BoardField>;
+    card?: boolean;
+    cardFields?: ArgumentGroup<CardField>;
     display?: boolean;
     entities?: boolean;
     fields?: ArgumentGroup<NotificationField>;
+    list?: boolean;
+    member?: boolean;
     memberCreator?: boolean;
     memberCreatorFields?: ArgumentGroup<MemberField>;
-    board?: boolean;
-    boardFields?: ArgumentGroup<BoardField>;
-    list?: boolean;
-    card?: boolean;
-    cardFields?: ArgumentGroup<CardField>;
+    memberFields?: ArgumentGroup<MemberField>;
     organization?: boolean;
     organizationFields?: ArgumentGroup<OrganizationField>;
-    member?: boolean;
-    memberFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
     return this.apiGet("/", params);
   }
@@ -90,20 +90,32 @@ export class Notification extends BaseResource {
     return this.apiGet(`/${field}`);
   }
 
-  public board(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/board`);
-  }
-
-  public card(): Card {
-    return new Card(this.config, `${this.baseEndpoint}/card`);
-  }
-
   public getDisplay(): Promise<unknown> {
     return this.apiGet("/display");
   }
 
   public getEntities(): Promise<unknown> {
     return this.apiGet("/entities");
+  }
+
+  public updateNotification(params?: { unread?: boolean }): Promise<unknown> {
+    return this.apiPut("/", params);
+  }
+
+  public updateUnreadStatus(value: boolean): Promise<unknown> {
+    return this.apiPut("/unread", { value });
+  }
+
+  public markAllAsRead(): Promise<unknown> {
+    return this.apiPost("/all/read");
+  }
+
+  public board(): Board {
+    return new Board(this.config, `${this.baseEndpoint}/board`);
+  }
+
+  public card(): Card {
+    return new Card(this.config, `${this.baseEndpoint}/card`);
   }
 
   public list(): List {
@@ -120,17 +132,5 @@ export class Notification extends BaseResource {
 
   public organization(): Organization {
     return new Organization(this.config, `${this.baseEndpoint}/organization`);
-  }
-
-  public updateNotification(params?: { unread?: boolean }): Promise<unknown> {
-    return this.apiPut("/", params);
-  }
-
-  public updateUnreadStatus(value: boolean): Promise<unknown> {
-    return this.apiPut("/unread", { value });
-  }
-
-  public markAllAsRead(): Promise<unknown> {
-    return this.apiPost("/all/read");
   }
 }

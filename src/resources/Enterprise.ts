@@ -8,33 +8,33 @@ import { BoardField } from "./Board";
 type ValueOrArray<T> = Omit<ArgumentGroup<T>, "all">;
 
 export type EnterpriseField =
-  | "id"
-  | "name"
   | "displayName"
-  | "prefs"
-  | "ssoActivationFailed"
+  | "id"
   | "idAdmins"
-  | "products"
-  | "userTypes"
   | "memberIds"
-  | "orgIds";
+  | "name"
+  | "orgIds"
+  | "prefs"
+  | "products"
+  | "ssoActivationFailed"
+  | "userTypes";
 
-export type SortOrder = "id" | "ascending" | "descending" | "asc" | "desc";
+export type SortOrder = "asc" | "ascending" | "desc" | "descending" | "id";
 
 export class Enterprise extends BaseResource {
   public getEnterprise(params?: {
     fields?: ArgumentGroup<EnterpriseField>;
-    members?: MemberFilter;
+    memberCount?: number;
     memberFields?: MemberEnterpriseOnlyField;
     memberFilter?: "none" | string;
+    members?: MemberFilter;
     memberSortBy?: "none" | string;
     memberSortOrder?: SortOrder;
     memberStartIndex?: number;
-    memberCount?: number;
-    organizations?: OrganizationFilter;
     organizationFields?: ArgumentGroup<OrganizationField>;
-    organizationPaidAccounts?: boolean;
     organizationMemberships?: ValueOrArray<MembershipFilter>;
+    organizationPaidAccounts?: boolean;
+    organizations?: OrganizationFilter;
   }): Promise<unknown> {
     return this.apiGet("/", params);
   }
@@ -54,14 +54,14 @@ export class Enterprise extends BaseResource {
   }
 
   public getMembers(params?: {
+    boardFields?: ArgumentGroup<BoardField>;
+    count?: number;
     fields?: ValueOrArray<EnterpriseField>;
     filter?: string;
+    organizationFields?: ArgumentGroup<OrganizationField>;
     sortBy?: "none" | string;
     sortOrder?: SortOrder;
     startIndex?: number;
-    count?: number;
-    organizationFields?: ArgumentGroup<OrganizationField>;
-    boardFields?: ArgumentGroup<BoardField>;
   }): Promise<unknown> {
     return this.apiGet("/members", params);
   }
@@ -69,9 +69,9 @@ export class Enterprise extends BaseResource {
   public getMember(
     memberId: string,
     params?: {
+      boardFields?: ArgumentGroup<BoardField>;
       fields?: ValueOrArray<MemberEnterpriseOnlyField>;
       organizationFields?: ArgumentGroup<OrganizationField>;
-      boardFields?: ArgumentGroup<BoardField>;
     },
   ): Promise<unknown> {
     return this.apiGet(`/members/${memberId}`, params);
@@ -79,17 +79,6 @@ export class Enterprise extends BaseResource {
 
   public getIfOrgTransferrable(orgId: string): Promise<unknown> {
     return this.apiGet(`/transferrable/organization/${orgId}`);
-  }
-
-  public deactivateMember(
-    memberId: string,
-    params?: {
-      fields?: ValueOrArray<MemberEnterpriseOnlyField>;
-      organizationFields?: ArgumentGroup<OrganizationField>;
-      boardFields?: ArgumentGroup<BoardField>;
-    },
-  ): Promise<unknown> {
-    return this.apiPut(`/members/${memberId}/deactivated`, params);
   }
 
   public transferToOrganization(orgId: string): Promise<unknown> {
@@ -104,6 +93,17 @@ export class Enterprise extends BaseResource {
     expiration: "none" | "1hour" | "1day" | "30days" | "never";
   }): Promise<unknown> {
     return this.apiPost("/tokens", params);
+  }
+
+  public deactivateMember(
+    memberId: string,
+    params?: {
+      boardFields?: ArgumentGroup<BoardField>;
+      fields?: ValueOrArray<MemberEnterpriseOnlyField>;
+      organizationFields?: ArgumentGroup<OrganizationField>;
+    },
+  ): Promise<unknown> {
+    return this.apiPut(`/members/${memberId}/deactivated`, params);
   }
 
   public dissociateOrganization(orgId: string): Promise<unknown> {

@@ -69,20 +69,20 @@ export type ActionFilter = ActionSingleFilter & ActionListFilter;
 
 export class Action extends BaseResource {
   public getActions(params?: {
+    before?: FilterDate;
     display?: boolean;
     entities?: boolean;
-    filter?: ArgumentGroup<ActionFilter>;
     fields?: ArgumentGroup<ActionField>;
-    limit?: number;
+    filter?: ArgumentGroup<ActionFilter>;
     format?: Format;
-    since?: FilterDate;
-    before?: FilterDate;
-    page?: number; // Not allowed for Card resources
     idModels?: string;
+    limit?: number;
     member?: boolean;
-    memberFields?: ArgumentGroup<MemberField>;
     memberCreator?: boolean;
     memberCreatorFields?: ArgumentGroup<MemberField>;
+    memberFields?: ArgumentGroup<MemberField>;
+    page?: number; // Not allowed for Card resources
+    since?: FilterDate;
   }): Promise<unknown> {
     return this.apiGet("/", params);
   }
@@ -92,9 +92,9 @@ export class Action extends BaseResource {
     entities?: boolean;
     fields?: ArgumentGroup<ActionField>;
     member?: boolean;
-    memberFields?: ArgumentGroup<MemberField>;
     memberCreator?: boolean;
     memberCreatorFields?: ArgumentGroup<MemberField>;
+    memberFields?: ArgumentGroup<MemberField>;
   }): Promise<unknown> {
     return this.apiGet("/", params);
   }
@@ -103,20 +103,32 @@ export class Action extends BaseResource {
     return this.apiGet(`/${field}`);
   }
 
-  public board(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/board`);
-  }
-
-  public card(): Card {
-    return new Card(this.config, `${this.baseEndpoint}/card`);
-  }
-
   public getDisplay(): Promise<unknown> {
     return this.apiGet("/display");
   }
 
   public getEntities(): Promise<unknown> {
     return this.apiGet("/entities");
+  }
+
+  public updateAction(params?: { text?: string }): Promise<unknown> {
+    return this.apiPut("/", params);
+  }
+
+  public updateText(value: string): Promise<unknown> {
+    return this.apiPut("/text", { value });
+  }
+
+  public deleteAction(): Promise<unknown> {
+    return this.apiDelete("/");
+  }
+
+  public board(): Board {
+    return new Board(this.config, `${this.baseEndpoint}/board`);
+  }
+
+  public card(): Card {
+    return new Card(this.config, `${this.baseEndpoint}/card`);
   }
 
   public list(): List {
@@ -133,17 +145,5 @@ export class Action extends BaseResource {
 
   public organization(): Organization {
     return new Organization(this.config, `${this.baseEndpoint}/organization`);
-  }
-
-  public updateAction(params?: { text?: string }): Promise<unknown> {
-    return this.apiPut("/", params);
-  }
-
-  public updateText(value: string): Promise<unknown> {
-    return this.apiPut("/text", { value });
-  }
-
-  public deleteAction(): Promise<unknown> {
-    return this.apiDelete("/");
   }
 }

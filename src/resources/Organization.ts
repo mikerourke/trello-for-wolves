@@ -42,33 +42,33 @@ export class Organization extends BaseResource {
   }
 
   public getOrganization(params?: {
-    actions?: ArgumentGroup<ActionFilter>;
-    actionsEntities?: boolean;
-    actionsDisplay?: boolean;
-    actionsLimit?: number;
     actionFields?: ArgumentGroup<ActionField>;
+    actions?: ArgumentGroup<ActionFilter>;
+    actionsDisplay?: boolean;
+    actionsEntities?: boolean;
+    actionsLimit?: number;
+    boardActionFields?: ArgumentGroup<ActionField>;
+    boardActions?: ArgumentGroup<ActionFilter>;
+    boardActionsDisplay?: boolean;
+    boardActionsEntities?: boolean;
+    boardActionsFormat?: Format;
+    boardActionsLimit?: number;
+    boardActionsSince?: FilterDate;
+    boardFields?: ArgumentGroup<BoardField>;
+    boardLists?: ArgumentGroup<ListFilter>;
+    boardPluginData?: boolean;
+    boards?: ArgumentGroup<BoardFilter>;
+    fields?: ArgumentGroup<OrganizationField>;
+    memberActivity?: boolean;
+    memberFields?: ArgumentGroup<MemberField>;
+    members?: MemberFilter;
     memberships?: ArgumentGroup<MembershipFilter>;
     membershipsMember?: boolean;
     membershipsMemberFields?: ArgumentGroup<MemberField>;
-    members?: MemberFilter;
-    memberFields?: ArgumentGroup<MemberField>;
-    memberActivity?: boolean;
     membersInvited?: MemberFilter;
     membersInvitedFields?: ArgumentGroup<MemberField>;
-    pluginData?: boolean;
-    boards?: ArgumentGroup<BoardFilter>;
-    boardFields?: ArgumentGroup<BoardField>;
-    boardActions?: ArgumentGroup<ActionFilter>;
-    boardActionsEntities?: boolean;
-    boardActionsDisplay?: boolean;
-    boardActionsFormat?: Format;
-    boardActionsSince?: FilterDate;
-    boardActionsLimit?: number;
-    boardActionFields?: ArgumentGroup<ActionField>;
-    boardLists?: ArgumentGroup<ListFilter>;
-    boardPluginData?: boolean;
     paidAccount?: boolean;
-    fields?: ArgumentGroup<OrganizationField>;
+    pluginData?: boolean;
   }): Promise<unknown> {
     return this.apiGet("/", params);
   }
@@ -83,34 +83,11 @@ export class Organization extends BaseResource {
     return this.apiGet(`/${field}`);
   }
 
-  public actions(): Action {
-    return new Action(this.config, `${this.baseEndpoint}/actions`);
-  }
-
-  public boards(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/boards`);
-  }
-
   public getDeltas(params: {
-    tags: string;
     ixLastUpdate: number;
+    tags: string;
   }): Promise<unknown> {
     return this.apiGet("/deltas", params);
-  }
-
-  public members(memberId: string = ""): Member {
-    return new Member(this.config, `${this.baseEndpoint}/members/${memberId}`);
-  }
-
-  public membersInvited(): Member {
-    return new Member(this.config, `${this.baseEndpoint}/membersInvited`);
-  }
-
-  public memberships(membershipId: string = ""): Membership {
-    return new Membership(
-      this.config,
-      `${this.baseEndpoint}/memberships/${membershipId}`,
-    );
   }
 
   public getPluginData(): Promise<unknown> {
@@ -122,9 +99,9 @@ export class Organization extends BaseResource {
   }
 
   public addOrganization(params?: {
-    name?: string;
-    displayName?: string;
     desc?: string;
+    displayName?: string;
+    name?: string;
     website?: string;
   }): Promise<unknown> {
     return this.apiPost("/", { ...params, separator: "/" });
@@ -139,21 +116,21 @@ export class Organization extends BaseResource {
   }
 
   public updateOrganization(params?: {
+    desc?: string;
+    displayName?: string;
+    name?: string;
     prefs?: {
       associatedDomain?: string;
-      externalMembersDisabled?: boolean;
-      googleAppsVersion?: number;
-      orgInviteRestrict?: string;
-      permissionLevel?: PermissionLevel;
       boardVisibilityRestrict?: {
         orgRestriction?: BoardVisibilityFilter;
         privateRestriction?: BoardVisibilityFilter;
         publicRestriction?: BoardVisibilityFilter;
       };
+      externalMembersDisabled?: boolean;
+      googleAppsVersion?: number;
+      orgInviteRestrict?: string;
+      permissionLevel?: PermissionLevel;
     };
-    name?: string;
-    displayName?: string;
-    desc?: string;
     website?: string | null;
   }): Promise<unknown> {
     return this.apiPut("/", { ...params, separator: "/" });
@@ -171,10 +148,6 @@ export class Organization extends BaseResource {
     return this.apiPut("/name", { value });
   }
 
-  public prefs(): OrganizationPref {
-    return new OrganizationPref(this.config, `${this.baseEndpoint}/prefs`);
-  }
-
   public updateWebsite(value: string | null): Promise<unknown> {
     return this.apiPut("/website", { value });
   }
@@ -185,5 +158,32 @@ export class Organization extends BaseResource {
 
   public deleteLogo(): Promise<unknown> {
     return this.apiDelete("/logo");
+  }
+
+  public actions(): Action {
+    return new Action(this.config, `${this.baseEndpoint}/actions`);
+  }
+
+  public boards(): Board {
+    return new Board(this.config, `${this.baseEndpoint}/boards`);
+  }
+
+  public members(memberId: string = ""): Member {
+    return new Member(this.config, `${this.baseEndpoint}/members/${memberId}`);
+  }
+
+  public membersInvited(): Member {
+    return new Member(this.config, `${this.baseEndpoint}/membersInvited`);
+  }
+
+  public memberships(membershipId: string = ""): Membership {
+    return new Membership(
+      this.config,
+      `${this.baseEndpoint}/memberships/${membershipId}`,
+    );
+  }
+
+  public prefs(): OrganizationPref {
+    return new OrganizationPref(this.config, `${this.baseEndpoint}/prefs`);
   }
 }

@@ -29,15 +29,18 @@ export class Token extends BaseResource {
     return this.apiGet(`/${field}`);
   }
 
+  public deleteToken(): Promise<unknown> {
+    return this.apiDelete("/");
+  }
+
   public member(): Member {
     return new Member(this.config, `${this.baseEndpoint}/member`);
   }
 
   public webhooks(webhookId: string = ""): Webhook {
-    return new Webhook(this.config, `${this.baseEndpoint}/webhooks/${webhookId}`);
-  }
-
-  public deleteToken(): Promise<unknown> {
-    return this.apiDelete("/");
+    return new Webhook(
+      this.config,
+      `${this.baseEndpoint}/webhooks/${webhookId}`,
+    );
   }
 }

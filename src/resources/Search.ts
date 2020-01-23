@@ -16,24 +16,24 @@ export type ModelType =
 export class Search extends BaseResource {
   public performSearch(params: {
     query: string;
-    idBoards?: "mine" | string[];
-    idOrganizations?: string[];
-    idCards?: string[];
-    modelTypes?: ArgumentGroup<ModelType>;
     boardFields?: ArgumentGroup<BoardField>;
     boardsLimit?: number;
-    cardFields?: ArgumentGroup<CardField>;
-    cardsLimit?: number;
-    cardsPage?: number;
+    cardAttachments?: AttachmentFilter;
     cardBoard?: boolean;
+    cardFields?: ArgumentGroup<CardField>;
     cardList?: boolean;
     cardMembers?: boolean;
+    cardsLimit?: number;
+    cardsPage?: number;
     cardStickers?: boolean;
-    cardAttachments?: AttachmentFilter;
-    organizationFields?: ArgumentGroup<OrganizationField>;
-    organizationsLimit?: number;
+    idBoards?: "mine" | string[];
+    idCards?: string[];
+    idOrganizations?: string[];
     memberFields?: ArgumentGroup<MemberField>;
     membersLimit?: number;
+    modelTypes?: ArgumentGroup<ModelType>;
+    organizationFields?: ArgumentGroup<OrganizationField>;
+    organizationsLimit?: number;
     partial?: boolean;
   }): Promise<unknown> {
     return this.apiGet("/", params);
@@ -41,9 +41,9 @@ export class Search extends BaseResource {
 
   public searchMembers(params: {
     query: string;
-    limit?: number;
     idBoard?: string | null;
     idOrganization?: string | null;
+    limit?: number;
     onlyOrgMembers?: boolean;
   }): Promise<unknown> {
     return this.apiGet("/members", params);
