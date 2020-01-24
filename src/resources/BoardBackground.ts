@@ -1,5 +1,5 @@
 import { BaseResource } from "./BaseResource";
-import { AllOrNone, ArgumentGroup } from "../typeDefs";
+import { AllOfOrListOf, AllOrNone, TypedFetch } from "../typeDefs";
 
 export type BoardBackgroundBrightness = "dark" | "light" | "unknown";
 
@@ -24,28 +24,30 @@ export type BoardBackgroundFilter =
 export class BoardBackground extends BaseResource {
   public getBoardBackgrounds(params?: {
     filter?: AllOrNone | BoardBackgroundFilter;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/", params);
   }
 
   public getBoardBackground(params?: {
-    fields?: ArgumentGroup<BoardBackgroundField>;
-  }): Promise<unknown> {
+    fields?: AllOfOrListOf<BoardBackgroundField>;
+  }): TypedFetch<unknown> {
     return this.apiGet("/", params);
   }
 
-  public uploadBoardBackground(file: any): Promise<unknown> {
+  public uploadBoardBackground(
+    file: Blob | File | FormData,
+  ): TypedFetch<unknown> {
     return this.apiPost("/", { file });
   }
 
   public updateBoardBackground(params?: {
     brightness?: BoardBackgroundBrightness;
     tile?: boolean;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPut("/", params);
   }
 
-  public deleteBoardBackground(): Promise<unknown> {
+  public deleteBoardBackground(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
 }

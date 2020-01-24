@@ -1,7 +1,7 @@
 import { BaseResource } from "./BaseResource";
 import { ActionField } from "./Action";
 import { MemberField } from "./Member";
-import { ArgumentGroup, FilterDate, Format } from "../typeDefs";
+import { AllOfOrListOf, FilterDate, Format, TypedFetch } from "../typeDefs";
 
 export class Comment extends BaseResource {
   /**
@@ -12,28 +12,28 @@ export class Comment extends BaseResource {
     before?: FilterDate;
     display?: boolean;
     entities?: boolean;
-    fields?: ArgumentGroup<ActionField>;
+    fields?: AllOfOrListOf<ActionField>;
     format?: Format;
     idModels?: string;
     limit?: number;
     member?: boolean;
     memberCreator?: boolean;
-    memberCreatorFields?: ArgumentGroup<MemberField>;
-    memberFields?: ArgumentGroup<MemberField>;
+    memberCreatorFields?: AllOfOrListOf<MemberField>;
+    memberFields?: AllOfOrListOf<MemberField>;
     since?: FilterDate;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/", { ...params, filter: "commentCard" });
   }
 
-  public addComment(text: string): Promise<unknown> {
+  public addComment(text: string): TypedFetch<unknown> {
     return this.apiPost("/comments", { text });
   }
 
-  public updateComment(text: string): Promise<unknown> {
+  public updateComment(text: string): TypedFetch<unknown> {
     return this.apiPut("/comments", { text });
   }
 
-  public deleteComment(): Promise<unknown> {
+  public deleteComment(): TypedFetch<unknown> {
     return this.apiDelete("/comments");
   }
 }

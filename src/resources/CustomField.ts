@@ -1,4 +1,5 @@
 import { BaseResource } from "./BaseResource";
+import { TypedFetch } from "../typeDefs";
 
 export type CustomFieldType = "number" | "date" | "text" | "checkbox" | "list";
 
@@ -24,19 +25,19 @@ export interface CustomFieldListOption {
 }
 
 export class CustomField extends BaseResource {
-  public getCustomFields(): Promise<unknown> {
+  public getCustomFields(): TypedFetch<unknown> {
     return this.apiGet("/");
   }
 
-  public getCustomField(): Promise<unknown> {
+  public getCustomField(): TypedFetch<unknown> {
     return this.apiGet("/");
   }
 
-  public getOptions(): Promise<unknown> {
+  public getOptions(): TypedFetch<unknown> {
     return this.apiGet("/options");
   }
 
-  public getOptionsField(idCustomFieldOption: string): Promise<unknown> {
+  public getOptionsField(idCustomFieldOption: string): TypedFetch<unknown> {
     return this.apiGet(`/options/${idCustomFieldOption}`);
   }
 
@@ -48,12 +49,14 @@ export class CustomField extends BaseResource {
     type: CustomFieldType;
     displayCardFront?: boolean;
     options?: CustomFieldListOption[];
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     const body = this.getBodyWithDisplayCardFront(params);
     return this.apiPost("/", {}, body);
   }
 
-  public addCustomFieldOption(option: CustomFieldListOption): Promise<unknown> {
+  public addCustomFieldOption(
+    option: CustomFieldListOption,
+  ): TypedFetch<unknown> {
     return this.apiPost("/options", {}, option);
   }
 
@@ -61,17 +64,17 @@ export class CustomField extends BaseResource {
     displayCardFront?: boolean;
     name?: string;
     pos?: number;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPut("/", {}, params);
   }
 
-  public deleteCustomField(): Promise<unknown> {
+  public deleteCustomField(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
 
   public deleteCustomFieldOption(
     idCustomFieldOption: string,
-  ): Promise<unknown> {
+  ): TypedFetch<unknown> {
     return this.apiDelete(`/options/${idCustomFieldOption}`);
   }
 

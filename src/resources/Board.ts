@@ -1,30 +1,121 @@
 import { BaseResource } from "./BaseResource";
-import { Action, ActionField, ActionFilter } from "./Action";
-import { AttachmentField, AttachmentFilter } from "./Attachment";
+import { Action, ActionField } from "./Action";
+import { BoardMyPref } from "./BoardMyPref";
 import {
   BoardPermissionLevel,
   BoardPref,
   GroupPermission,
   Invitation,
 } from "./BoardPref";
-import { BoardMyPref } from "./BoardMyPref";
-import { Card, CardAging, CardField, CardFilter } from "./Card";
-import { Checklist, ChecklistField } from "./Checklist";
+import { BoardStarRecord, BoardStarsFilter } from "./BoardStar";
+import { Card, CardAging, CardFilter } from "./Card";
+import { Checklist } from "./Checklist";
 import { CustomField } from "./CustomField";
-import { Label, LabelColor, LabelField } from "./Label";
-import { List, ListField, ListFilter } from "./List";
+import { Label, LabelColor } from "./Label";
+import { List, ListFilter } from "./List";
 import { Member, MemberField, MemberFilter } from "./Member";
 import { Membership, MembershipFilter } from "./Membership";
-import { Organization, OrganizationField } from "./Organization";
+import { Organization } from "./Organization";
 import { Plugin } from "./Plugin";
 import {
+  AllOfOrListOf,
   AllOrNone,
-  ArgumentGroup,
   FilterDate,
   Format,
   KeepFromSourceField,
   PermissionLevel,
+  QueryParamsByName,
+  TypedFetch,
+  ValueResponse,
 } from "../typeDefs";
+
+export type BoardRecord = {
+  id: string;
+  name: string;
+  desc: string;
+  descData: string | null;
+  closed: boolean;
+  idOrganization: string | null;
+  idEnterprise: string | null;
+  pinned: boolean;
+  url: string;
+  shortUrl: string;
+  labelNames: Record<LabelColor, string>;
+  starred?: boolean;
+  shortLink?: string;
+  subscribed?: boolean;
+  powerUps?: string[];
+  dateLastActivity?: string;
+  dateLastView?: string;
+  idTags?: string;
+  datePluginDisable?: string | null;
+  creationMethod?: string | null;
+  ixUpdate?: string;
+  templateGallery?: string | null;
+  enterpriseOwned?: boolean;
+};
+
+export type BoardPluginRecord = {
+  id: string;
+  idBoard: string;
+  idPlugin: string;
+};
+
+export type BoardStarsResponseRecord = {
+  id: string;
+  boardStars: BoardStarRecord[];
+};
+
+export type BoardActionType =
+  | "addAttachmentToCard"
+  | "addChecklistToCard"
+  | "addMemberToBoard"
+  | "addMemberToCard"
+  | "addMemberToOrganization"
+  | "addToOrganizationBoard"
+  | "commentCard"
+  | "convertToCardFromCheckItem"
+  | "copyBoard"
+  | "copyCard"
+  | "copyCommentCard"
+  | "createBoard"
+  | "createCard"
+  | "createList"
+  | "createOrganization"
+  | "deleteAttachmentFromCard"
+  | "deleteBoardInvitation"
+  | "deleteCard"
+  | "deleteOrganizationInvitation"
+  | "disablePowerUp"
+  | "emailCard"
+  | "enablePowerUp"
+  | "makeAdminOfBoard"
+  | "makeNormalMemberOfBoard"
+  | "makeNormalMemberOfOrganization"
+  | "makeObserverOfBoard"
+  | "memberJoinedTrello"
+  | "moveCardFromBoard"
+  | "moveCardToBoard"
+  | "moveListFromBoard"
+  | "moveListToBoard"
+  | "removeChecklistFromCard"
+  | "removeFromOrganizationBoard"
+  | "removeMemberFromCard"
+  | "unconfirmedBoardInvitation"
+  | "unconfirmedOrganizationInvitation"
+  | "updateBoard"
+  | "updateCard"
+  | "updateCard:closed"
+  | "updateCard:desc"
+  | "updateCard:idList"
+  | "updateCard:name"
+  | "updateCheckItemStateOnCard"
+  | "updateChecklist"
+  | "updateList"
+  | "updateList:closed"
+  | "updateList:name"
+  | "updateMember"
+  | "updateOrganization";
 
 export type BoardField =
   | "closed"
@@ -52,109 +143,80 @@ export type BoardFilter =
   | "members"
   | "open"
   | "organization"
-  | "pinned"
   | "public"
-  | "starred"
-  | "unpinned";
+  | "starred";
 
 export type BoardMemberType = "admin" | "normal" | "observer";
 
-export type BoardStarsFilter = "mine" | "none";
-
 export type PowerUp = "calendar" | "cardAging" | "recap" | "voting";
 
-export class Board extends BaseResource {
-  public getBoards(params?: {
-    actionFields?: ArgumentGroup<ActionField>;
-    actions?: ArgumentGroup<ActionFilter>;
-    actionsEntities?: boolean;
-    actionsFormat?: Format;
-    actionsLimit?: number;
-    actionsSince?: FilterDate;
-    fields?: ArgumentGroup<BoardField>;
-    filter?: ArgumentGroup<BoardFilter>;
-    lists?: ListFilter;
-    memberships?: ArgumentGroup<MembershipFilter>;
-    organization?: boolean;
-    organizationFields?: ArgumentGroup<OrganizationField>;
-  }): Promise<unknown> {
-    return this.apiGet("/", params);
+export type GetBoardParams = {
+  actions?: AllOfOrListOf<BoardActionType>;
+  boardStars?: BoardStarsFilter;
+  cards?: CardFilter;
+  cardPluginData?: boolean;
+  checklists?: AllOrNone;
+  customFields?: boolean;
+  fields?: AllOfOrListOf<BoardField>;
+  labels?: AllOrNone;
+  lists?: ListFilter;
+  members?: MemberFilter;
+  memberships?: AllOfOrListOf<MembershipFilter>;
+  membersInvited?: MemberFilter;
+  membersInvitedFields?: AllOfOrListOf<MemberField>;
+  myPrefs?: boolean;
+  organization?: boolean;
+  organizationPluginData?: boolean;
+  pluginData?: boolean;
+  tags?: boolean;
+};
+
+export type NestedBoardsParams = {
+  boards?: AllOfOrListOf<BoardFilter>;
+  boardFields?: AllOfOrListOf<BoardField>;
+  boardActions?: AllOfOrListOf<BoardActionType>;
+  boardActionsEntities?: boolean;
+  boardActionsDisplay?: boolean;
+  boardActionsFormat?: Format;
+  boardActionsSince?: FilterDate;
+  boardActionsLimit?: number;
+  boardActionFields?: AllOfOrListOf<ActionField>;
+  boardLists?: ListFilter;
+};
+
+export class Board<
+  TGetSingleParams = GetBoardParams,
+  TGetMultipleParams = NestedBoardsParams
+> extends BaseResource {
+  public getBoard(params?: TGetSingleParams): TypedFetch<BoardRecord> {
+    return this.apiGet("/", params as QueryParamsByName);
   }
 
-  public getBoard(params?: {
-    actionFields?: ArgumentGroup<ActionField>;
-    actionMember?: boolean;
-    actionMemberCreator?: boolean;
-    actionMemberCreatorFields?: ArgumentGroup<MemberField>;
-    actionMemberFields?: ArgumentGroup<MemberField>;
-    actions?: ArgumentGroup<ActionFilter>;
-    actionsDisplay?: boolean;
-    actionsEntities?: boolean;
-    actionsFormat?: Format;
-    actionsLimit?: number;
-    actionsSince?: FilterDate;
-    boardStars?: BoardStarsFilter;
-    cardAttachmentFields?: ArgumentGroup<AttachmentField>;
-    cardAttachments?: AttachmentFilter;
-    cardChecklists?: AllOrNone;
-    cardFields?: ArgumentGroup<CardField>;
-    cardPluginData?: boolean;
-    cards?: CardFilter;
-    cardStickers?: boolean;
-    checklistFields?: ArgumentGroup<ChecklistField>;
-    checklists?: AllOrNone;
-    fields?: ArgumentGroup<BoardField>;
-    labelFields?: ArgumentGroup<LabelField>;
-    labels?: AllOrNone;
-    labelsLimit?: number;
-    listFields?: ArgumentGroup<ListField>;
-    lists?: ListFilter;
-    memberFields?: ArgumentGroup<MemberField>;
-    members?: MemberFilter;
-    memberships?: ArgumentGroup<MembershipFilter>;
-    membershipsMember?: boolean;
-    membershipsMemberFields?: ArgumentGroup<MemberField>;
-    membersInvited?: MemberFilter;
-    membersInvitedFields?: ArgumentGroup<MemberField>;
-    myPrefs?: boolean;
-    organization?: boolean;
-    organizationFields?: ArgumentGroup<OrganizationField>;
-    organizationMemberships?: ArgumentGroup<MembershipFilter>;
-    organizationPluginData?: boolean;
-    pluginData?: boolean;
-    tags?: boolean;
-  }): Promise<unknown> {
-    return this.apiGet("/", params);
+  public getBoards(params?: TGetMultipleParams): TypedFetch<BoardRecord[]> {
+    return this.apiGet("/", params as QueryParamsByName);
   }
 
   public getBoardsFilteredBy(
-    filter: ArgumentGroup<BoardFilter>,
-  ): Promise<unknown> {
+    filter: AllOfOrListOf<BoardFilter>,
+  ): TypedFetch<unknown> {
     return this.apiGet("/", { filter });
   }
 
-  public getFieldValue(field: BoardField): Promise<unknown> {
+  public getFieldValue<T>(field: BoardField): TypedFetch<ValueResponse<T>> {
     return this.apiGet(`/${field}`);
+  }
+
+  public getBoardPlugins(): TypedFetch<BoardPluginRecord[]> {
+    return this.apiGet("/boardPlugins");
   }
 
   public getBoardStars(params?: {
     filter?: BoardStarsFilter;
-  }): Promise<unknown> {
+  }): TypedFetch<BoardStarsResponseRecord> {
     return this.apiGet("/boardStars", params);
   }
 
-  public getBoardPlugins(): Promise<unknown> {
-    return this.apiGet("/boardPlugins");
-  }
-
-  public getDeltas(params: {
-    ixLastUpdate: number;
-    tags: string;
-  }): Promise<unknown> {
-    return this.apiGet("/deltas", params);
-  }
-
-  public getTags(): Promise<unknown> {
+  public getTags(): TypedFetch<unknown> {
     return this.apiGet("/idTags");
   }
 
@@ -165,7 +227,7 @@ export class Board extends BaseResource {
     desc?: string;
     idBoardSource?: string;
     idOrganization?: string;
-    keepFromSource?: ArgumentGroup<KeepFromSourceField>;
+    keepFromSource?: AllOfOrListOf<KeepFromSourceField>;
     prefs?: {
       permissionLevel?: PermissionLevel;
       voting?: GroupPermission;
@@ -176,28 +238,28 @@ export class Board extends BaseResource {
       background?: string;
       cardAging?: CardAging;
     };
-    powerUps?: ArgumentGroup<PowerUp>;
-  }): Promise<unknown> {
+    powerUps?: AllOfOrListOf<PowerUp>;
+  }): TypedFetch<unknown> {
     return this.apiPost("/", { ...params, separator: "_" });
   }
 
-  public enableBoardPlugin(idPlugin: string): Promise<unknown> {
+  public enableBoardPlugin(idPlugin: string): TypedFetch<unknown> {
     return this.apiPost("/boardPlugins", { idPlugin });
   }
 
-  public addPowerUp(value: PowerUp): Promise<unknown> {
+  public addPowerUp(value: PowerUp): TypedFetch<unknown> {
     return this.apiPost("/powerUps", { value });
   }
 
-  public addTags(value: string): Promise<unknown> {
+  public addTags(value: string): TypedFetch<unknown> {
     return this.apiPost("/tags", { value });
   }
 
-  public generateCalendarKey(): Promise<unknown> {
+  public generateCalendarKey(): TypedFetch<unknown> {
     return this.apiPost("/calendarKey/generate");
   }
 
-  public generateEmailKey(): Promise<unknown> {
+  public generateEmailKey(): TypedFetch<unknown> {
     return this.apiPost("/emailKey/generate");
   }
 
@@ -226,50 +288,50 @@ export class Board extends BaseResource {
       voting?: GroupPermission;
     };
     subscribed?: boolean;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPut("/", { ...params, separator: "/" });
   }
 
-  public updateClosedStatus(value: boolean): Promise<unknown> {
+  public updateClosedStatus(value: boolean): TypedFetch<unknown> {
     return this.apiPut("/closed", { value });
   }
 
-  public updateDescription(value: string): Promise<unknown> {
+  public updateDescription(value: string): TypedFetch<unknown> {
     return this.apiPut("/desc", { value });
   }
 
-  public moveToOrganization(organizationId: string): Promise<unknown> {
+  public moveToOrganization(organizationId: string): TypedFetch<unknown> {
     return this.apiPut("/idOrganization", { value: organizationId });
   }
 
   public updateLabelNameForColor(
     labelColor: LabelColor,
     value: string,
-  ): Promise<unknown> {
+  ): TypedFetch<unknown> {
     return this.apiPut(`/labelNames/${labelColor}`, { value });
   }
 
-  public updateName(value: string): Promise<unknown> {
+  public updateName(value: string): TypedFetch<unknown> {
     return this.apiPut("/name", { value });
   }
 
-  public updateSubscribed(value: boolean): Promise<unknown> {
+  public updateSubscribed(value: boolean): TypedFetch<unknown> {
     return this.apiPut("/subscribed", { value });
   }
 
-  public markAsViewed(): Promise<unknown> {
+  public markAsViewed(): TypedFetch<unknown> {
     return this.apiPost("/markAsViewed");
   }
 
-  public deleteBoard(id: string): Promise<unknown> {
+  public deleteBoard(id: string): TypedFetch<unknown> {
     return this.apiDelete("/", { id });
   }
 
-  public disableBoardPlugin(idPlugin: string): Promise<unknown> {
+  public disableBoardPlugin(idPlugin: string): TypedFetch<unknown> {
     return this.apiDelete("/boardPlugins", { idPlugin });
   }
 
-  public deletePowerUp(powerUp: PowerUp): Promise<unknown> {
+  public deletePowerUp(powerUp: PowerUp): TypedFetch<unknown> {
     return this.apiDelete(`/powerUps/${powerUp}`);
   }
 

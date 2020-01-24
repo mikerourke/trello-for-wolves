@@ -1,35 +1,58 @@
 import { BaseResource } from "./BaseResource";
 import { Member } from "./Member";
 import { Webhook } from "./Webhook";
-import { AllOrNone, ArgumentGroup } from "../typeDefs";
+import {
+  AllOfOrListOf,
+  AllOrNone,
+  TypedFetch,
+  ValueResponse,
+} from "../typeDefs";
 
-export type TokenField =
-  | "dateCreated"
-  | "dateExpires"
-  | "idMember"
-  | "identifier"
-  | "permissions";
+export type TokenPermissionRecord = {
+  idModel: string;
+  modelType: string;
+  read: boolean;
+  write: boolean;
+};
+
+export type TokenRecord = {
+  id: string;
+  identifier: string;
+  idMember: string;
+  dateCreated: string;
+  dateExpires: string | null;
+  permissions: TokenPermissionRecord[];
+};
+
+export type TokenDeletedRecord = Omit<TokenRecord, "permissions"> & {
+  token: string;
+  idApplication: string;
+  origin: string;
+  permissions: TokenPermissionRecord & { _id: string }[];
+};
+
+export type TokenField = keyof TokenRecord;
 
 export class Token extends BaseResource {
+  public getToken(params?: {
+    fields?: AllOfOrListOf<TokenField>;
+    webhooks?: boolean;
+  }): TypedFetch<TokenRecord> {
+    return this.apiGet("/", params);
+  }
+
   public getTokens(params?: {
     filter?: AllOrNone;
     webhooks?: boolean;
-  }): Promise<unknown> {
+  }): TypedFetch<TokenRecord[]> {
     return this.apiGet("/", params);
   }
 
-  public getToken(params?: {
-    fields?: ArgumentGroup<TokenField>;
-    webhooks?: boolean;
-  }): Promise<unknown> {
-    return this.apiGet("/", params);
-  }
-
-  public getFieldValue(field: TokenField): Promise<unknown> {
+  public getFieldValue<T>(field: TokenField): TypedFetch<ValueResponse<T>> {
     return this.apiGet(`/${field}`);
   }
 
-  public deleteToken(): Promise<unknown> {
+  public deleteToken(): TypedFetch<TokenDeletedRecord> {
     return this.apiDelete("/");
   }
 

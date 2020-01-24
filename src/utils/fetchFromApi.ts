@@ -1,6 +1,6 @@
 import fetch from "cross-fetch";
 import { stringifyQueryParams } from "./stringifyQueryParams";
-import { Config, QueryParamsByName } from "../typeDefs";
+import { Config, QueryParamsByName, TypedResponse } from "../typeDefs";
 
 export type HttpMethod = "GET" | "PUT" | "POST" | "DELETE";
 
@@ -8,7 +8,7 @@ export type HttpMethod = "GET" | "PUT" | "POST" | "DELETE";
  * Returns a resolved Promise with the results of the Trello API call.
  * @private
  */
-export async function fetchFromApi({
+export async function fetchFromApi<T>({
   endpoint,
   method,
   config,
@@ -20,7 +20,7 @@ export async function fetchFromApi({
   config: Config;
   queryParamsByName?: QueryParamsByName;
   body?: unknown | null;
-}): Promise<unknown> {
+}): Promise<TypedResponse<T>> {
   const { backoffTime = 3000, maxRetryAttempts = 5, key, token } = config;
 
   const apiUrl = buildApiUrl(endpoint, queryParamsByName, key, token);
@@ -34,7 +34,7 @@ export async function fetchFromApi({
 
   const fetchWithRetries = async (
     attemptsRemaining: number,
-  ): Promise<unknown> => {
+  ): Promise<TypedResponse<T>> => {
     const response = await fetch(apiUrl, fetchConfig);
     if (!response.ok) {
       if (attemptsRemaining === 0) {

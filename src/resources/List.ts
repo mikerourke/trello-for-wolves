@@ -2,7 +2,7 @@ import { BaseResource } from "./BaseResource";
 import { Action } from "./Action";
 import { Board, BoardField } from "./Board";
 import { Card, CardField, CardFilter } from "./Card";
-import { ArgumentGroup, PositionNumbered } from "../typeDefs";
+import { AllOfOrListOf, PositionNumbered, TypedFetch } from "../typeDefs";
 
 export type ListField = "closed" | "idBoard" | "name" | "pos" | "subscribed";
 
@@ -10,29 +10,29 @@ export type ListFilter = "all" | "closed" | "none" | "open";
 
 export class List extends BaseResource {
   public getLists(params?: {
-    cardFields?: ArgumentGroup<CardField>;
+    cardFields?: AllOfOrListOf<CardField>;
     cards?: CardFilter;
-    fields?: ArgumentGroup<ListField>;
+    fields?: AllOfOrListOf<ListField>;
     filter?: ListFilter;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/", params);
   }
 
   public getList(params?: {
     board?: boolean;
-    boardFields?: ArgumentGroup<BoardField>;
-    cardFields?: ArgumentGroup<CardField>;
+    boardFields?: AllOfOrListOf<BoardField>;
+    cardFields?: AllOfOrListOf<CardField>;
     cards?: CardFilter;
-    fields?: ArgumentGroup<ListField>;
-  }): Promise<unknown> {
+    fields?: AllOfOrListOf<ListField>;
+  }): TypedFetch<unknown> {
     return this.apiGet("/", params);
   }
 
-  public getListsFilteredBy(filter: ListFilter): Promise<unknown> {
+  public getListsFilteredBy(filter: ListFilter): TypedFetch<unknown> {
     return this.apiGet("/", { filter });
   }
 
-  public getFieldValue(field: ListField): Promise<unknown> {
+  public getFieldValue(field: ListField): TypedFetch<unknown> {
     return this.apiGet(`/${field}`);
   }
 
@@ -41,7 +41,7 @@ export class List extends BaseResource {
     idBoard?: string;
     idListSource?: string;
     pos?: PositionNumbered;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     let updatedArgs = params;
     if (this.endpointElements[0] === "boards") {
       updatedArgs = { ...params, idBoard: this.endpointElements[1] };
@@ -55,11 +55,11 @@ export class List extends BaseResource {
     name?: string;
     pos?: PositionNumbered;
     subscribed?: boolean;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPut("/", params);
   }
 
-  public updateClosedStatus(value: boolean): Promise<unknown> {
+  public updateClosedStatus(value: boolean): TypedFetch<unknown> {
     return this.apiPut("/closed", { value });
   }
 
@@ -68,30 +68,30 @@ export class List extends BaseResource {
     params?: {
       pos?: PositionNumbered;
     },
-  ): Promise<unknown> {
+  ): TypedFetch<unknown> {
     return this.apiPut("/", { value: boardId, ...params });
   }
 
-  public updateName(value: string): Promise<unknown> {
+  public updateName(value: string): TypedFetch<unknown> {
     return this.apiPut("/name", { value });
   }
 
-  public updatePosition(value: PositionNumbered): Promise<unknown> {
+  public updatePosition(value: PositionNumbered): TypedFetch<unknown> {
     return this.apiPut("/pos", { value });
   }
 
-  public updateSubscribed(value: boolean): Promise<unknown> {
+  public updateSubscribed(value: boolean): TypedFetch<unknown> {
     return this.apiPut("/subscribed", { value });
   }
 
-  public archiveAllCards(): Promise<unknown> {
+  public archiveAllCards(): TypedFetch<unknown> {
     return this.apiPost("/archiveAllCards");
   }
 
   public moveAllCards(params: {
     idBoard: string;
     idList: string;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPost("/moveAllCards", params);
   }
 

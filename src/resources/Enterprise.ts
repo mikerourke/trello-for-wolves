@@ -1,11 +1,11 @@
 import { BaseResource } from "./BaseResource";
-import { ArgumentGroup } from "../typeDefs";
-import { MemberEnterpriseOnlyField, MemberFilter } from "./Member";
-import { OrganizationField, OrganizationFilter } from "./Organization";
-import { MembershipFilter } from "./Membership";
 import { BoardField } from "./Board";
+import { MemberBasicField, MemberFilter } from "./Member";
+import { MembershipFilter } from "./Membership";
+import { OrganizationField, OrganizationFilter } from "./Organization";
+import { AllOfOrListOf, TypedFetch } from "../typeDefs";
 
-type ValueOrArray<T> = Omit<ArgumentGroup<T>, "all">;
+type ValueOrArray<T> = Omit<AllOfOrListOf<T>, "all">;
 
 export type EnterpriseField =
   | "displayName"
@@ -23,25 +23,25 @@ export type SortOrder = "asc" | "ascending" | "desc" | "descending" | "id";
 
 export class Enterprise extends BaseResource {
   public getEnterprise(params?: {
-    fields?: ArgumentGroup<EnterpriseField>;
+    fields?: AllOfOrListOf<EnterpriseField>;
     memberCount?: number;
-    memberFields?: MemberEnterpriseOnlyField;
+    memberFields?: MemberBasicField;
     memberFilter?: "none" | string;
     members?: MemberFilter;
     memberSortBy?: "none" | string;
     memberSortOrder?: SortOrder;
     memberStartIndex?: number;
-    organizationFields?: ArgumentGroup<OrganizationField>;
+    organizationFields?: AllOfOrListOf<OrganizationField>;
     organizationMemberships?: ValueOrArray<MembershipFilter>;
     organizationPaidAccounts?: boolean;
     organizations?: OrganizationFilter;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/", params);
   }
 
   public getAdmins(params?: {
     fields: "fullName" | "userName";
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/admins", params);
   }
 
@@ -49,68 +49,68 @@ export class Enterprise extends BaseResource {
     authenticate?: boolean;
     confirmationAccepted?: boolean;
     returnUrl?: "none" | string;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/signupUrl", params);
   }
 
   public getMembers(params?: {
-    boardFields?: ArgumentGroup<BoardField>;
+    boardFields?: AllOfOrListOf<BoardField>;
     count?: number;
     fields?: ValueOrArray<EnterpriseField>;
     filter?: string;
-    organizationFields?: ArgumentGroup<OrganizationField>;
+    organizationFields?: AllOfOrListOf<OrganizationField>;
     sortBy?: "none" | string;
     sortOrder?: SortOrder;
     startIndex?: number;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/members", params);
   }
 
   public getMember(
     memberId: string,
     params?: {
-      boardFields?: ArgumentGroup<BoardField>;
-      fields?: ValueOrArray<MemberEnterpriseOnlyField>;
-      organizationFields?: ArgumentGroup<OrganizationField>;
+      boardFields?: AllOfOrListOf<BoardField>;
+      fields?: ValueOrArray<MemberBasicField>;
+      organizationFields?: AllOfOrListOf<OrganizationField>;
     },
-  ): Promise<unknown> {
+  ): TypedFetch<unknown> {
     return this.apiGet(`/members/${memberId}`, params);
   }
 
-  public getIfOrgTransferrable(orgId: string): Promise<unknown> {
+  public getIfOrgTransferrable(orgId: string): TypedFetch<unknown> {
     return this.apiGet(`/transferrable/organization/${orgId}`);
   }
 
-  public transferToOrganization(orgId: string): Promise<unknown> {
+  public transferToOrganization(orgId: string): TypedFetch<unknown> {
     return this.apiPut("/organizations", { idOrganization: orgId });
   }
 
-  public addMemberAsAdmin(memberId: string): Promise<unknown> {
+  public addMemberAsAdmin(memberId: string): TypedFetch<unknown> {
     return this.apiPut(`/admins/${memberId}`);
   }
 
   public addToken(params?: {
     expiration: "none" | "1hour" | "1day" | "30days" | "never";
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPost("/tokens", params);
   }
 
   public deactivateMember(
     memberId: string,
     params?: {
-      boardFields?: ArgumentGroup<BoardField>;
-      fields?: ValueOrArray<MemberEnterpriseOnlyField>;
-      organizationFields?: ArgumentGroup<OrganizationField>;
+      boardFields?: AllOfOrListOf<BoardField>;
+      fields?: ValueOrArray<MemberBasicField>;
+      organizationFields?: AllOfOrListOf<OrganizationField>;
     },
-  ): Promise<unknown> {
+  ): TypedFetch<unknown> {
     return this.apiPut(`/members/${memberId}/deactivated`, params);
   }
 
-  public dissociateOrganization(orgId: string): Promise<unknown> {
+  public dissociateOrganization(orgId: string): TypedFetch<unknown> {
     return this.apiDelete(`/organizations/${orgId}`);
   }
 
-  public removeMemberFromAdmin(memberId: string): Promise<unknown> {
+  public removeMemberFromAdmin(memberId: string): TypedFetch<unknown> {
     return this.apiDelete(`/admins/${memberId}`);
   }
 }

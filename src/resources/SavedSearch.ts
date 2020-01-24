@@ -1,12 +1,12 @@
 import { BaseResource } from "./BaseResource";
-import { PositionNumbered } from "../typeDefs";
+import { PositionNumbered, TypedFetch } from "../typeDefs";
 
 export class SavedSearch extends BaseResource {
-  public getSavedSearches(): Promise<unknown> {
+  public getSavedSearches(): TypedFetch<unknown> {
     return this.apiGet("/");
   }
 
-  public getSavedSearch(): Promise<unknown> {
+  public getSavedSearch(): TypedFetch<unknown> {
     return this.apiGet("/");
   }
 
@@ -14,7 +14,7 @@ export class SavedSearch extends BaseResource {
     name: string;
     pos: PositionNumbered;
     query: string;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPost("/", params);
   }
 
@@ -22,23 +22,23 @@ export class SavedSearch extends BaseResource {
     name?: string;
     pos?: PositionNumbered;
     query?: string;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPut("/", params);
   }
 
-  public updateName(value: string): Promise<unknown> {
+  public updateName(value: string): TypedFetch<unknown> {
     return this.apiPut("/name", { value });
   }
 
-  public updatePosition(value: PositionNumbered): Promise<unknown> {
+  public updatePosition(value: PositionNumbered): TypedFetch<unknown> {
     return this.apiPut("/pos", { value });
   }
 
-  public updateQuery(value: string): Promise<unknown> {
+  public updateQuery(value: string): TypedFetch<unknown> {
     return this.apiPut("/query", { value });
   }
 
-  public deleteSavedSearch(): Promise<unknown> {
+  public deleteSavedSearch(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
 }

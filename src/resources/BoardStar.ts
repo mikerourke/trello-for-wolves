@@ -1,37 +1,44 @@
 import { BaseResource } from "./BaseResource";
-import { PositionNumbered } from "../typeDefs";
+import { PositionNumbered, TypedFetch } from "../typeDefs";
+
+export type BoardStarRecord = {
+  idBoard: string;
+  pos: number;
+};
+
+export type BoardStarsFilter = "mine" | "none";
 
 export class BoardStar extends BaseResource {
-  public getBoardStars(): Promise<unknown> {
+  public getBoardStars(): TypedFetch<unknown> {
     return this.apiGet("/");
   }
 
-  public getBoardStar(): Promise<unknown> {
+  public getBoardStar(): TypedFetch<unknown> {
     return this.apiGet("/");
   }
 
   public addBoardStar(params: {
     idBoard: string;
     pos: PositionNumbered;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPost("/", params);
   }
 
   public updateBoardStar(params?: {
     pos?: PositionNumbered;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPut("/", params);
   }
 
-  public moveBoardStarToBoard(idBoard: string): Promise<unknown> {
+  public moveBoardStarToBoard(idBoard: string): TypedFetch<unknown> {
     return this.apiPut("/idBoard", { value: idBoard });
   }
 
-  public updatePosition(value: PositionNumbered): Promise<unknown> {
+  public updatePosition(value: PositionNumbered): TypedFetch<unknown> {
     return this.apiPut("/pos", { value });
   }
 
-  public deleteBoardStar(): Promise<unknown> {
+  public deleteBoardStar(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
 }

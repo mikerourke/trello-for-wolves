@@ -1,29 +1,47 @@
 import { BaseResource } from "./BaseResource";
-import { AllOrNone, ArgumentGroup, PositionNumbered } from "../typeDefs";
-
-export type CheckItemField = "name" | "nameData" | "pos" | "state";
+import {
+  AllOfOrListOf,
+  AllOrNone,
+  PositionNumbered,
+  TypedFetch,
+} from "../typeDefs";
 
 export type CheckItemState = "complete" | "false" | "incomplete" | "true";
+
+export type CheckItemRecord = {
+  id: string;
+  idChecklist: string;
+  name: string;
+  nameData: string | null;
+  post: number;
+  state: CheckItemState;
+  creationMethod?: string | null;
+};
+
+export type CheckItemField = Omit<
+  CheckItemRecord,
+  "id" | "idChecklist" | "creationMethod"
+>;
 
 export type CheckItemStateField = "idCheckItem" | "state";
 
 export class CheckItem extends BaseResource {
-  public getCheckItems(params?: {
-    fields?: ArgumentGroup<CheckItemField>;
-    filter?: AllOrNone;
-  }): Promise<unknown> {
+  public getCheckItem(params?: {
+    fields?: AllOfOrListOf<CheckItemField>;
+  }): TypedFetch<CheckItemRecord> {
     return this.apiGet("/", params);
   }
 
-  public getCheckItem(params?: {
-    fields?: ArgumentGroup<CheckItemField>;
-  }): Promise<unknown> {
+  public getCheckItems(params?: {
+    fields?: AllOfOrListOf<CheckItemField>;
+    filter?: AllOrNone;
+  }): TypedFetch<CheckItemRecord[]> {
     return this.apiGet("/", params);
   }
 
   public getCheckItemStates(params?: {
-    fields?: ArgumentGroup<CheckItemStateField>;
-  }): Promise<unknown> {
+    fields?: AllOfOrListOf<CheckItemStateField>;
+  }): TypedFetch<unknown> {
     return this.apiGet("/", params);
   }
 
@@ -31,11 +49,11 @@ export class CheckItem extends BaseResource {
     name: string;
     checked?: boolean;
     pos?: PositionNumbered;
-  }): Promise<unknown> {
+  }): TypedFetch<CheckItemRecord> {
     return this.apiPost("/", params);
   }
 
-  public convertToCard(): Promise<unknown> {
+  public convertToCard(): TypedFetch<unknown> {
     return this.apiPost("/convertToCard");
   }
 
@@ -44,23 +62,23 @@ export class CheckItem extends BaseResource {
     name?: string;
     pos?: PositionNumbered;
     state?: CheckItemState;
-  }): Promise<unknown> {
+  }): TypedFetch<CheckItemRecord> {
     return this.apiPut("/", params);
   }
 
-  public updateName(value: string): Promise<unknown> {
+  public updateName(value: string): TypedFetch<unknown> {
     return this.apiPut("/name", { value });
   }
 
-  public updatePosition(value: PositionNumbered): Promise<unknown> {
+  public updatePosition(value: PositionNumbered): TypedFetch<unknown> {
     return this.apiPut("/pos", { value });
   }
 
-  public updateState(value: CheckItemState): Promise<unknown> {
+  public updateState(value: CheckItemState): TypedFetch<unknown> {
     return this.apiPut("/state", { value });
   }
 
-  public deleteCheckItem(): Promise<unknown> {
+  public deleteCheckItem(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
 }

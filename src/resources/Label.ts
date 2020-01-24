@@ -1,6 +1,11 @@
 import { BaseResource } from "./BaseResource";
-import { Board } from "./Board";
-import { ArgumentGroup } from "../typeDefs";
+import { Board, BoardField } from "./Board";
+import {
+  AllOfOrListOf,
+  AllOrNone,
+  QueryParamsByName,
+  TypedFetch,
+} from "../typeDefs";
 
 export type LabelColor =
   | "blue"
@@ -15,53 +20,74 @@ export type LabelColor =
   | "pink"
   | "black";
 
-export type LabelField = "color" | "idBoard" | "name" | "uses";
+export type LabelRecord = {
+  id: string;
+  idBoard: string;
+  name: string;
+  color: LabelColor | null;
+};
 
-export class Label extends BaseResource {
-  public getLabels(params?: {
-    fields?: ArgumentGroup<LabelField>;
-  }): Promise<unknown> {
-    return this.apiGet("/", params);
+export type LabelField = Omit<keyof LabelRecord, "id">;
+
+export type GetLabelParams = {
+  fields?: AllOfOrListOf<LabelField>;
+  limit?: number;
+};
+
+export type NestedLabelParams = {
+  labels: AllOrNone;
+  labelFields: AllOfOrListOf<LabelField>;
+  /** A number from 0 to 1000. */
+  labelsLimit: number;
+};
+
+export class Label<
+  TGetSingleParams = Pick<GetLabelParams, "fields">,
+  TGetMultipleParams = Pick<GetLabelParams, "fields">
+> extends BaseResource {
+  public getLabel(params?: TGetSingleParams): TypedFetch<LabelRecord> {
+    return this.apiGet("/", params as QueryParamsByName);
   }
 
-  public getLabel(params?: {
-    fields?: ArgumentGroup<LabelField>;
-  }): Promise<unknown> {
-    return this.apiGet("/", params);
+  public getLabels(params?: TGetMultipleParams): TypedFetch<LabelRecord[]> {
+    return this.apiGet("/", params as QueryParamsByName);
   }
 
   public addLabel(params: {
     color: LabelColor | null;
     name: string;
     idBoard?: string;
-  }): Promise<unknown> {
-    let updatedArgs = params;
+  }): TypedFetch<LabelRecord> {
+    const updatedParams = { ...params };
     if (this.endpointElements[0] === "boards") {
-      updatedArgs = { ...params, idBoard: this.endpointElements[1] };
+      updatedParams.idBoard = this.endpointElements[1];
     }
-    return this.apiPost("/", updatedArgs);
+    return this.apiPost("/", updatedParams);
   }
 
   public updateLabel(params?: {
     color?: LabelColor | null;
     name?: string;
-  }): Promise<unknown> {
+  }): TypedFetch<LabelRecord> {
     return this.apiPut("/", params);
   }
 
-  public updateColor(value: LabelColor | null): Promise<unknown> {
+  public updateColor(value: LabelColor | null): TypedFetch<LabelRecord> {
     return this.apiPut("/color", { value });
   }
 
-  public updateName(value: string): Promise<unknown> {
+  public updateName(value: string): TypedFetch<LabelRecord> {
     return this.apiPut("/name", { value });
   }
 
-  public deleteLabel(): Promise<unknown> {
+  public deleteLabel(): TypedFetch<{ limits: unknown }> {
     return this.apiDelete("/");
   }
 
   public board(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/board`);
+    return new Board<{ fields?: AllOfOrListOf<BoardField> }>(
+      this.config,
+      `${this.baseEndpoint}/board`,
+    );
   }
 }

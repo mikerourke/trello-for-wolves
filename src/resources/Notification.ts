@@ -4,7 +4,7 @@ import { Card, CardField } from "./Card";
 import { List } from "./List";
 import { Member, MemberField } from "./Member";
 import { Organization, OrganizationField } from "./Organization";
-import { ArgumentGroup } from "../typeDefs";
+import { AllOfOrListOf, TypedFetch } from "../typeDefs";
 
 export type NotificationField =
   | "data"
@@ -49,64 +49,66 @@ export class Notification extends BaseResource {
     before?: string | null;
     display?: boolean;
     entities?: boolean;
-    fields?: ArgumentGroup<NotificationField>;
-    filter?: ArgumentGroup<NotificationFilter>;
+    fields?: AllOfOrListOf<NotificationField>;
+    filter?: AllOfOrListOf<NotificationFilter>;
     limit?: number;
     memberCreator?: boolean;
-    memberCreatorFields?: ArgumentGroup<MemberField>;
+    memberCreatorFields?: AllOfOrListOf<MemberField>;
     page?: number;
     readFilter?: ReadFilter;
     since?: string | null;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/", params);
   }
 
   public getNotification(params?: {
     board?: boolean;
-    boardFields?: ArgumentGroup<BoardField>;
+    boardFields?: AllOfOrListOf<BoardField>;
     card?: boolean;
-    cardFields?: ArgumentGroup<CardField>;
+    cardFields?: AllOfOrListOf<CardField>;
     display?: boolean;
     entities?: boolean;
-    fields?: ArgumentGroup<NotificationField>;
+    fields?: AllOfOrListOf<NotificationField>;
     list?: boolean;
     member?: boolean;
     memberCreator?: boolean;
-    memberCreatorFields?: ArgumentGroup<MemberField>;
-    memberFields?: ArgumentGroup<MemberField>;
+    memberCreatorFields?: AllOfOrListOf<MemberField>;
+    memberFields?: AllOfOrListOf<MemberField>;
     organization?: boolean;
-    organizationFields?: ArgumentGroup<OrganizationField>;
-  }): Promise<unknown> {
+    organizationFields?: AllOfOrListOf<OrganizationField>;
+  }): TypedFetch<unknown> {
     return this.apiGet("/", params);
   }
 
   public getNotificationsFilteredBy(
-    filter: ArgumentGroup<NotificationFilter>,
-  ): Promise<unknown> {
+    filter: AllOfOrListOf<NotificationFilter>,
+  ): TypedFetch<unknown> {
     return this.apiGet("/", { filter });
   }
 
-  public getFieldValue(field: NotificationField): Promise<unknown> {
+  public getFieldValue(field: NotificationField): TypedFetch<unknown> {
     return this.apiGet(`/${field}`);
   }
 
-  public getDisplay(): Promise<unknown> {
+  public getDisplay(): TypedFetch<unknown> {
     return this.apiGet("/display");
   }
 
-  public getEntities(): Promise<unknown> {
+  public getEntities(): TypedFetch<unknown> {
     return this.apiGet("/entities");
   }
 
-  public updateNotification(params?: { unread?: boolean }): Promise<unknown> {
+  public updateNotification(params?: {
+    unread?: boolean;
+  }): TypedFetch<unknown> {
     return this.apiPut("/", params);
   }
 
-  public updateUnreadStatus(value: boolean): Promise<unknown> {
+  public updateUnreadStatus(value: boolean): TypedFetch<unknown> {
     return this.apiPut("/unread", { value });
   }
 
-  public markAllAsRead(): Promise<unknown> {
+  public markAllAsRead(): TypedFetch<unknown> {
     return this.apiPost("/all/read");
   }
 

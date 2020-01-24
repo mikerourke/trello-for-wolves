@@ -1,15 +1,16 @@
 import { BaseResource } from "./BaseResource";
-import { Action, ActionField, ActionFilter } from "./Action";
+import { Action, ActionField, ActionType } from "./Action";
 import { Board, BoardField, BoardFilter } from "./Board";
 import { ListFilter } from "./List";
 import { Member, MemberField, MemberFilter } from "./Member";
 import { Membership, MembershipFilter } from "./Membership";
 import { BoardVisibilityFilter, OrganizationPref } from "./OrganizationPref";
 import {
-  ArgumentGroup,
+  AllOfOrListOf,
   FilterDate,
   Format,
   PermissionLevel,
+  TypedFetch,
 } from "../typeDefs";
 
 export type OrganizationField =
@@ -34,67 +35,67 @@ export type OrganizationFilter = "all" | "members" | "none" | "public";
 
 export class Organization extends BaseResource {
   public getOrganizations(params?: {
-    filter?: ArgumentGroup<OrganizationFilter>;
-    fields?: ArgumentGroup<OrganizationField>;
+    filter?: AllOfOrListOf<OrganizationFilter>;
+    fields?: AllOfOrListOf<OrganizationField>;
     paidAccount?: boolean;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/", params);
   }
 
   public getOrganization(params?: {
-    actionFields?: ArgumentGroup<ActionField>;
-    actions?: ArgumentGroup<ActionFilter>;
+    actionFields?: AllOfOrListOf<ActionField>;
+    actions?: AllOfOrListOf<ActionType>;
     actionsDisplay?: boolean;
     actionsEntities?: boolean;
     actionsLimit?: number;
-    boardActionFields?: ArgumentGroup<ActionField>;
-    boardActions?: ArgumentGroup<ActionFilter>;
+    boardActionFields?: AllOfOrListOf<ActionField>;
+    boardActions?: AllOfOrListOf<ActionType>;
     boardActionsDisplay?: boolean;
     boardActionsEntities?: boolean;
     boardActionsFormat?: Format;
     boardActionsLimit?: number;
     boardActionsSince?: FilterDate;
-    boardFields?: ArgumentGroup<BoardField>;
-    boardLists?: ArgumentGroup<ListFilter>;
+    boardFields?: AllOfOrListOf<BoardField>;
+    boardLists?: AllOfOrListOf<ListFilter>;
     boardPluginData?: boolean;
-    boards?: ArgumentGroup<BoardFilter>;
-    fields?: ArgumentGroup<OrganizationField>;
+    boards?: AllOfOrListOf<BoardFilter>;
+    fields?: AllOfOrListOf<OrganizationField>;
     memberActivity?: boolean;
-    memberFields?: ArgumentGroup<MemberField>;
+    memberFields?: AllOfOrListOf<MemberField>;
     members?: MemberFilter;
-    memberships?: ArgumentGroup<MembershipFilter>;
+    memberships?: AllOfOrListOf<MembershipFilter>;
     membershipsMember?: boolean;
-    membershipsMemberFields?: ArgumentGroup<MemberField>;
+    membershipsMemberFields?: AllOfOrListOf<MemberField>;
     membersInvited?: MemberFilter;
-    membersInvitedFields?: ArgumentGroup<MemberField>;
+    membersInvitedFields?: AllOfOrListOf<MemberField>;
     paidAccount?: boolean;
     pluginData?: boolean;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/", params);
   }
 
   public getOrganizationsFilteredBy(
-    filter: ArgumentGroup<OrganizationFilter>,
-  ): Promise<unknown> {
+    filter: AllOfOrListOf<OrganizationFilter>,
+  ): TypedFetch<unknown> {
     return this.apiGet("/", { filter });
   }
 
-  public getFieldValue(field: OrganizationField): Promise<unknown> {
+  public getFieldValue(field: OrganizationField): TypedFetch<unknown> {
     return this.apiGet(`/${field}`);
   }
 
   public getDeltas(params: {
     ixLastUpdate: number;
     tags: string;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/deltas", params);
   }
 
-  public getPluginData(): Promise<unknown> {
+  public getPluginData(): TypedFetch<unknown> {
     return this.apiGet("/pluginData");
   }
 
-  public getTags(): Promise<unknown> {
+  public getTags(): TypedFetch<unknown> {
     return this.apiGet("/tags");
   }
 
@@ -103,15 +104,15 @@ export class Organization extends BaseResource {
     displayName?: string;
     name?: string;
     website?: string;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPost("/", { ...params, separator: "/" });
   }
 
-  public uploadLogo(file: Record<string, any>): Promise<unknown> {
+  public uploadLogo(file: Blob | File | FormData): TypedFetch<unknown> {
     return this.apiPost("/logo", { file });
   }
 
-  public addTags(name: string): Promise<unknown> {
+  public addTags(name: string): TypedFetch<unknown> {
     return this.apiPost("/tags", { name });
   }
 
@@ -132,31 +133,31 @@ export class Organization extends BaseResource {
       permissionLevel?: PermissionLevel;
     };
     website?: string | null;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPut("/", { ...params, separator: "/" });
   }
 
-  public updateDescription(value: string): Promise<unknown> {
+  public updateDescription(value: string): TypedFetch<unknown> {
     return this.apiPut("/desc", { value });
   }
 
-  public updateDisplayName(value: string): Promise<unknown> {
+  public updateDisplayName(value: string): TypedFetch<unknown> {
     return this.apiPut("/displayName", { value });
   }
 
-  public updateName(value: string): Promise<unknown> {
+  public updateName(value: string): TypedFetch<unknown> {
     return this.apiPut("/name", { value });
   }
 
-  public updateWebsite(value: string | null): Promise<unknown> {
+  public updateWebsite(value: string | null): TypedFetch<unknown> {
     return this.apiPut("/website", { value });
   }
 
-  public deleteOrganization(): Promise<unknown> {
+  public deleteOrganization(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
 
-  public deleteLogo(): Promise<unknown> {
+  public deleteLogo(): TypedFetch<unknown> {
     return this.apiDelete("/logo");
   }
 

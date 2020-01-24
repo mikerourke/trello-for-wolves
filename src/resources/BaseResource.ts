@@ -1,5 +1,5 @@
 import { fetchFromApi, HttpMethod } from "../utils/fetchFromApi";
-import { Config, QueryParamsByName } from "../typeDefs";
+import { Config, QueryParamsByName, TypedResponse } from "../typeDefs";
 
 /**
  * Base class for resources.
@@ -21,41 +21,35 @@ export class BaseResource {
     }
   }
 
-  protected get firstElement(): string {
-    const endpointElements = this.baseEndpoint.split("/");
-    return endpointElements[0].replace(/\//g, "");
-  }
-
-  protected apiGet(
+  protected apiGet<T>(
     endpoint: string,
     queryParamsByName?: QueryParamsByName,
     body?: unknown,
-  ): Promise<unknown> {
-    console.log(endpoint);
+  ): Promise<TypedResponse<T>> {
     return this.performRequest("GET", endpoint, queryParamsByName, body);
   }
 
-  protected apiPut(
+  protected apiPut<T>(
     endpoint: string,
     queryParamsByName?: QueryParamsByName,
     body?: unknown,
-  ): Promise<unknown> {
+  ): Promise<TypedResponse<T>> {
     return this.performRequest("PUT", endpoint, queryParamsByName, body);
   }
 
-  protected apiPost(
+  protected apiPost<T>(
     endpoint: string,
     queryParamsByName?: QueryParamsByName,
     body?: unknown,
-  ): Promise<unknown> {
+  ): Promise<TypedResponse<T>> {
     return this.performRequest("POST", endpoint, queryParamsByName, body);
   }
 
-  protected apiDelete(
+  protected apiDelete<T>(
     endpoint: string,
     queryParamsByName?: QueryParamsByName,
     body?: unknown,
-  ): Promise<unknown> {
+  ): Promise<TypedResponse<T>> {
     return this.performRequest("DELETE", endpoint, queryParamsByName, body);
   }
 
@@ -66,13 +60,13 @@ export class BaseResource {
    * @param queryParamsByName Query params to build the full URL.
    * @param body Body of the fetch call.
    */
-  private performRequest(
+  private performRequest<T>(
     method: HttpMethod,
     endpoint: string,
     queryParamsByName?: QueryParamsByName,
     body?: unknown,
-  ): Promise<unknown> {
-    return fetchFromApi({
+  ): Promise<TypedResponse<T>> {
+    return fetchFromApi<T>({
       endpoint: this.baseEndpoint.concat(endpoint),
       method,
       config: this.config,

@@ -2,50 +2,68 @@ import { BaseResource } from "./BaseResource";
 import { Board } from "./Board";
 import { Card } from "./Card";
 import { List } from "./List";
-import { Member, MemberField } from "./Member";
+import {
+  Member,
+  MemberBasicField,
+  MemberCreatorRecord,
+  MemberField,
+} from "./Member";
 import { Organization } from "./Organization";
-import { ArgumentGroup, FilterDate, Format } from "../typeDefs";
-
-export type ActionField = "data" | "date" | "idMemberCreator" | "type";
+import { CommentReactionRecord } from "./Reaction";
+import {
+  AllOfOrListOf,
+  FieldOrListOf,
+  Format,
+  TypedFetch,
+  ValueResponse,
+} from "../typeDefs";
 
 /**
- * These actions only apply to List resources.
+ * These action types are valid for any calls to get actions. The API may
+ * throw an error if the action doesn't corresponded with the parent resource.
  */
-export type ActionListFilter =
-  | "commentCard"
-  | "convertToCardFromCheckItem"
-  | "copyCard"
-  | "createCard"
-  | "createList"
-  | "deleteCard"
-  | "emailCard"
-  | "updateCard"
-  | "updateCard:closed"
-  | "updateCard:desc"
-  | "updateCard:idList"
-  | "updateCard:name"
-  | "updateList"
-  | "updateList:closed"
-  | "updateList:name";
-
-type ActionSingleFilter =
+export type ActionType =
+  | "acceptEnterpriseJoinRequest"
+  | "addAdminToBoard"
+  | "addAdminToOrganization"
   | "addAttachmentToCard"
   | "addChecklistToCard"
+  | "addLabelToCard"
   | "addMemberToBoard"
   | "addMemberToCard"
   | "addMemberToOrganization"
+  | "addOrganizationToEnterprise"
+  | "addToEnterprisePluginWhitelist"
   | "addToOrganizationBoard"
+  | "commentCard"
+  | "convertToCardFromCheckItem"
   | "copyBoard"
+  | "copyCard"
+  | "copyChecklist"
+  | "createLabel"
   | "copyCommentCard"
   | "createBoard"
+  | "createBoardInvitation"
+  | "createBoardPreference"
+  | "createCard"
   | "createList"
   | "createOrganization"
+  | "createOrganizationInvitation"
   | "deleteAttachmentFromCard"
   | "deleteBoardInvitation"
+  | "deleteCard"
+  | "deleteCheckItem"
+  | "deleteLabel"
   | "deleteOrganizationInvitation"
+  | "disableEnterprisePluginWhitelist"
+  | "disablePlugin"
   | "disablePowerUp"
+  | "emailCard"
+  | "enableEnterprisePluginWhitelist"
+  | "enablePlugin"
   | "enablePowerUp"
   | "makeAdminOfBoard"
+  | "makeAdminOfOrganization"
   | "makeNormalMemberOfBoard"
   | "makeNormalMemberOfOrganization"
   | "makeObserverOfBoard"
@@ -54,72 +72,151 @@ type ActionSingleFilter =
   | "moveCardToBoard"
   | "moveListFromBoard"
   | "moveListToBoard"
+  | "removeAdminFromBoard"
+  | "removeAdminFromOrganization"
   | "removeChecklistFromCard"
+  | "removeFromEnterprisePluginWhitelist"
   | "removeFromOrganizationBoard"
+  | "removeLabelFromCard"
+  | "removeMemberFromBoard"
   | "removeMemberFromCard"
+  | "removeMemberFromOrganization"
+  | "removeOrganizationFromEnterprise"
   | "unconfirmedBoardInvitation"
   | "unconfirmedOrganizationInvitation"
   | "updateBoard"
+  | "updateCard"
+  | "updateCheckItem"
   | "updateCheckItemStateOnCard"
   | "updateChecklist"
+  | "updateLabel"
+  | "updateList"
   | "updateMember"
-  | "updateOrganization";
+  | "updateOrganization"
+  | "voteOnCard";
 
-export type ActionFilter = ActionSingleFilter & ActionListFilter;
+/**
+ * These actions will be sent to Webhooks but are not included in nested action
+ * resource responses (e.g. GET board/[board_id]/actions).
+ */
+export type ExcludedActionType =
+  | "addAdminToBoard"
+  | "addAdminToOrganization"
+  | "addLabelToCard"
+  | "copyChecklist"
+  | "createBoardInvitation"
+  | "createBoardPreference"
+  | "createCheckItem"
+  | "createLabel"
+  | "createOrganizationInvitation"
+  | "deleteAttachmentFromCard"
+  | "deleteCheckItem"
+  | "deleteComment"
+  | "deleteLabel"
+  | "makeAdminOfOrganization"
+  | "removeAdminFromBoard"
+  | "removeAdminFromOrganization"
+  | "removeLabelFromCard"
+  | "removeMemberFromBoard"
+  | "removeMemberFromOrganization"
+  | "updateCheckItem"
+  | "updateComment"
+  | "updateLabel"
+  | "voteOnCard";
 
-export class Action extends BaseResource {
-  public getActions(params?: {
-    before?: FilterDate;
-    display?: boolean;
-    entities?: boolean;
-    fields?: ArgumentGroup<ActionField>;
-    filter?: ArgumentGroup<ActionFilter>;
-    format?: Format;
-    idModels?: string;
-    limit?: number;
-    member?: boolean;
-    memberCreator?: boolean;
-    memberCreatorFields?: ArgumentGroup<MemberField>;
-    memberFields?: ArgumentGroup<MemberField>;
-    page?: number; // Not allowed for Card resources
-    since?: FilterDate;
-  }): Promise<unknown> {
+type AnyActionType = ActionType & ExcludedActionType;
+
+export type CommentLimitsReactionsRecord = {
+  perAction: CommentReactionRecord;
+  uniquePerAction: CommentReactionRecord;
+};
+
+export type ActionRecord<T = AnyActionType> = {
+  id: string;
+  idMemberCreator: string;
+  data: unknown;
+  type: T;
+  date: string;
+  limits: {
+    reactions?: CommentLimitsReactionsRecord;
+  };
+  memberCreator: MemberCreatorRecord;
+};
+
+export type ActionEntityRecord<T = AnyActionType> = {
+  id: string;
+  type: T;
+  text: string;
+  shortLink?: string;
+  username?: string;
+};
+
+export type ActionDisplayRecord<T = AnyActionType> = {
+  translationKey: string;
+  entities: ActionEntityRecord<T>[];
+};
+
+export type ActionField = Omit<keyof ActionRecord, "memberCreator">;
+
+export type GetSingleActionParams = {
+  display?: boolean;
+  entities?: boolean;
+  fields?: AllOfOrListOf<ActionField>;
+  member?: boolean;
+  memberCreator?: boolean;
+  memberCreatorFields?: AllOfOrListOf<MemberField>;
+  memberFields?: AllOfOrListOf<MemberField>;
+};
+
+export type NestedActionsParams = {
+  actionsEntities?: boolean;
+  actionsDisplay?: boolean;
+  actionsFormat?: Format;
+  actionsSince?: string;
+  actionsLimit?: number;
+  actionFields?: AllOfOrListOf<ActionField>;
+  actionMember?: FieldOrListOf<MemberBasicField>;
+  actionMemberFields?: string;
+  actionMemberCreator?: boolean;
+  actionMemberCreatorFields?: FieldOrListOf<MemberBasicField>;
+};
+
+export class Action<TActionType = AnyActionType> extends BaseResource {
+  public getAction(
+    params?: GetSingleActionParams,
+  ): TypedFetch<ActionRecord<TActionType>> {
     return this.apiGet("/", params);
   }
 
-  public getAction(params?: {
-    display?: boolean;
-    entities?: boolean;
-    fields?: ArgumentGroup<ActionField>;
-    member?: boolean;
-    memberCreator?: boolean;
-    memberCreatorFields?: ArgumentGroup<MemberField>;
-    memberFields?: ArgumentGroup<MemberField>;
-  }): Promise<unknown> {
+  public getActions(
+    params?: NestedActionsParams,
+  ): TypedFetch<ActionRecord<TActionType>[]> {
     return this.apiGet("/", params);
   }
 
-  public getFieldValue(field: ActionField): Promise<unknown> {
+  public getFieldValue<T>(field: ActionField): TypedFetch<ValueResponse<T>> {
     return this.apiGet(`/${field}`);
   }
 
-  public getDisplay(): Promise<unknown> {
+  public getDisplay(): TypedFetch<ActionDisplayRecord<TActionType>> {
     return this.apiGet("/display");
   }
 
-  public getEntities(): Promise<unknown> {
+  public getEntities(): TypedFetch<ActionEntityRecord<TActionType>[]> {
     return this.apiGet("/entities");
   }
 
-  public updateAction(params?: { text?: string }): Promise<unknown> {
+  public updateAction(params: {
+    text: string;
+  }): TypedFetch<ActionRecord<TActionType>> {
     return this.apiPut("/", params);
   }
 
-  public updateText(value: string): Promise<unknown> {
+  public updateText(value: string): TypedFetch<ActionRecord<TActionType>> {
     return this.apiPut("/text", { value });
   }
 
-  public deleteAction(): Promise<unknown> {
+  public deleteAction(): TypedFetch<ValueResponse<null>> {
     return this.apiDelete("/");
   }
 

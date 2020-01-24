@@ -81,7 +81,7 @@ function getQueryStringForNestedArgs(
     return "";
   }
 
-  for (const [childKey, childValue] of Object.entries(childGroup)) {
+  for (const [childKey, childValue] of Object.entries(childGroup as object)) {
     const childArgKey = `${childName}${separator}${childKey}`;
     childUrlString += `${childArgKey}=${childValue}&`;
   }

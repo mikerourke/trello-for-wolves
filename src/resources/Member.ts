@@ -1,5 +1,5 @@
 import { BaseResource } from "./BaseResource";
-import { Action, ActionField, ActionFilter } from "./Action";
+import { Action, ActionField, ActionType } from "./Action";
 import { AttachmentField, AttachmentFilter } from "./Attachment";
 import { Board, BoardField, BoardFilter } from "./Board";
 import { BoardBackground, BoardBackgroundFilter } from "./BoardBackground";
@@ -22,11 +22,30 @@ import {
 import { SavedSearch } from "./SavedSearch";
 import { Sticker } from "./Sticker";
 import { Token } from "./Token";
-import { AllOrNone, ArgumentGroup, FilterDate, Format } from "../typeDefs";
+import {
+  AllOfOrListOf,
+  AllOrNone,
+  FilterDate,
+  Format,
+  TypedFetch,
+} from "../typeDefs";
+
+export interface MemberCreatorRecord {
+  id: string;
+  activityBlocked: boolean;
+  avatarHash: string;
+  avatarUrl: string;
+  fullName: string;
+  idMemberReferrer: boolean;
+  initials: string;
+  nonPublic: unknown;
+  nonPublicAvailable: boolean;
+  username: string;
+}
 
 export type AvatarSourceField = "gravatar" | "none" | "upload";
 
-export type MemberEnterpriseOnlyField =
+export type MemberBasicField =
   | "avatarHash"
   | "fullName"
   | "initials"
@@ -42,7 +61,7 @@ type SingleMemberField =
   | "status"
   | "url";
 
-export type MemberField = MemberEnterpriseOnlyField & SingleMemberField;
+export type MemberField = MemberBasicField & SingleMemberField;
 
 export type MemberOtherField =
   | "avatarSource"
@@ -66,81 +85,81 @@ export type MemberType = "admin" | "normal";
 
 export class Member extends BaseResource {
   public getMembers(params?: {
-    fields?: ArgumentGroup<MemberEveryField>;
+    fields?: AllOfOrListOf<MemberEveryField>;
     limit?: number;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/", params);
   }
 
   public getMember(params?: {
     actionBefore?: Date | null;
-    actionFields?: ArgumentGroup<ActionField>;
-    actions?: ArgumentGroup<ActionFilter>;
+    actionFields?: AllOfOrListOf<ActionField>;
+    actions?: AllOfOrListOf<ActionType>;
     actionsDisplay?: boolean;
     actionsEntities?: boolean;
     actionsLimit?: number;
     actionsSince?: FilterDate;
-    boardActionFields?: ArgumentGroup<ActionField>;
-    boardActions?: ArgumentGroup<ActionFilter>;
+    boardActionFields?: AllOfOrListOf<ActionField>;
+    boardActions?: AllOfOrListOf<ActionType>;
     boardActionsDisplay?: boolean;
     boardActionsEntities?: boolean;
     boardActionsFormat?: Format;
     boardActionsLimit?: number;
     boardActionsSince?: FilterDate;
-    boardBackgrounds?: ArgumentGroup<BoardBackgroundFilter>;
-    boardFields?: ArgumentGroup<BoardField>;
-    boardLists?: ArgumentGroup<ListFilter>;
-    boardMemberships?: ArgumentGroup<MembershipFilter>;
+    boardBackgrounds?: AllOfOrListOf<BoardBackgroundFilter>;
+    boardFields?: AllOfOrListOf<BoardField>;
+    boardLists?: AllOfOrListOf<ListFilter>;
+    boardMemberships?: AllOfOrListOf<MembershipFilter>;
     boardOrganization?: boolean;
-    boardOrganizationFields?: ArgumentGroup<OrganizationField>;
-    boards?: ArgumentGroup<BoardFilter>;
-    boardsInvited?: ArgumentGroup<BoardFilter>;
-    boardsInvitedFields?: ArgumentGroup<BoardField>;
+    boardOrganizationFields?: AllOfOrListOf<OrganizationField>;
+    boards?: AllOfOrListOf<BoardFilter>;
+    boardsInvited?: AllOfOrListOf<BoardFilter>;
+    boardsInvitedFields?: AllOfOrListOf<BoardField>;
     boardStars?: boolean;
-    cardAttachmentFields?: ArgumentGroup<AttachmentField>;
+    cardAttachmentFields?: AllOfOrListOf<AttachmentField>;
     cardAttachments?: AttachmentFilter;
-    cardFields?: ArgumentGroup<CardField>;
-    cardMemberFields?: ArgumentGroup<MemberField>;
+    cardFields?: AllOfOrListOf<CardField>;
+    cardMemberFields?: AllOfOrListOf<MemberField>;
     cardMembers?: boolean;
     cards?: CardFilter;
     cardStickers?: boolean;
     customBoardBackgrounds?: AllOrNone;
     customEmoji?: AllOrNone;
     customStickers?: AllOrNone;
-    fields?: ArgumentGroup<MemberEveryField>;
+    fields?: AllOfOrListOf<MemberEveryField>;
     notificationBefore?: string | null;
-    notificationFields?: ArgumentGroup<NotificationField>;
+    notificationFields?: AllOfOrListOf<NotificationField>;
     notificationMemberCreator?: boolean;
-    notificationMemberCreatorFields?: ArgumentGroup<MemberField>;
-    notifications?: ArgumentGroup<NotificationFilter>;
+    notificationMemberCreatorFields?: AllOfOrListOf<MemberField>;
+    notifications?: AllOfOrListOf<NotificationFilter>;
     notificationsDisplay?: boolean;
     notificationsEntities?: boolean;
     notificationSince?: string | null;
     notificationsLimit?: number;
-    organizationFields?: ArgumentGroup<OrganizationField>;
+    organizationFields?: AllOfOrListOf<OrganizationField>;
     organizationPaidAccount?: boolean;
-    organizations?: ArgumentGroup<OrganizationFilter>;
+    organizations?: AllOfOrListOf<OrganizationFilter>;
     organizationsInvited?: OrganizationFilter;
-    organizationsInvitedFields?: ArgumentGroup<OrganizationField>;
+    organizationsInvitedFields?: AllOfOrListOf<OrganizationField>;
     paidAccount?: boolean;
     savedSearches?: boolean;
     tokens?: AllOrNone;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/", params);
   }
 
-  public getMembersFilteredBy(filter: MemberFilter): Promise<unknown> {
+  public getMembersFilteredBy(filter: MemberFilter): TypedFetch<unknown> {
     return this.apiGet("/", { filter });
   }
 
-  public getFieldValue(field: MemberEveryField): Promise<unknown> {
+  public getFieldValue(field: MemberEveryField): TypedFetch<unknown> {
     return this.apiGet(`/${field}`);
   }
 
   public getDeltas(params: {
     ixLastUpdate: number;
     tags: string;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/deltas", params);
   }
 
@@ -153,11 +172,11 @@ export class Member extends BaseResource {
     email: string;
     fullName: string;
     type?: MemberType;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPut("/", params);
   }
 
-  public uploadAvatar(file: any): Promise<unknown> {
+  public uploadAvatar(file: any): TypedFetch<unknown> {
     return this.apiPost("/avatar", { file });
   }
 
@@ -172,27 +191,27 @@ export class Member extends BaseResource {
       minutesBetweenSummaries?: number;
     };
     username?: string;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPut("/", { ...params, separator: "/" });
   }
 
-  public updateAvatarSource(value: AvatarSourceField): Promise<unknown> {
+  public updateAvatarSource(value: AvatarSourceField): TypedFetch<unknown> {
     return this.apiPut("/avatarSource", { value });
   }
 
-  public updateBio(value: string): Promise<unknown> {
+  public updateBio(value: string): TypedFetch<unknown> {
     return this.apiPut("/bio", { value });
   }
 
-  public updateFullName(value: string): Promise<unknown> {
+  public updateFullName(value: string): TypedFetch<unknown> {
     return this.apiPut("/fullName", { value });
   }
 
-  public updateInitials(value: string): Promise<unknown> {
+  public updateInitials(value: string): TypedFetch<unknown> {
     return this.apiPut("/initials", { value });
   }
 
-  public updateUsername(value: string): Promise<unknown> {
+  public updateUsername(value: string): TypedFetch<unknown> {
     return this.apiPut("/username", { value });
   }
 
@@ -201,7 +220,7 @@ export class Member extends BaseResource {
    * @example PUT /1/organizations/:organizationId/members/:memberId
    * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember-deactivated
    */
-  public updateDeactivatedStatus(value: boolean): Promise<unknown> {
+  public updateDeactivatedStatus(value: boolean): TypedFetch<unknown> {
     return this.apiPut("/deactivated", { value });
   }
 
@@ -213,11 +232,11 @@ export class Member extends BaseResource {
    * @example PUT /1/organizations/:organizationId/members/:memberId
    * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember
    */
-  public updateMemberType(type: MemberType): Promise<unknown> {
+  public updateMemberType(type: MemberType): TypedFetch<unknown> {
     return this.apiPut("/", { type });
   }
 
-  public dismissOneTimeMessages(value: string): Promise<unknown> {
+  public dismissOneTimeMessages(value: string): TypedFetch<unknown> {
     return this.apiPost("/oneTimeMessagesDismissed", { value });
   }
 
@@ -226,7 +245,7 @@ export class Member extends BaseResource {
    * @example DELETE /1/boards/:boardId/members/:memberId
    * @see https://developers.trello.com/advanced-reference/board#delete-1-boards-board-id-members-idmember
    */
-  public deleteMember(): Promise<unknown> {
+  public deleteMember(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
 
@@ -235,7 +254,7 @@ export class Member extends BaseResource {
    * @example DELETE /1/organizations/:organizationId/members/:memberId
    * @see https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember
    */
-  public dissociateMember(): Promise<unknown> {
+  public dissociateMember(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
 
@@ -245,7 +264,7 @@ export class Member extends BaseResource {
    * @example DELETE /1/organizations/:organizationId/members/:memberId/all
    * @see https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember-all
    */
-  public dissociateMemberFromAll(): Promise<unknown> {
+  public dissociateMemberFromAll(): TypedFetch<unknown> {
     return this.apiDelete("/all");
   }
 

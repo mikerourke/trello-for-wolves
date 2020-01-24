@@ -1,5 +1,5 @@
 import { BaseResource } from "./BaseResource";
-import { Action, ActionField, ActionFilter } from "./Action";
+import { Action, ActionField, ActionType } from "./Action";
 import { Attachment, AttachmentField, AttachmentFilter } from "./Attachment";
 import { Board, BoardField } from "./Board";
 import { CheckItem, CheckItemStateField } from "./CheckItem";
@@ -10,13 +10,45 @@ import { List, ListField } from "./List";
 import { Member, MemberField } from "./Member";
 import { Sticker, StickerField } from "./Sticker";
 import {
+  AllOfOrListOf,
   AllOrNone,
-  ArgumentGroup,
   KeepFromSourceField,
   PositionNumbered,
+  TypedFetch,
 } from "../typeDefs";
 
 export type CardAging = "pirate" | "regular";
+
+export type CardRecord = {
+  id: string;
+  badges: any; // TODO: Add object definition.
+  checkItemStates: string[];
+  closed: boolean;
+  dateLastActivity: string;
+  desc: string;
+  descData: string;
+  due: string;
+  dueComplete: boolean;
+  idAttachmentCover: string;
+  idBoard: string;
+  idChecklists: string[];
+  idLabels: string[];
+  idList: string;
+  idMembers: string[];
+  idMembersVoted: string[];
+  idShort: number;
+  labels: any[]; // Labels
+  manualCoverAttachment: boolean;
+  name: string;
+  pos: number;
+  shortLink: string;
+  shortUrl: string;
+  subscribed: boolean;
+  url: string;
+  address: string;
+  locationName: string;
+  coordinates: object;
+};
 
 export type CardField =
   | "badges"
@@ -54,69 +86,69 @@ export type CardFilter = "all" | "closed" | "none" | "open" | "visible";
 
 export class Card extends BaseResource {
   public getCards(params?: {
-    actions?: ArgumentGroup<ActionFilter>;
-    attachmentFields?: ArgumentGroup<AttachmentField>;
+    actions?: AllOfOrListOf<ActionType>;
+    attachmentFields?: AllOfOrListOf<AttachmentField>;
     attachments?: AttachmentFilter;
     before?: Date | null;
     checkItemStates?: boolean;
     checklists?: AllOrNone;
-    fields?: ArgumentGroup<CardField>;
+    fields?: AllOfOrListOf<CardField>;
     filter?: CardFilter;
     limit?: number;
-    memberFields?: ArgumentGroup<MemberField>;
+    memberFields?: AllOfOrListOf<MemberField>;
     members?: boolean;
     since?: Date | null;
     stickers?: boolean;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/", params);
   }
 
   public getCard(params?: {
-    actionFields?: ArgumentGroup<ActionField>;
-    actionMemberCreatorFields?: ArgumentGroup<MemberField>;
-    actions?: ArgumentGroup<ActionFilter>;
+    actionFields?: AllOfOrListOf<ActionField>;
+    actionMemberCreatorFields?: AllOfOrListOf<MemberField>;
+    actions?: AllOfOrListOf<ActionType>;
     actionsDisplay?: boolean;
     actionsEntities?: boolean;
     actionsLimit?: number;
-    attachmentFields?: ArgumentGroup<AttachmentField>;
+    attachmentFields?: AllOfOrListOf<AttachmentField>;
     attachments?: AttachmentFilter;
     board?: boolean;
-    boardFields?: ArgumentGroup<BoardField>;
-    checkItemStateFields?: ArgumentGroup<CheckItemStateField>;
+    boardFields?: AllOfOrListOf<BoardField>;
+    checkItemStateFields?: AllOfOrListOf<CheckItemStateField>;
     checkItemStates?: boolean;
-    checklistFields?: ArgumentGroup<ChecklistField>;
+    checklistFields?: AllOfOrListOf<ChecklistField>;
     checklists?: AllOrNone;
-    fields?: ArgumentGroup<CardField>;
+    fields?: AllOfOrListOf<CardField>;
     list?: boolean;
-    listFields?: ArgumentGroup<ListField>;
-    memberFields?: ArgumentGroup<MemberField>;
+    listFields?: AllOfOrListOf<ListField>;
+    memberFields?: AllOfOrListOf<MemberField>;
     members?: boolean;
     membersVoted?: boolean;
-    memberVotedFields?: ArgumentGroup<MemberField>;
+    memberVotedFields?: AllOfOrListOf<MemberField>;
     pluginData?: boolean;
-    stickerFields?: ArgumentGroup<StickerField>;
+    stickerFields?: AllOfOrListOf<StickerField>;
     stickers?: boolean;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiGet("/", params);
   }
 
-  public getCardsFilteredBy(filter: CardFilter): Promise<unknown> {
+  public getCardsFilteredBy(filter: CardFilter): TypedFetch<unknown> {
     return this.apiGet(`/${filter}`);
   }
 
-  public getFieldValue(field: CardField): Promise<unknown> {
+  public getFieldValue(field: CardField): TypedFetch<unknown> {
     return this.apiGet(`/${field}`);
   }
 
-  public voteOnCard(idMember: string): Promise<unknown> {
+  public voteOnCard(idMember: string): TypedFetch<unknown> {
     return this.apiPost("/membersVoted", { value: idMember });
   }
 
-  public removeVoteFromCard(idMember: string): Promise<unknown> {
+  public removeVoteFromCard(idMember: string): TypedFetch<unknown> {
     return this.apiDelete(`/membersVoted/${idMember}`);
   }
 
-  public getPluginData(): Promise<unknown> {
+  public getPluginData(): TypedFetch<unknown> {
     return this.apiGet("/pluginData");
   }
 
@@ -130,19 +162,19 @@ export class Card extends BaseResource {
     idList?: string;
     idMembers?: string[];
     keepFromSource?: KeepFromSourceField | KeepFromSourceField[];
-    labels?: ArgumentGroup<LabelColor>;
+    labels?: AllOfOrListOf<LabelColor>;
     name?: string;
     pos?: PositionNumbered;
     urlSource?: string | null;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPost("/", { ...params, separator: "/" });
   }
 
-  public associateLabel(labelId: string): Promise<unknown> {
+  public associateLabel(labelId: string): TypedFetch<unknown> {
     return this.apiPost("/idLabels", { value: labelId });
   }
 
-  public associateMember(memberId: string): Promise<unknown> {
+  public associateMember(memberId: string): TypedFetch<unknown> {
     return this.apiPost("/idMembers", { value: memberId });
   }
 
@@ -159,23 +191,23 @@ export class Card extends BaseResource {
     name?: string;
     pos?: PositionNumbered;
     subscribed?: boolean;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPut("/", params);
   }
 
-  public updateClosedStatus(value: boolean): Promise<unknown> {
+  public updateClosedStatus(value: boolean): TypedFetch<unknown> {
     return this.apiPut("/closed", { value });
   }
 
-  public updateDescription(value: string): Promise<unknown> {
+  public updateDescription(value: string): TypedFetch<unknown> {
     return this.apiPut("/desc", { value });
   }
 
-  public updateDueDate(value: Date | null): Promise<unknown> {
+  public updateDueDate(value: Date | null): TypedFetch<unknown> {
     return this.apiPut("/due", { value });
   }
 
-  public updateDueComplete(value: boolean): Promise<unknown> {
+  public updateDueComplete(value: boolean): TypedFetch<unknown> {
     return this.apiPut("/dueComplete", { value });
   }
 
@@ -186,7 +218,7 @@ export class Card extends BaseResource {
    */
   public updateAttachmentCoverImage(
     idAttachmentCover: string,
-  ): Promise<unknown> {
+  ): TypedFetch<unknown> {
     return this.apiPut("/idAttachmentCover", { value: idAttachmentCover });
   }
 
@@ -195,43 +227,43 @@ export class Card extends BaseResource {
     params?: {
       idList?: string;
     },
-  ): Promise<unknown> {
+  ): TypedFetch<unknown> {
     return this.apiPut("/idBoard", { value: boardId, ...params });
   }
 
-  public moveToList(listId: string): Promise<unknown> {
+  public moveToList(listId: string): TypedFetch<unknown> {
     return this.apiPut("/idList", { value: listId });
   }
 
-  public associateMembers(memberIds: string[]): Promise<unknown> {
+  public associateMembers(memberIds: string[]): TypedFetch<unknown> {
     return this.apiPut("/idMembers", { value: memberIds });
   }
 
-  public updateName(value: string): Promise<unknown> {
+  public updateName(value: string): TypedFetch<unknown> {
     return this.apiPut("/name", { value });
   }
 
-  public updatePosition(value: PositionNumbered): Promise<unknown> {
+  public updatePosition(value: PositionNumbered): TypedFetch<unknown> {
     return this.apiPut("/pos", { value });
   }
 
-  public updateSubscribed(value: boolean): Promise<unknown> {
+  public updateSubscribed(value: boolean): TypedFetch<unknown> {
     return this.apiPut("/subscribed", { value });
   }
 
-  public markAssociatedNotificationsRead(): Promise<unknown> {
+  public markAssociatedNotificationsRead(): TypedFetch<unknown> {
     return this.apiPost("/markAssociatedNotificationsRead");
   }
 
-  public deleteCard(): Promise<unknown> {
+  public deleteCard(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
 
-  public dissociateMember(memberId: string): Promise<unknown> {
+  public dissociateMember(memberId: string): TypedFetch<unknown> {
     return this.apiDelete(`/idMembers/${memberId}`);
   }
 
-  public dissociateLabel(labelId: string): Promise<unknown> {
+  public dissociateLabel(labelId: string): TypedFetch<unknown> {
     return this.apiDelete(`/idLabels/${labelId}`);
   }
 

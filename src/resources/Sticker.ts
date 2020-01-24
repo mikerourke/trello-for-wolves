@@ -1,37 +1,51 @@
 import { BaseResource } from "./BaseResource";
-import { AllOrNone, ArgumentGroup } from "../typeDefs";
+import { AllOfOrListOf, TypedFetch } from "../typeDefs";
 
-export type StickerField =
-  | "image"
-  | "imageScaled"
-  | "imageUrl"
-  | "left"
-  | "rotate"
-  | "top"
-  | "zIndex";
+export type ImageScaledRecord = {
+  _id: string;
+  url: string;
+  scaled: boolean;
+  width: number;
+  height: number;
+};
 
-export type CustomStickerField = "scaled" | "url";
+export type StickerRecord = {
+  /** The ID of the sticker. */
+  id: string;
+  /**
+   * The name of the sticker if it is a default sticker or a generated id if it
+   * is a custom sticker. See section below for the names of the default stickers.
+   */
+  image: string;
+  /** An array of scaled versions of the sticker image. */
+  imageScaled: ImageScaledRecord[];
+  /** Direct URL to the image. */
+  imageUrl: string;
+  /** How far to the left of the card the sticker is placed. */
+  left: number;
+  /** How far from the top of the card the sticker is placed. */
+  top: number;
+  /** How much the sticker has been rotated. */
+  rotate: number;
+  /**
+   * The ordering for display which tells you which sticker would show on top
+   * of another.
+   */
+  zIndex: number;
+};
+
+export type StickerField = Omit<keyof StickerRecord, "id">;
 
 export class Sticker extends BaseResource {
-  public getStickers(params?: {
-    fields?: ArgumentGroup<StickerField>;
-  }): Promise<unknown> {
-    return this.apiGet("/", params);
-  }
-
-  public getCustomStickers(params?: { filter?: AllOrNone }): Promise<unknown> {
-    return this.apiGet("/", params);
-  }
-
   public getSticker(params?: {
-    fields?: ArgumentGroup<StickerField>;
-  }): Promise<unknown> {
+    fields?: AllOfOrListOf<StickerField>;
+  }): TypedFetch<StickerRecord> {
     return this.apiGet("/", params);
   }
 
-  public getCustomSticker(params?: {
-    fields?: ArgumentGroup<CustomStickerField>;
-  }): Promise<unknown> {
+  public getStickers(params?: {
+    fields?: AllOfOrListOf<StickerField>;
+  }): TypedFetch<StickerRecord[]> {
     return this.apiGet("/", params);
   }
 
@@ -41,11 +55,11 @@ export class Sticker extends BaseResource {
     top: number;
     zIndex: number;
     rotate?: number;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPost("/", params);
   }
 
-  public uploadSticker(file: File): Promise<unknown> {
+  public uploadSticker(file: Blob | File | FormData): TypedFetch<unknown> {
     return this.apiPost("/", { file });
   }
 
@@ -54,11 +68,11 @@ export class Sticker extends BaseResource {
     rotate?: number;
     top?: number;
     zIndex?: number;
-  }): Promise<unknown> {
+  }): TypedFetch<unknown> {
     return this.apiPut("/", params);
   }
 
-  public deleteSticker(): Promise<unknown> {
+  public deleteSticker(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
 }
