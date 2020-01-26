@@ -20,7 +20,8 @@
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "strict": true,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "declaration": true
   },
   "exclude": [
     ".idea",

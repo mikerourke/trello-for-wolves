@@ -1,10 +1,10 @@
 import { BaseResource } from "./BaseResource";
-import { Board, BoardField } from "./Board";
+import { Board } from "./Board";
 import {
   AllOfOrListOf,
   AllOrNone,
-  QueryParamsByName,
   TypedFetch,
+  ValidResourceFields,
 } from "../typeDefs";
 
 export type LabelColor =
@@ -20,37 +20,55 @@ export type LabelColor =
   | "pink"
   | "black";
 
-export type LabelRecord = {
+export interface LabelRecord {
+  /** The ID of the label. */
   id: string;
+  /** The ID of the board the label is on. */
   idBoard: string;
+  /** The optional name of the label (0 - 16384 chars). */
   name: string;
+  /**
+   * The color of the label (null means no color, and the label will not show
+   * on the front of cards).
+   */
   color: LabelColor | null;
-};
+}
 
-export type LabelField = Omit<keyof LabelRecord, "id">;
+export type LabelField = ValidResourceFields<LabelRecord>;
 
-export type GetLabelParams = {
+export interface GetLabelsViaQueryParams {
+  labels?: AllOrNone;
+  labelFields?: AllOfOrListOf<LabelField>;
+  /** A number from 0 to 1000. */
+  labelsLimit?: number;
+}
+
+export interface GetLabelsViaUrlParams {
   fields?: AllOfOrListOf<LabelField>;
   limit?: number;
-};
+}
 
-export type NestedLabelParams = {
-  labels: AllOrNone;
-  labelFields: AllOfOrListOf<LabelField>;
-  /** A number from 0 to 1000. */
-  labelsLimit: number;
-};
+export type GetLabelsReturnType<
+  TParams,
+  TPayload
+> = TParams extends GetLabelsViaUrlParams
+  ? LabelRecord[]
+  : TPayload & { labels: LabelRecord[] };
 
-export class Label<
-  TGetSingleParams = Pick<GetLabelParams, "fields">,
-  TGetMultipleParams = Pick<GetLabelParams, "fields">
-> extends BaseResource {
-  public getLabel(params?: TGetSingleParams): TypedFetch<LabelRecord> {
-    return this.apiGet("/", params as QueryParamsByName);
+export type AnyGetLabelsParams =
+  | GetLabelsViaQueryParams
+  | GetLabelsViaUrlParams;
+
+export class Label extends BaseResource {
+  public getLabel(params?: GetLabelsViaUrlParams): TypedFetch<LabelRecord> {
+    return this.apiGet("/", params);
   }
 
-  public getLabels(params?: TGetMultipleParams): TypedFetch<LabelRecord[]> {
-    return this.apiGet("/", params as QueryParamsByName);
+  public getLabels<
+    TPayload extends object,
+    TParams extends AnyGetLabelsParams = {}
+  >(params?: TParams): TypedFetch<GetLabelsReturnType<TParams, TPayload>> {
+    return this.apiGet("/", params);
   }
 
   public addLabel(params: {
@@ -85,9 +103,6 @@ export class Label<
   }
 
   public board(): Board {
-    return new Board<{ fields?: AllOfOrListOf<BoardField> }>(
-      this.config,
-      `${this.baseEndpoint}/board`,
-    );
+    return new Board(this.config, `${this.baseEndpoint}/board`);
   }
 }

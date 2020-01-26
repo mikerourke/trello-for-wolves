@@ -16,6 +16,36 @@ import { Type } from "./resources/Type";
 import { Webhook } from "./resources/Webhook";
 import { Config } from "./typeDefs";
 
+export * from "./resources/Action";
+export * from "./resources/Attachment";
+export * from "./resources/Batch";
+export * from "./resources/Board";
+export * from "./resources/BoardMyPrefs";
+export * from "./resources/BoardStar";
+export * from "./resources/Card";
+export * from "./resources/CheckItem";
+export * from "./resources/Checklist";
+export * from "./resources/Comment";
+export * from "./resources/CustomEmoji";
+export * from "./resources/CustomField";
+export * from "./resources/Enterprise";
+export * from "./resources/Label";
+export * from "./resources/List";
+export * from "./resources/Member";
+export * from "./resources/MemberPref";
+export * from "./resources/Membership";
+export * from "./resources/Notification";
+export * from "./resources/Organization";
+export * from "./resources/OrganizationPref";
+export * from "./resources/Plugin";
+export * from "./resources/Reaction";
+export * from "./resources/SavedSearch";
+export * from "./resources/Search";
+export * from "./resources/Sticker";
+export * from "./resources/Token";
+export * from "./resources/Type";
+export * from "./resources/Webhook";
+
 export class Trello {
   public config: Config;
 

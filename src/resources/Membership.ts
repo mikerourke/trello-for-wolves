@@ -1,31 +1,50 @@
 import { BaseResource } from "./BaseResource";
 import { BoardMemberType } from "./Board";
-import { MemberField, MemberType } from "./Member";
+import {
+  MemberFilter,
+  MemberInvitedField,
+  MemberRecord,
+  MemberType,
+  NestedMemberField,
+} from "./Member";
 import { AllOfOrListOf, TypedFetch } from "../typeDefs";
 
 export type MembershipFilter =
   | "active"
   | "admin"
+  | "all"
   | "deactivated"
   | "me"
   | "none"
   | "normal";
 
-export class Membership extends BaseResource {
-  public getMemberships(params?: {
-    filter?: AllOfOrListOf<MembershipFilter>;
-    member?: boolean;
-    // Member Fields are only allowed when called from a Board:
-    memberFields?: AllOfOrListOf<MemberField>;
-  }): TypedFetch<unknown> {
-    return this.apiGet("/", params);
-  }
+export interface MembershipRecord {
+  id: string;
+  idMember: string;
+  memberType: string;
+  unconfirmed: boolean;
+  deactivated: boolean;
+  orgMemberType?: string;
+  member?: MemberRecord;
+}
 
+export class Membership extends BaseResource {
   public getMembership(params?: {
     member?: boolean;
     // Member Fields are only allowed when called from a Board:
-    memberFields?: AllOfOrListOf<MemberField>;
-  }): TypedFetch<unknown> {
+    memberFields?: AllOfOrListOf<MemberInvitedField>;
+  }): TypedFetch<MembershipRecord> {
+    return this.apiGet("/", params);
+  }
+
+  public getMemberships(params?: {
+    filter?: Omit<MemberFilter, "owners"> | Omit<MembershipFilter, "none">;
+    member?: boolean;
+    // These are callable from a Board only:
+    activity?: boolean;
+    orgMemberType?: boolean;
+    memberFields?: AllOfOrListOf<NestedMemberField>;
+  }): TypedFetch<MembershipRecord[]> {
     return this.apiGet("/", params);
   }
 
@@ -36,8 +55,8 @@ export class Membership extends BaseResource {
   public updateMembership(params: {
     // When called from Member or Organization:
     type: BoardMemberType | MemberType;
-    fields?: AllOfOrListOf<MemberField>;
-  }): TypedFetch<unknown> {
+    fields?: AllOfOrListOf<MemberInvitedField>;
+  }): TypedFetch<MembershipRecord> {
     return this.apiPut("/", params);
   }
 }

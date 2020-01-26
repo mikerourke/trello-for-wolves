@@ -1,32 +1,36 @@
 import { BaseResource } from "./BaseResource";
 import { PositionNumbered, TypedFetch } from "../typeDefs";
 
+export type BoardStarsFilter = "mine" | "none";
+
 export type BoardStarRecord = {
+  _id?: string;
+  id?: string;
   idBoard: string;
   pos: number;
 };
 
-export type BoardStarsFilter = "mine" | "none";
-
 export class BoardStar extends BaseResource {
-  public getBoardStars(): TypedFetch<unknown> {
+  public getBoardStar(): TypedFetch<BoardStarRecord> {
     return this.apiGet("/");
   }
 
-  public getBoardStar(): TypedFetch<unknown> {
-    return this.apiGet("/");
+  public getBoardStars(params?: {
+    filter: BoardStarsFilter;
+  }): TypedFetch<BoardStarRecord[]> {
+    return this.apiGet("/", params);
   }
 
   public addBoardStar(params: {
     idBoard: string;
     pos: PositionNumbered;
-  }): TypedFetch<unknown> {
+  }): TypedFetch<BoardStarRecord> {
     return this.apiPost("/", params);
   }
 
   public updateBoardStar(params?: {
     pos?: PositionNumbered;
-  }): TypedFetch<unknown> {
+  }): TypedFetch<BoardStarRecord> {
     return this.apiPut("/", params);
   }
 
@@ -34,7 +38,7 @@ export class BoardStar extends BaseResource {
     return this.apiPut("/idBoard", { value: idBoard });
   }
 
-  public updatePosition(value: PositionNumbered): TypedFetch<unknown> {
+  public updatePosition(value: PositionNumbered): TypedFetch<BoardStarRecord> {
     return this.apiPut("/pos", { value });
   }
 

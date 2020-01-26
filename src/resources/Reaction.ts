@@ -1,17 +1,22 @@
 import { BaseResource } from "./BaseResource";
 import { TypedFetch } from "../typeDefs";
+import { MemberRecord } from "./Member";
 
-export interface ReactionOptions {
-  shortName: string;
-  skinVariation: string;
-  native: string;
+export interface EmojiRecord {
   unified: string;
+  native: string;
+  name: string;
+  skinVariation: string;
+  shortName: string;
 }
 
-export interface CommentReactionRecord {
-  status: string;
-  disableAt: number;
-  warnAt: number;
+export interface ReactionRecord {
+  id: string;
+  idMember: string;
+  idModel: string;
+  idEmoji: string;
+  member?: MemberRecord;
+  emoji?: EmojiRecord;
 }
 
 export class Reaction extends BaseResource {
@@ -40,7 +45,7 @@ export class Reaction extends BaseResource {
     return this.apiGet("/reactionsSummary");
   }
 
-  public addReaction(params: ReactionOptions): TypedFetch<unknown> {
+  public addReaction(params: EmojiRecord): TypedFetch<unknown> {
     return this.apiPost("/", {}, params);
   }
 

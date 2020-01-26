@@ -1,15 +1,15 @@
 import { BaseResource } from "./BaseResource";
-import { AllOfOrListOf, TypedFetch } from "../typeDefs";
+import { AllOfOrListOf, FileUpload, TypedFetch } from "../typeDefs";
 
-export type ImageScaledRecord = {
+export interface ImageScaledRecord {
   _id: string;
   url: string;
   scaled: boolean;
   width: number;
   height: number;
-};
+}
 
-export type StickerRecord = {
+export interface StickerRecord {
   /** The ID of the sticker. */
   id: string;
   /**
@@ -32,7 +32,7 @@ export type StickerRecord = {
    * of another.
    */
   zIndex: number;
-};
+}
 
 export type StickerField = Omit<keyof StickerRecord, "id">;
 
@@ -59,7 +59,7 @@ export class Sticker extends BaseResource {
     return this.apiPost("/", params);
   }
 
-  public uploadSticker(file: Blob | File | FormData): TypedFetch<unknown> {
+  public uploadSticker(file: FileUpload): TypedFetch<unknown> {
     return this.apiPost("/", { file });
   }
 

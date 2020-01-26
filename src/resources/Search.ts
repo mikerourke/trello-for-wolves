@@ -2,7 +2,7 @@ import { BaseResource } from "./BaseResource";
 import { AttachmentFilter } from "./Attachment";
 import { BoardField } from "./Board";
 import { CardField } from "./Card";
-import { MemberField } from "./Member";
+import { MemberInvitedField } from "./Member";
 import { OrganizationField } from "./Organization";
 import { AllOfOrListOf, TypedFetch } from "../typeDefs";
 
@@ -43,7 +43,7 @@ export type PerformSearchParams = {
   idCards?: string[];
   /** A comma-separated list of team ids. */
   idOrganizations?: string[];
-  memberFields?: AllOfOrListOf<MemberField>;
+  memberFields?: AllOfOrListOf<MemberInvitedField>;
   /** The maximum number of members to return. Maximum 1000 */
   membersLimit?: number;
   /**

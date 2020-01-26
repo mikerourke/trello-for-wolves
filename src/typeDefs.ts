@@ -1,9 +1,9 @@
-export type Config = {
+export interface Config {
   key: string;
   token: string;
   backoffTime?: number;
   maxRetryAttempts?: number;
-};
+}
 
 export type AllOrNone = "all" | "none";
 
@@ -30,7 +30,7 @@ export type Position = "bottom" | "top";
 
 export type PositionNumbered = Position | number;
 
-export type QueryParamsByName = Record<string, unknown>;
+export type ValidResourceFields<T> = Omit<keyof T, "limits" | "creationMethod">;
 
 export interface TypedResponse<TPayload = unknown> extends Response {
   json<TResult = TPayload>(): Promise<TResult>;
@@ -38,6 +38,63 @@ export interface TypedResponse<TPayload = unknown> extends Response {
 
 export type TypedFetch<T> = Promise<TypedResponse<T>>;
 
-export type ValueResponse<T> = {
+export interface ValueResponse<T> {
   _value: T;
-};
+}
+
+export type FileUpload = Blob | File | FormData;
+
+export interface LimitRecord {
+  status: string;
+  disableAt: number;
+  warnAt: number;
+}
+
+export interface Limits {
+  attachments?: {
+    perBoard?: LimitRecord;
+    perCard?: LimitRecord;
+  };
+  boards?: {
+    totalMembersPerBoard?: LimitRecord;
+    totalPerMember?: LimitRecord;
+  };
+  cards?: {
+    openPerBoard?: LimitRecord;
+    openPerList?: LimitRecord;
+    totalPerBoard?: LimitRecord;
+    totalPerLimit?: LimitRecord;
+  };
+  checklists?: {
+    perBoard?: LimitRecord;
+    perCard?: LimitRecord;
+  };
+  checkItems?: {
+    perChecklist?: LimitRecord;
+  };
+  customFields?: {
+    perBoard?: LimitRecord;
+  };
+  customFieldOptions?: {
+    perField?: LimitRecord;
+  };
+  labels?: {
+    perBoard?: LimitRecord;
+  };
+  lists?: {
+    openPerBoard?: LimitRecord;
+    totalPerBoard?: LimitRecord;
+  };
+  orgs?: {
+    totalPerMember?: LimitRecord;
+    totalMembersPerOrg?: LimitRecord;
+    freeBoardsPerOrg?: LimitRecord;
+  };
+  stickers?: {
+    perCard?: LimitRecord;
+  };
+  reactions?: {
+    perAction?: LimitRecord;
+    uniquePerAction?: LimitRecord;
+  };
+}

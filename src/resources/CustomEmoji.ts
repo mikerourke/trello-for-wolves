@@ -1,23 +1,37 @@
 import { BaseResource } from "./BaseResource";
-import { AllOfOrListOf, AllOrNone, TypedFetch } from "../typeDefs";
+import {
+  AllOfOrListOf,
+  AllOrNone,
+  FileUpload,
+  TypedFetch,
+  ValidResourceFields,
+} from "../typeDefs";
 
-export type CustomEmojiField = "name" | "url";
+export interface CustomEmojiRecord {
+  id: string;
+  name: string;
+  url: string;
+}
+
+export type CustomEmojiField = ValidResourceFields<CustomEmojiRecord>;
 
 export class CustomEmoji extends BaseResource {
-  public getCustomEmojis(params?: { filter?: AllOrNone }): TypedFetch<unknown> {
+  public getCustomEmoji(params?: {
+    fields?: AllOfOrListOf<CustomEmojiField>;
+  }): TypedFetch<CustomEmojiRecord> {
     return this.apiGet("/", params);
   }
 
-  public getCustomEmoji(params?: {
-    fields?: AllOfOrListOf<CustomEmojiField>;
-  }): TypedFetch<unknown> {
+  public getCustomEmojis(params?: {
+    filter?: AllOrNone;
+  }): TypedFetch<CustomEmojiRecord[]> {
     return this.apiGet("/", params);
   }
 
   public uploadCustomEmoji(params: {
     name: string;
-    file: Blob | File | FormData;
-  }): TypedFetch<unknown> {
+    file: FileUpload;
+  }): TypedFetch<CustomEmojiRecord> {
     return this.apiPost("/", params);
   }
 }

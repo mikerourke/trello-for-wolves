@@ -1,41 +1,85 @@
 import { BaseResource } from "./BaseResource";
 import { BoardField } from "./Board";
-import { MemberBasicField, MemberFilter } from "./Member";
+import { NestedMemberField, MemberFilter } from "./Member";
 import { MembershipFilter } from "./Membership";
 import { OrganizationField, OrganizationFilter } from "./Organization";
-import { AllOfOrListOf, TypedFetch } from "../typeDefs";
+import { AllOfOrListOf, TypedFetch, ValidResourceFields } from "../typeDefs";
+
+export type SortOrder = "asc" | "ascending" | "desc" | "descending" | "id";
 
 type ValueOrArray<T> = Omit<AllOfOrListOf<T>, "all">;
 
-export type EnterpriseField =
-  | "displayName"
-  | "id"
-  | "idAdmins"
-  | "memberIds"
-  | "name"
-  | "orgIds"
-  | "prefs"
-  | "products"
-  | "ssoActivationFailed"
-  | "userTypes";
+export interface EnterprisePrefsRecord {
+  ssoOnly: boolean;
+  signup: {
+    message: string;
+    confirmation: string;
+    banner: string;
+    bannerHtml: string;
+    confirmationHtml: string;
+    messageHtml: string;
+  };
+  mandatoryTransferDate: string | null;
+  maxMembers: number | null;
+}
 
-export type SortOrder = "asc" | "ascending" | "desc" | "descending" | "id";
+export type EnterpriseUserType =
+  | "all"
+  | "member"
+  | "collaborator"
+  | "saml"
+  | "none";
+
+export interface EnterpriseRecord {
+  /** The ID of the enterprise. */
+  id: string;
+  /** Short-form name of the enterprise. */
+  name: string;
+  /**
+   * Long-form name of the enterprise used when displaying the full name of the
+   * enterprise.
+   */
+  displayName: string;
+  /**
+   * JSON Object containing information about the preferences set within the
+   * enterprise.
+   */
+  prefs: EnterprisePrefsRecord;
+  /** Determines whether SSO successfully activated. */
+  ssoActivationFailed: boolean;
+  /** Array of Member IDs that are admins of the enterprise. */
+  idAdmins: string[];
+  /** Array of Member IDs that belong to the enterprise. */
+  idMembers: string[];
+  /** Array of Organization IDs that belong to the enterprise. */
+  idOrganizations: string[];
+  /** Array of products that the enterprise has enabled. */
+  products: number[];
+  /**
+   * Object containing keys for every member type (all, member, collaborator,
+   * saml, none) and values representing the count of each type of member.
+   */
+  userTypes: Record<EnterpriseUserType, number>;
+}
+
+export type EnterpriseField = ValidResourceFields<EnterpriseRecord>;
 
 export class Enterprise extends BaseResource {
   public getEnterprise(params?: {
     fields?: AllOfOrListOf<EnterpriseField>;
-    memberCount?: number;
-    memberFields?: MemberBasicField;
-    memberFilter?: "none" | string;
     members?: MemberFilter;
+    memberFields?: NestedMemberField;
+    memberFilter?: "none" | string;
+    memberSort?: string;
     memberSortBy?: "none" | string;
     memberSortOrder?: SortOrder;
     memberStartIndex?: number;
-    organizationFields?: AllOfOrListOf<OrganizationField>;
-    organizationMemberships?: ValueOrArray<MembershipFilter>;
-    organizationPaidAccounts?: boolean;
+    memberCount?: number;
     organizations?: OrganizationFilter;
-  }): TypedFetch<unknown> {
+    organizationFields?: AllOfOrListOf<OrganizationField>;
+    organizationPaidAccounts?: boolean;
+    organizationMemberships?: ValueOrArray<MembershipFilter>;
+  }): TypedFetch<EnterpriseRecord> {
     return this.apiGet("/", params);
   }
 
@@ -49,44 +93,47 @@ export class Enterprise extends BaseResource {
     authenticate?: boolean;
     confirmationAccepted?: boolean;
     returnUrl?: "none" | string;
+    tosAccepted?: boolean;
   }): TypedFetch<unknown> {
     return this.apiGet("/signupUrl", params);
   }
 
+  public getMember(
+    idMember: string,
+    params?: {
+      idMember?: string | "none";
+      fields?: ValueOrArray<NestedMemberField>;
+      organizationFields?: AllOfOrListOf<OrganizationField>;
+      boardFields?: AllOfOrListOf<BoardField>;
+    },
+  ): TypedFetch<unknown> {
+    return this.apiGet(`/members/${idMember}`, params);
+  }
+
   public getMembers(params?: {
-    boardFields?: AllOfOrListOf<BoardField>;
-    count?: number;
     fields?: ValueOrArray<EnterpriseField>;
     filter?: string;
-    organizationFields?: AllOfOrListOf<OrganizationField>;
+    sort?: string;
     sortBy?: "none" | string;
     sortOrder?: SortOrder;
     startIndex?: number;
+    count?: number;
+    organizationFields?: AllOfOrListOf<OrganizationField>;
+    boardFields?: AllOfOrListOf<BoardField>;
   }): TypedFetch<unknown> {
     return this.apiGet("/members", params);
-  }
-
-  public getMember(
-    memberId: string,
-    params?: {
-      boardFields?: AllOfOrListOf<BoardField>;
-      fields?: ValueOrArray<MemberBasicField>;
-      organizationFields?: AllOfOrListOf<OrganizationField>;
-    },
-  ): TypedFetch<unknown> {
-    return this.apiGet(`/members/${memberId}`, params);
   }
 
   public getIfOrgTransferrable(orgId: string): TypedFetch<unknown> {
     return this.apiGet(`/transferrable/organization/${orgId}`);
   }
 
-  public transferToOrganization(orgId: string): TypedFetch<unknown> {
-    return this.apiPut("/organizations", { idOrganization: orgId });
+  public transferToOrganization(idOrganization: string): TypedFetch<unknown> {
+    return this.apiPut("/organizations", { idOrganization });
   }
 
-  public addMemberAsAdmin(memberId: string): TypedFetch<unknown> {
-    return this.apiPut(`/admins/${memberId}`);
+  public addMemberAsAdmin(idMember: string): TypedFetch<unknown> {
+    return this.apiPut(`/admins/${idMember}`);
   }
 
   public addToken(params?: {
@@ -96,21 +143,22 @@ export class Enterprise extends BaseResource {
   }
 
   public deactivateMember(
-    memberId: string,
-    params?: {
-      boardFields?: AllOfOrListOf<BoardField>;
-      fields?: ValueOrArray<MemberBasicField>;
+    idMember: string,
+    params: {
+      value: boolean;
+      fields?: ValueOrArray<NestedMemberField>;
       organizationFields?: AllOfOrListOf<OrganizationField>;
+      boardFields?: AllOfOrListOf<BoardField>;
     },
   ): TypedFetch<unknown> {
-    return this.apiPut(`/members/${memberId}/deactivated`, params);
+    return this.apiPut(`/members/${idMember}/deactivated`, params);
   }
 
-  public dissociateOrganization(orgId: string): TypedFetch<unknown> {
-    return this.apiDelete(`/organizations/${orgId}`);
+  public dissociateOrganization(idOrg: string): TypedFetch<unknown> {
+    return this.apiDelete(`/organizations/${idOrg}`);
   }
 
-  public removeMemberFromAdmin(memberId: string): TypedFetch<unknown> {
-    return this.apiDelete(`/admins/${memberId}`);
+  public removeMemberFromAdmin(idMember: string): TypedFetch<unknown> {
+    return this.apiDelete(`/admins/${idMember}`);
   }
 }

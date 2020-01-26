@@ -1,6 +1,6 @@
 import fetch from "cross-fetch";
 import { stringifyQueryParams } from "./stringifyQueryParams";
-import { Config, QueryParamsByName, TypedResponse } from "../typeDefs";
+import { Config, TypedResponse } from "../typeDefs";
 
 export type HttpMethod = "GET" | "PUT" | "POST" | "DELETE";
 
@@ -18,7 +18,7 @@ export async function fetchFromApi<T>({
   endpoint: string;
   method: HttpMethod;
   config: Config;
-  queryParamsByName?: QueryParamsByName;
+  queryParamsByName?: object;
   body?: unknown | null;
 }): Promise<TypedResponse<T>> {
   const { backoffTime = 3000, maxRetryAttempts = 5, key, token } = config;
@@ -59,7 +59,7 @@ export async function fetchFromApi<T>({
  */
 function buildApiUrl(
   endpoint: string,
-  queryParamsByName: QueryParamsByName,
+  queryParamsByName: object,
   apiKey: string,
   apiToken: string,
 ): string {
@@ -70,7 +70,7 @@ function buildApiUrl(
     ...queryParamsByName,
     key: apiKey,
     token: apiToken,
-  } as QueryParamsByName;
+  } as object & { file?: unknown };
 
   // We don't want to attempt to stringify the "file" query param:
   if ("file" in validParamsByName) {
@@ -82,7 +82,7 @@ function buildApiUrl(
 }
 
 function getFetchBody(
-  queryParamsByName: QueryParamsByName,
+  queryParamsByName: object,
   body?: unknown | null,
 ): FormData | string | null {
   const validParamsByName = queryParamsByName as Record<string, string>;

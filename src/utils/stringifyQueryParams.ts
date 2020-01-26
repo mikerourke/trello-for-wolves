@@ -1,5 +1,4 @@
 import snakeCase from "lodash.snakecase";
-import { QueryParamsByName } from "../typeDefs";
 
 type ValidQueryParams<T> = T & { separator: string };
 
@@ -8,12 +7,8 @@ type ValidQueryParams<T> = T & { separator: string };
  * the request to the Trello API.
  * @param queryParamsByName Argument(s) used to build query string.
  */
-export function stringifyQueryParams(
-  queryParamsByName: QueryParamsByName,
-): string {
-  const validParamsByName = queryParamsByName as ValidQueryParams<
-    QueryParamsByName
-  >;
+export function stringifyQueryParams(queryParamsByName: object): string {
+  const validParamsByName = queryParamsByName as ValidQueryParams<object>;
   let queryString = "";
 
   for (const [queryParamKey, queryParamValue] of Object.entries(
@@ -67,7 +62,7 @@ export function stringifyQueryParams(
  */
 function getQueryStringForNestedArgs(
   childName: string,
-  queryParams: ValidQueryParams<QueryParamsByName>,
+  queryParams: ValidQueryParams<object>,
 ): string {
   let childUrlString = "";
   const childGroup = queryParams[childName];
@@ -82,8 +77,8 @@ function getQueryStringForNestedArgs(
   }
 
   for (const [childKey, childValue] of Object.entries(childGroup as object)) {
-    const childArgKey = `${childName}${separator}${childKey}`;
-    childUrlString += `${childArgKey}=${childValue}&`;
+    const childParamKey = `${childName}${separator}${childKey}`;
+    childUrlString += `${childParamKey}=${childValue}&`;
   }
 
   // Remove the trailing ampersand:
@@ -103,25 +98,34 @@ function getKeyForQueryString(key: string): string {
     "boardBackgrounds",
     "boardStars",
     "callbackURL",
-    "confirmationAccepted", // Enterprise
+    "cardFront",
+    "confirmationAccepted",
     "customBoardBackgrounds",
     "customEmoji",
+    "customFields",
     "customStickers",
     "defaultLabels",
     "defaultLists",
+    "descData",
     "displayName",
     "dueComplete",
+    "enterpriseOwned",
+    "fieldGroup",
     "fullName",
     "ixLastUpdate",
     "keepFromSource",
+    "labelNames",
     "mimeType",
+    "modelType",
     "modelTypes",
     "myPrefs",
     "onlyOrgMembers",
+    "orgMemberType",
     "powerUp",
     "powerUps",
-    "returnUrl", // Enterprise
+    "returnUrl",
     "savedSearches",
+    "shortUrl",
     "webhook",
     "webhooks",
     "website",
@@ -140,10 +144,6 @@ function getKeyForQueryString(key: string): string {
   // Ensure this doesn't get converted to one word.
   if (key === "cardBoard") {
     return "card_board";
-  }
-
-  if (key === "displayCardFront") {
-    return "display_cardFront";
   }
 
   const recasedKey: string = snakeCase(key);

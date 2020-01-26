@@ -13,15 +13,13 @@ export type CheckItemRecord = {
   idChecklist: string;
   name: string;
   nameData: string | null;
-  post: number;
+  pos: number;
   state: CheckItemState;
+  due: string | null;
   creationMethod?: string | null;
 };
 
-export type CheckItemField = Omit<
-  CheckItemRecord,
-  "id" | "idChecklist" | "creationMethod"
->;
+export type CheckItemField = keyof CheckItemRecord;
 
 export type CheckItemStateField = "idCheckItem" | "state";
 
@@ -66,6 +64,7 @@ export class CheckItem extends BaseResource {
     return this.apiPut("/", params);
   }
 
+  // TODO: Find out if these still work.
   public updateName(value: string): TypedFetch<unknown> {
     return this.apiPut("/name", { value });
   }

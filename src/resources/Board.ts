@@ -1,21 +1,16 @@
 import { BaseResource } from "./BaseResource";
 import { Action, ActionField } from "./Action";
-import { BoardMyPref } from "./BoardMyPref";
-import {
-  BoardPermissionLevel,
-  BoardPref,
-  GroupPermission,
-  Invitation,
-} from "./BoardPref";
-import { BoardStarRecord, BoardStarsFilter } from "./BoardStar";
-import { Card, CardAging, CardFilter } from "./Card";
-import { Checklist } from "./Checklist";
+import { AttachmentField, AttachmentFilter } from "./Attachment";
+import { BoardMyPrefs } from "./BoardMyPrefs";
+import { BoardStar, BoardStarsFilter } from "./BoardStar";
+import { Card, CardAging, CardField, CardFilter } from "./Card";
+import { Checklist, ChecklistField } from "./Checklist";
 import { CustomField } from "./CustomField";
-import { Label, LabelColor } from "./Label";
-import { List, ListFilter } from "./List";
-import { Member, MemberField, MemberFilter } from "./Member";
+import { Label, LabelColor, LabelField } from "./Label";
+import { List, ListField, ListFilter } from "./List";
+import { Member, MemberInvitedField, MemberFilter } from "./Member";
 import { Membership, MembershipFilter } from "./Membership";
-import { Organization } from "./Organization";
+import { Organization, OrganizationField } from "./Organization";
 import { Plugin } from "./Plugin";
 import {
   AllOfOrListOf,
@@ -23,48 +18,12 @@ import {
   FilterDate,
   Format,
   KeepFromSourceField,
+  Limits,
   PermissionLevel,
-  QueryParamsByName,
   TypedFetch,
+  ValidResourceFields,
   ValueResponse,
 } from "../typeDefs";
-
-export type BoardRecord = {
-  id: string;
-  name: string;
-  desc: string;
-  descData: string | null;
-  closed: boolean;
-  idOrganization: string | null;
-  idEnterprise: string | null;
-  pinned: boolean;
-  url: string;
-  shortUrl: string;
-  labelNames: Record<LabelColor, string>;
-  starred?: boolean;
-  shortLink?: string;
-  subscribed?: boolean;
-  powerUps?: string[];
-  dateLastActivity?: string;
-  dateLastView?: string;
-  idTags?: string;
-  datePluginDisable?: string | null;
-  creationMethod?: string | null;
-  ixUpdate?: string;
-  templateGallery?: string | null;
-  enterpriseOwned?: boolean;
-};
-
-export type BoardPluginRecord = {
-  id: string;
-  idBoard: string;
-  idPlugin: string;
-};
-
-export type BoardStarsResponseRecord = {
-  id: string;
-  boardStars: BoardStarRecord[];
-};
 
 export type BoardActionType =
   | "addAttachmentToCard"
@@ -117,26 +76,16 @@ export type BoardActionType =
   | "updateMember"
   | "updateOrganization";
 
-export type BoardField =
-  | "closed"
-  | "dateLastActivity"
-  | "dateLastView"
-  | "desc"
-  | "descData"
-  | "idOrganization"
-  | "invitations"
-  | "invited"
-  | "labelNames"
-  | "memberships"
-  | "name"
-  | "pinned"
-  | "powerUps"
-  | "prefs"
-  | "shortLink"
-  | "shortUrl"
-  | "starred"
-  | "subscribed"
-  | "url";
+export type BoardBackgroundColor =
+  | "blue"
+  | "orange"
+  | "green"
+  | "red"
+  | "purple"
+  | "pink"
+  | "lime"
+  | "sky"
+  | "grey";
 
 export type BoardFilter =
   | "closed"
@@ -148,30 +97,126 @@ export type BoardFilter =
 
 export type BoardMemberType = "admin" | "normal" | "observer";
 
+export type BoardPermissionLevel = PermissionLevel | "org";
+
+export type GroupPermission =
+  | "disabled"
+  | "members"
+  | "observers"
+  | "org"
+  | "public";
+
 export type PowerUp = "calendar" | "cardAging" | "recap" | "voting";
 
-export type GetBoardParams = {
-  actions?: AllOfOrListOf<BoardActionType>;
-  boardStars?: BoardStarsFilter;
-  cards?: CardFilter;
-  cardPluginData?: boolean;
-  checklists?: AllOrNone;
-  customFields?: boolean;
-  fields?: AllOfOrListOf<BoardField>;
-  labels?: AllOrNone;
-  lists?: ListFilter;
-  members?: MemberFilter;
-  memberships?: AllOfOrListOf<MembershipFilter>;
-  membersInvited?: MemberFilter;
-  membersInvitedFields?: AllOfOrListOf<MemberField>;
-  myPrefs?: boolean;
-  organization?: boolean;
-  organizationPluginData?: boolean;
-  pluginData?: boolean;
-  tags?: boolean;
-};
+export type Invitation = "admins" | "members";
 
-export type NestedBoardsParams = {
+export interface BackgroundImageScaledRecord {
+  url: string;
+  height: number;
+  width: number;
+}
+
+export interface BoardPrefsRecord {
+  permissionLevel: PermissionLevel;
+  /**
+   * Determines whether the Voting Power-Up should hide who voted on cards or
+   * not.
+   */
+  hideVotes: boolean;
+  /** Who can vote on this board. */
+  voting: GroupPermission;
+  /** Who can comment on cards on this board. */
+  comments: GroupPermission;
+  /** Who can invite people to this board. */
+  invitations: GroupPermission;
+  /** Whether team members can join the board themselves. */
+  selfJoin: boolean;
+  /** Whether card covers should be displayed on this board. */
+  cardCovers: boolean;
+  isTemplate: boolean;
+  cardAging: CardAging;
+  /** Determines whether the calendar feed is enabled or not. */
+  calendarFeedEnabled: boolean;
+  /** The id of a custom background or color. */
+  background: BoardBackgroundColor | string;
+  backgroundImage: string;
+  backgroundImageScaled: BackgroundImageScaledRecord[];
+  backgroundTile: boolean;
+  backgroundBrightness: string;
+  backgroundBottomColor: string;
+  backgroundTopColor: string;
+  canBePublic: boolean;
+  canBeEnterprise: boolean;
+  canBeOrg: boolean;
+  canBePrivate: boolean;
+  canInvite: boolean;
+}
+
+export interface BoardRecord {
+  /** The ID of the board. */
+  id: string;
+  /** The name of the board. */
+  name: string;
+  /**
+   * The description of the board.
+   * @deprecated
+   */
+  desc: string;
+  /**
+   * If the description includes custom emoji, this will contain the data
+   * necessary to display them.
+   */
+  descData: unknown | null;
+  /** Boolean whether the board has been closed or not. */
+  closed: boolean;
+  /** MongoID of the organization to which the board belongs. */
+  idOrganization: string | null;
+  /** Boolean whether the board has been pinned or not. */
+  pinned: boolean;
+  /** Persistent URL for the board. */
+  url: string;
+  /** URL for the board using only its shortMongoID. */
+  shortUrl: string;
+  /** Short for "preferences", these are the settings for the board. */
+  prefs?: BoardPrefsRecord;
+  /**
+   * Object containing color keys and the label names given for one label of
+   * each color on the board.
+   */
+  labelNames: Record<LabelColor, string>;
+  /** Whether the board has been starred by the current request's user.. */
+  starred: boolean;
+  /** An object containing information on the limits that exist for the board. */
+  limits: Limits;
+  /**
+   * Array of objects that represent the relationship of users to this board as
+   * memberships.
+   */
+  memberships: Membership[];
+  /** Whether the board is owned by an Enterprise or not. */
+  enterpriseOwned: boolean;
+  idEnterprise?: string | null;
+  shortLink?: string;
+  subscribed?: boolean;
+  powerUps?: PowerUp[];
+  dateLastActivity?: string;
+  dateLastView?: string;
+  idTags?: string;
+  datePluginDisable?: string | null;
+  creationMethod?: string | null;
+  ixUpdate?: string;
+  templateGallery?: string | null;
+}
+
+export interface BoardPluginRecord {
+  id: string;
+  idBoard: string;
+  idPlugin: string;
+}
+
+export type BoardField = ValidResourceFields<BoardRecord>;
+
+export interface GetBoardsViaQueryParams {
   boards?: AllOfOrListOf<BoardFilter>;
   boardFields?: AllOfOrListOf<BoardField>;
   boardActions?: AllOfOrListOf<BoardActionType>;
@@ -182,18 +227,87 @@ export type NestedBoardsParams = {
   boardActionsLimit?: number;
   boardActionFields?: AllOfOrListOf<ActionField>;
   boardLists?: ListFilter;
-};
+}
 
-export class Board<
-  TGetSingleParams = GetBoardParams,
-  TGetMultipleParams = NestedBoardsParams
-> extends BaseResource {
-  public getBoard(params?: TGetSingleParams): TypedFetch<BoardRecord> {
-    return this.apiGet("/", params as QueryParamsByName);
+export interface GetBoardsViaUrlParams {
+  actions?: AllOfOrListOf<BoardActionType>;
+  actionFields?: AllOfOrListOf<ActionField>;
+  actionsEntities?: boolean;
+  actionsFormat?: Format;
+  actionsLimit?: number;
+  actionsSince?: FilterDate;
+  fields?: AllOfOrListOf<BoardField>;
+  filter?: AllOfOrListOf<BoardFilter>;
+  lists?: ListFilter;
+  memberships?: AllOfOrListOf<MembershipFilter>;
+  organization?: boolean;
+  organizationFields?: AllOfOrListOf<OrganizationField>;
+}
+
+export type GetBoardsReturnType<
+  TParams,
+  TPayload
+> = TParams extends GetBoardsViaUrlParams
+  ? BoardRecord[]
+  : TPayload & { boards: BoardRecord[] };
+
+export type AnyGetBoardsParams =
+  | GetBoardsViaUrlParams
+  | GetBoardsViaQueryParams;
+
+export class Board extends BaseResource {
+  public getBoard(params?: {
+    actions?: AllOfOrListOf<BoardActionType>;
+    actionFields?: AllOfOrListOf<ActionField>;
+    actionMember?: boolean;
+    actionMemberCreator?: boolean;
+    actionMemberCreatorFields?: AllOfOrListOf<MemberInvitedField>;
+    actionMemberFields?: AllOfOrListOf<MemberInvitedField>;
+    actionsDisplay?: boolean;
+    actionsEntities?: boolean;
+    actionsFormat?: Format;
+    actionsLimit?: number;
+    actionsSince?: FilterDate;
+    boardStars?: BoardStarsFilter;
+    cardAttachmentFields?: AllOfOrListOf<AttachmentField>;
+    cardAttachments?: AttachmentFilter;
+    cardChecklists?: AllOrNone;
+    cardFields?: AllOfOrListOf<CardField>;
+    cardPluginData?: boolean;
+    cards?: CardFilter;
+    cardStickers?: boolean;
+    checklistFields?: AllOfOrListOf<ChecklistField>;
+    checklists?: AllOrNone;
+    customFields?: boolean;
+    fields?: AllOfOrListOf<BoardField>;
+    labelFields?: AllOfOrListOf<LabelField>;
+    labels?: AllOrNone;
+    labelsLimit?: number;
+    listFields?: AllOfOrListOf<ListField>;
+    lists?: ListFilter;
+    memberFields?: AllOfOrListOf<MemberInvitedField>;
+    members?: MemberFilter;
+    memberships?: AllOfOrListOf<MembershipFilter>;
+    membershipsMember?: boolean;
+    membershipsMemberFields?: AllOfOrListOf<MemberInvitedField>;
+    membersInvited?: MemberFilter;
+    membersInvitedFields?: AllOfOrListOf<MemberInvitedField>;
+    myPrefs?: boolean;
+    organization?: boolean;
+    organizationFields?: AllOfOrListOf<OrganizationField>;
+    organizationMemberships?: AllOfOrListOf<MembershipFilter>;
+    organizationPluginData?: boolean;
+    pluginData?: boolean;
+    tags?: boolean;
+  }): TypedFetch<BoardRecord> {
+    return this.apiGet("/", params);
   }
 
-  public getBoards(params?: TGetMultipleParams): TypedFetch<BoardRecord[]> {
-    return this.apiGet("/", params as QueryParamsByName);
+  public getBoards<
+    TPayload extends object,
+    TParams extends AnyGetBoardsParams = {}
+  >(params?: TParams): TypedFetch<GetBoardsReturnType<TParams, TPayload>> {
+    return this.apiGet("/", params);
   }
 
   public getBoardsFilteredBy(
@@ -208,12 +322,6 @@ export class Board<
 
   public getBoardPlugins(): TypedFetch<BoardPluginRecord[]> {
     return this.apiGet("/boardPlugins");
-  }
-
-  public getBoardStars(params?: {
-    filter?: BoardStarsFilter;
-  }): TypedFetch<BoardStarsResponseRecord> {
-    return this.apiGet("/boardStars", params);
   }
 
   public getTags(): TypedFetch<unknown> {
@@ -239,7 +347,7 @@ export class Board<
       cardAging?: CardAging;
     };
     powerUps?: AllOfOrListOf<PowerUp>;
-  }): TypedFetch<unknown> {
+  }): TypedFetch<BoardRecord> {
     return this.apiPost("/", { ...params, separator: "_" });
   }
 
@@ -323,6 +431,44 @@ export class Board<
     return this.apiPost("/markAsViewed");
   }
 
+  public updateBackground(value: string): TypedFetch<BoardRecord> {
+    return this.apiPut("/prefs/background", { value });
+  }
+
+  public updateCalendarFeedEnabled(value: boolean): TypedFetch<BoardRecord> {
+    return this.apiPut("/prefs/calendarFeedEnabled", { value });
+  }
+
+  public updateCardAging(value: CardAging): TypedFetch<BoardRecord> {
+    return this.apiPut("/prefs/cardAging", { value });
+  }
+
+  public updateCardCovers(value: boolean): TypedFetch<BoardRecord> {
+    return this.apiPut("/prefs/cardCovers", { value });
+  }
+
+  public updateComments(value: GroupPermission): TypedFetch<BoardRecord> {
+    return this.apiPut("/prefs/comments", { value });
+  }
+
+  public updateInvitations(value: Invitation): TypedFetch<BoardRecord> {
+    return this.apiPut("/prefs/invitations", { value });
+  }
+
+  public updatePermissionLevel(
+    value: BoardPermissionLevel,
+  ): TypedFetch<BoardRecord> {
+    return this.apiPut("/prefs/permissionLevel", { value });
+  }
+
+  public updateSelfJoin(value: boolean): TypedFetch<BoardRecord> {
+    return this.apiPut("/prefs/selfJoin", { value });
+  }
+
+  public updateVoting(value: GroupPermission): TypedFetch<BoardRecord> {
+    return this.apiPut("/prefs/voting", { value });
+  }
+
   public deleteBoard(id: string): TypedFetch<unknown> {
     return this.apiDelete("/", { id });
   }
@@ -336,7 +482,14 @@ export class Board<
   }
 
   public actions(): Action {
-    return new Action(this.config, `${this.baseEndpoint}/actions`);
+    return new Action<BoardActionType>(
+      this.config,
+      `${this.baseEndpoint}/actions`,
+    );
+  }
+
+  public boardStars(): BoardStar {
+    return new BoardStar(this.config, `${this.baseEndpoint}/boardStars`);
   }
 
   public cards(cardId: string = ""): Card {
@@ -374,8 +527,8 @@ export class Board<
     );
   }
 
-  public myPrefs(): BoardMyPref {
-    return new BoardMyPref(this.config, `${this.baseEndpoint}/myPrefs`);
+  public myPrefs(): BoardMyPrefs {
+    return new BoardMyPrefs(this.config, `${this.baseEndpoint}/myPrefs`);
   }
 
   public organization(): Organization {
@@ -384,9 +537,5 @@ export class Board<
 
   public plugins(): Plugin {
     return new Plugin(this.config, `${this.baseEndpoint}/plugins`);
-  }
-
-  public prefs(): BoardPref {
-    return new BoardPref(this.config, `${this.baseEndpoint}/prefs`);
   }
 }

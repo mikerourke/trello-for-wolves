@@ -1,16 +1,18 @@
 import { BaseResource } from "./BaseResource";
-import { Board, BoardField } from "./Board";
-import { Card, CardField, CardFilter } from "./Card";
+import { Board } from "./Board";
+import { Card, CardFilter } from "./Card";
 import { CheckItem, CheckItemField } from "./CheckItem";
 import {
   AllOfOrListOf,
   AllOrNone,
+  Limits,
   PositionNumbered,
   TypedFetch,
+  ValidResourceFields,
   ValueResponse,
 } from "../typeDefs";
 
-export type ChecklistRecord = {
+export interface ChecklistRecord {
   /** The ID of the checklist. */
   id: string;
   /** The ID of the board the checklist is on. */
@@ -24,39 +26,52 @@ export type ChecklistRecord = {
    * checklists on the card).
    */
   pos: number;
-};
+  limits?: Limits;
+  creationMethod?: string | null;
+}
 
-export type ChecklistField = Omit<ChecklistRecord, "id">;
+export type ChecklistField = ValidResourceFields<ChecklistRecord>;
 
-export type GetSingleChecklistParams = {
-  cards?: CardFilter;
-  checkItemFields?: AllOfOrListOf<CheckItemField>;
-  checkItems?: AllOrNone;
-  fields?: AllOfOrListOf<ChecklistField>;
-};
-
-export type NestedChecklistParams = {
+export interface GetChecklistsViaQueryParams {
   checklists?: AllOrNone;
   checklistFields?: AllOfOrListOf<ChecklistField>;
   checkItems?: "all";
   checkItemFields?: AllOfOrListOf<CheckItemField>;
+}
+
+export type GetChecklistsViaUrlParams = {
+  cards?: CardFilter;
+  checkItemFields?: AllOfOrListOf<CheckItemField>;
+  checkItems?: AllOrNone;
+  fields?: AllOfOrListOf<ChecklistField>;
+  filter?: AllOrNone;
 };
 
-export class Checklist<TGetSingleParams = {}> extends BaseResource {
-  public getChecklist(
-    params?: TGetSingleParams & GetSingleChecklistParams,
-  ): TypedFetch<unknown> {
-    return this.apiGet("/", params);
-  }
+type GetChecklistsReturnType<
+  TParams,
+  TPayload
+> = TParams extends GetChecklistsViaQueryParams
+  ? TPayload & { checklists: ChecklistRecord[] }
+  : ChecklistRecord[];
 
-  public getChecklists(params?: {
-    cardFields?: AllOfOrListOf<CardField>;
+export type AllGetChecklistsParams =
+  | GetChecklistsViaQueryParams
+  | GetChecklistsViaUrlParams;
+
+export class Checklist extends BaseResource {
+  public getChecklist(params?: {
     cards?: CardFilter;
     checkItemFields?: AllOfOrListOf<CheckItemField>;
     checkItems?: AllOrNone;
     fields?: AllOfOrListOf<ChecklistField>;
-    filter?: AllOrNone;
-  }): TypedFetch<unknown> {
+  }): TypedFetch<ChecklistRecord> {
+    return this.apiGet("/", params);
+  }
+
+  public getChecklists<
+    TPayload extends object,
+    TParams extends AllGetChecklistsParams
+  >(params?: TParams): TypedFetch<GetChecklistsReturnType<TParams, TPayload>> {
     return this.apiGet("/", params);
   }
 
@@ -69,7 +84,7 @@ export class Checklist<TGetSingleParams = {}> extends BaseResource {
     idChecklistSource?: string;
     name?: string;
     pos?: PositionNumbered;
-  }): TypedFetch<unknown> {
+  }): TypedFetch<ChecklistRecord> {
     let updatedArgs = params;
     if (this.endpointElements[0] === "cards") {
       updatedArgs = { ...params, idCard: this.endpointElements[1] };
@@ -80,15 +95,15 @@ export class Checklist<TGetSingleParams = {}> extends BaseResource {
   public updateChecklist(params?: {
     name?: string;
     pos?: PositionNumbered;
-  }): TypedFetch<unknown> {
+  }): TypedFetch<ChecklistRecord> {
     return this.apiPut("/", params);
   }
 
-  public updateName(value: string): TypedFetch<unknown> {
+  public updateName(value: string): TypedFetch<ChecklistRecord> {
     return this.apiPut("/name", { value });
   }
 
-  public updatePosition(value: PositionNumbered): TypedFetch<unknown> {
+  public updatePosition(value: PositionNumbered): TypedFetch<ChecklistRecord> {
     return this.apiPut("/pos", { value });
   }
 
@@ -97,10 +112,7 @@ export class Checklist<TGetSingleParams = {}> extends BaseResource {
   }
 
   public board(): Board {
-    return new Board<{ fields?: AllOfOrListOf<BoardField> }>(
-      this.config,
-      `${this.baseEndpoint}/board`,
-    );
+    return new Board(this.config, `${this.baseEndpoint}/board`);
   }
 
   public cards(): Card {

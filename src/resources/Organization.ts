@@ -2,16 +2,19 @@ import { BaseResource } from "./BaseResource";
 import { Action, ActionField, ActionType } from "./Action";
 import { Board, BoardField, BoardFilter } from "./Board";
 import { ListFilter } from "./List";
-import { Member, MemberField, MemberFilter } from "./Member";
+import { Member, MemberInvitedField, MemberFilter } from "./Member";
 import { Membership, MembershipFilter } from "./Membership";
 import { BoardVisibilityFilter, OrganizationPref } from "./OrganizationPref";
 import {
   AllOfOrListOf,
+  FileUpload,
   FilterDate,
   Format,
   PermissionLevel,
   TypedFetch,
 } from "../typeDefs";
+
+export type OrganizationFilter = "all" | "members" | "none" | "public";
 
 export type OrganizationField =
   | "billableMemberCount"
@@ -30,8 +33,6 @@ export type OrganizationField =
   | "products"
   | "url"
   | "website";
-
-export type OrganizationFilter = "all" | "members" | "none" | "public";
 
 export class Organization extends BaseResource {
   public getOrganizations(params?: {
@@ -61,13 +62,13 @@ export class Organization extends BaseResource {
     boards?: AllOfOrListOf<BoardFilter>;
     fields?: AllOfOrListOf<OrganizationField>;
     memberActivity?: boolean;
-    memberFields?: AllOfOrListOf<MemberField>;
+    memberFields?: AllOfOrListOf<MemberInvitedField>;
     members?: MemberFilter;
     memberships?: AllOfOrListOf<MembershipFilter>;
     membershipsMember?: boolean;
-    membershipsMemberFields?: AllOfOrListOf<MemberField>;
+    membershipsMemberFields?: AllOfOrListOf<MemberInvitedField>;
     membersInvited?: MemberFilter;
-    membersInvitedFields?: AllOfOrListOf<MemberField>;
+    membersInvitedFields?: AllOfOrListOf<MemberInvitedField>;
     paidAccount?: boolean;
     pluginData?: boolean;
   }): TypedFetch<unknown> {
@@ -108,7 +109,7 @@ export class Organization extends BaseResource {
     return this.apiPost("/", { ...params, separator: "/" });
   }
 
-  public uploadLogo(file: Blob | File | FormData): TypedFetch<unknown> {
+  public uploadLogo(file: FileUpload): TypedFetch<unknown> {
     return this.apiPost("/logo", { file });
   }
 

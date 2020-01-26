@@ -1,5 +1,5 @@
 import { fetchFromApi, HttpMethod } from "../utils/fetchFromApi";
-import { Config, QueryParamsByName, TypedResponse } from "../typeDefs";
+import { Config, TypedResponse } from "../typeDefs";
 
 /**
  * Base class for resources.
@@ -11,9 +11,14 @@ export class BaseResource {
   /**
    * @param config Config object containing Trello API key and token.
    * @param baseEndpoint Base endpoint for performing the request.
+   * @param isNested Indicates if the request can only be performed via nested.
    * @constructor
    */
-  constructor(protected config: Config, protected baseEndpoint: string) {
+  constructor(
+    protected config: Config,
+    protected baseEndpoint: string,
+    protected isNested: boolean = false,
+  ) {
     this.endpointElements = this.baseEndpoint.split("/");
 
     if (this.endpointElements[0].length !== 0) {
@@ -23,7 +28,7 @@ export class BaseResource {
 
   protected apiGet<T>(
     endpoint: string,
-    queryParamsByName?: QueryParamsByName,
+    queryParamsByName?: object,
     body?: unknown,
   ): Promise<TypedResponse<T>> {
     return this.performRequest("GET", endpoint, queryParamsByName, body);
@@ -31,7 +36,7 @@ export class BaseResource {
 
   protected apiPut<T>(
     endpoint: string,
-    queryParamsByName?: QueryParamsByName,
+    queryParamsByName?: object,
     body?: unknown,
   ): Promise<TypedResponse<T>> {
     return this.performRequest("PUT", endpoint, queryParamsByName, body);
@@ -39,7 +44,7 @@ export class BaseResource {
 
   protected apiPost<T>(
     endpoint: string,
-    queryParamsByName?: QueryParamsByName,
+    queryParamsByName?: object,
     body?: unknown,
   ): Promise<TypedResponse<T>> {
     return this.performRequest("POST", endpoint, queryParamsByName, body);
@@ -47,7 +52,7 @@ export class BaseResource {
 
   protected apiDelete<T>(
     endpoint: string,
-    queryParamsByName?: QueryParamsByName,
+    queryParamsByName?: object,
     body?: unknown,
   ): Promise<TypedResponse<T>> {
     return this.performRequest("DELETE", endpoint, queryParamsByName, body);
@@ -63,7 +68,7 @@ export class BaseResource {
   private performRequest<T>(
     method: HttpMethod,
     endpoint: string,
-    queryParamsByName?: QueryParamsByName,
+    queryParamsByName?: object,
     body?: unknown,
   ): Promise<TypedResponse<T>> {
     return fetchFromApi<T>({

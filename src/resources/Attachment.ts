@@ -1,18 +1,19 @@
 import { BaseResource } from "./BaseResource";
-import { AllOfOrListOf, TypedFetch } from "../typeDefs";
+import { AllOfOrListOf, TypedFetch, ValidResourceFields } from "../typeDefs";
 
-export type AttachmentPreviewRecord = {
+export type AttachmentFilter = boolean | "cover";
+
+export interface AttachmentPreviewRecord {
   _id: string;
   byte: number;
   height: number;
   scaled: boolean;
   url: string;
   width: number;
-};
+}
 
-export type AttachmentRecord = {
+export interface AttachmentRecord {
   /** The ID of the attachment */
-
   id: string;
   /** The size of the attachment in bytes */
   bytes: number;
@@ -41,23 +42,28 @@ export type AttachmentRecord = {
   previews: AttachmentPreviewRecord[];
   /** The URL to the attachment */
   url: string;
-};
+}
 
-export type AttachmentField = keyof AttachmentRecord;
+export type AttachmentField = ValidResourceFields<AttachmentRecord>;
 
-export type AttachmentFilter = boolean | "cover";
-
+/**
+ * Used to manage attachments on cards. Cards can have up to 100 attachments.
+ * Attachments can be either just URLs, images with previews, or arbitrary
+ * files.
+ * @see https://developers.trello.com/reference#attachments
+ * @class
+ */
 export class Attachment extends BaseResource {
+  public getAttachment(params?: {
+    fields?: AllOfOrListOf<AttachmentField>;
+  }): TypedFetch<AttachmentRecord> {
+    return this.apiGet("/", params);
+  }
+
   public getAttachments(params?: {
     fields?: AllOfOrListOf<AttachmentField>;
     filter?: AllOfOrListOf<AttachmentFilter>;
   }): TypedFetch<AttachmentRecord[]> {
-    return this.apiGet("/", params);
-  }
-
-  public getAttachment(params?: {
-    fields?: AllOfOrListOf<AttachmentField>;
-  }): TypedFetch<AttachmentRecord> {
     return this.apiGet("/", params);
   }
 
