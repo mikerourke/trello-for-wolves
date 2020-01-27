@@ -1,4 +1,5 @@
 import { stringifyQueryParams } from "./stringifyQueryParams";
+import { isEmpty } from "./isEmpty";
 import { Config, TypedResponse } from "../typeDefs";
 
 export type HttpMethod = "GET" | "PUT" | "POST" | "DELETE";
@@ -11,25 +12,25 @@ export async function fetchFromApi<T>({
   endpoint,
   method,
   config,
-  queryParamsByName = {},
-  body = null,
+  queryParamsByName,
+  body,
 }: {
   endpoint: string;
   method: HttpMethod;
   config: Config;
   queryParamsByName?: object;
-  body?: unknown | null;
+  body?: unknown;
 }): Promise<TypedResponse<T>> {
-  const { backoffTime = 3000, maxRetryAttempts = 5, key, token } = config;
-
-  const apiUrl = buildApiUrl(endpoint, queryParamsByName, key, token);
+  const { backoffTime = 3000, maxRetryAttempts = 5 } = config;
 
   // Build the configuration object for sending the request.
-  const fetchConfig = { method } as Record<string, string | FormData>;
-  const fetchBody = getFetchBody(queryParamsByName, body);
+  const fetchConfig = { method } as Record<string, string | FormData | object>;
+  const fetchBody = await getFetchBody(config, queryParamsByName, body);
   if (fetchBody !== null) {
     fetchConfig.body = fetchBody;
   }
+
+  const apiUrl = buildApiUrl(endpoint, config, queryParamsByName);
 
   return await fetchWithRetries(
     apiUrl,
@@ -47,12 +48,13 @@ async function fetchWithRetries<T>(
 ): Promise<TypedResponse<T>> {
   const response = await fetch(apiUrl, fetchConfig);
   if (!response.ok) {
-    if (attemptsRemaining === 0) {
-      // TODO: Change this to throw a custom error.
-      throw new Error("I'm an error");
-    }
-
     if (response.status === 429) {
+      if (attemptsRemaining === 0) {
+        throw new Error(
+          "Maximum retry attempts reached, try increasing the `backoffTime` or `maxRetryAttempts`",
+        );
+      }
+
       await pause(backoffTime);
       return await fetchWithRetries(
         apiUrl,
@@ -61,6 +63,8 @@ async function fetchWithRetries<T>(
         attemptsRemaining - 1,
       );
     }
+
+    throw new Error(response.statusText);
   }
 
   return response;
@@ -71,53 +75,89 @@ async function fetchWithRetries<T>(
  */
 function buildApiUrl(
   endpoint: string,
-  queryParamsByName: object,
-  apiKey: string,
-  apiToken: string,
+  config: Config,
+  queryParamsByName?: object,
 ): string {
-  // Ensure there are no double or trailing slashes:
-  const sanitizedUrl = endpoint.replace(/\/+/g, "/").replace(/\/+$/, "");
-
   const validParamsByName = {
-    ...queryParamsByName,
-    key: apiKey,
-    token: apiToken,
-  } as object & { file?: unknown };
+    ...(queryParamsByName ?? {}),
+    key: config.key,
+    token: config.token,
+  } as Record<string, string>;
 
   // We don't want to attempt to stringify the "file" query param:
   if ("file" in validParamsByName) {
     delete validParamsByName.file;
+
+    // The "name" and "mimeType" will be in the FormData body of the request:
+    if ("name" in validParamsByName) {
+      delete validParamsByName.name;
+    }
+
+    if ("mimeType" in validParamsByName) {
+      delete validParamsByName.mimeType;
+    }
   }
   const queryString = stringifyQueryParams(validParamsByName);
 
-  return "https://api.trello.com/1/".concat(sanitizedUrl, "?", queryString);
+  // Remove any duplicate `/` values. We're omitting the `https://` from the
+  // URL to ensure the `//` doesn't get removed:
+  const validUrl = sanitizeUrl(`api.trello.com/1/${endpoint}`);
+  return `https://${validUrl}?${queryString}`;
+}
+
+function sanitizeUrl(url: string): string {
+  return url.replace(/\/+/g, "/").replace(/\/+$/, "");
 }
 
 /**
  * Returns the `body` for the fetch config object.
  */
-function getFetchBody(
-  queryParamsByName: object,
-  body?: unknown | null,
-): FormData | string | null {
-  const validParamsByName = queryParamsByName as Record<string, string>;
-  if ("file" in validParamsByName) {
-    const formData = new FormData();
-    formData.append("file", validParamsByName.file);
-    formData.append("name", validParamsByName?.name ?? "file");
+async function getFetchBody(
+  config: Config,
+  queryParamsByName?: object,
+  body?: unknown,
+): Promise<FormData | string | null | object> {
+  if (!isEmpty(queryParamsByName)) {
+    const validParamsByName = queryParamsByName as Record<string, string>;
 
-    if ("mimeType" in validParamsByName) {
-      formData.append("mimeType", validParamsByName.mimeType);
+    if ("file" in validParamsByName) {
+      if (typeof FormData === "undefined") {
+        const { default: FormData } = await import("form-data");
+        const formData = new FormData();
+        return appendDataToForm(formData, config, validParamsByName);
+      } else {
+        const formData = new FormData();
+        return appendDataToForm(formData, config, validParamsByName);
+      }
     }
-
-    return formData;
   }
 
-  if (body !== null) {
+  if (!isEmpty(body)) {
     return JSON.stringify(body);
   }
 
   return null;
+}
+
+function appendDataToForm(
+  formData: unknown,
+  config: Config,
+  paramsByName: Record<string, string>,
+): FormData {
+  const validFormData = formData as FormData;
+  validFormData.append("key", config.key);
+  validFormData.append("token", config.token);
+  validFormData.append("file", paramsByName.file);
+
+  if ("name" in paramsByName) {
+    validFormData.append("name", paramsByName.name);
+  }
+
+  if ("mimeType" in paramsByName) {
+    validFormData.append("mimeType", paramsByName.mimeType);
+  }
+
+  return validFormData;
 }
 
 /**

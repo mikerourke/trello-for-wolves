@@ -11,5 +11,11 @@ export function isEmpty<T>(value: T | null | undefined): boolean {
     return value.length === 0;
   }
 
-  return Object.keys(value).length === 0;
+  if (typeof value === "object") {
+    return Object.keys(value).length === 0;
+  }
+
+  // The value is a number, string, or boolean. We don't want to return
+  // true if the falsy condition is met because it's still a valid value:
+  return false;
 }

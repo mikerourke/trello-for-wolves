@@ -7,7 +7,12 @@
   ],
   "coverageReporters": ["lcov"],
   "globals": {
-    "testHelpers": true
+    "window": true,
+    "ts-jest": {
+      "diagnostics": {
+        "ignoreCodes": ["2339"]
+      }
+    }
   },
   "moduleFileExtensions": ["js", "json", "ts"],
   "preset": "ts-jest",
