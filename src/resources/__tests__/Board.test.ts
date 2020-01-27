@@ -14,16 +14,16 @@ describe("the Board resource", () => {
     global.resetFetchMocks();
   });
 
-  test("configures the fetch call for a single board", () => {
-    trello.boards(TEST_PARENT_ID).getBoard();
+  test("configures the fetch call for a single board", async () => {
+    await trello.boards(TEST_PARENT_ID).getBoard();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}`);
   });
 
-  test("configures the fetch call for getting multiple boards", () => {
-    trello
+  test("configures the fetch call for getting multiple boards", async () => {
+    await trello
       .members("me")
       .boards()
       .getBoards({
@@ -40,8 +40,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("lists")).toBe("all");
   });
 
-  test("configures the fetch call for getting nested boards", () => {
-    trello
+  test("configures the fetch call for getting nested boards", async () => {
+    await trello
       .members("me")
       .boards()
       .getNestedBoards({
@@ -56,8 +56,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("board_actions")).toBe("all");
   });
 
-  test("configures the fetch call for filtered boards", () => {
-    trello
+  test("configures the fetch call for filtered boards", async () => {
+    await trello
       .members("me")
       .boards()
       .getBoardsFilteredBy("closed");
@@ -68,16 +68,16 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("filter")).toBe("closed");
   });
 
-  test("configures the fetch call for getting a board field", () => {
-    trello.boards(TEST_PARENT_ID).getFieldValue("url");
+  test("configures the fetch call for getting a board field", async () => {
+    await trello.boards(TEST_PARENT_ID).getFieldValue("url");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/url`);
   });
 
-  test("configures the fetch call for getting board plugins", () => {
-    trello.boards(TEST_PARENT_ID).getBoardPlugins();
+  test("configures the fetch call for getting board plugins", async () => {
+    await trello.boards(TEST_PARENT_ID).getBoardPlugins();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -86,16 +86,16 @@ describe("the Board resource", () => {
     );
   });
 
-  test("configures the fetch call for getting board tags", () => {
-    trello.boards(TEST_PARENT_ID).getTags();
+  test("configures the fetch call for getting board tags", async () => {
+    await trello.boards(TEST_PARENT_ID).getTags();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/idTags`);
   });
 
-  test("configures the fetch call to add a new board", () => {
-    trello.boards().addBoard({
+  test("configures the fetch call to add a new board", async () => {
+    await trello.boards().addBoard({
       name: "Test Board",
       defaultLabels: false,
       defaultLists: true,
@@ -117,8 +117,8 @@ describe("the Board resource", () => {
     );
   });
 
-  test("configures the fetch call to add a new board plugin", () => {
-    trello.boards(TEST_PARENT_ID).enableBoardPlugin(TEST_CHILD_ID);
+  test("configures the fetch call to add a new board plugin", async () => {
+    await trello.boards(TEST_PARENT_ID).enableBoardPlugin(TEST_CHILD_ID);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -128,8 +128,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("idPlugin")).toBe(TEST_CHILD_ID);
   });
 
-  test("configures the fetch call to add a new power up to a board", () => {
-    trello.boards(TEST_PARENT_ID).addPowerUp("calendar");
+  test("configures the fetch call to add a new power up to a board", async () => {
+    await trello.boards(TEST_PARENT_ID).addPowerUp("calendar");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -137,8 +137,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("calendar");
   });
 
-  test("configures the fetch call to add tags to a board", () => {
-    trello.boards(TEST_PARENT_ID).addTags(TEST_CHILD_ID);
+  test("configures the fetch call to add tags to a board", async () => {
+    await trello.boards(TEST_PARENT_ID).addTags(TEST_CHILD_ID);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -146,8 +146,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe(TEST_CHILD_ID);
   });
 
-  test("configures the fetch call to generate a calendar key on a board", () => {
-    trello.boards(TEST_PARENT_ID).generateCalendarKey();
+  test("configures the fetch call to generate a calendar key on a board", async () => {
+    await trello.boards(TEST_PARENT_ID).generateCalendarKey();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -156,8 +156,8 @@ describe("the Board resource", () => {
     );
   });
 
-  test("configures the fetch call to generate an email key on a board", () => {
-    trello.boards(TEST_PARENT_ID).generateEmailKey();
+  test("configures the fetch call to generate an email key on a board", async () => {
+    await trello.boards(TEST_PARENT_ID).generateEmailKey();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -166,8 +166,8 @@ describe("the Board resource", () => {
     );
   });
 
-  test("configures the fetch call to mark the board as viewed", () => {
-    trello.boards(TEST_PARENT_ID).markAsViewed();
+  test("configures the fetch call to mark the board as viewed", async () => {
+    await trello.boards(TEST_PARENT_ID).markAsViewed();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -176,8 +176,8 @@ describe("the Board resource", () => {
     );
   });
 
-  test("configures the fetch call to update a board", () => {
-    trello.boards(TEST_PARENT_ID).updateBoard({
+  test("configures the fetch call to update a board", async () => {
+    await trello.boards(TEST_PARENT_ID).updateBoard({
       name: "New Name",
       prefs: {
         selfJoin: false,
@@ -191,14 +191,18 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("prefs/selfJoin")).toBe("false");
   });
 
-  test("throws an error if the params object is empty", () => {
-    expect(() => {
-      trello.boards(TEST_PARENT_ID).updateBoard({} as any);
-    }).toThrowError(/at least one param/gi);
+  test("throws an error if the params object is empty", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello.boards(TEST_PARENT_ID).updateBoard({} as any);
+    } catch (err) {
+      expect(err.message).toMatch(/at least one param/gi);
+    }
   });
 
-  test("configures the fetch call to update the closed status of a board", () => {
-    trello.boards(TEST_PARENT_ID).updateClosedStatus(true);
+  test("configures the fetch call to update the closed status of a board", async () => {
+    await trello.boards(TEST_PARENT_ID).updateClosedStatus(true);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -206,8 +210,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("true");
   });
 
-  test("configures the fetch call to update the description for a board", () => {
-    trello.boards(TEST_PARENT_ID).updateDescription("New Description");
+  test("configures the fetch call to update the description for a board", async () => {
+    await trello.boards(TEST_PARENT_ID).updateDescription("New Description");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -215,8 +219,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("New Description");
   });
 
-  test("configures the fetch call to update the organization for a board", () => {
-    trello.boards(TEST_PARENT_ID).moveToOrganization(TEST_CHILD_ID);
+  test("configures the fetch call to update the organization for a board", async () => {
+    await trello.boards(TEST_PARENT_ID).moveToOrganization(TEST_CHILD_ID);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -226,8 +230,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe(TEST_CHILD_ID);
   });
 
-  test("configures the fetch call to update the label name color for a board", () => {
-    trello.boards(TEST_PARENT_ID).updateLabelNameForColor("blue", "Test");
+  test("configures the fetch call to update the label name color for a board", async () => {
+    await trello.boards(TEST_PARENT_ID).updateLabelNameForColor("blue", "Test");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -237,8 +241,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("Test");
   });
 
-  test("configures the fetch call to update the board name", () => {
-    trello.boards(TEST_PARENT_ID).updateName("Test Board");
+  test("configures the fetch call to update the board name", async () => {
+    await trello.boards(TEST_PARENT_ID).updateName("Test Board");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -246,8 +250,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("Test Board");
   });
 
-  test("configures the fetch call to update the subscribed status for the board", () => {
-    trello.boards(TEST_PARENT_ID).updateSubscribed(true);
+  test("configures the fetch call to update the subscribed status for the board", async () => {
+    await trello.boards(TEST_PARENT_ID).updateSubscribed(true);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -255,8 +259,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("true");
   });
 
-  test("configures the fetch call to update the board's background pref", () => {
-    trello.boards(TEST_PARENT_ID).updateBackground("Test");
+  test("configures the fetch call to update the board's background pref", async () => {
+    await trello.boards(TEST_PARENT_ID).updateBackground("Test");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -266,8 +270,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("Test");
   });
 
-  test("configures the fetch call to update the board's calendar feed pref", () => {
-    trello.boards(TEST_PARENT_ID).updateCalendarFeedEnabled(true);
+  test("configures the fetch call to update the board's calendar feed pref", async () => {
+    await trello.boards(TEST_PARENT_ID).updateCalendarFeedEnabled(true);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -277,8 +281,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("true");
   });
 
-  test("configures the fetch call to update the board's card aging pref", () => {
-    trello.boards(TEST_PARENT_ID).updateCardAging("pirate");
+  test("configures the fetch call to update the board's card aging pref", async () => {
+    await trello.boards(TEST_PARENT_ID).updateCardAging("pirate");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -288,8 +292,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("pirate");
   });
 
-  test("configures the fetch call to update the board's card covers pref", () => {
-    trello.boards(TEST_PARENT_ID).updateCardCovers(false);
+  test("configures the fetch call to update the board's card covers pref", async () => {
+    await trello.boards(TEST_PARENT_ID).updateCardCovers(false);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -299,8 +303,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("false");
   });
 
-  test("configures the fetch call to update the board's comments pref", () => {
-    trello.boards(TEST_PARENT_ID).updateComments("public");
+  test("configures the fetch call to update the board's comments pref", async () => {
+    await trello.boards(TEST_PARENT_ID).updateComments("public");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -310,8 +314,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("public");
   });
 
-  test("configures the fetch call to update the board's invitations pref", () => {
-    trello.boards(TEST_PARENT_ID).updateInvitations("admins");
+  test("configures the fetch call to update the board's invitations pref", async () => {
+    await trello.boards(TEST_PARENT_ID).updateInvitations("admins");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -321,8 +325,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("admins");
   });
 
-  test("configures the fetch call to update the board's permissions level pref", () => {
-    trello.boards(TEST_PARENT_ID).updatePermissionLevel("private");
+  test("configures the fetch call to update the board's permissions level pref", async () => {
+    await trello.boards(TEST_PARENT_ID).updatePermissionLevel("private");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -332,8 +336,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("private");
   });
 
-  test("configures the fetch call to update the board's self join pref", () => {
-    trello.boards(TEST_PARENT_ID).updateSelfJoin(false);
+  test("configures the fetch call to update the board's self join pref", async () => {
+    await trello.boards(TEST_PARENT_ID).updateSelfJoin(false);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -343,8 +347,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("false");
   });
 
-  test("configures the fetch call to update the board's voting pref", () => {
-    trello.boards(TEST_PARENT_ID).updateVoting("disabled");
+  test("configures the fetch call to update the board's voting pref", async () => {
+    await trello.boards(TEST_PARENT_ID).updateVoting("disabled");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -354,16 +358,16 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("disabled");
   });
 
-  test("configures the fetch call to delete the board", () => {
-    trello.boards(TEST_PARENT_ID).deleteBoard();
+  test("configures the fetch call to delete the board", async () => {
+    await trello.boards(TEST_PARENT_ID).deleteBoard();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}`);
   });
 
-  test("configures the fetch call to disable the board plugin", () => {
-    trello.boards(TEST_PARENT_ID).disableBoardPlugin(TEST_CHILD_ID);
+  test("configures the fetch call to disable the board plugin", async () => {
+    await trello.boards(TEST_PARENT_ID).disableBoardPlugin(TEST_CHILD_ID);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");
@@ -372,8 +376,8 @@ describe("the Board resource", () => {
     );
   });
 
-  test("configures the fetch call to delete the board power up", () => {
-    trello.boards(TEST_PARENT_ID).deletePowerUp("recap");
+  test("configures the fetch call to delete the board power up", async () => {
+    await trello.boards(TEST_PARENT_ID).deletePowerUp("recap");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");
@@ -382,8 +386,8 @@ describe("the Board resource", () => {
     );
   });
 
-  test("configures the fetch call for getting the actions for a board", () => {
-    trello
+  test("configures the fetch call for getting the actions for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .actions()
       .getActions({
@@ -396,8 +400,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("member_fields")).toBe("all");
   });
 
-  test("configures the fetch call for getting the board stars for a board", () => {
-    trello
+  test("configures the fetch call for getting the board stars for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .boardStars()
       .getBoardStars({
@@ -410,8 +414,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("filter")).toBe("mine");
   });
 
-  test("configures the fetch call for getting the cards for a board", () => {
-    trello
+  test("configures the fetch call for getting the cards for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .cards()
       .getCards();
@@ -421,8 +425,8 @@ describe("the Board resource", () => {
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/cards`);
   });
 
-  test("configures the fetch call for getting a specific card for a board", () => {
-    trello
+  test("configures the fetch call for getting a specific card for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .cards(TEST_CHILD_ID)
       .getCard();
@@ -434,8 +438,8 @@ describe("the Board resource", () => {
     );
   });
 
-  test("configures the fetch call for getting the checklists for a board", () => {
-    trello
+  test("configures the fetch call for getting the checklists for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .checklists()
       .getChecklists();
@@ -445,8 +449,8 @@ describe("the Board resource", () => {
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/checklists`);
   });
 
-  test("configures the fetch call for getting the custom fields for a board", () => {
-    trello
+  test("configures the fetch call for getting the custom fields for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .customFields()
       .getCustomFields();
@@ -458,8 +462,8 @@ describe("the Board resource", () => {
     );
   });
 
-  test("configures the fetch call for getting the labels for a board", () => {
-    trello
+  test("configures the fetch call for getting the labels for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .labels()
       .getLabels();
@@ -469,8 +473,8 @@ describe("the Board resource", () => {
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/labels`);
   });
 
-  test("configures the fetch call for getting the specific label for a board", () => {
-    trello
+  test("configures the fetch call for getting the specific label for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .labels(TEST_CHILD_ID)
       .getLabel();
@@ -482,8 +486,8 @@ describe("the Board resource", () => {
     );
   });
 
-  test("configures the fetch call for getting the lists for a board", () => {
-    trello
+  test("configures the fetch call for getting the lists for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .lists()
       .getLists();
@@ -493,8 +497,8 @@ describe("the Board resource", () => {
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/lists`);
   });
 
-  test("configures the fetch call for getting the members for a board", () => {
-    trello
+  test("configures the fetch call for getting the members for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .members()
       .getMembers();
@@ -504,8 +508,8 @@ describe("the Board resource", () => {
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/members`);
   });
 
-  test("configures the fetch call for getting a specific member for a board", () => {
-    trello
+  test("configures the fetch call for getting a specific member for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .members(TEST_CHILD_ID)
       .getMember();
@@ -517,8 +521,8 @@ describe("the Board resource", () => {
     );
   });
 
-  test("configures the fetch call for getting the members invited for a board", () => {
-    trello
+  test("configures the fetch call for getting the members invited for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .membersInvited()
       .getMembers();
@@ -530,8 +534,8 @@ describe("the Board resource", () => {
     );
   });
 
-  test("configures the fetch call for getting the memberships for a board", () => {
-    trello
+  test("configures the fetch call for getting the memberships for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .memberships()
       .getMemberships();
@@ -541,8 +545,8 @@ describe("the Board resource", () => {
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/memberships`);
   });
 
-  test("configures the fetch call for getting the specific membership for a board", () => {
-    trello
+  test("configures the fetch call for getting the specific membership for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .memberships(TEST_CHILD_ID)
       .getMembership();
@@ -554,8 +558,8 @@ describe("the Board resource", () => {
     );
   });
 
-  test("configures the fetch call for getting the myPrefs for a board", () => {
-    trello
+  test("configures the fetch call for getting the myPrefs for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .myPrefs()
       .getMyPrefs();
@@ -565,8 +569,8 @@ describe("the Board resource", () => {
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/myPrefs`);
   });
 
-  test("configures the fetch call for getting the organization for a board", () => {
-    trello
+  test("configures the fetch call for getting the organization for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .organization()
       .getOrganization();
@@ -578,8 +582,8 @@ describe("the Board resource", () => {
     );
   });
 
-  test("configures the fetch call for getting the plugins for a board", () => {
-    trello
+  test("configures the fetch call for getting the plugins for a board", async () => {
+    await trello
       .boards(TEST_PARENT_ID)
       .plugins()
       .getPlugins();

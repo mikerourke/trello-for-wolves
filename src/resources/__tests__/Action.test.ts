@@ -14,16 +14,16 @@ describe("the Action resource", () => {
     global.resetFetchMocks();
   });
 
-  test("configures the fetch call for a single action", () => {
-    trello.actions(TEST_ACTION_ID).getAction();
+  test("configures the fetch call for a single action", async () => {
+    await trello.actions(TEST_ACTION_ID).getAction();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
     expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}`);
   });
 
-  test("configures the fetch call for getting multiple actions", () => {
-    trello
+  test("configures the fetch call for getting multiple actions", async () => {
+    await trello
       .boards(TEST_BOARD_ID)
       .actions()
       .getActions({
@@ -42,8 +42,8 @@ describe("the Action resource", () => {
     expect(result.url.searchParams.get("memberCreator_fields")).toBe("all");
   });
 
-  test("configures the fetch call for getting nested actions", () => {
-    trello
+  test("configures the fetch call for getting nested actions", async () => {
+    await trello
       .boards(TEST_BOARD_ID)
       .actions()
       .getNestedActions({
@@ -62,8 +62,8 @@ describe("the Action resource", () => {
     );
   });
 
-  test("configures the fetch call for getting an action field", () => {
-    trello.actions(TEST_ACTION_ID).getFieldValue("idMemberCreator");
+  test("configures the fetch call for getting an action field", async () => {
+    await trello.actions(TEST_ACTION_ID).getFieldValue("idMemberCreator");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -72,24 +72,24 @@ describe("the Action resource", () => {
     );
   });
 
-  test("configures the fetch call for getting the action's display", () => {
-    trello.actions(TEST_ACTION_ID).getDisplay();
+  test("configures the fetch call for getting the action's display", async () => {
+    await trello.actions(TEST_ACTION_ID).getDisplay();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
     expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}/display`);
   });
 
-  test("configures the fetch call for getting the action's entities", () => {
-    trello.actions(TEST_ACTION_ID).getEntities();
+  test("configures the fetch call for getting the action's entities", async () => {
+    await trello.actions(TEST_ACTION_ID).getEntities();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
     expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}/entities`);
   });
 
-  test("configures the fetch call for updating the action", () => {
-    trello.actions(TEST_ACTION_ID).updateAction({ text: "Test" });
+  test("configures the fetch call for updating the action", async () => {
+    await trello.actions(TEST_ACTION_ID).updateAction({ text: "Test" });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -97,8 +97,8 @@ describe("the Action resource", () => {
     expect(result.url.searchParams.get("text")).toBe("Test");
   });
 
-  test("configures the fetch call for updating the action's text", () => {
-    trello.actions(TEST_ACTION_ID).updateText("Test");
+  test("configures the fetch call for updating the action's text", async () => {
+    await trello.actions(TEST_ACTION_ID).updateText("Test");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -106,16 +106,16 @@ describe("the Action resource", () => {
     expect(result.url.searchParams.get("value")).toBe("Test");
   });
 
-  test("configures the fetch call for deleting an action", () => {
-    trello.actions(TEST_ACTION_ID).deleteAction();
+  test("configures the fetch call for deleting an action", async () => {
+    await trello.actions(TEST_ACTION_ID).deleteAction();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");
     expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}`);
   });
 
-  test("configures the fetch call for getting the board for an action", () => {
-    trello
+  test("configures the fetch call for getting the board for an action", async () => {
+    await trello
       .actions(TEST_ACTION_ID)
       .board()
       .getBoard();
@@ -125,8 +125,8 @@ describe("the Action resource", () => {
     expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}/board`);
   });
 
-  test("configures the fetch call for getting the card for an action", () => {
-    trello
+  test("configures the fetch call for getting the card for an action", async () => {
+    await trello
       .actions(TEST_ACTION_ID)
       .card()
       .getCard();
@@ -136,8 +136,8 @@ describe("the Action resource", () => {
     expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}/card`);
   });
 
-  test("configures the fetch call for getting the list for an action", () => {
-    trello
+  test("configures the fetch call for getting the list for an action", async () => {
+    await trello
       .actions(TEST_ACTION_ID)
       .list()
       .getList();
@@ -147,8 +147,8 @@ describe("the Action resource", () => {
     expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}/list`);
   });
 
-  test("configures the fetch call for getting the member for an action", () => {
-    trello
+  test("configures the fetch call for getting the member for an action", async () => {
+    await trello
       .actions(TEST_ACTION_ID)
       .member()
       .getMember();
@@ -158,8 +158,8 @@ describe("the Action resource", () => {
     expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}/member`);
   });
 
-  test("configures the fetch call for getting the member creator for an action", () => {
-    trello
+  test("configures the fetch call for getting the member creator for an action", async () => {
+    await trello
       .actions(TEST_ACTION_ID)
       .memberCreator()
       .getMember();
@@ -171,8 +171,8 @@ describe("the Action resource", () => {
     );
   });
 
-  test("configures the fetch call for getting the organization for an action", () => {
-    trello
+  test("configures the fetch call for getting the organization for an action", async () => {
+    await trello
       .actions(TEST_ACTION_ID)
       .organization()
       .getOrganization();

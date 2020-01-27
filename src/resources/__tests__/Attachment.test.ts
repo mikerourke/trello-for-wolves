@@ -14,8 +14,8 @@ describe("the Attachment resource", () => {
     global.resetFetchMocks();
   });
 
-  test("configures the fetch call for a single attachment", () => {
-    trello
+  test("configures the fetch call for a single attachment", async () => {
+    await trello
       .cards(TEST_CARD_ID)
       .attachments(TEST_ATTACH_ID)
       .getAttachment();
@@ -27,8 +27,8 @@ describe("the Attachment resource", () => {
     );
   });
 
-  test("configures the fetch call for multiple attachments", () => {
-    trello
+  test("configures the fetch call for multiple attachments", async () => {
+    await trello
       .cards(TEST_CARD_ID)
       .attachments()
       .getAttachments({
@@ -42,8 +42,8 @@ describe("the Attachment resource", () => {
   });
 
   // TODO: Validate that form data works.
-  test("configures the fetch call to upload an attachment", () => {
-    trello
+  test("configures the fetch call to upload an attachment", async () => {
+    await trello
       .cards(TEST_CARD_ID)
       .attachments()
       .uploadAttachment({
@@ -56,8 +56,8 @@ describe("the Attachment resource", () => {
     expect(result.url.pathname).toBe(`/1/cards/${TEST_CARD_ID}/attachments`);
   });
 
-  test("configures the fetch call to delete an attachment", () => {
-    trello
+  test("configures the fetch call to delete an attachment", async () => {
+    await trello
       .cards(TEST_CARD_ID)
       .attachments(TEST_ATTACH_ID)
       .deleteAttachment();

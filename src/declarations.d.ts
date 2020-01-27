@@ -8,18 +8,15 @@ declare interface TestHelpers {
     url: URL;
     config: {
       method: string;
-      body: unknown;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      body: any;
     };
   };
   resetFetchMocks: VoidFunction;
 }
 
 declare interface Global extends TestHelpers {
-  fetch: Mock & {
-    mockCall: VoidFunction;
-    mockReject: (body: unknown) => Mock;
-    resetMocks: VoidFunction;
-  };
+  fetch: Mock;
 }
 
 declare const global: Global;
