@@ -6,7 +6,11 @@
     "jestHelpers.ts"
   ],
   "coverageReporters": ["lcov"],
+  "globals": {
+    "testHelpers": true
+  },
   "moduleFileExtensions": ["js", "json", "ts"],
+  "preset": "ts-jest",
   "roots": ["<rootDir>/src/"],
   "setupFilesAfterEnv": ["<rootDir>/src/setupJest.ts"],
   "testEnvironment": "node",

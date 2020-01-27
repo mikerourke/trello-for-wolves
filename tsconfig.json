@@ -26,6 +26,7 @@
   "exclude": [
     ".idea",
     "build",
+    "coverage",
     "docs",
     "lib",
     "node_modules",
