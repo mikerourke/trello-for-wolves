@@ -8,6 +8,8 @@ import {
 
 export type CheckItemState = "complete" | "false" | "incomplete" | "true";
 
+export type CheckItemStateField = "idCheckItem" | "state";
+
 export type CheckItemRecord = {
   id: string;
   idChecklist: string;
@@ -19,9 +21,7 @@ export type CheckItemRecord = {
   creationMethod?: string | null;
 };
 
-export type CheckItemField = keyof CheckItemRecord;
-
-export type CheckItemStateField = "idCheckItem" | "state";
+export type CheckItemField = "name" | "nameData" | "pos" | "state" | "type";
 
 export class CheckItem extends BaseResource {
   public getCheckItem(params?: {
@@ -31,8 +31,8 @@ export class CheckItem extends BaseResource {
   }
 
   public getCheckItems(params?: {
-    fields?: AllOfOrListOf<CheckItemField>;
     filter?: AllOrNone;
+    fields?: AllOfOrListOf<CheckItemField>;
   }): TypedFetch<CheckItemRecord[]> {
     return this.apiGet("/", params);
   }

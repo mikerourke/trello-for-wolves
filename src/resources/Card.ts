@@ -1,22 +1,25 @@
 import { BaseResource } from "./BaseResource";
-import { Action, ActionField } from "./Action";
+import { Action } from "./Action";
 import { Attachment, AttachmentField, AttachmentFilter } from "./Attachment";
 import { Board, BoardField } from "./Board";
-import { CheckItem, CheckItemStateField } from "./CheckItem";
+import { CheckItem } from "./CheckItem";
 import { Checklist, ChecklistField } from "./Checklist";
 import { Comment } from "./Comment";
 import { Label, LabelColor, LabelRecord } from "./Label";
-import { List, ListField } from "./List";
+import { List } from "./List";
 import { Member, MemberInvitedField } from "./Member";
 import { Sticker, StickerField } from "./Sticker";
 import {
   AllOfOrListOf,
   AllOrNone,
+  FieldOrListOf,
+  FileUpload,
   FilterDate,
   KeepFromSourceField,
   PositionNumbered,
   TypedFetch,
   ValidResourceFields,
+  ValueResponse,
 } from "../typeDefs";
 
 export type CardAging = "pirate" | "regular";
@@ -88,178 +91,163 @@ export interface CardBadgeRecord {
   votes: number;
 }
 
+/**
+ * @typedef {Object} CardCoordinatesRecord
+ * @property latitude Latitude of the coordinate.
+ * @property longitude Longitude of the coordinate.
+ */
 export interface CardCoordinatesRecord {
   latitude: number;
   longitude: number;
 }
 
-export interface CardRecord {
-  /** The ID of the card. */
+/**
+ * The data associated with the card's location fields. These fields are only
+ * available if the Map Power-Up is enabled.
+ * @typedef {Object} CardMapPowerUpRecord
+ * @property address Address of card location.
+ * @property locationName Name of card location.
+ * @property coordinates Either a comma-separated string in the format latitude,longitude or an object
+ *                       containing keys for latitude and longitude whose values are numbers between -180 and 180.
+ *                       See the {@link CardCoordinatesRecord} type.
+ */
+export interface CardMapPowerUpRecord {
+  address?: string;
+  locationName?: string;
+  coordinates?: CardCoordinatesRecord | string;
+}
+
+/**
+ * The data associated with a Card object returned from the Trello API. It
+ * includes fields from {@link CardMapPowerUpRecord}.
+ * @typedef {Object} CardRecord
+ * @property id The ID of the card.
+ * @property badges Pieces of information about the card that are displayed on the front of the card.
+ * @property checkItemStates States of the check items.
+ * @property closed Whether the card is closed (archived). Note: Archived lists and boards do not cascade
+ *                  archives to cards. A card can have closed: false but be on an archived board.
+ * @property dateLastActivity The datetime of the last activity on the card. Note: There are activities
+ *                            that update dateLastActivity that do not create a corresponding action. For instance,
+ *                            updating the name field of a checklist item on a card does not create an action but
+ *                            does update the card and board's dateLastActivity value.
+ * @property desc The description for the card. Up to 16384 chars.
+ * @property descData If the description has custom emoji, this field will provide the data necessary to
+ *                    display them.
+ * @property due The due date on the card, if one exists.
+ * @property dueComplete Whether the due date has been marked complete.
+ * @property idAttachmentCover The id of the attachment selected as the cover image, if one exists.
+ * @property idBoard The ID of the board the card is on.
+ * @property idChecklists An array of checklist IDs that are on this card.
+ * @property idLabels An array of label IDs that are on this card.
+ * @property idList The ID of the list the card is in.
+ * @property idMembers An array of member IDs that are on this card.
+ * @property idMembersVoted An array of member IDs who have voted on this card.
+ * @property idShort Numeric ID for the card on this board. Only unique to the board, and subject to
+ *                   change as the card moves.
+ * @property labels Array of label objects on this card.
+ * @property manualCoverAttachment Whether the card cover image was selected automatically by
+ *                                 Trello, or manually by the user.
+ * @property name Name of the card.
+ * @property pos Position of the card in the list.
+ * @property shortLink The 8 character shortened ID for the card.
+ * @property shortUrl URL to the card without the name slug.
+ * @property subscribed Whether this member is subscribed to the card.
+ * @property url Full URL to the card, with the name slug.
+ */
+export interface CardRecord extends CardMapPowerUpRecord {
   id: string;
-  /**
-   * Pieces of information about the card that are displayed on the front of
-   * the card.
-   */
   badges: CardBadgeRecord;
   checkItemStates: string[];
-  /**
-   * Whether the card is closed (archived). Note: Archived lists and boards do
-   * not cascade archives to cards. A card can have closed: false but be on an
-   * archived board.
-   */
   closed: boolean;
-  /**
-   * The datetime of the last activity on the card. Note: There are activities
-   * that update dateLastActivity that do not create a corresponding action.
-   * For instance, updating the name field of a checklist item on a card does
-   * not create an action but does update the card and board's
-   * dateLastActivity value.
-   */
   dateLastActivity: string;
-  /** The description for the card. Up to 16384 chars. */
   desc: string;
-  /**
-   * If the description has custom emoji, this field will provide the data
-   * necessary to display them.
-   */
   descData: string;
-  /** The due date on the card, if one exists. */
   due: string;
-  /** Whether the due date has been marked complete. */
   dueComplete: boolean;
-  /** The id of the attachment selected as the cover image, if one exists. */
   idAttachmentCover: string;
-  /** The ID of the board the card is on. */
   idBoard: string;
-  /** An array of checklist IDs that are on this card. */
   idChecklists: string[];
-  /** An array of label IDs that are on this card. */
   idLabels: string[];
-  /** The ID of the list the card is in. */
   idList: string;
-  /** An array of member IDs that are on this card. */
   idMembers: string[];
-  /** An array of member IDs who have voted on this card. */
   idMembersVoted: string[];
-  /**
-   * Numeric ID for the card on this board. Only unique to the board, and
-   * subject to change as the card moves.
-   */
   idShort: number;
-  /** Array of label objects on this card. */
   labels: LabelRecord[];
-  /**
-   * Whether the card cover image was selected automatically by Trello, or
-   * manually by the user.
-   */
   manualCoverAttachment: boolean;
-  /** Name of the card. */
   name: string;
-  /** Position of the card in the list. */
   pos: number;
-  /** The 8 character shortened ID for the card. */
   shortLink: string;
-  /** URL to the card without the name slug. */
   shortUrl: string;
-  /** Whether this member is subscribed to the card. */
   subscribed: boolean;
-  /** Full URL to the card, with the name slug. */
   url: string;
-  /** Address of card location. */
-  address: string;
-  /** Name of card location. */
-  locationName: string;
-  /**
-   * Either a comma-separated string in the format latitude,longitude or an
-   * object containing keys for latitude and longitude whose values are
-   * numbers between -180 and 180.
-   */
-  coordinates: CardCoordinatesRecord | string;
 }
 
 export type CardField = ValidResourceFields<CardRecord>;
 
-export interface GetCardsViaQueryParams {
-  cardAttachmentFields?: AllOfOrListOf<AttachmentField>;
-  cardAttachments?: AttachmentFilter;
-  cardCustomFieldItems?: boolean;
-  cardFields?: AllOfOrListOf<CardField>;
-  cardMemberFields?: AllOfOrListOf<MemberInvitedField>;
-  cardMembers?: boolean;
-  cards?: AllOfOrListOf<CardFilter>;
-  cardsModifiedSince?: string | null;
-  cardStickers?: boolean;
-}
-
-export interface GetCardsViaUrlParams {
-  actions?: AllOfOrListOf<CardActionType>;
-  attachmentFields?: AllOfOrListOf<AttachmentField>;
-  attachments?: AttachmentFilter;
-  before?: FilterDate;
-  checkItemStates?: boolean;
-  checklists?: AllOrNone;
-  customFieldItems?: boolean;
-  fields?: AllOfOrListOf<CardField>;
-  filter?: CardFilter;
-  limit?: number;
-  memberFields?: AllOfOrListOf<MemberInvitedField>;
-  members?: boolean;
-  pluginData?: boolean;
-  since?: FilterDate;
-  sort: "none" | "-id";
-  stickers?: boolean;
-}
-
-export type GetCardsReturnType<
-  TParams,
-  TPayload
-> = TParams extends GetCardsViaQueryParams
-  ? TPayload & { cards: CardRecord[] }
-  : CardRecord[];
-
-export type AllGetCardsParams = GetCardsViaUrlParams | GetCardsViaQueryParams;
-
 export class Card extends BaseResource {
   public getCard(params?: {
-    actionFields?: AllOfOrListOf<ActionField>;
-    actionMemberCreatorFields?: AllOfOrListOf<MemberInvitedField>;
-    actions?: AllOfOrListOf<CardActionType>;
-    actionsDisplay?: boolean;
-    actionsEntities?: boolean;
-    actionsLimit?: number;
-    attachmentFields?: AllOfOrListOf<AttachmentField>;
-    attachments?: AttachmentFilter;
-    board?: boolean;
-    boardFields?: AllOfOrListOf<BoardField>;
-    checkItemStateFields?: AllOfOrListOf<CheckItemStateField>;
-    checkItemStates?: boolean;
-    checklistFields?: AllOfOrListOf<ChecklistField>;
-    checklists?: AllOrNone;
     fields?: AllOfOrListOf<CardField>;
-    list?: boolean;
-    listFields?: AllOfOrListOf<ListField>;
-    memberFields?: AllOfOrListOf<MemberInvitedField>;
+    actions?: AllOfOrListOf<CardActionType>;
+    attachments?: AttachmentFilter;
+    attachmentFields?: AllOfOrListOf<AttachmentField>;
     members?: boolean;
+    memberFields?: AllOfOrListOf<MemberInvitedField>;
     membersVoted?: boolean;
     memberVotedFields?: AllOfOrListOf<MemberInvitedField>;
+    checkItemStates?: boolean;
+    checklists?: AllOrNone;
+    checklistFields?: AllOfOrListOf<ChecklistField>;
+    board?: boolean;
+    boardFields?: AllOfOrListOf<BoardField>;
+    list?: boolean;
     pluginData?: boolean;
-    stickerFields?: AllOfOrListOf<StickerField>;
     stickers?: boolean;
+    stickerFields?: AllOfOrListOf<StickerField>;
+    customFieldItems?: boolean;
   }): TypedFetch<CardRecord> {
     return this.apiGet("/", params);
   }
 
-  public getCards<TPayload extends object, TParams extends AllGetCardsParams>(
-    params?: TParams,
-  ): TypedFetch<GetCardsReturnType<TParams, TPayload>> {
+  public getCards(params?: {
+    actions?: AllOfOrListOf<CardActionType>;
+    attachmentFields?: AllOfOrListOf<AttachmentField>;
+    attachments?: AttachmentFilter;
+    before?: FilterDate;
+    checkItemStates?: boolean;
+    checklists?: AllOrNone;
+    customFieldItems?: boolean;
+    fields?: AllOfOrListOf<CardField>;
+    filter?: CardFilter;
+    limit?: number;
+    memberFields?: AllOfOrListOf<MemberInvitedField>;
+    members?: boolean;
+    pluginData?: boolean;
+    since?: FilterDate;
+    sort: "none" | "-id";
+    stickers?: boolean;
+  }): TypedFetch<CardRecord[]> {
     return this.apiGet("/", params);
   }
 
-  public getCardsFilteredBy(filter: CardFilter): TypedFetch<unknown> {
+  public getNestedCards<TPayload extends object>(params?: {
+    cards?: AllOfOrListOf<CardFilter>;
+    cardFields?: AllOfOrListOf<CardField>;
+    cardMembers?: boolean;
+    cardMemberFields?: AllOfOrListOf<MemberInvitedField>;
+    cardAttachments?: AttachmentFilter;
+    cardAttachmentFields?: AllOfOrListOf<AttachmentField>;
+    cardStickers?: boolean;
+    cardsModifiedSince?: string | null;
+    cardCustomFieldItems?: boolean;
+  }): TypedFetch<TPayload & { cards: CardRecord[] }> {
+    return this.apiGetNested(params);
+  }
+
+  public getCardsFilteredBy(filter: CardFilter): TypedFetch<CardRecord[]> {
     return this.apiGet(`/${filter}`);
   }
 
-  public getFieldValue(field: CardField): TypedFetch<unknown> {
+  public getFieldValue<T>(field: CardField): TypedFetch<ValueResponse<T>> {
     return this.apiGet(`/${field}`);
   }
 
@@ -275,21 +263,23 @@ export class Card extends BaseResource {
     return this.apiGet("/pluginData");
   }
 
-  public addCard(params: {
-    desc?: string;
-    due?: Date | null;
-    dueComplete?: boolean;
-    fileSource?: Record<string, any>;
-    idCardSource?: string;
-    idLabels?: string[];
-    idList?: string;
-    idMembers?: string[];
-    keepFromSource?: KeepFromSourceField | KeepFromSourceField[];
-    labels?: AllOfOrListOf<LabelColor>;
-    name?: string;
-    pos?: PositionNumbered;
-    urlSource?: string | null;
-  }): TypedFetch<unknown> {
+  public addCard(
+    params: {
+      name?: string;
+      desc?: string;
+      pos?: PositionNumbered;
+      due?: Date | null;
+      dueComplete?: boolean;
+      idList?: string;
+      idMembers?: string[];
+      idLabels?: string[];
+      urlSource?: string | null;
+      fileSource?: FileUpload;
+      idCardSource?: string;
+      keepFromSource?: FieldOrListOf<KeepFromSourceField>;
+      labels?: AllOfOrListOf<LabelColor>;
+    } & CardMapPowerUpRecord,
+  ): TypedFetch<CardRecord> {
     return this.apiPost("/", { ...params, separator: "/" });
   }
 
@@ -301,20 +291,22 @@ export class Card extends BaseResource {
     return this.apiPost("/idMembers", { value: memberId });
   }
 
-  public updateCard(params?: {
-    closed?: boolean;
-    desc?: string;
-    due?: Date | null;
-    dueComplete?: boolean;
-    idAttachmentCover?: string;
-    idBoard?: string;
-    idLabels?: string[];
-    idList?: string;
-    idMembers?: string[];
-    name?: string;
-    pos?: PositionNumbered;
-    subscribed?: boolean;
-  }): TypedFetch<unknown> {
+  public updateCard(
+    params: {
+      name?: string;
+      desc?: string;
+      closed?: boolean;
+      idMembers?: string[];
+      idAttachmentCover?: string;
+      idList?: string;
+      idLabels?: string[];
+      idBoard?: string;
+      pos?: PositionNumbered;
+      due?: Date | null;
+      dueComplete?: boolean;
+      subscribed?: boolean;
+    } & CardMapPowerUpRecord,
+  ): TypedFetch<CardRecord> {
     return this.apiPut("/", params);
   }
 
@@ -346,20 +338,20 @@ export class Card extends BaseResource {
   }
 
   public moveToBoard(
-    boardId: string,
+    idBoard: string,
     params?: {
       idList?: string;
     },
   ): TypedFetch<unknown> {
-    return this.apiPut("/idBoard", { value: boardId, ...params });
+    return this.apiPut("/idBoard", { value: idBoard, ...params });
   }
 
-  public moveToList(listId: string): TypedFetch<unknown> {
-    return this.apiPut("/idList", { value: listId });
+  public moveToList(idList: string): TypedFetch<unknown> {
+    return this.apiPut("/idList", { value: idList });
   }
 
-  public associateMembers(memberIds: string[]): TypedFetch<unknown> {
-    return this.apiPut("/idMembers", { value: memberIds });
+  public associateMembers(idMembers: string[]): TypedFetch<unknown> {
+    return this.apiPut("/idMembers", { value: idMembers });
   }
 
   public updateName(value: string): TypedFetch<unknown> {
@@ -382,80 +374,83 @@ export class Card extends BaseResource {
     return this.apiDelete("/");
   }
 
-  public dissociateMember(memberId: string): TypedFetch<unknown> {
-    return this.apiDelete(`/idMembers/${memberId}`);
+  public dissociateMember(idMember: string): TypedFetch<unknown> {
+    return this.apiDelete(`/idMembers/${idMember}`);
   }
 
-  public dissociateLabel(labelId: string): TypedFetch<unknown> {
-    return this.apiDelete(`/idLabels/${labelId}`);
+  public dissociateLabel(idLabel: string): TypedFetch<unknown> {
+    return this.apiDelete(`/idLabels/${idLabel}`);
   }
 
-  public actions(): Action {
+  public actions(): Action<CardActionType> {
     return new Action<CardActionType>(
       this.config,
-      `${this.baseEndpoint}/actions`,
+      this.pathElements,
+      "actions",
     );
   }
 
-  public attachments(attachmentId: string = ""): Attachment {
+  public attachments(idAttachment: string = ""): Attachment {
     return new Attachment(
       this.config,
-      `${this.baseEndpoint}/attachments/${attachmentId}`,
+      this.pathElements,
+      "attachments",
+      idAttachment,
     );
   }
 
   public board(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/board`);
+    return new Board(this.config, this.pathElements, "board");
   }
 
   public checkItemStates(): CheckItem {
-    return new CheckItem(this.config, `${this.baseEndpoint}/checkItemStates`);
+    return new CheckItem(this.config, this.pathElements, "checkItemStates");
   }
 
   public checklist(checklistId: string): Checklist {
     return new Checklist(
       this.config,
-      `${this.baseEndpoint}/checklist/${checklistId}`,
+      this.pathElements,
+      "checklist",
+      checklistId,
     );
   }
 
   public checklists(checklistId: string = ""): Checklist {
     return new Checklist(
       this.config,
-      `${this.baseEndpoint}/checklists/${checklistId}`,
+      this.pathElements,
+      "checklists",
+      checklistId,
     );
   }
 
   public checkItem(checkItemId: string): CheckItem {
     return new CheckItem(
       this.config,
-      `${this.baseEndpoint}/checkItem/${checkItemId}`,
+      this.pathElements,
+      "checkItem",
+      checkItemId,
     );
   }
 
   public comments(commentId: string = ""): Comment {
-    return new Comment(
-      this.config,
-      `${this.baseEndpoint}/actions/${commentId}`,
-    );
+    return new Comment(this.config, this.pathElements, `actions/${commentId}`);
   }
 
   public labels(): Label {
-    return new Label(this.config, `${this.baseEndpoint}/labels`);
+    return new Label(this.config, this.pathElements, "labels");
   }
 
   public list(): List {
-    return new List(this.config, `${this.baseEndpoint}/list`);
+    return new List(this.config, this.pathElements, "list");
   }
 
   public members(): Member {
-    return new Member(this.config, `${this.baseEndpoint}/members`);
+    return new Member(this.config, this.pathElements, "members");
   }
 
   public stickers(stickerId: string = ""): Sticker {
-    return new Sticker(
-      this.config,
-      `${this.baseEndpoint}/stickers/${stickerId}`,
-    );
+    return new Sticker(this.config, this.pathElements, "stickers", stickerId);
   }
 }

@@ -4,19 +4,17 @@ import { Card } from "./Card";
 import { List } from "./List";
 import {
   Member,
-  NestedMemberField,
   MemberCreatorRecord,
   MemberInvitedField,
+  MemberField,
 } from "./Member";
 import { Organization } from "./Organization";
 import {
   AllOfOrListOf,
-  FieldOrListOf,
   FilterDate,
   Format,
   Limits,
   TypedFetch,
-  ValidResourceFields,
   ValueResponse,
 } from "../typeDefs";
 
@@ -42,6 +40,7 @@ export type ActionType =
   | "copyBoard"
   | "copyCard"
   | "copyChecklist"
+  | "createCheckItem" // Excluded Only
   | "createLabel"
   | "copyCommentCard"
   | "createBoard"
@@ -55,6 +54,7 @@ export type ActionType =
   | "deleteBoardInvitation"
   | "deleteCard"
   | "deleteCheckItem"
+  | "deleteComment" // Excluded Only
   | "deleteLabel"
   | "deleteOrganizationInvitation"
   | "disableEnterprisePluginWhitelist"
@@ -91,6 +91,7 @@ export type ActionType =
   | "updateCheckItem"
   | "updateCheckItemStateOnCard"
   | "updateChecklist"
+  | "updateComment" // Excluded Only
   | "updateLabel"
   | "updateList"
   | "updateMember"
@@ -98,52 +99,26 @@ export type ActionType =
   | "voteOnCard";
 
 /**
- * These actions will be sent to Webhooks but are not included in nested action
- * resource responses (e.g. GET board/[board_id]/actions).
+ * @typedef {Object} ActionRecord
+ * @property id The ID of the action.
+ * @property idMemberCreator The ID of the member who caused the action.
+ * @property data Relevant information regarding the action.
+ * @property type The type of the action (based on the associated resource).
+ * @property date Date the action occurred.
+ * @property limits Limit data associated with the action.
+ * @property [memberCreator] Optional member creator details.
  */
-export type ExcludedActionType =
-  | "addAdminToBoard"
-  | "addAdminToOrganization"
-  | "addLabelToCard"
-  | "copyChecklist"
-  | "createBoardInvitation"
-  | "createBoardPreference"
-  | "createCheckItem"
-  | "createLabel"
-  | "createOrganizationInvitation"
-  | "deleteAttachmentFromCard"
-  | "deleteCheckItem"
-  | "deleteComment"
-  | "deleteLabel"
-  | "makeAdminOfOrganization"
-  | "removeAdminFromBoard"
-  | "removeAdminFromOrganization"
-  | "removeLabelFromCard"
-  | "removeMemberFromBoard"
-  | "removeMemberFromOrganization"
-  | "updateCheckItem"
-  | "updateComment"
-  | "updateLabel"
-  | "voteOnCard";
-
-type AnyActionType = ActionType & ExcludedActionType;
-
-export interface ActionRecord<T = AnyActionType> {
-  /** The ID of the action. */
+export interface ActionRecord<T = ActionType> {
   id: string;
-  /** The ID of the member who caused the action. */
   idMemberCreator: string;
-  /** Relevant information regarding the action. */
   data: unknown;
-  /** The type of the action. */
   type: T;
-  /** When the action occurred. */
   date: string;
   limits: Limits;
   memberCreator: MemberCreatorRecord;
 }
 
-export interface EntityRecord<T = AnyActionType> {
+export interface EntityRecord<T = ActionType> {
   id: string;
   type: T;
   text: string;
@@ -153,54 +128,12 @@ export interface EntityRecord<T = AnyActionType> {
   current?: string;
 }
 
-export interface DisplayRecord<T = AnyActionType> {
+export interface DisplayRecord<T = ActionType> {
   translationKey: string;
   entities: EntityRecord<T>[];
 }
 
-export type ActionField = ValidResourceFields<ActionRecord>;
-
-export interface GetActionsViaQueryParams {
-  actionsEntities?: boolean;
-  actionsDisplay?: boolean;
-  actionsFormat?: Format;
-  actionsSince?: string;
-  actionsLimit?: number;
-  actionFields?: AllOfOrListOf<ActionField>;
-  actionMember?: FieldOrListOf<NestedMemberField>;
-  actionMemberFields?: string;
-  actionMemberCreator?: boolean;
-  actionMemberCreatorFields?: FieldOrListOf<NestedMemberField>;
-}
-
-export interface GetActionsViaUrlParams<T = AnyActionType> {
-  entities?: boolean;
-  display?: boolean;
-  filter?: AllOfOrListOf<T>;
-  fields?: AllOfOrListOf<ActionField>;
-  limit?: number;
-  format?: Format;
-  since?: FilterDate;
-  before?: FilterDate;
-  page?: number; // Not allowed for Card resources
-  idModels?: string;
-  member?: boolean;
-  memberFields?: AllOfOrListOf<MemberInvitedField>;
-  memberCreator?: boolean;
-  memberCreatorFields?: AllOfOrListOf<MemberInvitedField>;
-}
-
-export type GetActionsReturnType<
-  TParams,
-  TPayload,
-  TActionType
-> = TParams extends GetActionsViaUrlParams
-  ? ActionRecord<TActionType>[]
-  : TPayload & { actions: ActionRecord<TActionType>[] };
-
-export type AnyGetActionsParams<T> =
-  | GetActionsViaQueryParams
-  | GetActionsViaUrlParams<T>;
+export type ActionField = "id" | "data" | "date" | "idMemberCreator" | "type";
 
 /**
  * Actions are generated whenever an action occurs in Trello. For instance, when
@@ -214,7 +147,7 @@ export type AnyGetActionsParams<T> =
  * @see https://developers.trello.com/reference#actions
  * @class
  */
-export class Action<TActionType = AnyActionType> extends BaseResource {
+export class Action<TActionType = ActionType> extends BaseResource {
   public getAction(params?: {
     display?: boolean;
     entities?: boolean;
@@ -227,13 +160,39 @@ export class Action<TActionType = AnyActionType> extends BaseResource {
     return this.apiGet("/", params);
   }
 
-  public getActions<
-    TPayload extends object,
-    TParams extends AnyGetActionsParams<TActionType> = {}
-  >(
-    params?: TParams,
-  ): TypedFetch<GetActionsReturnType<TParams, TPayload, TActionType>[]> {
+  public getActions(params?: {
+    entities?: boolean;
+    display?: boolean;
+    filter?: AllOfOrListOf<TActionType>;
+    fields?: AllOfOrListOf<ActionField>;
+    limit?: number;
+    format?: Format;
+    since?: FilterDate;
+    before?: FilterDate;
+    page?: number; // Not allowed for Card resources
+    idModels?: string;
+    member?: boolean;
+    memberFields?: AllOfOrListOf<MemberInvitedField>;
+    memberCreator?: boolean;
+    memberCreatorFields?: AllOfOrListOf<MemberInvitedField>;
+  }): TypedFetch<ActionRecord<TActionType>[]> {
     return this.apiGet("/", params);
+  }
+
+  public getNestedActions<TPayload extends object>(params?: {
+    actions?: AllOfOrListOf<TActionType>;
+    actionsEntities?: boolean;
+    actionsDisplay?: boolean;
+    actionsFormat?: Format;
+    actionsSince?: string;
+    actionsLimit?: number;
+    actionFields?: AllOfOrListOf<ActionField>;
+    actionMember?: boolean;
+    actionMemberFields?: AllOfOrListOf<MemberField>;
+    actionMemberCreator?: boolean;
+    actionMemberCreatorFields?: AllOfOrListOf<MemberField>;
+  }): TypedFetch<TPayload & { actions: ActionRecord<TActionType>[] }> {
+    return this.apiGetNested(params);
   }
 
   public getFieldValue<T>(field: ActionField): TypedFetch<ValueResponse<T>> {
@@ -263,26 +222,26 @@ export class Action<TActionType = AnyActionType> extends BaseResource {
   }
 
   public board(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/board`);
+    return new Board(this.config, this.pathElements, "board");
   }
 
   public card(): Card {
-    return new Card(this.config, `${this.baseEndpoint}/card`);
+    return new Card(this.config, this.pathElements, "card");
   }
 
   public list(): List {
-    return new List(this.config, `${this.baseEndpoint}/list`);
+    return new List(this.config, this.pathElements, "list");
   }
 
   public member(): Member {
-    return new Member(this.config, `${this.baseEndpoint}/member`);
+    return new Member(this.config, this.pathElements, "member");
   }
 
   public memberCreator(): Member {
-    return new Member(this.config, `${this.baseEndpoint}/memberCreator`);
+    return new Member(this.config, this.pathElements, "memberCreator");
   }
 
   public organization(): Organization {
-    return new Organization(this.config, `${this.baseEndpoint}/organization`);
+    return new Organization(this.config, this.pathElements, "organization");
   }
 }

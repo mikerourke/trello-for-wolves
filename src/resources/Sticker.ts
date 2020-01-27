@@ -1,40 +1,45 @@
 import { BaseResource } from "./BaseResource";
-import { AllOfOrListOf, FileUpload, TypedFetch } from "../typeDefs";
+import {
+  AllOfOrListOf,
+  FileUpload,
+  TypedFetch,
+  ValidResourceFields,
+} from "../typeDefs";
 
 export interface ImageScaledRecord {
-  _id: string;
   url: string;
-  scaled: boolean;
-  width: number;
   height: number;
+  width: number;
+  scaled: boolean;
+  _id: string;
 }
 
+/**
+ * The data corresponding to a Sticker associated with a Card.
+ * @typedef {Object} StickerRecord
+ * @property id The ID of the sticker.
+ * @property image The name of the sticker if it is a default sticker or a generated id if it is
+ *                 a custom sticker.
+ * @property imageScaled An array of scaled versions of the sticker image.
+ * @property imageUrl Direct URL to the image.
+ * @property left How far to the left of the card the sticker is placed.
+ * @property top How far from the top of the card the sticker is placed.
+ * @property rotate How much the sticker has been rotated.
+ * @property zIndex The ordering for display which tells you which sticker would show on top of
+ *                  another.
+ */
 export interface StickerRecord {
-  /** The ID of the sticker. */
   id: string;
-  /**
-   * The name of the sticker if it is a default sticker or a generated id if it
-   * is a custom sticker. See section below for the names of the default stickers.
-   */
   image: string;
-  /** An array of scaled versions of the sticker image. */
   imageScaled: ImageScaledRecord[];
-  /** Direct URL to the image. */
   imageUrl: string;
-  /** How far to the left of the card the sticker is placed. */
   left: number;
-  /** How far from the top of the card the sticker is placed. */
   top: number;
-  /** How much the sticker has been rotated. */
   rotate: number;
-  /**
-   * The ordering for display which tells you which sticker would show on top
-   * of another.
-   */
   zIndex: number;
 }
 
-export type StickerField = Omit<keyof StickerRecord, "id">;
+export type StickerField = ValidResourceFields<StickerRecord>;
 
 export class Sticker extends BaseResource {
   public getSticker(params?: {

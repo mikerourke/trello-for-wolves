@@ -319,7 +319,7 @@ export class Member extends BaseResource {
   public updateMember(params?: UpdateMemberParams): TypedFetch<MemberRecord> {
     const body = {} as { fullName?: string };
 
-    if (/board/gi.test(this.endpointElements[0])) {
+    if (/board/gi.test(this.pathElements[0])) {
       body.fullName = params?.fullName;
       delete params?.fullName;
     }
@@ -413,79 +413,92 @@ export class Member extends BaseResource {
   }
 
   public actions(): Action {
-    return new Action(this.config, `${this.baseEndpoint}/actions`);
+    return new Action(this.config, this.pathElements, "actions");
   }
 
   public boardBackgrounds(backgroundId: string = ""): BoardBackground {
     return new BoardBackground(
       this.config,
-      `${this.baseEndpoint}/boardBackgrounds/${backgroundId}`,
+      this.pathElements,
+      "boardBackgrounds",
+      backgroundId,
     );
   }
 
   public boardStars(boardStarId: string = ""): BoardStar {
     return new BoardStar(
       this.config,
-      `${this.baseEndpoint}/boardStars/${boardStarId}`,
+      this.pathElements,
+      "boardStars",
+      boardStarId,
     );
   }
 
   public boards(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/boards`);
+    return new Board(this.config, this.pathElements, "boards");
   }
 
   public boardsInvited(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/boardsInvited`);
+    return new Board(this.config, this.pathElements, "boardsInvited");
   }
 
   public cards(): Card {
-    return new Card(this.config, `${this.baseEndpoint}/cards`);
+    return new Card(this.config, this.pathElements, "cards");
   }
 
   public customBoardBackgrounds(backgroundId: string = ""): BoardBackground {
     return new BoardBackground(
       this.config,
-      `${this.baseEndpoint}/customBoardBackgrounds/${backgroundId}`,
+      this.pathElements,
+      "customBoardBackgrounds",
+      backgroundId,
     );
   }
 
   public customEmoji(customEmojiId: string = ""): CustomEmoji {
     return new CustomEmoji(
       this.config,
-      `${this.baseEndpoint}/customEmoji/${customEmojiId}`,
+      this.pathElements,
+      "customEmoji",
+      customEmojiId,
     );
   }
 
   public customStickers(customStickerId: string = ""): Sticker {
     return new Sticker(
       this.config,
-      `${this.baseEndpoint}/customStickers/${customStickerId}`,
+      this.pathElements,
+      "customStickers",
+      customStickerId,
     );
   }
 
   public notifications(): Notification {
-    return new Notification(this.config, `${this.baseEndpoint}/notifications`);
+    return new Notification(this.config, this.pathElements, "notifications");
   }
 
   public organizations(): Organization {
-    return new Organization(this.config, `${this.baseEndpoint}/organizations`);
+    return new Organization(this.config, this.pathElements, "organizations");
   }
 
   public organizationsInvited(): Organization {
     return new Organization(
       this.config,
-      `${this.baseEndpoint}/organizationsInvited`,
+      this.pathElements,
+      "organizationsInvited",
     );
   }
 
   public savedSearches(savedSearchId: string = ""): SavedSearch {
     return new SavedSearch(
       this.config,
-      `${this.baseEndpoint}/savedSearches/${savedSearchId}`,
+      this.pathElements,
+      "savedSearches",
+      savedSearchId,
     );
   }
 
   public tokens(): Token {
-    return new Token(this.config, `${this.baseEndpoint}/tokens`);
+    return new Token(this.config, this.pathElements, "tokens");
   }
 }

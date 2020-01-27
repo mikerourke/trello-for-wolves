@@ -169,26 +169,26 @@ export class Notification extends BaseResource {
   }
 
   public board(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/board`);
+    return new Board(this.config, this.pathElements, "board");
   }
 
   public card(): Card {
-    return new Card(this.config, `${this.baseEndpoint}/card`);
+    return new Card(this.config, this.pathElements, "card");
   }
 
   public list(): List {
-    return new List(this.config, `${this.baseEndpoint}/list`);
+    return new List(this.config, this.pathElements, "list");
   }
 
   public member(): Member {
-    return new Member(this.config, `${this.baseEndpoint}/member`);
+    return new Member(this.config, this.pathElements, "member");
   }
 
   public memberCreator(): Member {
-    return new Member(this.config, `${this.baseEndpoint}/memberCreator`);
+    return new Member(this.config, this.pathElements, "memberCreator");
   }
 
   public organization(): Organization {
-    return new Organization(this.config, `${this.baseEndpoint}/organization`);
+    return new Organization(this.config, this.pathElements, "organization");
   }
 }

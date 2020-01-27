@@ -1,3 +1,4 @@
+import { isEmpty } from "../utils/isEmpty";
 import { BaseResource } from "./BaseResource";
 import { Action, ActionField } from "./Action";
 import { AttachmentField, AttachmentFilter } from "./Attachment";
@@ -216,45 +217,6 @@ export interface BoardPluginRecord {
 
 export type BoardField = ValidResourceFields<BoardRecord>;
 
-export interface GetBoardsViaQueryParams {
-  boards?: AllOfOrListOf<BoardFilter>;
-  boardFields?: AllOfOrListOf<BoardField>;
-  boardActions?: AllOfOrListOf<BoardActionType>;
-  boardActionsEntities?: boolean;
-  boardActionsDisplay?: boolean;
-  boardActionsFormat?: Format;
-  boardActionsSince?: FilterDate;
-  boardActionsLimit?: number;
-  boardActionFields?: AllOfOrListOf<ActionField>;
-  boardLists?: ListFilter;
-}
-
-export interface GetBoardsViaUrlParams {
-  actions?: AllOfOrListOf<BoardActionType>;
-  actionFields?: AllOfOrListOf<ActionField>;
-  actionsEntities?: boolean;
-  actionsFormat?: Format;
-  actionsLimit?: number;
-  actionsSince?: FilterDate;
-  fields?: AllOfOrListOf<BoardField>;
-  filter?: AllOfOrListOf<BoardFilter>;
-  lists?: ListFilter;
-  memberships?: AllOfOrListOf<MembershipFilter>;
-  organization?: boolean;
-  organizationFields?: AllOfOrListOf<OrganizationField>;
-}
-
-export type GetBoardsReturnType<
-  TParams,
-  TPayload
-> = TParams extends GetBoardsViaUrlParams
-  ? BoardRecord[]
-  : TPayload & { boards: BoardRecord[] };
-
-export type AnyGetBoardsParams =
-  | GetBoardsViaUrlParams
-  | GetBoardsViaQueryParams;
-
 export class Board extends BaseResource {
   public getBoard(params?: {
     actions?: AllOfOrListOf<BoardActionType>;
@@ -303,11 +265,36 @@ export class Board extends BaseResource {
     return this.apiGet("/", params);
   }
 
-  public getBoards<
-    TPayload extends object,
-    TParams extends AnyGetBoardsParams = {}
-  >(params?: TParams): TypedFetch<GetBoardsReturnType<TParams, TPayload>> {
+  public getBoards(params?: {
+    actions?: AllOfOrListOf<BoardActionType>;
+    actionFields?: AllOfOrListOf<ActionField>;
+    actionsEntities?: boolean;
+    actionsFormat?: Format;
+    actionsLimit?: number;
+    actionsSince?: FilterDate;
+    fields?: AllOfOrListOf<BoardField>;
+    filter?: AllOfOrListOf<BoardFilter>;
+    lists?: ListFilter;
+    memberships?: AllOfOrListOf<MembershipFilter>;
+    organization?: boolean;
+    organizationFields?: AllOfOrListOf<OrganizationField>;
+  }): TypedFetch<BoardRecord[]> {
     return this.apiGet("/", params);
+  }
+
+  public getNestedBoards<TPayload extends object>(params?: {
+    boards?: AllOfOrListOf<BoardFilter>;
+    boardFields?: AllOfOrListOf<BoardField>;
+    boardActions?: AllOfOrListOf<BoardActionType>;
+    boardActionsEntities?: boolean;
+    boardActionsDisplay?: boolean;
+    boardActionsFormat?: Format;
+    boardActionsSince?: FilterDate;
+    boardActionsLimit?: number;
+    boardActionFields?: AllOfOrListOf<ActionField>;
+    boardLists?: ListFilter;
+  }): TypedFetch<TPayload & { boards: BoardRecord[] }> {
+    return this.apiGetNested(params);
   }
 
   public getBoardsFilteredBy(
@@ -333,9 +320,10 @@ export class Board extends BaseResource {
     defaultLabels?: boolean;
     defaultLists?: boolean;
     desc?: string;
-    idBoardSource?: string;
     idOrganization?: string;
+    idBoardSource?: string;
     keepFromSource?: AllOfOrListOf<KeepFromSourceField>;
+    powerUps?: AllOfOrListOf<PowerUp>;
     prefs?: {
       permissionLevel?: PermissionLevel;
       voting?: GroupPermission;
@@ -346,7 +334,6 @@ export class Board extends BaseResource {
       background?: string;
       cardAging?: CardAging;
     };
-    powerUps?: AllOfOrListOf<PowerUp>;
   }): TypedFetch<BoardRecord> {
     return this.apiPost("/", { ...params, separator: "_" });
   }
@@ -360,7 +347,7 @@ export class Board extends BaseResource {
   }
 
   public addTags(value: string): TypedFetch<unknown> {
-    return this.apiPost("/tags", { value });
+    return this.apiPost("/idTags", { value });
   }
 
   public generateCalendarKey(): TypedFetch<unknown> {
@@ -371,32 +358,43 @@ export class Board extends BaseResource {
     return this.apiPost("/emailKey/generate");
   }
 
-  public updateBoard(params?: {
-    closed?: boolean;
-    desc?: string;
-    idOrganization?: string;
-    labelNames?: {
-      blue?: string;
-      green?: string;
-      orange?: string;
-      purple?: string;
-      red?: string;
-      yellow?: string;
-    };
+  public markAsViewed(): TypedFetch<unknown> {
+    return this.apiPost("/markAsViewed");
+  }
+
+  public updateBoard(params: {
     name?: string;
+    desc?: string;
+    closed?: boolean;
+    subscribed?: boolean;
+    idOrganization?: string;
     prefs?: {
-      background?: string;
-      calendarFeedEnabled?: boolean;
-      cardAging?: CardAging;
-      cardCovers?: boolean;
-      comments?: GroupPermission;
-      invitations?: Invitation;
       permissionLevel?: BoardPermissionLevel;
       selfJoin?: boolean;
+      cardCovers?: boolean;
+      hideVotes?: boolean;
+      invitations?: Invitation;
       voting?: GroupPermission;
+      comments?: GroupPermission;
+      background?: string;
+      cardAging?: CardAging;
+      calendarFeedEnabled?: boolean;
     };
-    subscribed?: boolean;
+    labelNames?: {
+      green?: string;
+      yellow?: string;
+      orange?: string;
+      red?: string;
+      purple?: string;
+      blue?: string;
+    };
   }): TypedFetch<unknown> {
+    if (isEmpty(params)) {
+      throw new Error(
+        "You must specify at least one param when updating a board",
+      );
+    }
+
     return this.apiPut("/", { ...params, separator: "/" });
   }
 
@@ -414,9 +412,9 @@ export class Board extends BaseResource {
 
   public updateLabelNameForColor(
     labelColor: LabelColor,
-    value: string,
+    labelName: string,
   ): TypedFetch<unknown> {
-    return this.apiPut(`/labelNames/${labelColor}`, { value });
+    return this.apiPut(`/labelNames/${labelColor}`, { value: labelName });
   }
 
   public updateName(value: string): TypedFetch<unknown> {
@@ -425,10 +423,6 @@ export class Board extends BaseResource {
 
   public updateSubscribed(value: boolean): TypedFetch<unknown> {
     return this.apiPut("/subscribed", { value });
-  }
-
-  public markAsViewed(): TypedFetch<unknown> {
-    return this.apiPost("/markAsViewed");
   }
 
   public updateBackground(value: string): TypedFetch<BoardRecord> {
@@ -469,73 +463,76 @@ export class Board extends BaseResource {
     return this.apiPut("/prefs/voting", { value });
   }
 
-  public deleteBoard(id: string): TypedFetch<unknown> {
-    return this.apiDelete("/", { id });
+  public deleteBoard(): TypedFetch<unknown> {
+    return this.apiDelete("/");
   }
 
   public disableBoardPlugin(idPlugin: string): TypedFetch<unknown> {
-    return this.apiDelete("/boardPlugins", { idPlugin });
+    return this.apiDelete(`/boardPlugins/${idPlugin}`);
   }
 
   public deletePowerUp(powerUp: PowerUp): TypedFetch<unknown> {
     return this.apiDelete(`/powerUps/${powerUp}`);
   }
 
-  public actions(): Action {
+  public actions(): Action<BoardActionType> {
     return new Action<BoardActionType>(
       this.config,
-      `${this.baseEndpoint}/actions`,
+      this.pathElements,
+      "actions",
     );
   }
 
   public boardStars(): BoardStar {
-    return new BoardStar(this.config, `${this.baseEndpoint}/boardStars`);
+    return new BoardStar(this.config, this.pathElements, "boardStars");
   }
 
   public cards(cardId: string = ""): Card {
-    return new Card(this.config, `${this.baseEndpoint}/cards/${cardId}`);
+    return new Card(this.config, this.pathElements, "cards", cardId);
   }
 
   public checklists(): Checklist {
-    return new Checklist(this.config, `${this.baseEndpoint}/checklists`);
+    return new Checklist(this.config, this.pathElements, "checklists");
   }
 
   public customFields(): CustomField {
-    return new CustomField(this.config, `${this.baseEndpoint}/customFields`);
+    return new CustomField(this.config, this.pathElements, "customFields");
   }
 
   public labels(labelId: string = ""): Label {
-    return new Label(this.config, `${this.baseEndpoint}/labels/${labelId}`);
+    return new Label(this.config, this.pathElements, "labels", labelId);
   }
 
   public lists(): List {
-    return new List(this.config, `${this.baseEndpoint}/lists`);
+    return new List(this.config, this.pathElements, "lists");
   }
 
   public members(memberId: string = ""): Member {
-    return new Member(this.config, `${this.baseEndpoint}/members/${memberId}`);
+    return new Member(this.config, this.pathElements, "members", memberId);
   }
 
   public membersInvited(): Member {
-    return new Member(this.config, `${this.baseEndpoint}/membersInvited`);
+    return new Member(this.config, this.pathElements, "membersInvited");
   }
 
   public memberships(membershipId: string = ""): Membership {
     return new Membership(
       this.config,
-      `${this.baseEndpoint}/memberships/${membershipId}`,
+      this.pathElements,
+      "memberships",
+      membershipId,
     );
   }
 
   public myPrefs(): BoardMyPrefs {
-    return new BoardMyPrefs(this.config, `${this.baseEndpoint}/myPrefs`);
+    return new BoardMyPrefs(this.config, this.pathElements, "myPrefs");
   }
 
   public organization(): Organization {
-    return new Organization(this.config, `${this.baseEndpoint}/organization`);
+    return new Organization(this.config, this.pathElements, "organization");
   }
 
   public plugins(): Plugin {
-    return new Plugin(this.config, `${this.baseEndpoint}/plugins`);
+    return new Plugin(this.config, this.pathElements, "plugins");
   }
 }

@@ -41,7 +41,14 @@ export function stringifyQueryParams(queryParamsByName: object): string {
 
   // Ensure there is no double ampersand in the query string.  This may
   // occur due to the string being constructed manually.
-  return queryString.replace("&&", "&");
+  const validQueryString = queryString.replace("&&", "&");
+
+  // Make sure there isn't a trailing ampersand:
+  if (validQueryString.endsWith("&")) {
+    return validQueryString.slice(0, -1);
+  }
+
+  return validQueryString;
 }
 
 /**
@@ -88,10 +95,31 @@ function getQueryStringForNestedArgs(
 /**
  * Returns the key for building the query string with the correct casing. The
  * "queryParams" object passed into the request function has camel cased keys.
- * The Trello API's keys are snake cased (with a few exceptions).
- * @param key Camel cased key.
+ * The Trello API keys are snake cased (with a few exceptions).
  */
 function getKeyForQueryString(key: string): string {
+  if (isKeyInWhitelist(key)) {
+    return key;
+  }
+
+  // All of the params that start with "id" (e.g. idBoard, idCard, etc.)
+  // shouldn't be re-cased.
+  if (key.substr(0, 2) === "id") {
+    return key;
+  }
+
+  // Ensure this doesn't get converted to one word.
+  if (key === "cardBoard") {
+    return "card_board";
+  }
+
+  return applyValidSnakeCasing(key);
+}
+
+/**
+ * Returns true if the specified key is valid and should be returned.
+ */
+function isKeyInWhitelist(key: string): boolean {
   // Certain keys should not be re-cased.
   const excludedKeys = [
     "avatarSource",
@@ -131,55 +159,48 @@ function getKeyForQueryString(key: string): string {
     "website",
     "zIndex",
   ];
-  if (excludedKeys.includes(key)) {
-    return key;
-  }
 
-  // All of the params that start with "id" (e.g. idBoard, idCard, etc.)
-  // shouldn't be re-cased.
-  if (key.substr(0, 2) === "id") {
-    return key;
-  }
+  return excludedKeys.includes(key);
+}
 
-  // Ensure this doesn't get converted to one word.
-  if (key === "cardBoard") {
-    return "card_board";
-  }
-
-  const recasedKey: string = snakeCase(key);
+/**
+ * Return the specified key with the correct snake casing.
+ */
+function applyValidSnakeCasing(key: string): string {
+  const reCasedKey: string = snakeCase(key);
 
   // These are fields that have been re-cased to ensure all the other words
   // are separated by underscores, but only part of the key needs to be
   // changed.
   switch (true) {
-    case /member_creator/gi.test(recasedKey):
-      return recasedKey.replace("_creator", "Creator");
+    case /member_creator/gi.test(reCasedKey):
+      return reCasedKey.replace("_creator", "Creator");
 
-    case /_voted/gi.test(recasedKey):
-      return recasedKey.replace("_voted", "Voted");
+    case /_voted/gi.test(reCasedKey):
+      return reCasedKey.replace("_voted", "Voted");
 
-    case /plugin_data/gi.test(recasedKey):
-      return recasedKey.replace("_data", "Data");
+    case /plugin_data/gi.test(reCasedKey):
+      return reCasedKey.replace("_data", "Data");
 
-    case /_invited/gi.test(recasedKey):
-      return recasedKey.replace("_invited", "Invited");
+    case /_invited/gi.test(reCasedKey):
+      return reCasedKey.replace("_invited", "Invited");
 
-    case /check_item/gi.test(recasedKey):
-      return recasedKey.replace("check_item", "checkItem");
+    case /check_item/gi.test(reCasedKey):
+      return reCasedKey.replace("check_item", "checkItem");
 
-    case /_state/gi.test(recasedKey):
-      return recasedKey.replace("_state", "State");
+    case /_state/gi.test(reCasedKey):
+      return reCasedKey.replace("_state", "State");
 
-    case /sort_by/gi.test(recasedKey):
-      return recasedKey.replace("sort_by", "sortBy");
+    case /sort_by/gi.test(reCasedKey):
+      return reCasedKey.replace("sort_by", "sortBy");
 
-    case /sort_order/gi.test(recasedKey):
-      return recasedKey.replace("sort_order", "sortOrder");
+    case /sort_order/gi.test(reCasedKey):
+      return reCasedKey.replace("sort_order", "sortOrder");
 
-    case /start_index/gi.test(recasedKey):
-      return recasedKey.replace("start_index", "startIndex");
+    case /start_index/gi.test(reCasedKey):
+      return reCasedKey.replace("start_index", "startIndex");
 
     default:
-      return recasedKey;
+      return reCasedKey;
   }
 }

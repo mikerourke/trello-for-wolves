@@ -1,3 +1,4 @@
+import "cross-fetch/polyfill";
 import { Action } from "./resources/Action";
 import { Batch } from "./resources/Batch";
 import { Board } from "./resources/Board";
@@ -32,7 +33,6 @@ export * from "./resources/Enterprise";
 export * from "./resources/Label";
 export * from "./resources/List";
 export * from "./resources/Member";
-export * from "./resources/MemberPref";
 export * from "./resources/Membership";
 export * from "./resources/Notification";
 export * from "./resources/Organization";
@@ -54,68 +54,67 @@ export class Trello {
   }
 
   public actions(actionId: string = ""): Action {
-    return new Action(this.config, `/actions/${actionId}`);
+    return new Action(this.config, [], "actions", actionId);
   }
 
   public batch(): Batch {
-    return new Batch(this.config, "/batch");
+    return new Batch(this.config, [], "batch");
   }
 
   public boards(boardId: string = ""): Board {
-    return new Board(this.config, `/boards/${boardId}`);
+    return new Board(this.config, [], "boards", boardId);
   }
 
   public cards(cardId: string = ""): Card {
-    return new Card(this.config, `/cards/${cardId}`);
+    return new Card(this.config, [], "cards", cardId);
   }
 
   public checklists(checklistId: string = ""): Checklist {
-    return new Checklist(this.config, `/checklists/${checklistId}`);
+    return new Checklist(this.config, [], "checklists", checklistId);
   }
 
   public customField(customFieldId: string = ""): CustomField {
-    return new CustomField(this.config, `/customField/${customFieldId}`);
+    return new CustomField(this.config, [], "customFields", customFieldId);
   }
 
   public enterprises(enterpriseId: string = ""): Enterprise {
-    return new Enterprise(this.config, `/enterprise/${enterpriseId}`);
+    return new Enterprise(this.config, [], "enterprise", enterpriseId);
   }
 
   public labels(labelId: string = ""): Label {
-    return new Label(this.config, `/labels/${labelId}`);
+    return new Label(this.config, [], "labels", labelId);
   }
 
   public lists(listId: string = ""): List {
-    return new List(this.config, `/lists/${listId}`);
+    return new List(this.config, [], "lists", listId);
   }
 
   public members(memberIdOrUsername: string = ""): Member {
-    return new Member(this.config, `/members/${memberIdOrUsername}`);
+    return new Member(this.config, [], "members", memberIdOrUsername);
   }
 
-  /* istanbul ignore next: Need to figure out how to trigger Notifications. */
   public notifications(notificationId: string = ""): Notification {
-    return new Notification(this.config, `/notifications/${notificationId}`);
+    return new Notification(this.config, [], "notifications", notificationId);
   }
 
   public organizations(orgIdOrName: string = ""): Organization {
-    return new Organization(this.config, `/organizations/${orgIdOrName}`);
+    return new Organization(this.config, [], "organizations", orgIdOrName);
   }
 
   public search(): Search {
-    return new Search(this.config, "/search");
+    return new Search(this.config, [], "search");
   }
 
   public tokens(tokenName: string = ""): Token {
-    return new Token(this.config, `/tokens/${tokenName}`);
+    return new Token(this.config, [], "tokens", tokenName);
   }
 
   public types(): Type {
-    return new Type(this.config, "/types");
+    return new Type(this.config, [], "types");
   }
 
   /* istanbul ignore next: Need a valid callback URL to create Webhooks. */
   public webhooks(webhookId: string = ""): Webhook {
-    return new Webhook(this.config, `/webhooks/${webhookId}`);
+    return new Webhook(this.config, [], "webhooks", webhookId);
   }
 }

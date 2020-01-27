@@ -1,4 +1,3 @@
-import fetch from "cross-fetch";
 import { stringifyQueryParams } from "./stringifyQueryParams";
 import { Config, TypedResponse } from "../typeDefs";
 
@@ -32,26 +31,39 @@ export async function fetchFromApi<T>({
     fetchConfig.body = fetchBody;
   }
 
-  const fetchWithRetries = async (
-    attemptsRemaining: number,
-  ): Promise<TypedResponse<T>> => {
-    const response = await fetch(apiUrl, fetchConfig);
-    if (!response.ok) {
-      if (attemptsRemaining === 0) {
-        // TODO: Change this to throw a custom error.
-        throw new Error("I'm an error");
-      }
+  return await fetchWithRetries(
+    apiUrl,
+    fetchConfig,
+    backoffTime,
+    maxRetryAttempts,
+  );
+}
 
-      if (response.status === 429) {
-        await pause(backoffTime);
-        return await fetchWithRetries(attemptsRemaining - 1);
-      }
+async function fetchWithRetries<T>(
+  apiUrl: string,
+  fetchConfig: object,
+  backoffTime: number,
+  attemptsRemaining: number,
+): Promise<TypedResponse<T>> {
+  const response = await fetch(apiUrl, fetchConfig);
+  if (!response.ok) {
+    if (attemptsRemaining === 0) {
+      // TODO: Change this to throw a custom error.
+      throw new Error("I'm an error");
     }
 
-    return response;
-  };
+    if (response.status === 429) {
+      await pause(backoffTime);
+      return await fetchWithRetries(
+        apiUrl,
+        fetchConfig,
+        backoffTime,
+        attemptsRemaining - 1,
+      );
+    }
+  }
 
-  return await fetchWithRetries(maxRetryAttempts);
+  return response;
 }
 
 /**
@@ -78,9 +90,12 @@ function buildApiUrl(
   }
   const queryString = stringifyQueryParams(validParamsByName);
 
-  return "https://api.trello.com/1".concat(sanitizedUrl, "?", queryString);
+  return "https://api.trello.com/1/".concat(sanitizedUrl, "?", queryString);
 }
 
+/**
+ * Returns the `body` for the fetch config object.
+ */
 function getFetchBody(
   queryParamsByName: object,
   body?: unknown | null,
@@ -105,6 +120,9 @@ function getFetchBody(
   return null;
 }
 
+/**
+ * Pauses execution for the specified duration (in milliseconds).
+ */
 function pause(duration: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, duration));
 }

@@ -77,8 +77,8 @@ export class Label extends BaseResource {
     idBoard?: string;
   }): TypedFetch<LabelRecord> {
     const updatedParams = { ...params };
-    if (this.endpointElements[0] === "boards") {
-      updatedParams.idBoard = this.endpointElements[1];
+    if (this.pathElements[0] === "boards") {
+      updatedParams.idBoard = this.pathElements[1];
     }
     return this.apiPost("/", updatedParams);
   }
@@ -103,6 +103,6 @@ export class Label extends BaseResource {
   }
 
   public board(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/board`);
+    return new Board(this.config, this.pathElements, "board");
   }
 }

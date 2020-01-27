@@ -6,23 +6,24 @@ import { Config, TypedResponse } from "../typeDefs";
  * @class
  */
 export class BaseResource {
-  protected endpointElements: string[];
+  protected pathElements: string[];
 
   /**
    * @param config Config object containing Trello API key and token.
-   * @param baseEndpoint Base endpoint for performing the request.
-   * @param isNested Indicates if the request can only be performed via nested.
+   * @param parentElements Parent path elements.
+   * @param groupName Resource group name associated with the resource.
+   * @param [recordId] ID for the associated resource.
    * @constructor
    */
   constructor(
     protected config: Config,
-    protected baseEndpoint: string,
-    protected isNested: boolean = false,
+    protected parentElements: string[],
+    protected groupName: string,
+    protected recordId: string = "",
   ) {
-    this.endpointElements = this.baseEndpoint.split("/");
-
-    if (this.endpointElements[0].length !== 0) {
-      this.endpointElements.shift();
+    this.pathElements = [...parentElements, groupName];
+    if (recordId !== "") {
+      this.pathElements.push(recordId);
     }
   }
 
@@ -31,7 +32,25 @@ export class BaseResource {
     queryParamsByName?: object,
     body?: unknown,
   ): Promise<TypedResponse<T>> {
-    return this.performRequest("GET", endpoint, queryParamsByName, body);
+    const fullEndpoint = this.pathElements.join("/").concat(endpoint);
+    return this.performRequest("GET", fullEndpoint, queryParamsByName, body);
+  }
+
+  protected apiGetNested<T>(
+    queryParamsByName: object = {},
+  ): Promise<TypedResponse<T>> {
+    const validParams = {
+      ...queryParamsByName,
+      [this.groupName]: queryParamsByName[this.groupName] ?? "all",
+    } as Record<string, string>;
+
+    const fullEndpoint = this.pathElements
+      .filter(
+        pathElement => ![this.groupName, this.recordId].includes(pathElement),
+      )
+      .join("/");
+
+    return this.performRequest("GET", fullEndpoint, validParams);
   }
 
   protected apiPut<T>(
@@ -39,7 +58,8 @@ export class BaseResource {
     queryParamsByName?: object,
     body?: unknown,
   ): Promise<TypedResponse<T>> {
-    return this.performRequest("PUT", endpoint, queryParamsByName, body);
+    const fullEndpoint = this.pathElements.join("/").concat(endpoint);
+    return this.performRequest("PUT", fullEndpoint, queryParamsByName, body);
   }
 
   protected apiPost<T>(
@@ -47,7 +67,8 @@ export class BaseResource {
     queryParamsByName?: object,
     body?: unknown,
   ): Promise<TypedResponse<T>> {
-    return this.performRequest("POST", endpoint, queryParamsByName, body);
+    const fullEndpoint = this.pathElements.join("/").concat(endpoint);
+    return this.performRequest("POST", fullEndpoint, queryParamsByName, body);
   }
 
   protected apiDelete<T>(
@@ -55,7 +76,8 @@ export class BaseResource {
     queryParamsByName?: object,
     body?: unknown,
   ): Promise<TypedResponse<T>> {
-    return this.performRequest("DELETE", endpoint, queryParamsByName, body);
+    const fullEndpoint = this.pathElements.join("/").concat(endpoint);
+    return this.performRequest("DELETE", fullEndpoint, queryParamsByName, body);
   }
 
   /**
@@ -72,7 +94,7 @@ export class BaseResource {
     body?: unknown,
   ): Promise<TypedResponse<T>> {
     return fetchFromApi<T>({
-      endpoint: this.baseEndpoint.concat(endpoint),
+      endpoint,
       method,
       config: this.config,
       queryParamsByName,

@@ -86,8 +86,8 @@ export class Checklist extends BaseResource {
     pos?: PositionNumbered;
   }): TypedFetch<ChecklistRecord> {
     let updatedArgs = params;
-    if (this.endpointElements[0] === "cards") {
-      updatedArgs = { ...params, idCard: this.endpointElements[1] };
+    if (this.pathElements[0] === "cards") {
+      updatedArgs = { ...params, idCard: this.pathElements[1] };
     }
     return this.apiPost("/", updatedArgs);
   }
@@ -112,24 +112,28 @@ export class Checklist extends BaseResource {
   }
 
   public board(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/board`);
+    return new Board(this.config, this.pathElements, "board");
   }
 
   public cards(): Card {
-    return new Card(this.config, `${this.baseEndpoint}/cards`);
+    return new Card(this.config, this.pathElements, "cards");
   }
 
   public checkItem(checkItemId: string = ""): CheckItem {
     return new CheckItem(
       this.config,
-      `${this.baseEndpoint}/checkItem/${checkItemId}`,
+      this.pathElements,
+      "checkItem",
+      checkItemId,
     );
   }
 
   public checkItems(checkItemId: string = ""): CheckItem {
     return new CheckItem(
       this.config,
-      `${this.baseEndpoint}/checkItems/${checkItemId}`,
+      this.pathElements,
+      "checkItems",
+      checkItemId,
     );
   }
 }

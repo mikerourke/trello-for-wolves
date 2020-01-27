@@ -57,13 +57,10 @@ export class Token extends BaseResource {
   }
 
   public member(): Member {
-    return new Member(this.config, `${this.baseEndpoint}/member`);
+    return new Member(this.config, this.pathElements, "member");
   }
 
   public webhooks(webhookId: string = ""): Webhook {
-    return new Webhook(
-      this.config,
-      `${this.baseEndpoint}/webhooks/${webhookId}`,
-    );
+    return new Webhook(this.config, this.pathElements, "webhooks", webhookId);
   }
 }

@@ -163,29 +163,31 @@ export class Organization extends BaseResource {
   }
 
   public actions(): Action {
-    return new Action(this.config, `${this.baseEndpoint}/actions`);
+    return new Action(this.config, this.pathElements, "actions");
   }
 
   public boards(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/boards`);
+    return new Board(this.config, this.pathElements, "boards");
   }
 
   public members(memberId: string = ""): Member {
-    return new Member(this.config, `${this.baseEndpoint}/members/${memberId}`);
+    return new Member(this.config, this.pathElements, "members", memberId);
   }
 
   public membersInvited(): Member {
-    return new Member(this.config, `${this.baseEndpoint}/membersInvited`);
+    return new Member(this.config, this.pathElements, "membersInvited");
   }
 
   public memberships(membershipId: string = ""): Membership {
     return new Membership(
       this.config,
-      `${this.baseEndpoint}/memberships/${membershipId}`,
+      this.pathElements,
+      "memberships",
+      membershipId,
     );
   }
 
   public prefs(): OrganizationPref {
-    return new OrganizationPref(this.config, `${this.baseEndpoint}/prefs`);
+    return new OrganizationPref(this.config, this.pathElements, "prefs");
   }
 }

@@ -97,8 +97,8 @@ export class List extends BaseResource {
     pos?: PositionNumbered;
   }): TypedFetch<ListRecord> {
     let updatedParams = params;
-    if (/board/gi.test(this.endpointElements[0])) {
-      updatedParams = { ...params, idBoard: this.endpointElements[1] };
+    if (/board/gi.test(this.pathElements[0])) {
+      updatedParams = { ...params, idBoard: this.pathElements[1] };
     }
     return this.apiPost("/", updatedParams);
   }
@@ -150,14 +150,14 @@ export class List extends BaseResource {
   }
 
   public actions(): Action {
-    return new Action(this.config, `${this.baseEndpoint}/actions`);
+    return new Action(this.config, this.pathElements, "actions");
   }
 
   public board(): Board {
-    return new Board(this.config, `${this.baseEndpoint}/board`);
+    return new Board(this.config, this.pathElements, "board");
   }
 
   public cards(): Card {
-    return new Card(this.config, `${this.baseEndpoint}/cards`);
+    return new Card(this.config, this.pathElements, "cards");
   }
 }
