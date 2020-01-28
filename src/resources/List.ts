@@ -5,7 +5,7 @@ import { Card, CardField, CardFilter } from "./Card";
 import {
   AllOfOrListOf,
   LimitRecord,
-  PositionNumbered,
+  PositionOrFloat,
   TypedFetch,
   ValidResourceFields,
   ValueResponse,
@@ -77,10 +77,10 @@ export class List extends BaseResource {
     name: string;
     idBoard?: string;
     idListSource?: string;
-    pos?: PositionNumbered;
+    pos?: PositionOrFloat;
   }): TypedFetch<ListRecord> {
     let updatedParams = params;
-    if (/board/gi.test(this.pathElements[0])) {
+    if (this.isChildOf("board")) {
       updatedParams = { ...params, idBoard: this.pathElements[1] };
     }
     return this.apiPost("/", updatedParams);
@@ -90,7 +90,7 @@ export class List extends BaseResource {
     name?: string;
     closed?: boolean;
     idBoard?: string;
-    pos?: PositionNumbered;
+    pos?: PositionOrFloat;
     subscribed?: boolean;
   }): TypedFetch<ListRecord> {
     return this.apiPut("/", params);
@@ -100,21 +100,48 @@ export class List extends BaseResource {
     return this.apiPut("/closed", { value });
   }
 
-  public moveToBoard(
-    idBoard: string,
-    params?: {
-      pos?: PositionNumbered;
-    },
-  ): TypedFetch<unknown> {
-    return this.apiPut("/", { value: idBoard, ...params });
+  public moveToBoard(params?: { pos?: PositionOrFloat }): TypedFetch<unknown> {
+    if (!this.isChildOf("board")) {
+      throw new Error(
+        "You can only call `moveToBoard()` from a board resource",
+      );
+    }
+
+    const idBoard = this.pathElements[1];
+    if (idBoard === "") {
+      throw new Error(
+        "You must specify an ID for the board instance (`trello.boards(<NEED ID>).lists('lIsTiD').moveToBoard()`)",
+      );
+    }
+
+    if (!this.identifier) {
+      throw new Error(
+        "You must specify an ID for the lists instance (`trello.boards('bOarDiD').lists(<NEED ID>).moveToBoard()`)",
+      );
+    }
+
+    return this.apiPut(`/${idBoard}`, params);
   }
 
   public updateName(value: string): TypedFetch<ListRecord> {
     return this.apiPut("/name", { value });
   }
 
-  public updatePosition(value: PositionNumbered): TypedFetch<ListRecord> {
+  public updatePosition(value: PositionOrFloat): TypedFetch<ListRecord> {
     return this.apiPut("/pos", { value });
+  }
+
+  /**
+   * Alters the soft limit for number of cards in the list. This is used in conjunction
+   * with the List Limits Power-Up which will highlight lists that go over their set limit.
+   * @param value A number between 0 and 5000 or "none" to remove the limit.
+   */
+  public updateSoftLimit(value: "none" | number): TypedFetch<ListRecord> {
+    // Passing an empty value removes the limit on lists. We're forcing the
+    // user to either specify "none" or a number to make the purpose of the
+    // empty value clearer:
+    const validValue = value === "none" ? "" : value;
+    return this.apiPut("/softLimit", { value: validValue });
   }
 
   public updateSubscribed(value: boolean): TypedFetch<ListRecord> {
@@ -133,14 +160,20 @@ export class List extends BaseResource {
   }
 
   public actions(): Action {
-    return new Action(this.config, this.pathElements, "actions");
+    return new Action(this.config, this.pathElements, "actions", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public board(): Board {
-    return new Board(this.config, this.pathElements, "board");
+    return new Board(this.config, this.pathElements, "board", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public cards(): Card {
-    return new Card(this.config, this.pathElements, "cards");
+    return new Card(this.config, this.pathElements, "cards", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 }

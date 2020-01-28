@@ -2,11 +2,12 @@ import { BaseResource } from "./BaseResource";
 import { TypedFetch, ValidResourceFields, ValueResponse } from "../typeDefs";
 
 /**
+ * The data corresponding to a webhook.
  * @typedef {Object} WebhookRecord
  * @property id ID of the webhook.
  * @property description Description provided when creating webhook.
- * @property idModel ID of the Trello object the webhook is watching. This can be any Trello
- *                   object ID (list, board, card, member, etc.).
+ * @property idModel ID of the Trello object the webhook is watching. This can be
+ *                   any Trello object ID (list, board, card, member, etc.).
  * @property callbackURL The URL that the webhook will POST information to.
  * @property active Determines whether the webhook is active or not.
  */

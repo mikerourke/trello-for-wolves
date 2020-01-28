@@ -93,6 +93,8 @@ export interface NestedMemberRecord {
   memberType: "normal" | "ghost";
 }
 
+export type NestedMemberField = keyof NestedMemberRecord;
+
 /**
  * Member data associated with an invited member. It builds upon the properties
  * of the {@link NestedMemberRecord}.
@@ -119,6 +121,8 @@ export interface MemberInvitedRecord extends NestedMemberRecord {
   idEnterprisesDeactivated?: string[];
 }
 
+export type MemberInvitedField = keyof MemberInvitedRecord;
+
 export interface MemberCreatorRecord extends MemberInvitedRecord {
   activityBlocked: boolean;
   nonPublic: unknown;
@@ -136,23 +140,26 @@ export interface MemberCreatorRecord extends MemberInvitedRecord {
 }
 
 /**
- * This contains the most comprehensive member data. It includes all of the
- * fields in {@link NestedMemberRecord} and {@link MemberInvitedRecord}.
+ * The data corresponding to a member. The fields that are present in the
+ * record are contingent on the `fields`/`memberFields` param passed to
+ * the method used to retrieve the member data. This contains the most
+ * comprehensive data. It includes all of the fields in {@link NestedMemberRecord}
+ * and {@link MemberInvitedRecord}.
  * @typedef {Object} MemberRecord
- * avatarSource The source of the user's avatar - either via "upload" or "gravatar".
- * email The primary email address for the member. You can only read your own.
- * gravatarHash Same as avatarHash.
- * idBoards An array of board IDs this member is on.
- * idBoardsPinned An array of pinned board IDs.
- * idOrganizations An array of organization IDs this member is in.
- * idEnterprisesAdmin An array of enterprise IDs this member is an admin of.
- * loginTypes The types of logins a user can use.
- * oneTimeMessagesDismissed Array of message IDs that were dismissed.
- * prefs Preferences associated with the member.
- * premiumFeatures Array of premium feature details.
- * trophies Array of trophies.
- * uploadedAvatarHash Same as avatar hash.
- * uploadedAvatarUrl The URL of the uploaded avatar if one has been uploaded.
+ * @property avatarSource The source of the user's avatar - either via "upload" or "gravatar".
+ * @property email The primary email address for the member. You can only read your own.
+ * @property gravatarHash Same as avatarHash.
+ * @property idBoards An array of board IDs this member is on.
+ * @property idBoardsPinned An array of pinned board IDs.
+ * @property idOrganizations An array of organization IDs this member is in.
+ * @property idEnterprisesAdmin An array of enterprise IDs this member is an admin of.
+ * @property loginTypes The types of logins a user can use.
+ * @property oneTimeMessagesDismissed Array of message IDs that were dismissed.
+ * @property prefs Preferences associated with the member.
+ * @property premiumFeatures Array of premium feature details.
+ * @property trophies Array of trophies.
+ * @property uploadedAvatarHash Same as avatar hash.
+ * @property uploadedAvatarUrl The URL of the uploaded avatar if one has been uploaded.
  */
 export interface MemberRecord extends MemberCreatorRecord {
   avatarSource: Omit<AvatarSourceField, "none"> | null;
@@ -170,10 +177,6 @@ export interface MemberRecord extends MemberCreatorRecord {
   uploadedAvatarHash: unknown | null;
   uploadedAvatarUrl: string;
 }
-
-export type NestedMemberField = keyof NestedMemberRecord;
-
-export type MemberInvitedField = keyof MemberInvitedRecord;
 
 export type MemberField = keyof MemberRecord;
 
@@ -210,6 +213,11 @@ export interface GetMembersForEnterpriseParams {
   boardFields?: AllOfOrListOf<BoardField>;
 }
 
+/**
+ * Everyone with a Trello account is called a member.
+ * @se https://developers.trello.com/reference#member
+ * @class
+ */
 export class Member extends BaseResource {
   public getMember(params?: {
     actions?: AllOfOrListOf<ActionType>;
@@ -246,10 +254,9 @@ export class Member extends BaseResource {
       | GetMembersForEnterpriseParams,
   ): TypedFetch<MemberRecord[]> {
     if (!isEmpty(params)) {
-      const isEnterprise = /enterprise/gi.test(this.pathElements[0]);
-      if (!params?.fields && !isEnterprise) {
+      if (!params?.fields && !this.isChildOf("enterprise")) {
         throw new Error(
-          "You can only specify the `fields` param if you're not getting boards for an Enterprise",
+          "You can only specify the `fields` param if you're not getting boards for an enterprise",
         );
       }
     }
@@ -282,7 +289,7 @@ export class Member extends BaseResource {
   }
 
   /**
-   * Adds a member to an Organization.
+   * Adds a member to an organization.
    * @example PUT /1/organizations/:organizationId/members
    * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members
    */
@@ -291,6 +298,10 @@ export class Member extends BaseResource {
     fullName: string;
     type?: MemberType;
   }): TypedFetch<MemberRecord> {
+    if (!this.isChildOf("organization")) {
+      throw new Error("You can only call `addMember()` on an organization");
+    }
+
     return this.apiPut("/", params);
   }
 
@@ -312,7 +323,7 @@ export class Member extends BaseResource {
   }): TypedFetch<MemberRecord> {
     const body = {} as { fullName?: string };
 
-    if (/board/gi.test(this.pathElements[0])) {
+    if (this.isChildOf("board")) {
       body.fullName = params?.fullName;
       delete params?.fullName;
     }
@@ -341,23 +352,33 @@ export class Member extends BaseResource {
   }
 
   /**
-   * Updates the deactivated status for a member associated with an Organization.
-   * @example PUT /1/organizations/:organizationId/members/:memberId
-   * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember-deactivated
+   * Updates the deactivated status for a member associated with an enterprise
+   * or organization.
+   * @see https://developers.trello.com/reference#enterprisesidmembersidmemberdeactivated-1
+   * @see https://developers.trello.com/reference#organizationsidmembersidmemberdeactivated
    */
   public updateDeactivatedStatus(value: boolean): TypedFetch<unknown> {
+    if (!this.isChildOf(["enterprise", "organization"])) {
+      throw new Error(
+        "You can only call `updateDeactivatedStatus()` on an enterprise or organization",
+      );
+    }
+
     return this.apiPut("/deactivated", { value });
   }
 
   /**
-   * Updates the member type for a member associated with a Board or Organization.
-   * @example PUT /1/boards/:boardId/members/:memberId
-   * @see https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-members-idmember
-   *
-   * @example PUT /1/organizations/:organizationId/members/:memberId
-   * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members-idmember
+   * Updates the member type for a member associated with a board or organization.
+   * @see https://developers.trello.com/reference/#boardsidlabelnamesmembers
+   * @see https://developers.trello.com/reference/#organizationsidmembers-1
    */
   public updateMemberType(type: MemberType): TypedFetch<unknown> {
+    if (!this.isChildOf(["board", "organization"])) {
+      throw new Error(
+        "You can only call `updateMemberType()` on a board or organization",
+      );
+    }
+
     return this.apiPut("/", { type });
   }
 
@@ -378,8 +399,7 @@ export class Member extends BaseResource {
   }
 
   /**
-   * Deletes a member created for a Board.
-   * @example DELETE /1/boards/:boardId/members/:memberId
+   * Deletes a member created for a board.
    * @see https://developers.trello.com/advanced-reference/board#delete-1-boards-board-id-members-idmember
    */
   public deleteMember(): TypedFetch<unknown> {
@@ -387,8 +407,7 @@ export class Member extends BaseResource {
   }
 
   /**
-   * Removes a member's association with an Organization, doesn't actually delete it.
-   * @example DELETE /1/organizations/:organizationId/members/:memberId
+   * Removes a member's association with an organization, doesn't actually delete it.
    * @see https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember
    */
   public dissociateMember(): TypedFetch<unknown> {
@@ -396,9 +415,8 @@ export class Member extends BaseResource {
   }
 
   /**
-   * This will remove a member from your Organization AND remove the member from
-   * all Boards associated with an Organization.
-   * @example DELETE /1/organizations/:organizationId/members/:memberId/all
+   * This will remove a member from your organization AND remove the member from
+   * all boards associated with an organization.
    * @see https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember-all
    */
   public dissociateMemberFromAll(): TypedFetch<unknown> {
@@ -406,7 +424,9 @@ export class Member extends BaseResource {
   }
 
   public actions(): Action {
-    return new Action(this.config, this.pathElements, "actions");
+    return new Action(this.config, this.pathElements, "actions", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public boardBackgrounds(backgroundId: string = ""): BoardBackground {
@@ -414,29 +434,36 @@ export class Member extends BaseResource {
       this.config,
       this.pathElements,
       "boardBackgrounds",
-      backgroundId,
+      {
+        identifier: backgroundId,
+        isReturnUrl: this.isReturnUrl,
+      },
     );
   }
 
   public boardStars(boardStarId: string = ""): BoardStar {
-    return new BoardStar(
-      this.config,
-      this.pathElements,
-      "boardStars",
-      boardStarId,
-    );
+    return new BoardStar(this.config, this.pathElements, "boardStars", {
+      identifier: boardStarId,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public boards(): Board {
-    return new Board(this.config, this.pathElements, "boards");
+    return new Board(this.config, this.pathElements, "boards", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public boardsInvited(): Board {
-    return new Board(this.config, this.pathElements, "boardsInvited");
+    return new Board(this.config, this.pathElements, "boardsInvited", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public cards(): Card {
-    return new Card(this.config, this.pathElements, "cards");
+    return new Card(this.config, this.pathElements, "cards", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public customBoardBackgrounds(backgroundId: string = ""): BoardBackground {
@@ -444,34 +471,37 @@ export class Member extends BaseResource {
       this.config,
       this.pathElements,
       "customBoardBackgrounds",
-      backgroundId,
+      {
+        identifier: backgroundId,
+        isReturnUrl: this.isReturnUrl,
+      },
     );
   }
 
   public customEmoji(customEmojiId: string = ""): CustomEmoji {
-    return new CustomEmoji(
-      this.config,
-      this.pathElements,
-      "customEmoji",
-      customEmojiId,
-    );
+    return new CustomEmoji(this.config, this.pathElements, "customEmoji", {
+      identifier: customEmojiId,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public customStickers(customStickerId: string = ""): Sticker {
-    return new Sticker(
-      this.config,
-      this.pathElements,
-      "customStickers",
-      customStickerId,
-    );
+    return new Sticker(this.config, this.pathElements, "customStickers", {
+      identifier: customStickerId,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public notifications(): Notification {
-    return new Notification(this.config, this.pathElements, "notifications");
+    return new Notification(this.config, this.pathElements, "notifications", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public organizations(): Organization {
-    return new Organization(this.config, this.pathElements, "organizations");
+    return new Organization(this.config, this.pathElements, "organizations", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public organizationsInvited(): Organization {
@@ -479,19 +509,22 @@ export class Member extends BaseResource {
       this.config,
       this.pathElements,
       "organizationsInvited",
+      {
+        isReturnUrl: this.isReturnUrl,
+      },
     );
   }
 
   public savedSearches(savedSearchId: string = ""): SavedSearch {
-    return new SavedSearch(
-      this.config,
-      this.pathElements,
-      "savedSearches",
-      savedSearchId,
-    );
+    return new SavedSearch(this.config, this.pathElements, "savedSearches", {
+      identifier: savedSearchId,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public tokens(): Token {
-    return new Token(this.config, this.pathElements, "tokens");
+    return new Token(this.config, this.pathElements, "tokens", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 }

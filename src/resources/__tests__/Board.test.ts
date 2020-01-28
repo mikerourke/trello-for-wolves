@@ -486,6 +486,19 @@ describe("the Board resource", () => {
     );
   });
 
+  test("gets the specific list for a board", async () => {
+    await trello
+      .boards(TEST_PARENT_ID)
+      .lists(TEST_CHILD_ID)
+      .getLists();
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("GET");
+    expect(result.url.pathname).toBe(
+      `/1/boards/${TEST_PARENT_ID}/lists/${TEST_CHILD_ID}`,
+    );
+  });
+
   test("gets the lists for a board", async () => {
     await trello
       .boards(TEST_PARENT_ID)

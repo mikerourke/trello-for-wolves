@@ -24,11 +24,6 @@ export class BoardMyPrefs extends BaseResource {
     return this.apiPut("/emailPosition", { value });
   }
 
-  /**
-   * @example
-   * PUT > .../boards/[boardId]/myPrefs/idEmailList?value=[emailListId]&key=...
-   * @see https://developers.trello.com/advanced-reference/board#put-1-boards-board-id-myprefs-idemaillist
-   */
   public moveToEmailList(value: string): TypedFetch<BoardMyPrefsRecord> {
     return this.apiPut("/idEmailList", { value });
   }

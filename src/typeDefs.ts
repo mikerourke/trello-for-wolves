@@ -15,6 +15,19 @@ export type FilterDate = Date | "lastView" | null;
 
 export type Format = "count" | "list" | "minimal";
 
+export type ColorName =
+  | "blue"
+  | "green"
+  | "orange"
+  | "purple"
+  | "red"
+  | "yellow"
+  // These colors are also available, they're just not documented:
+  | "sky"
+  | "lime"
+  | "pink"
+  | "black";
+
 export type KeepFromSourceField =
   | "attachments"
   | "checklists"
@@ -28,7 +41,7 @@ export type PermissionLevel = "private" | "public";
 
 export type Position = "bottom" | "top";
 
-export type PositionNumbered = Position | number;
+export type PositionOrFloat = Position | number;
 
 export type ValidResourceFields<T> = Omit<keyof T, "limits" | "creationMethod">;
 

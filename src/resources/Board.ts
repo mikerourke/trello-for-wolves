@@ -6,7 +6,7 @@ import { BoardStar, BoardStarsFilter } from "./BoardStar";
 import { Card, CardAging, CardField, CardFilter } from "./Card";
 import { Checklist, ChecklistField } from "./Checklist";
 import { CustomField } from "./CustomField";
-import { Label, LabelColor, LabelField } from "./Label";
+import { Label, LabelField } from "./Label";
 import { List, ListField, ListFilter } from "./List";
 import { Member, MemberInvitedField, MemberFilter } from "./Member";
 import { Membership, MembershipFilter } from "./Membership";
@@ -18,6 +18,7 @@ import {
   FilterDate,
   Format,
   KeepFromSourceField,
+  ColorName,
   Limits,
   PermissionLevel,
   TypedFetch,
@@ -116,28 +117,43 @@ export interface BackgroundImageScaledRecord {
   width: number;
 }
 
+/**
+ * @typedef {Object} BoardPrefsRecord
+ * @property permissionLevel Determines whether the Voting Power-Up should hide who
+ *                           voted on cards or not.
+ * @property hideVotes Indicates if votes should be hidden.
+ * @property voting Who can vote on this board.
+ * @property comments Who can comment on cards on this board.
+ * @property invitations Who can invite people to this board.
+ * @property selfJoin Whether team members can join the board themselves.
+ * @property cardCovers Whether card covers should be displayed on this board.
+ * @property isTemplate Indicates if board can be used as a template.
+ * @property cardAging
+ * @property calendarFeedEnabled Determines whether the calendar feed is enabled or not.
+ * @property background The id of a custom background or color.
+ * @property backgroundImage URL of the board's background image.
+ * @property backgroundImageScaled
+ * @property backgroundTile
+ * @property backgroundBrightness
+ * @property backgroundBottomColor
+ * @property backgroundTopColor
+ * @property canBePublic
+ * @property canBeEnterprise
+ * @property canBeOrg
+ * @property canBePrivate
+ * @property canInvite
+ */
 export interface BoardPrefsRecord {
   permissionLevel: PermissionLevel;
-  /**
-   * Determines whether the Voting Power-Up should hide who voted on cards or
-   * not.
-   */
   hideVotes: boolean;
-  /** Who can vote on this board. */
   voting: GroupPermission;
-  /** Who can comment on cards on this board. */
   comments: GroupPermission;
-  /** Who can invite people to this board. */
   invitations: GroupPermission;
-  /** Whether team members can join the board themselves. */
   selfJoin: boolean;
-  /** Whether card covers should be displayed on this board. */
   cardCovers: boolean;
   isTemplate: boolean;
   cardAging: CardAging;
-  /** Determines whether the calendar feed is enabled or not. */
   calendarFeedEnabled: boolean;
-  /** The id of a custom background or color. */
   background: BoardBackgroundColor | string;
   backgroundImage: string;
   backgroundImageScaled: BackgroundImageScaledRecord[];
@@ -152,50 +168,57 @@ export interface BoardPrefsRecord {
   canInvite: boolean;
 }
 
+/**
+ * The data corresponding to a board. The fields that are present in the record
+ * are contingent on the `fields`/`boardFields` param passed to the method
+ * used to retrieve the board data.
+ * @typedef {Object} BoardRecord
+ * @property id The ID of the board.
+ * @property name The name of the board.
+ * @property desc The description of the board.
+ * @property descData If the description includes custom emoji, this will contain
+ *                    the data necessary to display them.
+ * @property closed Boolean whether the board has been closed or not.
+ * @property idOrganization MongoID of the organization to which the board belongs.
+ * @property idEnterprise ID of the associated enterprise.
+ * @property pinned Boolean whether the board has been pinned or not.
+ * @property url Persistent URL for the board.
+ * @property shortUrl URL for the board using only its shortMongoID.
+ * @property prefs Short for "preferences", these are the settings for the board.
+ * @property labelNames Object containing color keys and the label names given for one
+ *                      label of each color on the board.
+ * @property starred Whether the board has been starred by the current request's user.
+ * @property memberships Array of objects that represent the relationship of users
+ *                       to this board as memberships.
+ * @property enterpriseOwned Whether the board is owned by an Enterprise or not.
+ * @property [shortLink] Short link for the board.
+ * @property [subscribed] Indicates if you are subscribed to the board.
+ * @property [powerUps] Array of power ups associated with the board.
+ * @property [dateLastActivity] The last date any activity took place on the board.
+ * @property [dateLastView] The date the board was last viewed.
+ * @property [idTags] Comma-separated list of tag IDs.
+ * @property [datePluginDisable] Date a plugin was disabled.
+ * @property [ixUpdate] Update index (no clue what this is)?
+ * @property [templateGallery] Template gallery for the board.
+ * @property [limits] Limit data associated with the board.
+ * @property [creationMethod] Creation method for the board.
+ */
 export interface BoardRecord {
-  /** The ID of the board. */
   id: string;
-  /** The name of the board. */
   name: string;
-  /**
-   * The description of the board.
-   * @deprecated
-   */
   desc: string;
-  /**
-   * If the description includes custom emoji, this will contain the data
-   * necessary to display them.
-   */
   descData: unknown | null;
-  /** Boolean whether the board has been closed or not. */
   closed: boolean;
-  /** MongoID of the organization to which the board belongs. */
   idOrganization: string | null;
-  /** Boolean whether the board has been pinned or not. */
+  idEnterprise: string | null;
   pinned: boolean;
-  /** Persistent URL for the board. */
   url: string;
-  /** URL for the board using only its shortMongoID. */
   shortUrl: string;
-  /** Short for "preferences", these are the settings for the board. */
-  prefs?: BoardPrefsRecord;
-  /**
-   * Object containing color keys and the label names given for one label of
-   * each color on the board.
-   */
-  labelNames: Record<LabelColor, string>;
-  /** Whether the board has been starred by the current request's user.. */
+  prefs: BoardPrefsRecord;
+  labelNames: Record<ColorName, string>;
   starred: boolean;
-  /** An object containing information on the limits that exist for the board. */
-  limits: Limits;
-  /**
-   * Array of objects that represent the relationship of users to this board as
-   * memberships.
-   */
   memberships: Membership[];
-  /** Whether the board is owned by an Enterprise or not. */
   enterpriseOwned: boolean;
-  idEnterprise?: string | null;
   shortLink?: string;
   subscribed?: boolean;
   powerUps?: PowerUp[];
@@ -203,9 +226,10 @@ export interface BoardRecord {
   dateLastView?: string;
   idTags?: string;
   datePluginDisable?: string | null;
-  creationMethod?: string | null;
   ixUpdate?: string;
   templateGallery?: string | null;
+  limits?: Limits;
+  creationMethod?: string | null;
 }
 
 export interface BoardPluginRecord {
@@ -216,6 +240,12 @@ export interface BoardPluginRecord {
 
 export type BoardField = ValidResourceFields<BoardRecord>;
 
+/**
+ * Boards are fundamental to Trello. A board may belong to 0 or 1 teams and can
+ * have 0 or more lists.
+ * @see https://developers.trello.com/reference#boards-2
+ * @class
+ */
 export class Board extends BaseResource {
   public getBoard(params?: {
     actions?: AllOfOrListOf<BoardActionType>;
@@ -406,7 +436,7 @@ export class Board extends BaseResource {
   }
 
   public updateLabelNameForColor(
-    labelColor: LabelColor,
+    labelColor: ColorName,
     labelName: string,
   ): TypedFetch<unknown> {
     return this.apiPut(`/labelNames/${labelColor}`, { value: labelName });
@@ -470,64 +500,95 @@ export class Board extends BaseResource {
     return this.apiDelete(`/powerUps/${powerUp}`);
   }
 
-  public actions(): Action<BoardActionType> {
+  public actions(idAction: string = ""): Action<BoardActionType> {
     return new Action<BoardActionType>(
       this.config,
       this.pathElements,
       "actions",
+      {
+        identifier: idAction,
+        isReturnUrl: this.isReturnUrl,
+      },
     );
   }
 
-  public boardStars(): BoardStar {
-    return new BoardStar(this.config, this.pathElements, "boardStars");
+  public boardStars(idBoardStar: string = ""): BoardStar {
+    return new BoardStar(this.config, this.pathElements, "boardStars", {
+      identifier: idBoardStar,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
-  public cards(cardId: string = ""): Card {
-    return new Card(this.config, this.pathElements, "cards", cardId);
+  public cards(idCard: string = ""): Card {
+    return new Card(this.config, this.pathElements, "cards", {
+      identifier: idCard,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
-  public checklists(): Checklist {
-    return new Checklist(this.config, this.pathElements, "checklists");
+  public checklists(idChecklist: string = ""): Checklist {
+    return new Checklist(this.config, this.pathElements, "checklists", {
+      identifier: idChecklist,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
-  public customFields(): CustomField {
-    return new CustomField(this.config, this.pathElements, "customFields");
+  public customFields(idCustomField: string = ""): CustomField {
+    return new CustomField(this.config, this.pathElements, "customFields", {
+      identifier: idCustomField,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
-  public labels(labelId: string = ""): Label {
-    return new Label(this.config, this.pathElements, "labels", labelId);
+  public labels(idLabel: string = ""): Label {
+    return new Label(this.config, this.pathElements, "labels", {
+      identifier: idLabel,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
-  public lists(): List {
-    return new List(this.config, this.pathElements, "lists");
+  public lists(idList: string = ""): List {
+    return new List(this.config, this.pathElements, "lists", {
+      identifier: idList,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
-  public members(memberId: string = ""): Member {
-    return new Member(this.config, this.pathElements, "members", memberId);
+  public members(idMember: string = ""): Member {
+    return new Member(this.config, this.pathElements, "members", {
+      identifier: idMember,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public membersInvited(): Member {
-    return new Member(this.config, this.pathElements, "membersInvited");
+    return new Member(this.config, this.pathElements, "membersInvited", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
-  public memberships(membershipId: string = ""): Membership {
-    return new Membership(
-      this.config,
-      this.pathElements,
-      "memberships",
-      membershipId,
-    );
+  public memberships(idMembership: string = ""): Membership {
+    return new Membership(this.config, this.pathElements, "memberships", {
+      identifier: idMembership,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public myPrefs(): BoardMyPrefs {
-    return new BoardMyPrefs(this.config, this.pathElements, "myPrefs");
+    return new BoardMyPrefs(this.config, this.pathElements, "myPrefs", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public organization(): Organization {
-    return new Organization(this.config, this.pathElements, "organization");
+    return new Organization(this.config, this.pathElements, "organization", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public plugins(): Plugin {
-    return new Plugin(this.config, this.pathElements, "plugins");
+    return new Plugin(this.config, this.pathElements, "plugins", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 }

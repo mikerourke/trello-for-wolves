@@ -1,13 +1,15 @@
 import { BaseResource } from "./BaseResource";
-import { PositionNumbered, TypedFetch } from "../typeDefs";
+import { PositionOrFloat, TypedFetch } from "../typeDefs";
 
 export type BoardStarsFilter = "mine" | "none";
 
-export type BoardStarRecord = {
-  _id?: string;
-  id?: string;
+export type BoardStarRecord<T = { id: string }> = T & {
   idBoard: string;
   pos: number;
+};
+
+type GetBoardStarsForBoardResponse<TPayload> = TPayload & {
+  boardStars: BoardStarRecord<{ _id: string }>;
 };
 
 export class BoardStar extends BaseResource {
@@ -15,21 +17,21 @@ export class BoardStar extends BaseResource {
     return this.apiGet("/");
   }
 
-  public getBoardStars(params?: {
+  public getBoardStars<TPayload extends object = {}>(params?: {
     filter: BoardStarsFilter;
-  }): TypedFetch<BoardStarRecord[]> {
+  }): TypedFetch<GetBoardStarsForBoardResponse<TPayload> | BoardStarRecord[]> {
     return this.apiGet("/", params);
   }
 
   public addBoardStar(params: {
     idBoard: string;
-    pos: PositionNumbered;
+    pos: PositionOrFloat;
   }): TypedFetch<BoardStarRecord> {
     return this.apiPost("/", params);
   }
 
   public updateBoardStar(params: {
-    pos: PositionNumbered;
+    pos: PositionOrFloat;
   }): TypedFetch<BoardStarRecord> {
     return this.apiPut("/", params);
   }
@@ -38,7 +40,7 @@ export class BoardStar extends BaseResource {
     return this.apiPut("/idBoard", { value: idBoard });
   }
 
-  public updatePosition(value: PositionNumbered): TypedFetch<BoardStarRecord> {
+  public updatePosition(value: PositionOrFloat): TypedFetch<BoardStarRecord> {
     return this.apiPut("/pos", { value });
   }
 

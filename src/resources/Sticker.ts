@@ -18,15 +18,15 @@ export interface ImageScaledRecord {
  * The data corresponding to a Sticker associated with a Card.
  * @typedef {Object} StickerRecord
  * @property id The ID of the sticker.
- * @property image The name of the sticker if it is a default sticker or a generated id if it is
- *                 a custom sticker.
+ * @property image The name of the sticker if it is a default sticker or a
+ *                 generated id if it is a custom sticker.
  * @property imageScaled An array of scaled versions of the sticker image.
  * @property imageUrl Direct URL to the image.
  * @property left How far to the left of the card the sticker is placed.
  * @property top How far from the top of the card the sticker is placed.
  * @property rotate How much the sticker has been rotated.
- * @property zIndex The ordering for display which tells you which sticker would show on top of
- *                  another.
+ * @property zIndex The ordering for display which tells you which sticker would
+ *                  show on top of another.
  */
 export interface StickerRecord {
   id: string;

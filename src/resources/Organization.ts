@@ -28,6 +28,9 @@ import {
 export type OrganizationFilter = "all" | "members" | "none" | "public";
 
 /**
+ * The data corresponding to an Organization. The fields that are present in the
+ * record are contingent on the `fields`/`organizationFields` param passed to
+ * the method used to retrieve the Organization data.
  * @typedef {Object} OrganizationRecord
  * @property id The ID of the organization.
  * @property billableMemberCount
@@ -70,6 +73,12 @@ export interface OrganizationRecord {
 
 export type OrganizationField = ValidResourceFields<OrganizationRecord>;
 
+/**
+ * Organizations, or as they are referred to in Trello, "Teams", represent
+ * collections of members and boards.
+ * @see https://developers.trello.com/reference#organizations
+ * @class
+ */
 export class Organization extends BaseResource {
   public getOrganization(params?: {
     actionFields?: AllOfOrListOf<ActionField>;
@@ -201,6 +210,16 @@ export class Organization extends BaseResource {
     return this.apiPut("/website", { value });
   }
 
+  public transferToEnterprise(): TypedFetch<unknown> {
+    if (!this.isChildOf("enterprise")) {
+      throw new Error(
+        "You can only call `transferToEnterprise()` on an enterprise",
+      );
+    }
+
+    return this.apiPut("/");
+  }
+
   public deleteOrganization(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
@@ -210,31 +229,40 @@ export class Organization extends BaseResource {
   }
 
   public actions(): Action {
-    return new Action(this.config, this.pathElements, "actions");
+    return new Action(this.config, this.pathElements, "actions", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public boards(): Board {
-    return new Board(this.config, this.pathElements, "boards");
+    return new Board(this.config, this.pathElements, "boards", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public members(memberId: string = ""): Member {
-    return new Member(this.config, this.pathElements, "members", memberId);
+    return new Member(this.config, this.pathElements, "members", {
+      identifier: memberId,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public membersInvited(): Member {
-    return new Member(this.config, this.pathElements, "membersInvited");
+    return new Member(this.config, this.pathElements, "membersInvited", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public memberships(membershipId: string = ""): Membership {
-    return new Membership(
-      this.config,
-      this.pathElements,
-      "memberships",
-      membershipId,
-    );
+    return new Membership(this.config, this.pathElements, "memberships", {
+      identifier: membershipId,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public prefs(): OrganizationPref {
-    return new OrganizationPref(this.config, this.pathElements, "prefs");
+    return new OrganizationPref(this.config, this.pathElements, "prefs", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 }

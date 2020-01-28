@@ -1,43 +1,48 @@
 import { BaseResource } from "./BaseResource";
-import { AllOfOrListOf, AllOrNone, FileUpload, TypedFetch } from "../typeDefs";
+import { AllOfOrListOf, ColorName, FileUpload, TypedFetch } from "../typeDefs";
 
 export type BoardBackgroundBrightness = "dark" | "light" | "unknown";
 
-export type BoardBackgroundFilter =
-  | "all"
-  | "custom"
-  | "default"
-  | "none"
-  | "premium";
+export type BoardBackgroundType = "custom" | "default" | "premium";
 
-export interface BoardBackgroundScaledRecord {
-  id?: string;
-  _id?: string;
-  bytes: number;
-  height: number;
-  scaled: boolean;
-  url: string;
-  width: number;
-}
+export type BoardBackgroundFilter = BoardBackgroundType | "all" | "none";
 
+/**
+ * The data corresponding to a board background. The fields that are present in
+ * the record are contingent on the `fields` param passed to the method used to
+ * retrieve the board background data.
+ * @typedef {Object} BoardBackgroundRecord
+ * @property id The ID of the board background.
+ * @property brightness The brightness value for the text/other elements.
+ * @property color Color of the board background.
+ * @property tile Whether the background should be tiled.
+ * @property type Type of board background.
+ */
 export interface BoardBackgroundRecord {
   id: string;
   brightness: BoardBackgroundBrightness;
-  color: string;
+  color: ColorName;
   tile: boolean;
-  type: string;
+  type: BoardBackgroundType;
 }
 
-export interface CustomBoardBackgroundRecord
+export interface BoardBackgroundImageScaledRecord {
+  id: string;
+  _id: string;
+  scaled: boolean;
+  url: string;
+  bytes: number;
+  height: number;
+  width: number;
+}
+
+export interface BoardBackgroundImageRecord
   extends Omit<BoardBackgroundRecord, "color"> {
   bottomColor: string | null;
   topColor: string | null;
   fullSizeUrl: string;
-  scaled: BoardBackgroundScaledRecord[];
+  scaled: BoardBackgroundImageScaledRecord[];
 }
-
-export type AnyBoardBackgroundRecord = BoardBackgroundRecord &
-  CustomBoardBackgroundRecord;
 
 export type BoardBackgroundField =
   | "brightness"
@@ -53,28 +58,28 @@ export type BoardBackgroundField =
  */
 export class BoardBackground extends BaseResource {
   public getBoardBackground(params?: {
-    fields?: AllOfOrListOf<BoardBackgroundField | CustomBoardBackgroundRecord>;
-  }): TypedFetch<AnyBoardBackgroundRecord> {
+    fields?: AllOfOrListOf<BoardBackgroundField>;
+  }): TypedFetch<BoardBackgroundRecord | BoardBackgroundImageRecord> {
     this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
   public getBoardBackgrounds(params?: {
-    filter?: AllOrNone | BoardBackgroundFilter;
-  }): TypedFetch<AnyBoardBackgroundRecord[]> {
+    filter?: BoardBackgroundFilter;
+  }): TypedFetch<BoardBackgroundRecord[] | BoardBackgroundImageRecord[]> {
     return this.apiGet("/", params);
   }
 
   public uploadBoardBackground(
     file: FileUpload,
-  ): TypedFetch<AnyBoardBackgroundRecord> {
+  ): TypedFetch<BoardBackgroundRecord | BoardBackgroundImageRecord> {
     return this.apiPost("/", { file });
   }
 
   public updateBoardBackground(params: {
     brightness?: BoardBackgroundBrightness;
     tile?: boolean;
-  }): TypedFetch<AnyBoardBackgroundRecord> {
+  }): TypedFetch<BoardBackgroundRecord | BoardBackgroundImageRecord> {
     this.validateUpdate(params);
     return this.apiPut("/", params);
   }

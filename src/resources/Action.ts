@@ -99,6 +99,9 @@ export type ActionType =
   | "voteOnCard";
 
 /**
+ * The data corresponding to an action. The fields that are present in the
+ * record are contingent on the `fields`/`actionFields` param passed to
+ * the method used to retrieve the action data.
  * @typedef {Object} ActionRecord
  * @property id The ID of the action.
  * @property idMemberCreator The ID of the member who caused the action.
@@ -145,6 +148,10 @@ export type ActionField = "id" | "data" | "date" | "idMemberCreator" | "type";
  * Actions for Trello objects can be listed from nested action endpoints - e.g.
  * the resource GET /1/boards/[board_id]/actions lists all of the actions for
  * the given board.
+ *
+ * Note: The only action that can be added, updated, and deleted is a "commentCard"
+ * action. If you wish to perform any of these operations, use the `comment()`
+ * initializer on a `Card` instance (e.g. `trello.cards().comments().addComment()`.
  * @see https://developers.trello.com/reference#actions
  * @class
  */
@@ -209,41 +216,39 @@ export class Action<TActionType = ActionType> extends BaseResource {
     return this.apiGet("/entities");
   }
 
-  public updateAction(params: {
-    text: string;
-  }): TypedFetch<ActionRecord<TActionType>> {
-    return this.apiPut("/", params);
-  }
-
-  public updateText(value: string): TypedFetch<ActionRecord<TActionType>> {
-    return this.apiPut("/text", { value });
-  }
-
-  public deleteAction(): TypedFetch<ValueResponse<null>> {
-    return this.apiDelete("/");
-  }
-
   public board(): Board {
-    return new Board(this.config, this.pathElements, "board");
+    return new Board(this.config, this.pathElements, "board", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public card(): Card {
-    return new Card(this.config, this.pathElements, "card");
+    return new Card(this.config, this.pathElements, "card", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public list(): List {
-    return new List(this.config, this.pathElements, "list");
+    return new List(this.config, this.pathElements, "list", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public member(): Member {
-    return new Member(this.config, this.pathElements, "member");
+    return new Member(this.config, this.pathElements, "member", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public memberCreator(): Member {
-    return new Member(this.config, this.pathElements, "memberCreator");
+    return new Member(this.config, this.pathElements, "memberCreator", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public organization(): Organization {
-    return new Organization(this.config, this.pathElements, "organization");
+    return new Organization(this.config, this.pathElements, "organization", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 }

@@ -45,6 +45,9 @@ export type NotificationType =
 export type ReadFilter = "all" | "read" | "unread";
 
 /**
+ * The data corresponding to a notification. The fields that are present in the
+ * record are contingent on the `fields`/`notificationFields` param passed to
+ * the method used to retrieve the notification data.
  * @typedef {Object} NotificationRecord
  * @property id The ID of the notification.
  * @property data Relevant data regarding the notification.
@@ -161,26 +164,38 @@ export class Notification extends BaseResource {
   }
 
   public board(): Board {
-    return new Board(this.config, this.pathElements, "board");
+    return new Board(this.config, this.pathElements, "board", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public card(): Card {
-    return new Card(this.config, this.pathElements, "card");
+    return new Card(this.config, this.pathElements, "card", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public list(): List {
-    return new List(this.config, this.pathElements, "list");
+    return new List(this.config, this.pathElements, "list", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public member(): Member {
-    return new Member(this.config, this.pathElements, "member");
+    return new Member(this.config, this.pathElements, "member", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public memberCreator(): Member {
-    return new Member(this.config, this.pathElements, "memberCreator");
+    return new Member(this.config, this.pathElements, "memberCreator", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public organization(): Organization {
-    return new Organization(this.config, this.pathElements, "organization");
+    return new Organization(this.config, this.pathElements, "organization", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 }

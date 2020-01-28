@@ -3,7 +3,6 @@ import { TypedFetch } from "../typeDefs";
 
 export type CustomFieldType = "number" | "date" | "text" | "checkbox" | "list";
 
-// TODO: Add function to stringify the "value" regardless of the type.
 type CustomFieldListOptionValue =
   | { text: string }
   | { number: number }
@@ -17,6 +16,7 @@ export interface CustomFieldListOptionRecord {
 }
 
 /**
+ * The data corresponding to a custom field.
  * @typedef {Object} CustomFieldRecord
  * @property id The ID of the Custom Field definition.
  * @property idModel The ID of the model that the Custom Field is defined on. This
@@ -55,6 +55,13 @@ type NestedResponse =
   | { customFields: CustomFieldRecord[] }
   | { customFieldItems: CustomFieldRecord[] };
 
+/**
+ * Custom Fields are extra bits of structured data attached to cards when our
+ * users need a bit more than what Trello provides. To use them users need to
+ * enable the Custom Fields Power-Up.
+ * @see https://developers.trello.com/reference#custom-fields
+ * @class
+ */
 // TODO: Add handling for cards (https://developers.trello.com/reference#setting-custom-field-values-on-cards).
 export class CustomField extends BaseResource {
   public getCustomField(): TypedFetch<CustomFieldRecord> {
@@ -106,7 +113,7 @@ export class CustomField extends BaseResource {
   ): TypedFetch<CustomFieldListOptionRecord> {
     const body = this.stringifyOptionValue(option);
 
-    if (/card/gi.test(this.pathElements[0])) {
+    if (this.isChildOf("card")) {
       return this.apiPut("/item", {}, body);
     }
 
@@ -119,6 +126,7 @@ export class CustomField extends BaseResource {
     displayCardFront?: boolean;
   }): TypedFetch<CustomFieldRecord> {
     this.validateUpdate(params);
+
     const validBody = params;
     if (validBody.displayCardFront) {
       validBody["display/cardFront"] = validBody.displayCardFront;
@@ -131,7 +139,7 @@ export class CustomField extends BaseResource {
   public updateCustomFieldOption(
     option: CustomFieldListOptionRecord,
   ): TypedFetch<CustomFieldListOptionRecord> {
-    if (!/card/gi.test(this.pathElements[0])) {
+    if (!this.isChildOf("card")) {
       throw new Error(
         "You can only call updateCustomFieldOption() from a parent card",
       );
@@ -154,7 +162,7 @@ export class CustomField extends BaseResource {
   private stringifyOptionValue(
     option: CustomFieldListOptionRecord,
   ): Record<string, string> {
-    // TODO: Add this functionality.
+    // TODO: Add this functionality (https://developers.trello.com/reference#customfielditemsid).
     return (option as unknown) as Record<string, string>;
   }
 }

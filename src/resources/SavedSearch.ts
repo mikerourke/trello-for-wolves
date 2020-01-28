@@ -1,5 +1,5 @@
 import { BaseResource } from "./BaseResource";
-import { PositionNumbered, TypedFetch } from "../typeDefs";
+import { PositionOrFloat, TypedFetch } from "../typeDefs";
 
 export interface SavedSearchRecord {
   id: string;
@@ -20,7 +20,7 @@ export class SavedSearch extends BaseResource {
 
   public addSavedSearch(params: {
     name: string;
-    pos: PositionNumbered;
+    pos: PositionOrFloat;
     query: string;
   }): TypedFetch<SavedSearchRecord> {
     return this.apiPost("/", params);
@@ -28,7 +28,7 @@ export class SavedSearch extends BaseResource {
 
   public updateSavedSearch(params: {
     name?: string;
-    pos?: PositionNumbered;
+    pos?: PositionOrFloat;
     query?: string;
   }): TypedFetch<SavedSearchRecord> {
     return this.apiPut("/", params);
@@ -39,7 +39,7 @@ export class SavedSearch extends BaseResource {
   }
 
   public updatePosition(
-    value: PositionNumbered,
+    value: PositionOrFloat,
   ): TypedFetch<SavedSearchRecord> {
     return this.apiPut("/pos", { value });
   }

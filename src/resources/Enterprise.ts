@@ -1,6 +1,5 @@
 import { BaseResource } from "./BaseResource";
-import { BoardField } from "./Board";
-import { NestedMemberField, MemberFilter } from "./Member";
+import { NestedMemberField, MemberFilter, Member } from "./Member";
 import { MembershipFilter } from "./Membership";
 import { OrganizationField, OrganizationFilter } from "./Organization";
 import { AllOfOrListOf, TypedFetch, ValidResourceFields } from "../typeDefs";
@@ -30,35 +29,35 @@ export type EnterpriseUserType =
   | "saml"
   | "none";
 
+/**
+ The data corresponding to an enterprise. The fields that are present in the
+ * record are contingent on the `fields` param passed to the method used to
+ * retrieve the enterprise data.
+ * @typedef {Object} EnterpriseRecord
+ * @property id The ID of the enterprise.
+ * @property name Short-form name of the enterprise.
+ * @property displayName Long-form name of the enterprise used when displaying
+ *                       the full name of the enterprise.
+ * @property prefs JSON Object containing information about the preferences set
+ *                 within the enterprise.
+ * @property ssoActivationFailed Determines whether SSO successfully activated.
+ * @property idAdmins Array of Member IDs that are admins of the enterprise.
+ * @property idMembers Array of Member IDs that belong to the enterprise.
+ * @property idOrganizations Array of Organization IDs that belong to the enterprise.
+ * @property products Array of products that the enterprise has enabled.
+ * @property userTypes Object containing keys for every member type and values
+ *                     representing the count of each type of member.
+ */
 export interface EnterpriseRecord {
-  /** The ID of the enterprise. */
   id: string;
-  /** Short-form name of the enterprise. */
   name: string;
-  /**
-   * Long-form name of the enterprise used when displaying the full name of the
-   * enterprise.
-   */
   displayName: string;
-  /**
-   * JSON Object containing information about the preferences set within the
-   * enterprise.
-   */
   prefs: EnterprisePrefsRecord;
-  /** Determines whether SSO successfully activated. */
   ssoActivationFailed: boolean;
-  /** Array of Member IDs that are admins of the enterprise. */
   idAdmins: string[];
-  /** Array of Member IDs that belong to the enterprise. */
   idMembers: string[];
-  /** Array of Organization IDs that belong to the enterprise. */
   idOrganizations: string[];
-  /** Array of products that the enterprise has enabled. */
   products: number[];
-  /**
-   * Object containing keys for every member type (all, member, collaborator,
-   * saml, none) and values representing the count of each type of member.
-   */
   userTypes: Record<EnterpriseUserType, number>;
 }
 
@@ -99,34 +98,8 @@ export class Enterprise extends BaseResource {
     return this.apiGet("/signupUrl", params);
   }
 
-  public getMember(
-    idMember: string,
-    params?: {
-      idMember?: string | "none";
-      fields?: ValueOrArray<NestedMemberField>;
-      organizationFields?: AllOfOrListOf<OrganizationField>;
-      boardFields?: AllOfOrListOf<BoardField>;
-    },
-  ): TypedFetch<unknown> {
-    return this.apiGet(`/members/${idMember}`, params);
-  }
-
-  public getMembers(params?: {
-    fields?: ValueOrArray<EnterpriseField>;
-    filter?: string;
-    sort?: string;
-    sortBy?: "none" | string;
-    sortOrder?: SortOrder;
-    startIndex?: number;
-    count?: number;
-    organizationFields?: AllOfOrListOf<OrganizationField>;
-    boardFields?: AllOfOrListOf<BoardField>;
-  }): TypedFetch<unknown> {
-    return this.apiGet("/members", params);
-  }
-
-  public getIfOrgTransferrable(orgId: string): TypedFetch<unknown> {
-    return this.apiGet(`/transferrable/organization/${orgId}`);
+  public getIfOrgTransferrable(idOrganization: string): TypedFetch<unknown> {
+    return this.apiGet(`/transferrable/organization/${idOrganization}`);
   }
 
   public transferToOrganization(idOrganization: string): TypedFetch<unknown> {
@@ -137,29 +110,17 @@ export class Enterprise extends BaseResource {
     return this.apiPut(`/admins/${idMember}`);
   }
 
-  public addToken(params?: {
-    expiration: "none" | "1hour" | "1day" | "30days" | "never";
-  }): TypedFetch<unknown> {
-    return this.apiPost("/tokens", params);
-  }
-
-  public deactivateMember(
-    idMember: string,
-    params: {
-      value: boolean;
-      fields?: ValueOrArray<NestedMemberField>;
-      organizationFields?: AllOfOrListOf<OrganizationField>;
-      boardFields?: AllOfOrListOf<BoardField>;
-    },
-  ): TypedFetch<unknown> {
-    return this.apiPut(`/members/${idMember}/deactivated`, params);
-  }
-
-  public dissociateOrganization(idOrg: string): TypedFetch<unknown> {
-    return this.apiDelete(`/organizations/${idOrg}`);
+  public dissociateOrganization(idOrganization: string): TypedFetch<unknown> {
+    return this.apiDelete(`/organizations/${idOrganization}`);
   }
 
   public removeMemberFromAdmin(idMember: string): TypedFetch<unknown> {
     return this.apiDelete(`/admins/${idMember}`);
+  }
+
+  public members(): Member {
+    return new Member(this.config, this.pathElements, "members", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 }

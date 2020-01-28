@@ -5,7 +5,7 @@ import { Board, BoardField } from "./Board";
 import { CheckItem } from "./CheckItem";
 import { Checklist, ChecklistField } from "./Checklist";
 import { Comment } from "./Comment";
-import { Label, LabelColor, LabelRecord } from "./Label";
+import { Label, LabelRecord } from "./Label";
 import { List } from "./List";
 import { Member, MemberInvitedField } from "./Member";
 import { Sticker, StickerField } from "./Sticker";
@@ -16,7 +16,9 @@ import {
   FileUpload,
   FilterDate,
   KeepFromSourceField,
-  PositionNumbered,
+  ColorName,
+  Limits,
+  PositionOrFloat,
   TypedFetch,
   ValidResourceFields,
   ValueResponse,
@@ -118,8 +120,10 @@ export interface CardMapPowerUpRecord {
 }
 
 /**
- * The data associated with a Card object returned from the Trello API. It
- * includes fields from {@link CardMapPowerUpRecord}.
+ * The data corresponding to a card. The fields that are present in the
+ * record are contingent on the `fields`/`cardFields` param passed to the method
+ * used to retrieve the card data. It includes fields from the
+ * {@link CardMapPowerUpRecord}.
  * @typedef {Object} CardRecord
  * @property id The ID of the card.
  * @property badges Pieces of information about the card that are displayed on the front of the card.
@@ -142,17 +146,19 @@ export interface CardMapPowerUpRecord {
  * @property idList The ID of the list the card is in.
  * @property idMembers An array of member IDs that are on this card.
  * @property idMembersVoted An array of member IDs who have voted on this card.
- * @property idShort Numeric ID for the card on this board. Only unique to the board, and subject to
- *                   change as the card moves.
+ * @property idShort Numeric ID for the card on this board. Only unique to the board,
+ *                   and subject to change as the card moves.
  * @property labels Array of label objects on this card.
- * @property manualCoverAttachment Whether the card cover image was selected automatically by
- *                                 Trello, or manually by the user.
+ * @property manualCoverAttachment Whether the card cover image was selected automatically
+ *                                 by Trello, or manually by the user.
  * @property name Name of the card.
  * @property pos Position of the card in the list.
  * @property shortLink The 8 character shortened ID for the card.
  * @property shortUrl URL to the card without the name slug.
  * @property subscribed Whether this member is subscribed to the card.
  * @property url Full URL to the card, with the name slug.
+ * @property [limits] Limit data associated with the card.
+ * @property [creationMethod] Creation method for the card.
  */
 export interface CardRecord extends CardMapPowerUpRecord {
   id: string;
@@ -180,6 +186,8 @@ export interface CardRecord extends CardMapPowerUpRecord {
   shortUrl: string;
   subscribed: boolean;
   url: string;
+  limits?: Limits;
+  creationMethod?: string | null;
 }
 
 export type CardField = ValidResourceFields<CardRecord>;
@@ -268,7 +276,7 @@ export class Card extends BaseResource {
     params: {
       name?: string;
       desc?: string;
-      pos?: PositionNumbered;
+      pos?: PositionOrFloat;
       due?: Date | null;
       dueComplete?: boolean;
       idList?: string;
@@ -278,7 +286,7 @@ export class Card extends BaseResource {
       fileSource?: FileUpload;
       idCardSource?: string;
       keepFromSource?: FieldOrListOf<KeepFromSourceField>;
-      labels?: AllOfOrListOf<LabelColor>;
+      labels?: AllOfOrListOf<ColorName>;
     } & CardMapPowerUpRecord,
   ): TypedFetch<CardRecord> {
     return this.apiPost("/", { ...params, separator: "/" });
@@ -302,7 +310,7 @@ export class Card extends BaseResource {
       idList?: string;
       idLabels?: string[];
       idBoard?: string;
-      pos?: PositionNumbered;
+      pos?: PositionOrFloat;
       due?: Date | null;
       dueComplete?: boolean;
       subscribed?: boolean;
@@ -360,7 +368,7 @@ export class Card extends BaseResource {
     return this.apiPut("/name", { value });
   }
 
-  public updatePosition(value: PositionNumbered): TypedFetch<CardRecord> {
+  public updatePosition(value: PositionOrFloat): TypedFetch<CardRecord> {
     return this.apiPut("/pos", { value });
   }
 
@@ -393,12 +401,10 @@ export class Card extends BaseResource {
   }
 
   public attachments(idAttachment: string = ""): Attachment {
-    return new Attachment(
-      this.config,
-      this.pathElements,
-      "attachments",
-      idAttachment,
-    );
+    return new Attachment(this.config, this.pathElements, "attachments", {
+      identifier: idAttachment,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public board(): Board {
@@ -409,50 +415,56 @@ export class Card extends BaseResource {
     return new CheckItem(this.config, this.pathElements, "checkItemStates");
   }
 
-  public checklist(checklistId: string): Checklist {
-    return new Checklist(
-      this.config,
-      this.pathElements,
-      "checklist",
-      checklistId,
-    );
+  public checklist(idChecklist: string): Checklist {
+    return new Checklist(this.config, this.pathElements, "checklist", {
+      identifier: idChecklist,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
-  public checklists(checklistId: string = ""): Checklist {
-    return new Checklist(
-      this.config,
-      this.pathElements,
-      "checklists",
-      checklistId,
-    );
+  public checklists(idChecklist: string = ""): Checklist {
+    return new Checklist(this.config, this.pathElements, "checklists", {
+      identifier: idChecklist,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
-  public checkItem(checkItemId: string): CheckItem {
-    return new CheckItem(
-      this.config,
-      this.pathElements,
-      "checkItem",
-      checkItemId,
-    );
+  public checkItem(idCheckItem: string): CheckItem {
+    return new CheckItem(this.config, this.pathElements, "checkItem", {
+      identifier: idCheckItem,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
-  public comments(commentId: string = ""): Comment {
-    return new Comment(this.config, this.pathElements, `actions/${commentId}`);
+  public comments(idComment: string = ""): Comment {
+    return new Comment(this.config, this.pathElements, "actions", {
+      identifier: idComment,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public labels(): Label {
-    return new Label(this.config, this.pathElements, "labels");
+    return new Label(this.config, this.pathElements, "labels", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public list(): List {
-    return new List(this.config, this.pathElements, "list");
+    return new List(this.config, this.pathElements, "list", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public members(): Member {
-    return new Member(this.config, this.pathElements, "members");
+    return new Member(this.config, this.pathElements, "members", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
-  public stickers(stickerId: string = ""): Sticker {
-    return new Sticker(this.config, this.pathElements, "stickers", stickerId);
+  public stickers(idSticker: string = ""): Sticker {
+    return new Sticker(this.config, this.pathElements, "stickers", {
+      identifier: idSticker,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 }

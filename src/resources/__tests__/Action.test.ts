@@ -20,7 +20,7 @@ describe("the Action resource", () => {
     try {
       await trello.actions().getAction();
     } catch (err) {
-      expect(err.message).toMatch(/without specifying an id/gi);
+      expect(err.message).toMatch(/must specify an id/gi);
     }
   });
 
@@ -96,32 +96,6 @@ describe("the Action resource", () => {
 
     expect(result.config.method).toBe("GET");
     expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}/entities`);
-  });
-
-  test("updates the action", async () => {
-    await trello.actions(TEST_ACTION_ID).updateAction({ text: "Test" });
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("PUT");
-    expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}`);
-    expect(result.url.searchParams.get("text")).toBe("Test");
-  });
-
-  test("updates the action's text", async () => {
-    await trello.actions(TEST_ACTION_ID).updateText("Test");
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("PUT");
-    expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}/text`);
-    expect(result.url.searchParams.get("value")).toBe("Test");
-  });
-
-  test("deletes an action", async () => {
-    await trello.actions(TEST_ACTION_ID).deleteAction();
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("DELETE");
-    expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}`);
   });
 
   test("gets the board for an action", async () => {

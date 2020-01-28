@@ -28,6 +28,9 @@ export interface AttachmentPreviewRecord {
 }
 
 /**
+ * The data corresponding to an attachment on a board. The fields that are
+ * present in the record are contingent on the `fields` param passed to
+ * the method used to retrieve the attachment data.
  * @typedef {Object} AttachmentRecord
  * @property id The ID of the attachment.
  * @property bytes The size of the attachment in bytes.
@@ -43,6 +46,7 @@ export interface AttachmentPreviewRecord {
  * @property previews If the image is an uploaded image, Trello will generate some various sized previews.
  * @property url The URL to the attachment.
  * @property [limits] Limits associated with the attachment.
+ * @property [creationMethod] Creation method for the attachment.
  */
 export interface AttachmentRecord {
   id: string;
@@ -57,6 +61,7 @@ export interface AttachmentRecord {
   previews: AttachmentPreviewRecord[];
   url: string;
   limits?: Limits;
+  creationMethod?: string | null;
 }
 
 export type AttachmentField = ValidResourceFields<AttachmentRecord>;

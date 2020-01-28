@@ -3,23 +3,11 @@ import { Board } from "./Board";
 import {
   AllOfOrListOf,
   AllOrNone,
+  ColorName,
   Limits,
   TypedFetch,
   ValidResourceFields,
 } from "../typeDefs";
-
-export type LabelColor =
-  | "blue"
-  | "green"
-  | "orange"
-  | "purple"
-  | "red"
-  | "yellow"
-  // These colors are also available, they're just not documented:
-  | "sky"
-  | "lime"
-  | "pink"
-  | "black";
 
 /**
  * @typedef {Object} LabelRecord
@@ -35,7 +23,7 @@ export interface LabelRecord {
   id: string;
   idBoard: string;
   name: string;
-  color: LabelColor | null;
+  color: ColorName | null;
   limits?: Limits;
   creationMethod?: string | null;
 }
@@ -68,25 +56,26 @@ export class Label extends BaseResource {
   }
 
   public addLabel(params: {
-    color: LabelColor | null;
+    color: ColorName | null;
     name: string;
     idBoard?: string;
   }): TypedFetch<LabelRecord> {
     const updatedParams = { ...params };
-    if (this.pathElements[0] === "boards") {
+    if (this.isChildOf("board")) {
       updatedParams.idBoard = this.pathElements[1];
     }
     return this.apiPost("/", updatedParams);
   }
 
-  public updateLabel(params?: {
-    color?: LabelColor | null;
+  public updateLabel(params: {
+    color?: ColorName | null;
     name?: string;
   }): TypedFetch<LabelRecord> {
+    this.validateUpdate(params);
     return this.apiPut("/", params);
   }
 
-  public updateColor(value: LabelColor | null): TypedFetch<LabelRecord> {
+  public updateColor(value: ColorName | null): TypedFetch<LabelRecord> {
     return this.apiPut("/color", { value });
   }
 
@@ -99,6 +88,8 @@ export class Label extends BaseResource {
   }
 
   public board(): Board {
-    return new Board(this.config, this.pathElements, "board");
+    return new Board(this.config, this.pathElements, "board", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 }

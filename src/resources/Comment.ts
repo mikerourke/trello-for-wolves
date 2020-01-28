@@ -1,5 +1,5 @@
 import { BaseResource } from "./BaseResource";
-import { ActionField } from "./Action";
+import { ActionField, EntityRecord } from "./Action";
 import { MemberCreatorRecord, MemberInvitedField } from "./Member";
 import {
   AllOfOrListOf,
@@ -18,58 +18,65 @@ export interface CommentRecord {
       emoji?: Record<string, string>;
     };
   };
-  card: {
-    id: string;
-    name: string;
-    idShort: number;
-    shortLink: string;
-  };
-  board: {
-    id: string;
-    name: string;
-    shortLink: string;
-  };
-  list: {
-    id: string;
-    name: string;
-  };
+  card: EntityRecord;
+  board: EntityRecord;
+  list: EntityRecord;
   type: string;
-  date: string;
-  limits: Limits;
+  date: string | null;
   memberCreator?: MemberCreatorRecord;
+  limits?: Limits;
 }
 
+/**
+ * Comments are Action records with a "type" of "commentCard". They are the
+ * only type of action that can be added, updated, and deleted. They're also
+ * only available on a `Card` resource.
+ * @see https://developers.trello.com/reference#actionsid
+ * @class
+ */
 export class Comment extends BaseResource {
-  /**
-   * This is the same as calling ...cards('cardId').actions().getActions({ filter: 'commentCard' }).
-   * It's just a nice shortcut if you only need Comment actions.
-   */
+  public getComment(params?: {
+    display?: boolean;
+    entities?: boolean;
+    fields?: AllOfOrListOf<ActionField>;
+    member?: boolean;
+    memberFields?: AllOfOrListOf<MemberInvitedField>;
+    memberCreator?: boolean;
+    memberCreatorFields?: AllOfOrListOf<MemberInvitedField>;
+  }): TypedFetch<CommentRecord[]> {
+    return this.apiGet("/", { ...params, filter: "commentCard" });
+  }
+
   public getComments(params?: {
-    before?: FilterDate;
     display?: boolean;
     entities?: boolean;
     fields?: AllOfOrListOf<ActionField>;
     format?: Format;
+    before?: FilterDate;
+    since?: FilterDate;
     idModels?: string;
     limit?: number;
     member?: boolean;
+    memberFields?: AllOfOrListOf<MemberInvitedField>;
     memberCreator?: boolean;
     memberCreatorFields?: AllOfOrListOf<MemberInvitedField>;
-    memberFields?: AllOfOrListOf<MemberInvitedField>;
-    since?: FilterDate;
   }): TypedFetch<CommentRecord[]> {
     return this.apiGet("/", { ...params, filter: "commentCard" });
   }
 
   public addComment(text: string): TypedFetch<CommentRecord> {
-    return this.apiPost("/comments", { text });
+    return this.apiPost("/", { text });
   }
 
   public updateComment(text: string): TypedFetch<CommentRecord> {
-    return this.apiPut("/comments", { text });
+    return this.apiPut("/", { text });
+  }
+
+  public updateText(value: string): TypedFetch<CommentRecord> {
+    return this.apiPut("/text", { value });
   }
 
   public deleteComment(): TypedFetch<unknown> {
-    return this.apiDelete("/comments");
+    return this.apiDelete("/");
   }
 }

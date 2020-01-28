@@ -2,7 +2,7 @@ import { BaseResource } from "./BaseResource";
 import {
   AllOfOrListOf,
   AllOrNone,
-  PositionNumbered,
+  PositionOrFloat,
   TypedFetch,
 } from "../typeDefs";
 
@@ -10,6 +10,21 @@ export type CheckItemState = "complete" | "false" | "incomplete" | "true";
 
 export type CheckItemStateField = "idCheckItem" | "state";
 
+/**
+ * The data corresponding to a check item. The fields that are present in the
+ * record are contingent on the `fields` param passed to the method used to
+ * retrieve the check item data.
+ * @typedef {Object} CheckItemRecord
+ * @property id The ID of the check item.
+ * @property idChecklist The ID of the parent checklist.
+ * @property name The name of the check item.
+ * @property nameData Additional data associated with the check item.
+ * @property pos Position of the check item in the checklist.
+ * @property state Current state of the check item.
+ * @property due Date the check item is due.
+ * @property type Type of the check item (this is usually null).
+ * @property [creationMethod] Creation method for the check item.
+ */
 export type CheckItemRecord = {
   id: string;
   idChecklist: string;
@@ -18,6 +33,7 @@ export type CheckItemRecord = {
   pos: number;
   state: CheckItemState;
   due: string | null;
+  type: string | null;
   creationMethod?: string | null;
 };
 
@@ -47,7 +63,7 @@ export class CheckItem extends BaseResource {
   public addCheckItem(params: {
     name: string;
     checked?: boolean;
-    pos?: PositionNumbered;
+    pos?: PositionOrFloat;
   }): TypedFetch<CheckItemRecord> {
     return this.apiPost("/", params);
   }
@@ -59,7 +75,7 @@ export class CheckItem extends BaseResource {
   public updateCheckItem(params: {
     idChecklist?: string | null;
     name?: string;
-    pos?: PositionNumbered;
+    pos?: PositionOrFloat;
     state?: CheckItemState;
   }): TypedFetch<CheckItemRecord> {
     this.validateUpdate(params);
@@ -70,7 +86,7 @@ export class CheckItem extends BaseResource {
     return this.apiPut("/name", { value });
   }
 
-  public updatePosition(value: PositionNumbered): TypedFetch<CheckItemRecord> {
+  public updatePosition(value: PositionOrFloat): TypedFetch<CheckItemRecord> {
     return this.apiPut("/pos", { value });
   }
 
