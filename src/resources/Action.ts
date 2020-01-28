@@ -105,8 +105,8 @@ export type ActionType =
  * @property data Relevant information regarding the action.
  * @property type The type of the action (based on the associated resource).
  * @property date Date the action occurred.
- * @property limits Limit data associated with the action.
- * @property [memberCreator] Optional member creator details.
+ * @property [limits] Limit data associated with the action.
+ * @property [creationMethod] Creation method for the action.
  */
 export interface ActionRecord<T = ActionType> {
   id: string;
@@ -114,8 +114,9 @@ export interface ActionRecord<T = ActionType> {
   data: unknown;
   type: T;
   date: string;
-  limits: Limits;
   memberCreator: MemberCreatorRecord;
+  limits?: Limits;
+  creationMethod?: string | null;
 }
 
 export interface EntityRecord<T = ActionType> {
@@ -157,6 +158,7 @@ export class Action<TActionType = ActionType> extends BaseResource {
     memberCreator?: boolean;
     memberCreatorFields?: AllOfOrListOf<MemberInvitedField>;
   }): TypedFetch<ActionRecord<TActionType>> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 

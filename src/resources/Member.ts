@@ -1,3 +1,4 @@
+import { isEmpty } from "../utils/isEmpty";
 import { BaseResource } from "./BaseResource";
 import { Action, ActionType } from "./Action";
 import { Board, BoardField, BoardFilter } from "./Board";
@@ -5,6 +6,7 @@ import { BoardBackground, BoardBackgroundFilter } from "./BoardBackground";
 import { BoardStar } from "./BoardStar";
 import { Card, CardFilter } from "./Card";
 import { CustomEmoji } from "./CustomEmoji";
+import { SortOrder } from "./Enterprise";
 import { Notification, NotificationType } from "./Notification";
 import {
   Organization,
@@ -22,7 +24,6 @@ import {
   TypedFetch,
   ValueResponse,
 } from "../typeDefs";
-import { SortOrder } from "./Enterprise";
 
 export type AvatarSourceField = "gravatar" | "none" | "upload";
 
@@ -68,51 +69,52 @@ export interface MessageDismissedRecord {
   lastDismissed: string;
 }
 
+/**
+ * @typedef {Object} NestedMemberRecord
+ * @property id The ID of the member.
+ * @property avatarHash Member profile image.
+ * @property avatarUrl The URL of the current avatar being used, regardless of
+ *                     whether it is a gravatar or uploaded avatar.
+ * @property initials The member's initials, used for display when there isn't an avatar set.
+ * @property fullName The full display name for the member.
+ * @property username The username for the member. What is shown in @mentions for example.
+ * @property confirmed Whether the member has confirmed their email address after signing up.
+ * @property memberType Type of member ("ghost" has been invited to join but has not
+ *                      created a Trello account.
+ */
 export interface NestedMemberRecord {
-  /** The ID of the member. */
   id: string;
-  /** Member profile image. */
   avatarHash: string | null;
-  /**
-   * The URL of the current avatar being used, regardless of whether it is a
-   * gravatar or uploaded avatar.
-   */
   avatarUrl: string;
-  /** The member's initials, used for display when there isn't an avatar set. */
   initials: string;
-  /** The full display name for the member. */
   fullName: string;
-  /** The username for the member. What is shown in @mentions for example. */
   username: string;
-  /** Whether the member has confirmed their email address after signing up. */
   confirmed: boolean;
-  /**
-   * Type of member ("ghost" has been invited to join but has not created a
-   * Trello account.
-   */
   memberType: "normal" | "ghost";
 }
 
+/**
+ * Member data associated with an invited member. It builds upon the properties
+ * of the {@link NestedMemberRecord}.
+ * @typedef {Object} MemberInvitedRecord
+ * @property bio Optional bio for the member.
+ * @property bioData If the bio includes custom emoji, this object will contain the
+ *                   information necessary to display them.
+ * @property idPremOrgsAdmin An array of organization IDs this member is an admin of.
+ * @property products Array of numbers that represent premium features.
+ *                    10: member has Trello Gold as a result of being in a Business Class team.
+ *                    37: member has monthly Trello Gold.
+ *                    38: member has annual Trello Gold.
+ * @property status Status of the member.
+ * @property url The URL to the member's profile page.
+ * @property idEnterprisesDeactivated
+ */
 export interface MemberInvitedRecord extends NestedMemberRecord {
-  /** Optional bio for the member. */
   bio: string;
-  /**
-   * If the bio includes custom emoji, this object will contain the information
-   * necessary to display them.
-   */
   bioData: { emoji: unknown } | null;
-  /** An array of organization IDs this member is an admin of. */
   idPremOrgsAdmin: string[];
-  /**
-   * Array of numbers that represent premium features.
-   * 10: member has Trello Gold as a result of being in a Business Class team
-   * 37: member has monthly Trello Gold
-   * 38: member has annual Trello Gold
-   */
   products: number[] | MemberProduct[];
-  /** @deprecated */
   status: string;
-  /** The URL to the member's profile page. */
   url: string;
   idEnterprisesDeactivated?: string[];
 }
@@ -133,34 +135,39 @@ export interface MemberCreatorRecord extends MemberInvitedRecord {
   idEnterprise?: string | null;
 }
 
+/**
+ * This contains the most comprehensive member data. It includes all of the
+ * fields in {@link NestedMemberRecord} and {@link MemberInvitedRecord}.
+ * @typedef {Object} MemberRecord
+ * avatarSource The source of the user's avatar - either via "upload" or "gravatar".
+ * email The primary email address for the member. You can only read your own.
+ * gravatarHash Same as avatarHash.
+ * idBoards An array of board IDs this member is on.
+ * idBoardsPinned An array of pinned board IDs.
+ * idOrganizations An array of organization IDs this member is in.
+ * idEnterprisesAdmin An array of enterprise IDs this member is an admin of.
+ * loginTypes The types of logins a user can use.
+ * oneTimeMessagesDismissed Array of message IDs that were dismissed.
+ * prefs Preferences associated with the member.
+ * premiumFeatures Array of premium feature details.
+ * trophies Array of trophies.
+ * uploadedAvatarHash Same as avatar hash.
+ * uploadedAvatarUrl The URL of the uploaded avatar if one has been uploaded.
+ */
 export interface MemberRecord extends MemberCreatorRecord {
-  /** The source of the user's avatar - either via "upload" or "gravatar". */
   avatarSource: Omit<AvatarSourceField, "none"> | null;
-  /** The primary email address for the member. You can only read your own. */
   email: string | null;
-  /** Same as avatarHash. */
   gravatarHash: string | null;
-  /** An array of board IDs this member is on. */
   idBoards: string[];
-  /**
-   * An array of pinned board IDs.
-   * @deprecated
-   */
   idBoardsPinned: string[];
-  /** An array of organization IDs this member is in. */
   idOrganizations: string[];
-  /** An array of enterprise IDs this member is an admin of. */
   idEnterprisesAdmin: string[];
-  /** The types of logins a user can use. */
   loginTypes: MemberLoginType[];
   oneTimeMessagesDismissed: string[];
   prefs: MemberPrefsRecord;
   premiumFeatures: unknown[];
-  /** @deprecated */
   trophies: unknown[];
-  /** Same as avatar hash. */
   uploadedAvatarHash: unknown | null;
-  /** The URL of the uploaded avatar if one has been uploaded. */
   uploadedAvatarUrl: string;
 }
 
@@ -170,82 +177,37 @@ export type MemberInvitedField = keyof MemberInvitedRecord;
 
 export type MemberField = keyof MemberRecord;
 
-export interface GetMembersViaQueryParams {
-  members?: MemberFilter;
-  memberFields?: AllOfOrListOf<MemberField>;
-}
-
-export interface GetMembersViaUrlParams {
-  fields: AllOfOrListOf<MemberInvitedRecord>;
-}
-
-export interface GetMembersForEnterpriseParams extends GetMembersViaUrlParams {
-  /**
-   * Pass a SCIM-style query to filter members. This takes precedence over the
-   * all/normal/admins value of members. If any of the below member_* args are
-   * set, the member array will be paginated.
-   */
+/**
+ * @typedef {Object} GetMembersForEnterpriseParams
+ * @property fields
+ * @property filter Pass a SCIM-style query to filter members. This takes precedence over the
+ *                  all/normal/admins value of members. If any of the below member_* args are set,
+ *                  the member array will be paginated.
+ * @property sort This parameter expects a SCIM-style sorting value prefixed by a - to sort
+ *                descending. If no - is prefixed, it will be sorted ascending. Note that the
+ *                members array returned will be paginated if members is "normal" or "admins".
+ *                Pagination can be controlled with member_startIndex, etc, but the API
+ *                response will not contain the total available result count or pagination status data.
+ * @property sortBy This parameter expects a SCIM-style sorting value. Note that the members array
+ *                  returned will be paginated if members is "normal" or "admins". Pagination
+ *                  can be controlled with member_startIndex, etc, but the API response will not
+ *                  contain the total available result count or pagination status data.
+ * @property sortOrder Order to sort records by.
+ * @property startIndex Any integer between 0 and 9999.
+ * @property count SCIM-style filter.
+ * @property organizationFields Organization fields to include in response.
+ * @property boardFields Board fields to include in response.
+ */
+export interface GetMembersForEnterpriseParams {
+  fields?: AllOfOrListOf<MemberInvitedRecord>;
   filter?: string | "none";
-  /**
-   * This parameter expects a SCIM-style sorting value prefixed by a - to sort
-   * descending. If no - is prefixed, it will be sorted ascending. Note that
-   * the members array returned will be paginated if members is "normal" or
-   * "admins". Pagination can be controlled with member_startIndex, etc, but
-   * the API response will not contain the total available result count or
-   * pagination status data.
-   */
   sort?: string;
-  /**
-   * This parameter expects a SCIM-style sorting value. Note that the members
-   * array returned will be paginated if members is "normal" or "admins".
-   * Pagination can be controlled with member_startIndex, etc, but the API
-   * response will not contain the total available result count or pagination
-   * status data.
-   * @deprecated Use the "sort" param instead.
-   */
   sortBy: string;
-  /** @deprecated Use the "sort" param instead. */
   sortOrder: SortOrder;
-  /** Any integer between 0 and 9999. */
   startIndex?: number;
-  /** SCIM-style filter. */
   count?: string | "none";
   organizationFields?: AllOfOrListOf<OrganizationField>;
   boardFields?: AllOfOrListOf<BoardField>;
-}
-
-export type GetMembersReturnType<
-  TParams,
-  TPayload
-> = TParams extends GetMembersViaUrlParams
-  ? MemberRecord[]
-  : TParams extends GetMembersForEnterpriseParams
-  ? MemberRecord[]
-  : TPayload & { members: MemberRecord[] };
-
-export type AnyGetMembersParams =
-  | GetMembersViaQueryParams
-  | GetMembersViaUrlParams
-  | GetMembersForEnterpriseParams;
-
-export interface UpdateMemberParams {
-  avatarSource?: AvatarSourceField;
-  bio?: string;
-  /** New name for the member. Cannot begin or end with a space. */
-  fullName?: string;
-  /** New initials for the member. 1-4 characters long. */
-  initials?: string;
-  prefs?: {
-    colorBlind?: boolean;
-    locale?: string;
-    /** -1 for disabled, 1, or 60. */
-    minutesBetweenSummaries?: number;
-  };
-  /**
-   * New username for the member. At least 3 characters long, only lowercase
-   * letters, underscores, and numbers. Must be unique.
-   */
-  username?: string;
 }
 
 export class Member extends BaseResource {
@@ -272,14 +234,34 @@ export class Member extends BaseResource {
     savedSearches?: boolean;
     tokens?: AllOrNone;
   }): TypedFetch<MemberRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
-  public getMembers<
-    TPayload extends object,
-    TParams extends AnyGetMembersParams = {}
-  >(params?: TParams): TypedFetch<GetMembersReturnType<TParams, TPayload>> {
+  public getMembers(
+    params?:
+      | {
+          fields: AllOfOrListOf<MemberField>;
+        }
+      | GetMembersForEnterpriseParams,
+  ): TypedFetch<MemberRecord[]> {
+    if (!isEmpty(params)) {
+      const isEnterprise = /enterprise/gi.test(this.pathElements[0]);
+      if (!params?.fields && !isEnterprise) {
+        throw new Error(
+          "You can only specify the `fields` param if you're not getting boards for an Enterprise",
+        );
+      }
+    }
+
     return this.apiGet("/", params);
+  }
+
+  public getNestedMembers<TPayload extends object>(params?: {
+    members?: MemberFilter;
+    memberFields?: AllOfOrListOf<MemberField>;
+  }): TypedFetch<TPayload & { members: MemberRecord[] }> {
+    return this.apiGetNested(params);
   }
 
   public getMembersFilteredBy(
@@ -316,7 +298,18 @@ export class Member extends BaseResource {
     return this.apiPost("/avatar", { file });
   }
 
-  public updateMember(params?: UpdateMemberParams): TypedFetch<MemberRecord> {
+  public updateMember(params: {
+    avatarSource?: AvatarSourceField;
+    bio?: string;
+    fullName?: string;
+    initials?: string;
+    prefs?: {
+      colorBlind?: boolean;
+      locale?: string;
+      minutesBetweenSummaries?: number;
+    };
+    username?: string;
+  }): TypedFetch<MemberRecord> {
     const body = {} as { fullName?: string };
 
     if (/board/gi.test(this.pathElements[0])) {

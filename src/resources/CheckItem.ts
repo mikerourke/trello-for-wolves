@@ -27,6 +27,7 @@ export class CheckItem extends BaseResource {
   public getCheckItem(params?: {
     fields?: AllOfOrListOf<CheckItemField>;
   }): TypedFetch<CheckItemRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
@@ -55,25 +56,25 @@ export class CheckItem extends BaseResource {
     return this.apiPost("/convertToCard");
   }
 
-  public updateCheckItem(params?: {
+  public updateCheckItem(params: {
     idChecklist?: string | null;
     name?: string;
     pos?: PositionNumbered;
     state?: CheckItemState;
   }): TypedFetch<CheckItemRecord> {
+    this.validateUpdate(params);
     return this.apiPut("/", params);
   }
 
-  // TODO: Find out if these still work.
-  public updateName(value: string): TypedFetch<unknown> {
+  public updateName(value: string): TypedFetch<CheckItemRecord> {
     return this.apiPut("/name", { value });
   }
 
-  public updatePosition(value: PositionNumbered): TypedFetch<unknown> {
+  public updatePosition(value: PositionNumbered): TypedFetch<CheckItemRecord> {
     return this.apiPut("/pos", { value });
   }
 
-  public updateState(value: CheckItemState): TypedFetch<unknown> {
+  public updateState(value: CheckItemState): TypedFetch<CheckItemRecord> {
     return this.apiPut("/state", { value });
   }
 

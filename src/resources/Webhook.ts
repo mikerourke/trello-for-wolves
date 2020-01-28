@@ -1,6 +1,5 @@
 import { BaseResource } from "./BaseResource";
 import { TypedFetch, ValidResourceFields, ValueResponse } from "../typeDefs";
-import { isEmpty } from "../utils/isEmpty";
 
 /**
  * @typedef {Object} WebhookRecord
@@ -29,6 +28,7 @@ export type WebhookField = ValidResourceFields<WebhookRecord>;
  */
 export class Webhook extends BaseResource {
   public getWebhook(): TypedFetch<WebhookRecord> {
+    this.validateGetSingle();
     return this.apiGet("/");
   }
 
@@ -57,12 +57,7 @@ export class Webhook extends BaseResource {
     idModel?: string;
     active?: boolean;
   }): TypedFetch<WebhookRecord[]> {
-    if (isEmpty(params)) {
-      throw new Error(
-        "You must specify at least one param when updating a webhook",
-      );
-    }
-
+    this.validateUpdate(params);
     return this.apiPut("/", params);
   }
 

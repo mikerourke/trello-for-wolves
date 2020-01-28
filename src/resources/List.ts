@@ -10,26 +10,30 @@ import {
   ValidResourceFields,
   ValueResponse,
 } from "../typeDefs";
+import { LabelRecord } from "./Label";
 
 export type ListFilter = "all" | "closed" | "none" | "open";
 
+/**
+ * @typedef {Object} ListRecord
+ * @property id The ID of the list.
+ * @property name The name of the list.
+ * @property closed Whether the list is closed (archived).
+ * @property idBoard The ID of the board the list is on.
+ * @property pos The position of the list on the board.
+ * @property subscribed Whether the member is subscribed to this list.
+ * @property softLimit A soft limit for number of open cards in the list used by the
+ *                     List Limits Power-Up.
+ * @property [limits] Limit data associated with the list.
+ * @property [creationMethod] Creation method for the list.
+ */
 export interface ListRecord {
-  /** The ID of the list. */
   id: string;
-  /** The name of the list. */
   name: string;
-  /** Whether the list is closed (archived). */
   closed: boolean;
-  /** The ID of the board the list is on. */
   idBoard: string;
-  /** The position of the list on the board. */
   pos: number;
-  /** Whether the member is subscribed to this list. */
   subscribed: boolean;
-  /**
-   * A soft limit for number of open cards in the list used by the List
-   * Limits Power-Up.
-   */
   softLimit: number | null;
   limits?: LimitRecord;
   creationMethod?: string | null;
@@ -37,49 +41,28 @@ export interface ListRecord {
 
 export type ListField = ValidResourceFields<ListRecord>;
 
-export interface GetListsForBoardParams {
-  cards?: CardFilter;
-  cardFields?: AllOfOrListOf<CardField>;
-  filter?: ListFilter;
-  fields?: AllOfOrListOf<ListField>;
-}
-
-export interface GetListsViaQueryParams {
-  lists: ListFilter;
-  listFields?: AllOfOrListOf<ListField>;
-}
-
-export interface GetListsViaUrlParams {
-  lists?: ListFilter;
-  filter?: ListFilter;
-}
-
-type GetListsReturnType<
-  TParams,
-  TPayload
-> = TParams extends GetListsForBoardParams
-  ? ListRecord[]
-  : TParams extends GetListsViaUrlParams
-  ? ListRecord[]
-  : TPayload & { lists: ListRecord[] };
-
-type AnyGetListsParams =
-  | GetListsForBoardParams
-  | GetListsViaQueryParams
-  | GetListsViaUrlParams;
-
 export class List extends BaseResource {
   public getList(params?: {
     fields?: AllOfOrListOf<ListField>;
   }): TypedFetch<ListRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
-  public getLists<
-    TPayload extends object,
-    TParams extends AnyGetListsParams = {}
-  >(params?: TParams): TypedFetch<GetListsReturnType<TPayload, TParams>> {
+  public getLists(params?: {
+    cards?: CardFilter;
+    cardFields?: AllOfOrListOf<CardField>;
+    filter?: ListFilter;
+    fields?: AllOfOrListOf<ListField>;
+  }): TypedFetch<LabelRecord[]> {
     return this.apiGet("/", params);
+  }
+
+  public getNestedLists<TPayload extends object>(params?: {
+    lists: ListFilter;
+    listFields?: AllOfOrListOf<ListField>;
+  }): TypedFetch<TPayload & { lists: ListRecord[] }> {
+    return this.apiGetNested(params);
   }
 
   public getListsFilteredBy(filter: ListFilter): TypedFetch<ListRecord[]> {

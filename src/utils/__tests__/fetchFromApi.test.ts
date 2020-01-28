@@ -1,12 +1,15 @@
 import { fetchFromApi } from "../fetchFromApi";
 
 describe("the fetchFromApi method", () => {
+  beforeEach(() => {
+    global.captureFetchMock();
+  });
+
   afterEach(() => {
     global.resetFetchMocks();
   });
 
   test("correctly builds the API url based on the query params", async () => {
-    global.captureFetchMock();
     await fetchFromApi({
       endpoint: "/test",
       method: "GET",
@@ -20,7 +23,6 @@ describe("the fetchFromApi method", () => {
   });
 
   test("correctly builds the fetch config based on the body", async () => {
-    global.captureFetchMock();
     await fetchFromApi({
       endpoint: "/test",
       method: "GET",
@@ -87,7 +89,6 @@ describe("the fetchFromApi method", () => {
 
   describe("when the query params contains a `file` key", () => {
     test("the API url is correctly built", async () => {
-      global.captureFetchMock();
       await fetchFromApi({
         endpoint: "/test",
         method: "GET",
@@ -107,7 +108,6 @@ describe("the fetchFromApi method", () => {
     });
 
     test("the correct contents are added to the body", async () => {
-      global.captureFetchMock();
       const testFile = new File(["test"], "test");
       await fetchFromApi({
         endpoint: "/test",

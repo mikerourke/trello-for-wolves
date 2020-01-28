@@ -3,6 +3,7 @@ import { Board } from "./Board";
 import {
   AllOfOrListOf,
   AllOrNone,
+  Limits,
   TypedFetch,
   ValidResourceFields,
 } from "../typeDefs";
@@ -20,55 +21,50 @@ export type LabelColor =
   | "pink"
   | "black";
 
+/**
+ * @typedef {Object} LabelRecord
+ * @property id The ID of the label.
+ * @property idBoard The ID of the board the label is on.
+ * @property name The optional name of the label (0 - 16384 chars).
+ * @property color The color of the label (null means no color, and the label will
+ *                 not show on the front of cards).
+ * @property [limits] Limit data associated with the label.
+ * @property [creationMethod] Creation method for the label.
+ */
 export interface LabelRecord {
-  /** The ID of the label. */
   id: string;
-  /** The ID of the board the label is on. */
   idBoard: string;
-  /** The optional name of the label (0 - 16384 chars). */
   name: string;
-  /**
-   * The color of the label (null means no color, and the label will not show
-   * on the front of cards).
-   */
   color: LabelColor | null;
+  limits?: Limits;
+  creationMethod?: string | null;
 }
 
 export type LabelField = ValidResourceFields<LabelRecord>;
 
-export interface GetLabelsViaQueryParams {
-  labels?: AllOrNone;
-  labelFields?: AllOfOrListOf<LabelField>;
-  /** A number from 0 to 1000. */
-  labelsLimit?: number;
-}
-
-export interface GetLabelsViaUrlParams {
-  fields?: AllOfOrListOf<LabelField>;
-  limit?: number;
-}
-
-export type GetLabelsReturnType<
-  TParams,
-  TPayload
-> = TParams extends GetLabelsViaUrlParams
-  ? LabelRecord[]
-  : TPayload & { labels: LabelRecord[] };
-
-export type AnyGetLabelsParams =
-  | GetLabelsViaQueryParams
-  | GetLabelsViaUrlParams;
-
 export class Label extends BaseResource {
-  public getLabel(params?: GetLabelsViaUrlParams): TypedFetch<LabelRecord> {
+  public getLabel(params?: {
+    fields?: AllOfOrListOf<LabelField>;
+    limit?: number;
+  }): TypedFetch<LabelRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
-  public getLabels<
-    TPayload extends object,
-    TParams extends AnyGetLabelsParams = {}
-  >(params?: TParams): TypedFetch<GetLabelsReturnType<TParams, TPayload>> {
+  public getLabels(params?: {
+    fields?: AllOfOrListOf<LabelField>;
+    limit?: number;
+  }): TypedFetch<LabelRecord[]> {
     return this.apiGet("/", params);
+  }
+
+  public getNestedLabels<TPayload extends object>(params?: {
+    labels?: AllOrNone;
+    labelFields?: AllOfOrListOf<LabelField>;
+    /** A number from 0 to 1000. */
+    labelsLimit?: number;
+  }): TypedFetch<TPayload & { labels: LabelRecord[] }> {
+    return this.apiGetNested(params);
   }
 
   public addLabel(params: {

@@ -8,28 +8,28 @@ import {
   ValueResponse,
 } from "../typeDefs";
 
-export type TokenPermissionRecord = {
+export interface TokenPermissionRecord {
   idModel: string;
   modelType: string;
   read: boolean;
   write: boolean;
-};
+}
 
-export type TokenRecord = {
+export interface TokenRecord {
   id: string;
   identifier: string;
   idMember: string;
   dateCreated: string;
   dateExpires: string | null;
   permissions: TokenPermissionRecord[];
-};
+}
 
-export type TokenDeletedRecord = Omit<TokenRecord, "permissions"> & {
+export interface TokenDeletedRecord extends Omit<TokenRecord, "permissions"> {
   token: string;
   idApplication: string;
   origin: string;
   permissions: TokenPermissionRecord & { _id: string }[];
-};
+}
 
 export type TokenField = keyof TokenRecord;
 
@@ -38,6 +38,7 @@ export class Token extends BaseResource {
     fields?: AllOfOrListOf<TokenField>;
     webhooks?: boolean;
   }): TypedFetch<TokenRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 

@@ -2,9 +2,18 @@ import { BaseResource } from "./BaseResource";
 import { Action, ActionField, ActionType } from "./Action";
 import { Board, BoardField, BoardFilter } from "./Board";
 import { ListFilter } from "./List";
-import { Member, MemberInvitedField, MemberFilter } from "./Member";
-import { Membership, MembershipFilter } from "./Membership";
-import { BoardVisibilityFilter, OrganizationPref } from "./OrganizationPref";
+import {
+  Member,
+  MemberInvitedField,
+  MemberFilter,
+  MemberField,
+} from "./Member";
+import { Membership, MembershipFilter, MembershipRecord } from "./Membership";
+import {
+  BoardVisibilityFilter,
+  OrganizationPref,
+  OrganizationPrefsRecord,
+} from "./OrganizationPref";
 import {
   AllOfOrListOf,
   FileUpload,
@@ -12,37 +21,56 @@ import {
   Format,
   PermissionLevel,
   TypedFetch,
+  ValidResourceFields,
+  ValueResponse,
 } from "../typeDefs";
 
 export type OrganizationFilter = "all" | "members" | "none" | "public";
 
-export type OrganizationField =
-  | "billableMemberCount"
-  | "desc"
-  | "descData"
-  | "displayName"
-  | "idBoards"
-  | "invitations"
-  | "invited"
-  | "logoHash"
-  | "memberships"
-  | "name"
-  | "powerUps"
-  | "prefs"
-  | "premiumFeatures"
-  | "products"
-  | "url"
-  | "website";
+/**
+ * @typedef {Object} OrganizationRecord
+ * @property id The ID of the organization.
+ * @property billableMemberCount
+ * @property desc The description for the team
+ * @property descData If there are custom emoji in the desc this will contain
+ *                    information about them.
+ * @property displayName The name for the team. For example: Trello Inc.
+ * @property idBoards An array of board IDs that are in the team.
+ * @property invitations Array of invitations.
+ * @property invited Indicates if invited.
+ * @property logoHash Hash string for the organization logo.
+ * @property memberships Array of memberships associated with the organization.
+ * @property name The programmatic name for the team. For example: `trelloinc`.
+ * @property powerUps Array of power ups associated with the organization.
+ * @property prefs The preferences (settings) for the team.
+ * @property premiumFeatures Array of premium features associated with the organization.
+ * @property products Array of products associated with the organization.
+ * @property url The URL to the team page on Trello.
+ * @property website Website for the organization.
+ */
+export interface OrganizationRecord {
+  id: string;
+  billableMemberCount: string;
+  desc: string;
+  descData: object;
+  displayName: string;
+  idBoards: string[];
+  invitations: unknown[];
+  invited: string;
+  logoHash: string;
+  memberships: MembershipRecord[];
+  name: string;
+  powerUps: number[];
+  prefs: OrganizationPrefsRecord;
+  premiumFeatures: string[];
+  products: number[];
+  url: string;
+  website: string;
+}
+
+export type OrganizationField = ValidResourceFields<OrganizationRecord>;
 
 export class Organization extends BaseResource {
-  public getOrganizations(params?: {
-    filter?: AllOfOrListOf<OrganizationFilter>;
-    fields?: AllOfOrListOf<OrganizationField>;
-    paidAccount?: boolean;
-  }): TypedFetch<unknown> {
-    return this.apiGet("/", params);
-  }
-
   public getOrganization(params?: {
     actionFields?: AllOfOrListOf<ActionField>;
     actions?: AllOfOrListOf<ActionType>;
@@ -62,26 +90,45 @@ export class Organization extends BaseResource {
     boards?: AllOfOrListOf<BoardFilter>;
     fields?: AllOfOrListOf<OrganizationField>;
     memberActivity?: boolean;
-    memberFields?: AllOfOrListOf<MemberInvitedField>;
+    memberFields?: AllOfOrListOf<MemberField>;
     members?: MemberFilter;
     memberships?: AllOfOrListOf<MembershipFilter>;
     membershipsMember?: boolean;
-    membershipsMemberFields?: AllOfOrListOf<MemberInvitedField>;
+    membershipsMemberFields?: AllOfOrListOf<MemberField>;
     membersInvited?: MemberFilter;
     membersInvitedFields?: AllOfOrListOf<MemberInvitedField>;
     paidAccount?: boolean;
     pluginData?: boolean;
-  }): TypedFetch<unknown> {
+  }): TypedFetch<OrganizationRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
+  public getOrganizations(params?: {
+    filter?: OrganizationFilter;
+    fields?: AllOfOrListOf<OrganizationField>;
+    paidAccount?: boolean;
+  }): TypedFetch<OrganizationRecord[]> {
+    return this.apiGet("/", params);
+  }
+
+  // TODO: Ensure this works, it isn't actually documented.
+  public getNestedOrganizations<TPayload extends object>(params?: {
+    organizations?: OrganizationFilter;
+    organizationFields?: AllOfOrListOf<OrganizationField>;
+  }): TypedFetch<TPayload & { organizations: OrganizationRecord[] }> {
+    return this.apiGetNested(params);
+  }
+
   public getOrganizationsFilteredBy(
-    filter: AllOfOrListOf<OrganizationFilter>,
-  ): TypedFetch<unknown> {
+    filter: OrganizationFilter,
+  ): TypedFetch<OrganizationRecord[]> {
     return this.apiGet("/", { filter });
   }
 
-  public getFieldValue(field: OrganizationField): TypedFetch<unknown> {
+  public getFieldValue<T>(
+    field: OrganizationField,
+  ): TypedFetch<ValueResponse<T>> {
     return this.apiGet(`/${field}`);
   }
 
@@ -100,12 +147,12 @@ export class Organization extends BaseResource {
     return this.apiGet("/tags");
   }
 
-  public addOrganization(params?: {
+  public addOrganization(params: {
+    displayName: string;
     desc?: string;
-    displayName?: string;
     name?: string;
     website?: string;
-  }): TypedFetch<unknown> {
+  }): TypedFetch<OrganizationRecord> {
     return this.apiPost("/", { ...params, separator: "/" });
   }
 
@@ -117,10 +164,11 @@ export class Organization extends BaseResource {
     return this.apiPost("/tags", { name });
   }
 
-  public updateOrganization(params?: {
-    desc?: string;
-    displayName?: string;
+  public updateOrganization(params: {
     name?: string;
+    displayName?: string;
+    desc?: string;
+    website?: string | null;
     prefs?: {
       associatedDomain?: string;
       boardVisibilityRestrict?: {
@@ -133,24 +181,23 @@ export class Organization extends BaseResource {
       orgInviteRestrict?: string;
       permissionLevel?: PermissionLevel;
     };
-    website?: string | null;
-  }): TypedFetch<unknown> {
+  }): TypedFetch<OrganizationRecord> {
     return this.apiPut("/", { ...params, separator: "/" });
   }
 
-  public updateDescription(value: string): TypedFetch<unknown> {
+  public updateDescription(value: string): TypedFetch<OrganizationRecord> {
     return this.apiPut("/desc", { value });
   }
 
-  public updateDisplayName(value: string): TypedFetch<unknown> {
+  public updateDisplayName(value: string): TypedFetch<OrganizationRecord> {
     return this.apiPut("/displayName", { value });
   }
 
-  public updateName(value: string): TypedFetch<unknown> {
+  public updateName(value: string): TypedFetch<OrganizationRecord> {
     return this.apiPut("/name", { value });
   }
 
-  public updateWebsite(value: string | null): TypedFetch<unknown> {
+  public updateWebsite(value: string | null): TypedFetch<OrganizationRecord> {
     return this.apiPut("/website", { value });
   }
 

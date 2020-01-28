@@ -28,8 +28,8 @@ export class BoardStar extends BaseResource {
     return this.apiPost("/", params);
   }
 
-  public updateBoardStar(params?: {
-    pos?: PositionNumbered;
+  public updateBoardStar(params: {
+    pos: PositionNumbered;
   }): TypedFetch<BoardStarRecord> {
     return this.apiPut("/", params);
   }

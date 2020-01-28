@@ -71,6 +71,7 @@ export class Attachment extends BaseResource {
   public getAttachment(params?: {
     fields?: AllOfOrListOf<AttachmentField>;
   }): TypedFetch<AttachmentRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
@@ -87,13 +88,13 @@ export class Attachment extends BaseResource {
     mimeType?: string;
     url?: string;
   }): TypedFetch<AttachmentRecord> {
-    if ((params?.name ?? "").length > 256) {
+    if ((params.name ?? "").length > 256) {
       throw new Error(
         "The `name` field for an attachment cannot exceed 256 characters",
       );
     }
 
-    if ((params?.mimeType ?? "").length > 256) {
+    if ((params.mimeType ?? "").length > 256) {
       throw new Error(
         "The `mimeType` field for an attachment cannot exceed 256 characters",
       );

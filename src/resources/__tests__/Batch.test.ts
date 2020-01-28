@@ -14,7 +14,7 @@ describe("the Batch resource", () => {
     global.resetFetchMocks();
   });
 
-  test("configures the fetch call to make batch requests with no commas in requests", async () => {
+  test("makes batch requests with no commas in requests", async () => {
     const urls = [`/boards/${TEST_PARENT_ID}`, `/cards/${TEST_CHILD_ID}`];
     await trello.batch().makeRequests(urls);
     const result = global.getLastFetchCall();
@@ -24,7 +24,7 @@ describe("the Batch resource", () => {
     expect(result.url.searchParams.get("urls")).toBe(urls.join(","));
   });
 
-  test("configures the fetch call to make batch requests with commas in requests", async () => {
+  test("makes batch requests with commas in requests", async () => {
     const requestUrls = [
       `/boards/${TEST_PARENT_ID}/test=Other,Thing`,
       `/cards/${TEST_CHILD_ID}`,

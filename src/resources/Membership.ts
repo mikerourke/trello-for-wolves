@@ -1,11 +1,11 @@
 import { BaseResource } from "./BaseResource";
 import { BoardMemberType } from "./Board";
 import {
+  MemberField,
   MemberFilter,
   MemberInvitedField,
   MemberRecord,
   MemberType,
-  NestedMemberField,
 } from "./Member";
 import { AllOfOrListOf, TypedFetch } from "../typeDefs";
 
@@ -31,9 +31,9 @@ export interface MembershipRecord {
 export class Membership extends BaseResource {
   public getMembership(params?: {
     member?: boolean;
-    // Member Fields are only allowed when called from a Board:
-    memberFields?: AllOfOrListOf<MemberInvitedField>;
+    memberFields?: AllOfOrListOf<MemberField>;
   }): TypedFetch<MembershipRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
@@ -43,7 +43,7 @@ export class Membership extends BaseResource {
     // These are callable from a Board only:
     activity?: boolean;
     orgMemberType?: boolean;
-    memberFields?: AllOfOrListOf<NestedMemberField>;
+    memberFields?: AllOfOrListOf<MemberField>;
   }): TypedFetch<MembershipRecord[]> {
     return this.apiGet("/", params);
   }

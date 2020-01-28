@@ -12,51 +12,28 @@ import {
   ValueResponse,
 } from "../typeDefs";
 
+/**
+ * @typedef {Object} ChecklistRecord
+ * @property id The ID of the checklist.
+ * @property idBoard The ID of the board the checklist is on.
+ * @property idCard The ID of the card the checklist is on.
+ * @property name The name of the checklist.
+ * @property pos The position of the checklist on the card (relative to any other checklists
+ *               on the card).
+ * @property [limits] Limit data associated with the checklist.
+ * @property [creationMethod] Creation method for the checklist.
+ */
 export interface ChecklistRecord {
-  /** The ID of the checklist. */
   id: string;
-  /** The ID of the board the checklist is on. */
   idBoard: string;
-  /** The ID of the card the checklist is on. */
   idCard: string;
-  /** The name of the checklist. */
   name: string;
-  /**
-   * The position of the checklist on the card (relative to any other
-   * checklists on the card).
-   */
   pos: number;
   limits?: Limits;
   creationMethod?: string | null;
 }
 
 export type ChecklistField = ValidResourceFields<ChecklistRecord>;
-
-export interface GetChecklistsViaQueryParams {
-  checklists?: AllOrNone;
-  checklistFields?: AllOfOrListOf<ChecklistField>;
-  checkItems?: "all";
-  checkItemFields?: AllOfOrListOf<CheckItemField>;
-}
-
-export type GetChecklistsViaUrlParams = {
-  cards?: CardFilter;
-  checkItemFields?: AllOfOrListOf<CheckItemField>;
-  checkItems?: AllOrNone;
-  fields?: AllOfOrListOf<ChecklistField>;
-  filter?: AllOrNone;
-};
-
-type GetChecklistsReturnType<
-  TParams,
-  TPayload
-> = TParams extends GetChecklistsViaQueryParams
-  ? TPayload & { checklists: ChecklistRecord[] }
-  : ChecklistRecord[];
-
-export type AllGetChecklistsParams =
-  | GetChecklistsViaQueryParams
-  | GetChecklistsViaUrlParams;
 
 export class Checklist extends BaseResource {
   public getChecklist(params?: {
@@ -65,14 +42,27 @@ export class Checklist extends BaseResource {
     checkItems?: AllOrNone;
     fields?: AllOfOrListOf<ChecklistField>;
   }): TypedFetch<ChecklistRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
-  public getChecklists<
-    TPayload extends object,
-    TParams extends AllGetChecklistsParams
-  >(params?: TParams): TypedFetch<GetChecklistsReturnType<TParams, TPayload>> {
+  public getChecklists(params?: {
+    cards?: CardFilter;
+    checkItemFields?: AllOfOrListOf<CheckItemField>;
+    checkItems?: AllOrNone;
+    fields?: AllOfOrListOf<ChecklistField>;
+    filter?: AllOrNone;
+  }): TypedFetch<ChecklistRecord[]> {
     return this.apiGet("/", params);
+  }
+
+  public getNestedChecklists<TPayload extends object>(params?: {
+    checklists?: AllOrNone;
+    checklistFields?: AllOfOrListOf<ChecklistField>;
+    checkItems?: "all";
+    checkItemFields?: AllOfOrListOf<CheckItemField>;
+  }): TypedFetch<TPayload & { checklists: ChecklistRecord[] }> {
+    return this.apiGetNested(params);
   }
 
   public getFieldValue<T>(field: ChecklistField): TypedFetch<ValueResponse<T>> {
@@ -92,10 +82,11 @@ export class Checklist extends BaseResource {
     return this.apiPost("/", updatedArgs);
   }
 
-  public updateChecklist(params?: {
+  public updateChecklist(params: {
     name?: string;
     pos?: PositionNumbered;
   }): TypedFetch<ChecklistRecord> {
+    this.validateUpdate(params);
     return this.apiPut("/", params);
   }
 

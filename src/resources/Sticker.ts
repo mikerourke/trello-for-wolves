@@ -45,6 +45,7 @@ export class Sticker extends BaseResource {
   public getSticker(params?: {
     fields?: AllOfOrListOf<StickerField>;
   }): TypedFetch<StickerRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
@@ -60,7 +61,7 @@ export class Sticker extends BaseResource {
     top: number;
     zIndex: number;
     rotate?: number;
-  }): TypedFetch<unknown> {
+  }): TypedFetch<StickerRecord> {
     return this.apiPost("/", params);
   }
 
@@ -68,12 +69,12 @@ export class Sticker extends BaseResource {
     return this.apiPost("/", { file });
   }
 
-  public updateSticker(params?: {
+  public updateSticker(params: {
     left?: number;
     rotate?: number;
     top?: number;
     zIndex?: number;
-  }): TypedFetch<unknown> {
+  }): TypedFetch<StickerRecord> {
     return this.apiPut("/", params);
   }
 

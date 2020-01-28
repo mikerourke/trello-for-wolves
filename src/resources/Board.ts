@@ -1,4 +1,3 @@
-import { isEmpty } from "../utils/isEmpty";
 import { BaseResource } from "./BaseResource";
 import { Action, ActionField } from "./Action";
 import { AttachmentField, AttachmentFilter } from "./Attachment";
@@ -262,6 +261,7 @@ export class Board extends BaseResource {
     pluginData?: boolean;
     tags?: boolean;
   }): TypedFetch<BoardRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
@@ -389,12 +389,7 @@ export class Board extends BaseResource {
       blue?: string;
     };
   }): TypedFetch<unknown> {
-    if (isEmpty(params)) {
-      throw new Error(
-        "You must specify at least one param when updating a board",
-      );
-    }
-
+    this.validateUpdate(params);
     return this.apiPut("/", { ...params, separator: "/" });
   }
 

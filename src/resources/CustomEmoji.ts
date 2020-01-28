@@ -19,6 +19,7 @@ export class CustomEmoji extends BaseResource {
   public getCustomEmoji(params?: {
     fields?: AllOfOrListOf<CustomEmojiField>;
   }): TypedFetch<CustomEmojiRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 

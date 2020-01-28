@@ -1,13 +1,32 @@
 import { BaseResource } from "./BaseResource";
-import { TypedFetch } from "../typeDefs";
-import { MemberRecord } from "./Member";
+import { AllOfOrListOf, TypedFetch } from "../typeDefs";
+import { MemberField, MemberRecord } from "./Member";
 
-export interface EmojiRecord {
+export interface EmojiSkinVariationRecord {
+  unified: string;
+  native: string;
+  sheetX: number;
+  sheetY: number;
+}
+
+export interface ReactionEmojiRecord {
   unified: string;
   native: string;
   name: string;
   skinVariation: string;
   shortName: string;
+}
+
+export interface EmojiRecord extends ReactionEmojiRecord {
+  shortNames: string[];
+  text: string | null;
+  texts: string[] | null;
+  category: string;
+  sheetX: number;
+  sheetY: number;
+  skinVariations: Record<string, EmojiSkinVariationRecord>;
+  tts: string;
+  keywords: string[];
 }
 
 export interface ReactionRecord {
@@ -23,22 +42,33 @@ export class Reaction extends BaseResource {
   public getEmoji(params?: {
     locale: string;
     spritesheets?: boolean;
-  }): TypedFetch<unknown> {
+  }): TypedFetch<Record<string, EmojiRecord[]>> {
+    this.validateGetSingle();
     return this.apiGet("/emoji", params);
   }
 
-  public getReactions(params?: {
-    emoji?: boolean;
+  public getReaction(params?: {
     member?: boolean;
-  }): TypedFetch<unknown> {
+    emoji?: boolean;
+  }): TypedFetch<ReactionRecord> {
     return this.apiGet("/", params);
   }
 
-  public getReaction(params?: {
-    emoji?: boolean;
+  public getReactions(params?: {
     member?: boolean;
-  }): TypedFetch<unknown> {
+    emoji?: boolean;
+  }): TypedFetch<ReactionRecord[]> {
     return this.apiGet("/", params);
+  }
+
+  public getNestedReactions<TPayload extends object>(params?: {
+    reactions?: boolean;
+    reactionsSummary?: boolean;
+    reactionsMember?: boolean;
+    reactionsMemberFields?: AllOfOrListOf<MemberField>;
+    reactionsEmoji?: boolean;
+  }): TypedFetch<TPayload & { reactions: ReactionRecord[] }> {
+    return this.apiGetNested(params);
   }
 
   public getReactionsSummary(): TypedFetch<unknown> {

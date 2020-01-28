@@ -1,5 +1,6 @@
 import { fetchFromApi, HttpMethod } from "../utils/fetchFromApi";
 import { Config, TypedResponse } from "../typeDefs";
+import { isEmpty } from "../utils/isEmpty";
 
 /**
  * Base class for resources.
@@ -24,6 +25,31 @@ export class BaseResource {
     this.pathElements = [...parentElements, groupName];
     if (recordId !== "") {
       this.pathElements.push(recordId);
+    }
+  }
+
+  protected validateGetSingle(): void {
+    // If we're getting a board or list associated with the parent resource,
+    // the groupName will be `/board` or `/list`. We don't need the ID of the
+    // resource to fetch it:
+    if (!this.groupName.endsWith("s")) {
+      return;
+    }
+
+    if (this.recordId === "") {
+      const errMessage = [
+        `You cannot call get${this.singleDisplay}() without specifying an ID.`,
+        "Example: trello.actions(<NEED AN ID!>).getAction()",
+      ].join(" ");
+      throw new Error(errMessage);
+    }
+  }
+
+  protected validateUpdate(params: object | undefined): void {
+    if (isEmpty(params)) {
+      throw new Error(
+        `You must specify at least one param when updating a ${this.singleDisplay}`,
+      );
     }
   }
 
@@ -100,5 +126,16 @@ export class BaseResource {
       queryParamsByName,
       body,
     });
+  }
+
+  private get singleDisplay(): string {
+    return this.groupDisplay.slice(0, -1);
+  }
+
+  private get groupDisplay(): string {
+    return this.groupName
+      .charAt(0)
+      .toUpperCase()
+      .concat(this.groupName.slice(1));
   }
 }

@@ -1,12 +1,20 @@
 import { BaseResource } from "./BaseResource";
 import { PositionNumbered, TypedFetch } from "../typeDefs";
 
+export interface SavedSearchRecord {
+  id: string;
+  name: string;
+  query: string;
+  pos: number;
+}
+
 export class SavedSearch extends BaseResource {
-  public getSavedSearches(): TypedFetch<unknown> {
+  public getSavedSearch(): TypedFetch<SavedSearchRecord> {
+    this.validateGetSingle();
     return this.apiGet("/");
   }
 
-  public getSavedSearch(): TypedFetch<unknown> {
+  public getSavedSearches(): TypedFetch<SavedSearchRecord[]> {
     return this.apiGet("/");
   }
 
@@ -14,27 +22,29 @@ export class SavedSearch extends BaseResource {
     name: string;
     pos: PositionNumbered;
     query: string;
-  }): TypedFetch<unknown> {
+  }): TypedFetch<SavedSearchRecord> {
     return this.apiPost("/", params);
   }
 
-  public updateSavedSearch(params?: {
+  public updateSavedSearch(params: {
     name?: string;
     pos?: PositionNumbered;
     query?: string;
-  }): TypedFetch<unknown> {
+  }): TypedFetch<SavedSearchRecord> {
     return this.apiPut("/", params);
   }
 
-  public updateName(value: string): TypedFetch<unknown> {
+  public updateName(value: string): TypedFetch<SavedSearchRecord> {
     return this.apiPut("/name", { value });
   }
 
-  public updatePosition(value: PositionNumbered): TypedFetch<unknown> {
+  public updatePosition(
+    value: PositionNumbered,
+  ): TypedFetch<SavedSearchRecord> {
     return this.apiPut("/pos", { value });
   }
 
-  public updateQuery(value: string): TypedFetch<unknown> {
+  public updateQuery(value: string): TypedFetch<SavedSearchRecord> {
     return this.apiPut("/query", { value });
   }
 

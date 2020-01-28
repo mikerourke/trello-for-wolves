@@ -205,6 +205,7 @@ export class Card extends BaseResource {
     stickerFields?: AllOfOrListOf<StickerField>;
     customFieldItems?: boolean;
   }): TypedFetch<CardRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
@@ -307,22 +308,23 @@ export class Card extends BaseResource {
       subscribed?: boolean;
     } & CardMapPowerUpRecord,
   ): TypedFetch<CardRecord> {
+    this.validateUpdate(params);
     return this.apiPut("/", params);
   }
 
-  public updateClosedStatus(value: boolean): TypedFetch<unknown> {
+  public updateClosedStatus(value: boolean): TypedFetch<CardRecord> {
     return this.apiPut("/closed", { value });
   }
 
-  public updateDescription(value: string): TypedFetch<unknown> {
+  public updateDescription(value: string): TypedFetch<CardRecord> {
     return this.apiPut("/desc", { value });
   }
 
-  public updateDueDate(value: Date | null): TypedFetch<unknown> {
+  public updateDueDate(value: Date | null): TypedFetch<CardRecord> {
     return this.apiPut("/due", { value });
   }
 
-  public updateDueComplete(value: boolean): TypedFetch<unknown> {
+  public updateDueComplete(value: boolean): TypedFetch<CardRecord> {
     return this.apiPut("/dueComplete", { value });
   }
 
@@ -354,15 +356,15 @@ export class Card extends BaseResource {
     return this.apiPut("/idMembers", { value: idMembers });
   }
 
-  public updateName(value: string): TypedFetch<unknown> {
+  public updateName(value: string): TypedFetch<CardRecord> {
     return this.apiPut("/name", { value });
   }
 
-  public updatePosition(value: PositionNumbered): TypedFetch<unknown> {
+  public updatePosition(value: PositionNumbered): TypedFetch<CardRecord> {
     return this.apiPut("/pos", { value });
   }
 
-  public updateSubscribed(value: boolean): TypedFetch<unknown> {
+  public updateSubscribed(value: boolean): TypedFetch<CardRecord> {
     return this.apiPut("/subscribed", { value });
   }
 

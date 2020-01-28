@@ -5,6 +5,19 @@ export type BoardVisibilityFilter = "admin" | "none" | "org";
 
 export type BoardVisibilityRestrictionLevel = "org" | "private" | "public";
 
+export interface OrganizationPrefsRecord {
+  associatedDomain: string;
+  boardVisibilityRestrict: {
+    orgRestriction: BoardVisibilityFilter;
+    privateRestriction: BoardVisibilityFilter;
+    publicRestriction: BoardVisibilityFilter;
+  };
+  externalMembersDisabled: boolean;
+  googleAppsVersion: number;
+  orgInviteRestrict: string;
+  permissionLevel: PermissionLevel;
+}
+
 export class OrganizationPref extends BaseResource {
   public updateAssociatedDomain(value: string): TypedFetch<unknown> {
     return this.apiPut("/associatedDomain", { value });

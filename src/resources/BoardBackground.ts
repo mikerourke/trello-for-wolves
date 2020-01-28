@@ -55,6 +55,7 @@ export class BoardBackground extends BaseResource {
   public getBoardBackground(params?: {
     fields?: AllOfOrListOf<BoardBackgroundField | CustomBoardBackgroundRecord>;
   }): TypedFetch<AnyBoardBackgroundRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
@@ -70,10 +71,11 @@ export class BoardBackground extends BaseResource {
     return this.apiPost("/", { file });
   }
 
-  public updateBoardBackground(params?: {
+  public updateBoardBackground(params: {
     brightness?: BoardBackgroundBrightness;
     tile?: boolean;
   }): TypedFetch<AnyBoardBackgroundRecord> {
+    this.validateUpdate(params);
     return this.apiPut("/", params);
   }
 

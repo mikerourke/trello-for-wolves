@@ -44,18 +44,25 @@ export type NotificationType =
 
 export type ReadFilter = "all" | "read" | "unread";
 
+/**
+ * @typedef {Object} NotificationRecord
+ * @property id The ID of the notification.
+ * @property data Relevant data regarding the notification.
+ * @property date The datetime the notification was triggered.
+ * @property idMemberCreator The ID of the member who triggered the notification.
+ * @property type The type of the notification.
+ * @property unread Whether the notification hasn't been read yet.
+ * @property [memberCreator] Member creator data associated with the notification.
+ * @property [dateRead] Date the notification was read.
+ * @property [idAction] Action ID associated with the notification.
+ * @property [reactions] Reactions data associated with the notification.
+ */
 export interface NotificationRecord {
-  /** The ID of the notification. */
   id: string;
-  /** Relevant data regarding the notification. */
   data: unknown;
-  /** The datetime the notification was triggered. */
   date: string;
-  /** The ID of the member who triggered the notification. */
   idMemberCreator: string;
-  /** The type of the notification. */
   type: NotificationType;
-  /** Whether the notification hasn't been read yet. */
   unread: boolean;
   memberCreator?: MemberRecord;
   dateRead?: string;
@@ -67,43 +74,6 @@ export type NotificationField = Omit<
   ValidResourceFields<NotificationRecord>,
   "dateRead" | "idAction" | "reactions"
 >;
-
-export interface GetNotificationsViaQueryParams {
-  notifications?: AllOfOrListOf<NotificationType>;
-  notificationsEntities?: boolean;
-  notificationsDisplay?: boolean;
-  notificationsLimit?: number;
-  notificationFields?: AllOfOrListOf<NotificationField>;
-  notificationMemberCreator?: boolean;
-  notificationMemberCreatorFields?: AllOfOrListOf<MemberField>;
-  notificationBefore?: string | null;
-  notificationSince?: string | null;
-}
-
-export interface GetNotificationsViaUrlParams {
-  entities?: boolean;
-  display?: boolean;
-  filter?: AllOfOrListOf<NotificationType>;
-  readFilter?: ReadFilter;
-  fields?: AllOfOrListOf<NotificationField>;
-  limit?: number;
-  page?: number;
-  before?: string | null;
-  since?: string | null;
-  memberCreator?: boolean;
-  memberCreatorFields?: AllOfOrListOf<MemberField>;
-}
-
-export type GetNotificationsReturnType<
-  TParams,
-  TPayload
-> = TParams extends GetNotificationsViaUrlParams
-  ? NotificationRecord[]
-  : TPayload & { notifications: NotificationRecord[] };
-
-export type AnyGetNotificationsParams =
-  | GetNotificationsViaQueryParams
-  | GetNotificationsViaUrlParams;
 
 export class Notification extends BaseResource {
   public getNotification(params?: {
@@ -122,16 +92,38 @@ export class Notification extends BaseResource {
     organization?: boolean;
     organizationFields?: AllOfOrListOf<OrganizationField>;
   }): TypedFetch<NotificationRecord> {
+    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
-  public getNotifications<
-    TPayload extends object,
-    TParams extends AnyGetNotificationsParams = {}
-  >(
-    params?: TParams,
-  ): TypedFetch<GetNotificationsReturnType<TParams, TPayload>> {
+  public getNotifications(params?: {
+    entities?: boolean;
+    display?: boolean;
+    filter?: AllOfOrListOf<NotificationType>;
+    readFilter?: ReadFilter;
+    fields?: AllOfOrListOf<NotificationField>;
+    limit?: number;
+    page?: number;
+    before?: string | null;
+    since?: string | null;
+    memberCreator?: boolean;
+    memberCreatorFields?: AllOfOrListOf<MemberField>;
+  }): TypedFetch<NotificationRecord[]> {
     return this.apiGet("/", params);
+  }
+
+  public getNestedNotifications<TPayload extends object>(params?: {
+    notifications?: AllOfOrListOf<NotificationType>;
+    notificationsEntities?: boolean;
+    notificationsDisplay?: boolean;
+    notificationsLimit?: number;
+    notificationFields?: AllOfOrListOf<NotificationField>;
+    notificationMemberCreator?: boolean;
+    notificationMemberCreatorFields?: AllOfOrListOf<MemberField>;
+    notificationBefore?: string | null;
+    notificationSince?: string | null;
+  }): TypedFetch<TPayload & { notifications: NotificationRecord[] }> {
+    return this.apiGetNested(params);
   }
 
   public getNotificationsFilteredBy(
@@ -154,7 +146,7 @@ export class Notification extends BaseResource {
     return this.apiGet("/entities");
   }
 
-  public updateNotification(params?: {
+  public updateNotification(params: {
     unread?: boolean;
   }): TypedFetch<NotificationRecord> {
     return this.apiPut("/", params);

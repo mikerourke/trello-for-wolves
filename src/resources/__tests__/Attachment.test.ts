@@ -14,7 +14,7 @@ describe("the Attachment resource", () => {
     global.resetFetchMocks();
   });
 
-  test("configures the fetch call for a single attachment", async () => {
+  test("gets a single attachment", async () => {
     await trello
       .cards(TEST_CARD_ID)
       .attachments(TEST_ATTACH_ID)
@@ -27,7 +27,7 @@ describe("the Attachment resource", () => {
     );
   });
 
-  test("configures the fetch call for multiple attachments", async () => {
+  test("gets multiple attachments", async () => {
     await trello
       .cards(TEST_CARD_ID)
       .attachments()
@@ -41,22 +41,69 @@ describe("the Attachment resource", () => {
     expect(result.url.searchParams.get("filter")).toBe("all");
   });
 
-  // TODO: Validate that form data works.
-  test("configures the fetch call to upload an attachment", async () => {
+  test("uploads an attachment", async () => {
+    const testFile = new File(["test"], "test");
     await trello
       .cards(TEST_CARD_ID)
       .attachments()
       .uploadAttachment({
         name: "TEST",
-        file: new File(["test"], "test"),
+        file: testFile,
       });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
     expect(result.url.pathname).toBe(`/1/cards/${TEST_CARD_ID}/attachments`);
+    expect(result.config.body.get("file")).toEqual(testFile);
+    expect(result.config.body.get("name")).toBe("TEST");
   });
 
-  test("configures the fetch call to delete an attachment", async () => {
+  test("throws an error if the name param is longer than 256 characters", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello
+        .cards(TEST_CARD_ID)
+        .attachments()
+        .uploadAttachment({
+          name: "TEST".repeat(80),
+        });
+    } catch (err) {
+      expect(err.message).toMatch(/cannot exceed 256/gi);
+    }
+  });
+
+  test("throws an error if the mimeType param is longer than 256 characters", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello
+        .cards(TEST_CARD_ID)
+        .attachments()
+        .uploadAttachment({
+          mimeType: "TEST".repeat(80),
+        });
+    } catch (err) {
+      expect(err.message).toMatch(/cannot exceed 256/gi);
+    }
+  });
+
+  test("throws an error if the url param is invalid", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello
+        .cards(TEST_CARD_ID)
+        .attachments()
+        .uploadAttachment({
+          url: "TEST",
+        });
+    } catch (err) {
+      expect(err.message).toMatch(/must start with/gi);
+    }
+  });
+
+  test("deletes an attachment", async () => {
     await trello
       .cards(TEST_CARD_ID)
       .attachments(TEST_ATTACH_ID)
