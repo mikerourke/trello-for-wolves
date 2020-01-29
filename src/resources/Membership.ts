@@ -33,7 +33,6 @@ export class Membership extends BaseResource {
     member?: boolean;
     memberFields?: AllOfOrListOf<MemberField>;
   }): TypedFetch<MembershipRecord> {
-    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 

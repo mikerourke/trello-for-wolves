@@ -35,7 +35,6 @@ export class Label extends BaseResource {
     fields?: AllOfOrListOf<LabelField>;
     limit?: number;
   }): TypedFetch<LabelRecord> {
-    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
@@ -71,7 +70,6 @@ export class Label extends BaseResource {
     color?: ColorName | null;
     name?: string;
   }): TypedFetch<LabelRecord> {
-    this.validateUpdate(params);
     return this.apiPut("/", params);
   }
 

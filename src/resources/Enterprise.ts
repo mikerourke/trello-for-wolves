@@ -79,7 +79,6 @@ export class Enterprise extends BaseResource {
     organizationPaidAccounts?: boolean;
     organizationMemberships?: ValueOrArray<MembershipFilter>;
   }): TypedFetch<EnterpriseRecord> {
-    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 

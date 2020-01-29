@@ -213,7 +213,6 @@ export class Card extends BaseResource {
     stickerFields?: AllOfOrListOf<StickerField>;
     customFieldItems?: boolean;
   }): TypedFetch<CardRecord> {
-    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
@@ -316,7 +315,6 @@ export class Card extends BaseResource {
       subscribed?: boolean;
     } & CardMapPowerUpRecord,
   ): TypedFetch<CardRecord> {
-    this.validateUpdate(params);
     return this.apiPut("/", params);
   }
 

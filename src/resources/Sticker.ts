@@ -6,12 +6,12 @@ import {
   ValidResourceFields,
 } from "../typeDefs";
 
-export interface ImageScaledRecord {
+export interface StickerScaledRecord {
+  _id: string;
   url: string;
   height: number;
   width: number;
   scaled: boolean;
-  _id: string;
 }
 
 /**
@@ -31,7 +31,7 @@ export interface ImageScaledRecord {
 export interface StickerRecord {
   id: string;
   image: string;
-  imageScaled: ImageScaledRecord[];
+  imageScaled: StickerScaledRecord[];
   imageUrl: string;
   left: number;
   top: number;
@@ -39,20 +39,39 @@ export interface StickerRecord {
   zIndex: number;
 }
 
+export interface CustomStickerRecord {
+  id: string;
+  url: string;
+  scaled: StickerScaledRecord[];
+}
+
 export type StickerField = ValidResourceFields<StickerRecord>;
 
+export type AnyStickerRecord = StickerRecord & CustomStickerRecord;
+
+/**
+ * This class handles both the "stickers" and "customStickers" resources.
+ * Stickers are associated with cards while custom stickers are associated
+ * with a member.
+ * @class
+ */
 export class Sticker extends BaseResource {
   public getSticker(params?: {
     fields?: AllOfOrListOf<StickerField>;
-  }): TypedFetch<StickerRecord> {
-    this.validateGetSingle();
+  }): TypedFetch<AnyStickerRecord> {
     return this.apiGet("/", params);
   }
 
   public getStickers(params?: {
     fields?: AllOfOrListOf<StickerField>;
-  }): TypedFetch<StickerRecord[]> {
+  }): TypedFetch<AnyStickerRecord[]> {
     return this.apiGet("/", params);
+  }
+
+  public getNestedStickers<TPayload extends object>(params?: {
+    stickers?: AllOfOrListOf<StickerField>;
+  }): TypedFetch<TPayload & { stickers: AnyStickerRecord[] }> {
+    return this.apiGetNested(params);
   }
 
   public addSticker(params: {
@@ -61,11 +80,13 @@ export class Sticker extends BaseResource {
     top: number;
     zIndex: number;
     rotate?: number;
-  }): TypedFetch<StickerRecord> {
+  }): TypedFetch<AnyStickerRecord> {
     return this.apiPost("/", params);
   }
 
-  public uploadSticker(file: FileUpload): TypedFetch<unknown> {
+  public uploadCustomSticker(
+    file: FileUpload,
+  ): TypedFetch<CustomStickerRecord> {
     return this.apiPost("/", { file });
   }
 
@@ -78,7 +99,11 @@ export class Sticker extends BaseResource {
     return this.apiPut("/", params);
   }
 
-  public deleteSticker(): TypedFetch<unknown> {
+  public removeSticker(): TypedFetch<unknown> {
+    return this.apiDelete("/");
+  }
+
+  public deleteCustomSticker(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
 }

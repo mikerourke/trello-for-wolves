@@ -44,6 +44,9 @@ export interface BoardBackgroundImageRecord
   scaled: BoardBackgroundImageScaledRecord[];
 }
 
+export type AnyBoardBackgroundRecord = BoardBackground &
+  BoardBackgroundImageRecord;
+
 export type BoardBackgroundField =
   | "brightness"
   | "fullSizeUrl"
@@ -59,28 +62,26 @@ export type BoardBackgroundField =
 export class BoardBackground extends BaseResource {
   public getBoardBackground(params?: {
     fields?: AllOfOrListOf<BoardBackgroundField>;
-  }): TypedFetch<BoardBackgroundRecord | BoardBackgroundImageRecord> {
-    this.validateGetSingle();
+  }): TypedFetch<AnyBoardBackgroundRecord> {
     return this.apiGet("/", params);
   }
 
   public getBoardBackgrounds(params?: {
     filter?: BoardBackgroundFilter;
-  }): TypedFetch<BoardBackgroundRecord[] | BoardBackgroundImageRecord[]> {
+  }): TypedFetch<AnyBoardBackgroundRecord[]> {
     return this.apiGet("/", params);
   }
 
   public uploadBoardBackground(
     file: FileUpload,
-  ): TypedFetch<BoardBackgroundRecord | BoardBackgroundImageRecord> {
+  ): TypedFetch<BoardBackgroundImageRecord> {
     return this.apiPost("/", { file });
   }
 
   public updateBoardBackground(params: {
     brightness?: BoardBackgroundBrightness;
     tile?: boolean;
-  }): TypedFetch<BoardBackgroundRecord | BoardBackgroundImageRecord> {
-    this.validateUpdate(params);
+  }): TypedFetch<AnyBoardBackgroundRecord> {
     return this.apiPut("/", params);
   }
 

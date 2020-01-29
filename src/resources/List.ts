@@ -45,7 +45,6 @@ export class List extends BaseResource {
   public getList(params?: {
     fields?: AllOfOrListOf<ListField>;
   }): TypedFetch<ListRecord> {
-    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 

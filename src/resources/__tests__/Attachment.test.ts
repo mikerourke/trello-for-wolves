@@ -1,7 +1,7 @@
 import { Trello } from "../../index";
 
-const TEST_ATTACH_ID = "60024c859ab0c51945243414";
 const TEST_CARD_ID = "d9a04f38b919f23b8cc7bf01";
+const TEST_ATTACH_ID = "60024c859ab0c51945243414";
 
 describe("the Attachment resource", () => {
   const trello = new Trello(global.trelloConfig);

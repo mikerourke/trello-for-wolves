@@ -80,5 +80,14 @@
     "unicorn/no-new-buffer": "error",
     "unicorn/prefer-add-event-listener": "error",
     "unicorn/throw-new-error": "error"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["src/**/*.test.ts"],
+      "rules": {
+        "no-console": "off",
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    }
+  ]
 }

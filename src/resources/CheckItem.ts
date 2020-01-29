@@ -43,7 +43,6 @@ export class CheckItem extends BaseResource {
   public getCheckItem(params?: {
     fields?: AllOfOrListOf<CheckItemField>;
   }): TypedFetch<CheckItemRecord> {
-    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
@@ -78,7 +77,6 @@ export class CheckItem extends BaseResource {
     pos?: PositionOrFloat;
     state?: CheckItemState;
   }): TypedFetch<CheckItemRecord> {
-    this.validateUpdate(params);
     return this.apiPut("/", params);
   }
 

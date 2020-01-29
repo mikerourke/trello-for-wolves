@@ -109,7 +109,6 @@ export class Organization extends BaseResource {
     paidAccount?: boolean;
     pluginData?: boolean;
   }): TypedFetch<OrganizationRecord> {
-    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 

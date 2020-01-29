@@ -12,7 +12,7 @@ import { Member } from "./resources/Member";
 import { Notification } from "./resources/Notification";
 import { Organization } from "./resources/Organization";
 import { Plugin } from "./resources/Plugin";
-import { Reaction } from "./resources/Reaction";
+import { Emoji } from "./resources/Reaction";
 import { Search } from "./resources/Search";
 import { Token } from "./resources/Token";
 import { Type } from "./resources/Type";
@@ -90,6 +90,10 @@ export class Trello {
     });
   }
 
+  public emoji(): Emoji {
+    return new Emoji(this.config, [], "emoji");
+  }
+
   public enterprises(idEnterprise: string = ""): Enterprise {
     return new Enterprise(this.config, [], "enterprise", {
       identifier: idEnterprise,
@@ -129,12 +133,6 @@ export class Trello {
   public plugins(idPlugin: string = ""): Plugin {
     return new Plugin(this.config, [], "plugins", {
       identifier: idPlugin,
-    });
-  }
-
-  public reactions(idReaction: string = ""): Reaction {
-    return new Reaction(this.config, [], "reactions", {
-      identifier: idReaction,
     });
   }
 

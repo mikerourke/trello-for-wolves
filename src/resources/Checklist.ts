@@ -53,7 +53,6 @@ export class Checklist extends BaseResource {
     checkItems?: AllOrNone;
     fields?: AllOfOrListOf<ChecklistField>;
   }): TypedFetch<ChecklistRecord> {
-    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
@@ -97,7 +96,6 @@ export class Checklist extends BaseResource {
     name?: string;
     pos?: PositionOrFloat;
   }): TypedFetch<ChecklistRecord> {
-    this.validateUpdate(params);
     return this.apiPut("/", params);
   }
 

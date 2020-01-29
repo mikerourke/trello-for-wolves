@@ -65,7 +65,6 @@ type NestedResponse =
 // TODO: Add handling for cards (https://developers.trello.com/reference#setting-custom-field-values-on-cards).
 export class CustomField extends BaseResource {
   public getCustomField(): TypedFetch<CustomFieldRecord> {
-    this.validateGetSingle();
     return this.apiGet("/");
   }
 
@@ -125,8 +124,6 @@ export class CustomField extends BaseResource {
     pos?: number;
     displayCardFront?: boolean;
   }): TypedFetch<CustomFieldRecord> {
-    this.validateUpdate(params);
-
     const validBody = params;
     if (validBody.displayCardFront) {
       validBody["display/cardFront"] = validBody.displayCardFront;

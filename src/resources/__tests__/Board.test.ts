@@ -191,16 +191,6 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("prefs/selfJoin")).toBe("false");
   });
 
-  test("throws an error if the params object is empty when updating a board", async () => {
-    expect.assertions(1);
-
-    try {
-      await trello.boards(TEST_PARENT_ID).updateBoard({} as any);
-    } catch (err) {
-      expect(err.message).toMatch(/at least one param/gi);
-    }
-  });
-
   test("updates the closed status of a board", async () => {
     await trello.boards(TEST_PARENT_ID).updateClosedStatus(true);
     const result = global.getLastFetchCall();
@@ -400,6 +390,22 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("member_fields")).toBe("all");
   });
 
+  test("gets a specific action for a board", async () => {
+    await trello
+      .boards(TEST_PARENT_ID)
+      .actions(TEST_CHILD_ID)
+      .getAction({
+        memberFields: "all",
+      });
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("GET");
+    expect(result.url.pathname).toBe(
+      `/1/boards/${TEST_PARENT_ID}/actions/${TEST_CHILD_ID}`,
+    );
+    expect(result.url.searchParams.get("member_fields")).toBe("all");
+  });
+
   test("gets the board stars for a board", async () => {
     await trello
       .boards(TEST_PARENT_ID)
@@ -449,6 +455,19 @@ describe("the Board resource", () => {
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/checklists`);
   });
 
+  test("gets a specific checklist for a board", async () => {
+    await trello
+      .boards(TEST_PARENT_ID)
+      .checklists(TEST_CHILD_ID)
+      .getChecklist();
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("GET");
+    expect(result.url.pathname).toBe(
+      `/1/boards/${TEST_PARENT_ID}/checklists/${TEST_CHILD_ID}`,
+    );
+  });
+
   test("gets the custom fields for a board", async () => {
     await trello
       .boards(TEST_PARENT_ID)
@@ -459,6 +478,19 @@ describe("the Board resource", () => {
     expect(result.config.method).toBe("GET");
     expect(result.url.pathname).toBe(
       `/1/boards/${TEST_PARENT_ID}/customFields`,
+    );
+  });
+
+  test("gets a specific custom field for a board", async () => {
+    await trello
+      .boards(TEST_PARENT_ID)
+      .customFields(TEST_CHILD_ID)
+      .getCustomField();
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("GET");
+    expect(result.url.pathname).toBe(
+      `/1/boards/${TEST_PARENT_ID}/customFields/${TEST_CHILD_ID}`,
     );
   });
 

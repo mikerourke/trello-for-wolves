@@ -29,7 +29,6 @@ export type WebhookField = ValidResourceFields<WebhookRecord>;
  */
 export class Webhook extends BaseResource {
   public getWebhook(): TypedFetch<WebhookRecord> {
-    this.validateGetSingle();
     return this.apiGet("/");
   }
 
@@ -44,21 +43,20 @@ export class Webhook extends BaseResource {
   }
 
   public addWebhook(params: {
-    description?: string;
     callbackURL: string;
     idModel: string;
+    description?: string;
     active?: boolean;
   }): TypedFetch<WebhookRecord[]> {
     return this.apiPost("/", params);
   }
 
   public updateWebhook(params: {
-    description?: string;
     callbackURL?: string;
     idModel?: string;
+    description?: string;
     active?: boolean;
   }): TypedFetch<WebhookRecord[]> {
-    this.validateUpdate(params);
     return this.apiPut("/", params);
   }
 

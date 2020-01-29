@@ -13,7 +13,6 @@ export class CustomEmoji extends BaseResource {
   public getCustomEmoji(params?: {
     fields?: AllOfOrListOf<CustomEmojiField>;
   }): TypedFetch<CustomEmojiRecord> {
-    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
@@ -24,8 +23,8 @@ export class CustomEmoji extends BaseResource {
   }
 
   public uploadCustomEmoji(params: {
-    name: string;
     file: FileUpload;
+    name: string;
   }): TypedFetch<CustomEmojiRecord> {
     return this.apiPost("/", params);
   }

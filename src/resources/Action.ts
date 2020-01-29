@@ -15,8 +15,10 @@ import {
   Format,
   Limits,
   TypedFetch,
+  ValidResourceFields,
   ValueResponse,
 } from "../typeDefs";
+import { Reaction, ReactionSummaryRecord } from "./Reaction";
 
 /**
  * These action types are valid for any calls to get actions. The API may
@@ -137,7 +139,7 @@ export interface DisplayRecord<T = ActionType> {
   entities: EntityRecord<T>[];
 }
 
-export type ActionField = "id" | "data" | "date" | "idMemberCreator" | "type";
+export type ActionField = ValidResourceFields<ActionRecord>;
 
 /**
  * Actions are generated whenever an action occurs in Trello. For instance, when
@@ -165,7 +167,6 @@ export class Action<TActionType = ActionType> extends BaseResource {
     memberCreator?: boolean;
     memberCreatorFields?: AllOfOrListOf<MemberInvitedField>;
   }): TypedFetch<ActionRecord<TActionType>> {
-    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
@@ -216,6 +217,10 @@ export class Action<TActionType = ActionType> extends BaseResource {
     return this.apiGet("/entities");
   }
 
+  public getReactionsSummary(): TypedFetch<ReactionSummaryRecord[]> {
+    return this.apiGet("/reactionsSummary");
+  }
+
   public board(): Board {
     return new Board(this.config, this.pathElements, "board", {
       isReturnUrl: this.isReturnUrl,
@@ -248,6 +253,13 @@ export class Action<TActionType = ActionType> extends BaseResource {
 
   public organization(): Organization {
     return new Organization(this.config, this.pathElements, "organization", {
+      isReturnUrl: this.isReturnUrl,
+    });
+  }
+
+  public reactions(idReaction: string = ""): Reaction {
+    return new Reaction(this.config, this.pathElements, "reactions", {
+      identifier: idReaction,
       isReturnUrl: this.isReturnUrl,
     });
   }

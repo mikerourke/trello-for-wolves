@@ -10,7 +10,6 @@ export interface SavedSearchRecord {
 
 export class SavedSearch extends BaseResource {
   public getSavedSearch(): TypedFetch<SavedSearchRecord> {
-    this.validateGetSingle();
     return this.apiGet("/");
   }
 
@@ -38,9 +37,7 @@ export class SavedSearch extends BaseResource {
     return this.apiPut("/name", { value });
   }
 
-  public updatePosition(
-    value: PositionOrFloat,
-  ): TypedFetch<SavedSearchRecord> {
+  public updatePosition(value: PositionOrFloat): TypedFetch<SavedSearchRecord> {
     return this.apiPut("/pos", { value });
   }
 

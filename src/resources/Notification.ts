@@ -95,7 +95,6 @@ export class Notification extends BaseResource {
     organization?: boolean;
     organizationFields?: AllOfOrListOf<OrganizationField>;
   }): TypedFetch<NotificationRecord> {
-    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 

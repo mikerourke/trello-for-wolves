@@ -1,7 +1,7 @@
 import { Trello } from "../../index";
 
-const TEST_ACTION_ID = "60024c859ab0c51945243414";
 const TEST_BOARD_ID = "d9a04f38b919f23b8cc7bf01";
+const TEST_ACTION_ID = "60024c859ab0c51945243414";
 
 describe("the Action resource", () => {
   const trello = new Trello(global.trelloConfig);
@@ -14,22 +14,29 @@ describe("the Action resource", () => {
     global.resetFetchMocks();
   });
 
-  test("throws an error if attempting to get a single action without an ID", async () => {
-    expect.assertions(1);
-
-    try {
-      await trello.actions().getAction();
-    } catch (err) {
-      expect(err.message).toMatch(/must specify an id/gi);
-    }
-  });
-
   test("gets a single action", async () => {
-    await trello.actions(TEST_ACTION_ID).getAction();
+    await trello.actions(TEST_ACTION_ID).getAction({
+      display: true,
+      entities: true,
+      fields: ["data", "date"],
+      member: true,
+      memberFields: "all",
+      memberCreator: true,
+      memberCreatorFields: ["bioData", "status", "url"],
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
     expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}`);
+    expect(result.url.searchParams.get("display")).toBe("true");
+    expect(result.url.searchParams.get("entities")).toBe("true");
+    expect(result.url.searchParams.get("fields")).toBe("data,date");
+    expect(result.url.searchParams.get("member")).toBe("true");
+    expect(result.url.searchParams.get("member_fields")).toBe("all");
+    expect(result.url.searchParams.get("memberCreator")).toBe("true");
+    expect(result.url.searchParams.get("memberCreator_fields")).toBe(
+      "bioData,status,url",
+    );
   });
 
   test("gets multiple actions", async () => {

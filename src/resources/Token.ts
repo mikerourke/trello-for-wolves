@@ -38,7 +38,6 @@ export class Token extends BaseResource {
     fields?: AllOfOrListOf<TokenField>;
     webhooks?: boolean;
   }): TypedFetch<TokenRecord> {
-    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 

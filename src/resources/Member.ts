@@ -242,7 +242,6 @@ export class Member extends BaseResource {
     savedSearches?: boolean;
     tokens?: AllOrNone;
   }): TypedFetch<MemberRecord> {
-    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 
@@ -478,7 +477,7 @@ export class Member extends BaseResource {
     );
   }
 
-  public customEmoji(customEmojiId: string = ""): CustomEmoji {
+  public customEmojis(customEmojiId: string = ""): CustomEmoji {
     return new CustomEmoji(this.config, this.pathElements, "customEmoji", {
       identifier: customEmojiId,
       isReturnUrl: this.isReturnUrl,

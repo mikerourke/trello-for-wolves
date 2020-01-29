@@ -76,7 +76,6 @@ export class Attachment extends BaseResource {
   public getAttachment(params?: {
     fields?: AllOfOrListOf<AttachmentField>;
   }): TypedFetch<AttachmentRecord> {
-    this.validateGetSingle();
     return this.apiGet("/", params);
   }
 

@@ -1,7 +1,6 @@
+import { buildApiUrl } from "../utils/buildApiUrl";
 import { fetchFromApi, HttpMethod } from "../utils/fetchFromApi";
 import { Config, TypedResponse } from "../typeDefs";
-import { isEmpty } from "../utils/isEmpty";
-import { buildApiUrl } from "../utils/buildApiUrl";
 
 interface BaseResourceOptions {
   identifier?: string;
@@ -9,7 +8,7 @@ interface BaseResourceOptions {
 }
 
 /**
- * Base class for resources.
+ * Base class for resources. All other resources extend this class.
  * @class
  */
 export class BaseResource {
@@ -54,14 +53,34 @@ export class BaseResource {
     return this;
   }
 
-  protected isChildOf(groupName: string | string[]): boolean {
+  /**
+   * Returns true if the path elements of this resource instance contains the
+   * contents of the specified group name/names argument.
+   * @example
+   *   const resource = trello.boards("boardid").actions().getActions();
+   *   // From the `actions` instance:
+   *   console.log(this.isChildOf("board")); // true
+   *   console.log(this.isChildOf("action")); // false
+   *
+   * @example
+   *   const resource = trello.boards("boardid").actions().getActions();
+   *   // From the `actions` instance:
+   *   console.log(this.isChildOf(["board", "enterprise"])); // true
+   *   console.log(this.isChildOf(["action", "organization"])); // false
+   */
+  protected isChildOf(groupNameOrNames: string | string[]): boolean {
     const parentGroupName = this.pathElements[0];
 
-    if (Array.isArray(groupName)) {
-      return groupName.includes(parentGroupName);
+    // If the arg is an array, create a RegExp instance that combines all of
+    // the array values (separated by a pipe) and return the result of testing
+    // it against the parentGroupName:
+    if (Array.isArray(groupNameOrNames)) {
+      const namePattern = groupNameOrNames.join("|");
+      const nameRegex = new RegExp(namePattern, "ig");
+      return nameRegex.test(parentGroupName);
     }
 
-    return parentGroupName.includes(groupName);
+    return parentGroupName.includes(groupNameOrNames);
   }
 
   protected apiGet<T>(
@@ -80,6 +99,12 @@ export class BaseResource {
       ...queryParamsByName,
       [this.groupName]: queryParamsByName[this.groupName] ?? "all",
     } as Record<string, string>;
+
+    if (this.groupName === "reactions") {
+      validParams.reactions = queryParamsByName[this.groupName] ?? true;
+    } else {
+      validParams[this.groupName] = queryParamsByName[this.groupName] ?? "all";
+    }
 
     const fullEndpoint = this.pathElements
       .filter(
@@ -115,37 +140,6 @@ export class BaseResource {
   ): Promise<TypedResponse<T>> {
     const fullEndpoint = this.pathElements.join("/").concat(endpoint);
     return this.onApiFetch("DELETE", fullEndpoint, queryParamsByName, body);
-  }
-
-  protected validateGetSingle(): void {
-    // If we're getting a board or list associated with the parent resource,
-    // the groupName will be `/board` or `/list`. We don't need the ID of the
-    // resource to fetch it:
-    if (!this.groupName.endsWith("s")) {
-      return;
-    }
-
-    this.validateIdentifier();
-  }
-
-  protected validateUpdate(params: object | undefined): void {
-    this.validateIdentifier();
-
-    if (isEmpty(params)) {
-      throw new Error(
-        "You must specify at least one param when updating a resource",
-      );
-    }
-  }
-
-  protected validateIdentifier(): void {
-    if (!this.identifier) {
-      const errMessage = [
-        "You must specify an ID for the resource instance.",
-        "Example: trello.actions(<NEED AN ID>).getAction()",
-      ].join(" ");
-      throw new Error(errMessage);
-    }
   }
 
   /**
