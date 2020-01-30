@@ -21,6 +21,18 @@ export async function fetchFromApi<T>({
   queryParamsByName?: object;
   body?: unknown;
 }): Promise<TypedResponse<T>> {
+  if (!config.key) {
+    throw new Error(
+      `You must provide a "key" to the Trello instance config object`,
+    );
+  }
+
+  if (!config.token) {
+    throw new Error(
+      `You must provide a "token" to the Trello instance config object`,
+    );
+  }
+
   const { backoffTime = 3000, maxRetryAttempts = 5 } = config;
 
   // Build the configuration object for sending the request.
@@ -83,12 +95,12 @@ async function getFetchBody(
     const validParamsByName = queryParamsByName as Record<string, string>;
 
     if ("file" in validParamsByName) {
-      if (typeof FormData === "undefined") {
+      if (typeof window?.FormData === "undefined") {
         const { default: FormData } = await import("form-data");
         const formData = new FormData();
         return appendDataToForm(formData, config, validParamsByName);
       } else {
-        const formData = new FormData();
+        const formData = new window.FormData();
         return appendDataToForm(formData, config, validParamsByName);
       }
     }

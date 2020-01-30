@@ -17,7 +17,8 @@ import { Search } from "./resources/Search";
 import { Token } from "./resources/Token";
 import { Type } from "./resources/Type";
 import { Webhook } from "./resources/Webhook";
-import { Config } from "./typeDefs";
+import { fetchFromApi, HttpMethod } from "./utils/fetchFromApi";
+import { Config, TypedFetch } from "./typeDefs";
 
 export * from "./resources/Action";
 export * from "./resources/Attachment";
@@ -56,7 +57,22 @@ export class Trello {
     this.config = config;
   }
 
-  public actions(idAction: string = ""): Action {
+  public makeApiRequest(
+    endpoint: string,
+    method: HttpMethod,
+    queryParamsByName?: unknown,
+    body?: unknown,
+  ): TypedFetch<unknown> {
+    return fetchFromApi({
+      endpoint,
+      method,
+      config: this.config,
+      queryParamsByName: queryParamsByName as object,
+      body,
+    });
+  }
+
+  public actions(idAction: string): Action {
     return new Action(this.config, [], "actions", {
       identifier: idAction,
     });
@@ -94,7 +110,7 @@ export class Trello {
     return new Emoji(this.config, [], "emoji");
   }
 
-  public enterprises(idEnterprise: string = ""): Enterprise {
+  public enterprises(idEnterprise: string): Enterprise {
     return new Enterprise(this.config, [], "enterprises", {
       identifier: idEnterprise,
     });
@@ -140,7 +156,7 @@ export class Trello {
     return new Search(this.config, [], "search", {});
   }
 
-  public tokens(tokenName: string = ""): Token {
+  public tokens(tokenName: string): Token {
     return new Token(this.config, [], "tokens", {
       identifier: tokenName,
     });
