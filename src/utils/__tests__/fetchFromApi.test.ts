@@ -9,6 +9,36 @@ describe("the fetchFromApi method", () => {
     global.resetFetchMocks();
   });
 
+  test("throws an error if the key is missing from the config object", async () => {
+    expect.assertions(1);
+
+    try {
+      await fetchFromApi({
+        endpoint: "/test",
+        method: "GET",
+        config: { token: "TEST" } as any,
+        queryParamsByName: { filter: "all" },
+      });
+    } catch (err) {
+      expect(err.message).toMatch(/You must provide a "key" to the/gi);
+    }
+  });
+
+  test("throws an error if the token is missing from the config object", async () => {
+    expect.assertions(1);
+
+    try {
+      await fetchFromApi({
+        endpoint: "/test",
+        method: "GET",
+        config: { key: "TEST" } as any,
+        queryParamsByName: { filter: "all" },
+      });
+    } catch (err) {
+      expect(err.message).toMatch(/You must provide a "token" to the/gi);
+    }
+  });
+
   test("correctly builds the API url based on the query params", async () => {
     await fetchFromApi({
       endpoint: "/test",

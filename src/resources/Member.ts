@@ -258,7 +258,7 @@ export class Member extends BaseResource {
   ): TypedFetch<MemberRecord[]> {
     if (!isEmpty(params) && !params?.fields && !this.isChildOf("enterprise")) {
       throw new Error(
-        `Only the "fields" param is allowed if you're not getting boards for an enterprise`,
+        `Only the "fields" param is allowed when calling getMembers() from a non-enterprise resource`,
       );
     }
 
@@ -323,9 +323,9 @@ export class Member extends BaseResource {
   }): TypedFetch<MemberRecord> {
     const body = {} as { fullName?: string };
 
-    if (this.isChildOf("board")) {
-      body.fullName = params?.fullName;
-      delete params?.fullName;
+    if (this.isChildOf("board") && params?.fullName) {
+      body.fullName = params.fullName;
+      delete params.fullName;
     }
 
     return this.apiPut("/", { ...params, separator: "/" }, body);

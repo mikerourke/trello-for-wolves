@@ -38,7 +38,7 @@ describe("the Member resource", () => {
     await trello
       .organizations(TEST_PARENT_ID)
       .members()
-      .getMembers();
+      .getMembers({ fields: "all" });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -136,6 +136,22 @@ describe("the Member resource", () => {
     expect(result.url.searchParams.get("fullName")).toBe("Suzy Test");
   });
 
+  test("moves the fullName param to the body if updating a member from a board", async () => {
+    await trello
+      .boards(TEST_PARENT_ID)
+      .members(TEST_MEMBER_ID)
+      .updateMember({
+        fullName: "Suzy Test",
+      });
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("PUT");
+    expect(result.url.pathname).toBe(
+      `/1/boards/${TEST_PARENT_ID}/members/${TEST_MEMBER_ID}`,
+    );
+    expect(result.config.body).toBe(JSON.stringify({ fullName: "Suzy Test" }));
+  });
+
   test("updates the avatar source of a member", async () => {
     await trello.members(TEST_MEMBER_ID).updateAvatarSource("gravatar");
     const result = global.getLastFetchCall();
@@ -183,6 +199,21 @@ describe("the Member resource", () => {
     expect(result.url.searchParams.get("value")).toBe("test");
   });
 
+  test("throws an error when updating the deactivated status of a member for an invalid resource", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello
+        .boards(TEST_PARENT_ID)
+        .members(TEST_MEMBER_ID)
+        .updateDeactivatedStatus(true);
+    } catch (err) {
+      expect(err.message).toMatch(
+        /You can only call updateDeactivatedStatus/gi,
+      );
+    }
+  });
+
   test("updates the deactivated status of a member", async () => {
     await trello
       .enterprises(TEST_PARENT_ID)
@@ -195,6 +226,19 @@ describe("the Member resource", () => {
       `/1/enterprises/${TEST_PARENT_ID}/members/${TEST_MEMBER_ID}/deactivated`,
     );
     expect(result.url.searchParams.get("value")).toBe("true");
+  });
+
+  test("throws an error when updating the member type of a member for an invalid resource", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello
+        .enterprises(TEST_PARENT_ID)
+        .members(TEST_MEMBER_ID)
+        .updateMemberType("admin");
+    } catch (err) {
+      expect(err.message).toMatch(/You can only call updateMemberType/gi);
+    }
   });
 
   test("updates the member type of a member", async () => {

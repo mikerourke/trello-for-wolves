@@ -46,7 +46,7 @@ describe("the Reaction resource", () => {
     expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}/reactions`);
   });
 
-  test("gets nested reactions", async () => {
+  test("gets nested reactions with params", async () => {
     await trello
       .actions(TEST_ACTION_ID)
       .reactions()
@@ -66,6 +66,18 @@ describe("the Reaction resource", () => {
     expect(result.url.searchParams.get("reactions_emoji")).toBe("true");
     expect(result.url.searchParams.get("reactions_member")).toBe("true");
     expect(result.url.searchParams.get("reactions_member_fields")).toBe("all");
+  });
+
+  test("gets nested reactions with no params", async () => {
+    await trello
+      .actions(TEST_ACTION_ID)
+      .reactions()
+      .getNestedReactions();
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("GET");
+    expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}`);
+    expect(result.url.searchParams.get("reactions")).toBe("true");
   });
 
   test("adds a new reaction", async () => {
