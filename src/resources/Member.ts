@@ -2,7 +2,11 @@ import { isEmpty } from "../utils/isEmpty";
 import { BaseResource } from "./BaseResource";
 import { Action, ActionType } from "./Action";
 import { Board, BoardField, BoardFilter } from "./Board";
-import { BoardBackground, BoardBackgroundFilter } from "./BoardBackground";
+import {
+  CustomBoardBackground,
+  BoardBackground,
+  BoardBackgroundFilter,
+} from "./BoardBackgrounds";
 import { BoardStar } from "./BoardStar";
 import { Card, CardFilter } from "./Card";
 import { CustomEmoji } from "./CustomEmoji";
@@ -14,10 +18,10 @@ import {
   OrganizationFilter,
 } from "./Organization";
 import { SavedSearch } from "./SavedSearch";
-import { Sticker } from "./Sticker";
+import { CustomSticker } from "./Stickers";
 import { Token } from "./Token";
 import {
-  AllOfOrListOf,
+  AllOrFieldOrListOf,
   AllOrNone,
   FileUpload,
   Limits,
@@ -202,15 +206,15 @@ export type MemberField = keyof MemberRecord;
  * @property boardFields Board fields to include in response.
  */
 export interface GetMembersForEnterpriseParams {
-  fields?: AllOfOrListOf<MemberInvitedRecord>;
+  fields?: AllOrFieldOrListOf<MemberInvitedRecord>;
   filter?: string | "none";
   sort?: string;
-  sortBy: string;
-  sortOrder: SortOrder;
+  sortBy?: string;
+  sortOrder?: SortOrder;
   startIndex?: number;
   count?: string | "none";
-  organizationFields?: AllOfOrListOf<OrganizationField>;
-  boardFields?: AllOfOrListOf<BoardField>;
+  organizationFields?: AllOrFieldOrListOf<OrganizationField>;
+  boardFields?: AllOrFieldOrListOf<BoardField>;
 }
 
 /**
@@ -220,24 +224,24 @@ export interface GetMembersForEnterpriseParams {
  */
 export class Member extends BaseResource {
   public getMember(params?: {
-    actions?: AllOfOrListOf<ActionType>;
-    boards?: AllOfOrListOf<BoardFilter>;
-    boardFields?: AllOfOrListOf<BoardField>;
-    boardBackgrounds?: AllOfOrListOf<BoardBackgroundFilter>;
-    boardsInvited?: AllOfOrListOf<BoardFilter>;
-    boardsInvitedFields?: AllOfOrListOf<BoardField>;
+    actions?: AllOrFieldOrListOf<ActionType>;
+    boards?: BoardFilter;
+    boardFields?: AllOrFieldOrListOf<BoardField>;
+    boardBackgrounds?: AllOrFieldOrListOf<BoardBackgroundFilter>;
+    boardsInvited?: BoardFilter;
+    boardsInvitedFields?: AllOrFieldOrListOf<BoardField>;
     boardStars?: boolean;
     cards?: CardFilter;
     customBoardBackgrounds?: AllOrNone;
     customEmoji?: AllOrNone;
     customStickers?: AllOrNone;
-    fields?: AllOfOrListOf<MemberField>;
-    notifications?: AllOfOrListOf<NotificationType>;
-    organizations?: AllOfOrListOf<OrganizationFilter>;
-    organizationFields?: AllOfOrListOf<OrganizationField>;
+    fields?: AllOrFieldOrListOf<MemberField>;
+    notifications?: AllOrFieldOrListOf<NotificationType>;
+    organizations?: AllOrFieldOrListOf<OrganizationFilter>;
+    organizationFields?: AllOrFieldOrListOf<OrganizationField>;
     organizationPaidAccount?: boolean;
     organizationsInvited?: OrganizationFilter;
-    organizationsInvitedFields?: AllOfOrListOf<OrganizationField>;
+    organizationsInvitedFields?: AllOrFieldOrListOf<OrganizationField>;
     paidAccount?: boolean;
     savedSearches?: boolean;
     tokens?: AllOrNone;
@@ -248,16 +252,14 @@ export class Member extends BaseResource {
   public getMembers(
     params?:
       | {
-          fields: AllOfOrListOf<MemberField>;
+          fields: AllOrFieldOrListOf<MemberField>;
         }
       | GetMembersForEnterpriseParams,
   ): TypedFetch<MemberRecord[]> {
-    if (!isEmpty(params)) {
-      if (!params?.fields && !this.isChildOf("enterprise")) {
-        throw new Error(
-          "You can only specify the `fields` param if you're not getting boards for an enterprise",
-        );
-      }
+    if (!isEmpty(params) && !params?.fields && !this.isChildOf("enterprise")) {
+      throw new Error(
+        `Only the "fields" param is allowed if you're not getting boards for an enterprise`,
+      );
     }
 
     return this.apiGet("/", params);
@@ -265,7 +267,7 @@ export class Member extends BaseResource {
 
   public getNestedMembers<TPayload extends object>(params?: {
     members?: MemberFilter;
-    memberFields?: AllOfOrListOf<MemberField>;
+    memberFields?: AllOrFieldOrListOf<MemberField>;
   }): TypedFetch<TPayload & { members: MemberRecord[] }> {
     return this.apiGetNested(params);
   }
@@ -280,16 +282,15 @@ export class Member extends BaseResource {
     return this.apiGet(`/${field}`);
   }
 
-  public getDeltas(params: {
-    ixLastUpdate: number;
-    tags: string;
+  public getDeltas(params?: {
+    ixLastUpdate?: number;
+    tags?: string;
   }): TypedFetch<unknown> {
     return this.apiGet("/deltas", params);
   }
 
   /**
    * Adds a member to an organization.
-   * @example PUT /1/organizations/:organizationId/members
    * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members
    */
   public addMember(params: {
@@ -298,7 +299,7 @@ export class Member extends BaseResource {
     type?: MemberType;
   }): TypedFetch<MemberRecord> {
     if (!this.isChildOf("organization")) {
-      throw new Error("You can only call `addMember()` on an organization");
+      throw new Error("You can only call addMember() on an organization");
     }
 
     return this.apiPut("/", params);
@@ -309,16 +310,16 @@ export class Member extends BaseResource {
   }
 
   public updateMember(params: {
-    avatarSource?: AvatarSourceField;
-    bio?: string;
     fullName?: string;
     initials?: string;
+    username?: string;
+    bio?: string;
+    avatarSource?: AvatarSourceField;
     prefs?: {
       colorBlind?: boolean;
       locale?: string;
       minutesBetweenSummaries?: number;
     };
-    username?: string;
   }): TypedFetch<MemberRecord> {
     const body = {} as { fullName?: string };
 
@@ -359,7 +360,7 @@ export class Member extends BaseResource {
   public updateDeactivatedStatus(value: boolean): TypedFetch<unknown> {
     if (!this.isChildOf(["enterprise", "organization"])) {
       throw new Error(
-        "You can only call `updateDeactivatedStatus()` on an enterprise or organization",
+        "You can only call updateDeactivatedStatus() on an enterprise or organization",
       );
     }
 
@@ -374,7 +375,7 @@ export class Member extends BaseResource {
   public updateMemberType(type: MemberType): TypedFetch<unknown> {
     if (!this.isChildOf(["board", "organization"])) {
       throw new Error(
-        "You can only call `updateMemberType()` on a board or organization",
+        "You can only call updateMemberType() on a board or organization",
       );
     }
 
@@ -391,6 +392,11 @@ export class Member extends BaseResource {
 
   public updateMinutesBetweenSummaries(value: number): TypedFetch<unknown> {
     return this.apiPut("/prefs/minutesBetweenSummaries", { value });
+  }
+
+  public voteOnCard(): TypedFetch<unknown> {
+    this.pathElements.pop();
+    return this.apiPost("/", { value: this.identifier });
   }
 
   public dismissOneTimeMessages(value: string): TypedFetch<unknown> {
@@ -422,27 +428,31 @@ export class Member extends BaseResource {
     return this.apiDelete("/all");
   }
 
+  public removeVoteFromCard(): TypedFetch<unknown> {
+    return this.apiDelete("/");
+  }
+
   public actions(): Action {
     return new Action(this.config, this.pathElements, "actions", {
       isReturnUrl: this.isReturnUrl,
     });
   }
 
-  public boardBackgrounds(backgroundId: string = ""): BoardBackground {
+  public boardBackgrounds(idBoardBackground: string = ""): BoardBackground {
     return new BoardBackground(
       this.config,
       this.pathElements,
       "boardBackgrounds",
       {
-        identifier: backgroundId,
+        identifier: idBoardBackground,
         isReturnUrl: this.isReturnUrl,
       },
     );
   }
 
-  public boardStars(boardStarId: string = ""): BoardStar {
+  public boardStars(idBoardStar: string = ""): BoardStar {
     return new BoardStar(this.config, this.pathElements, "boardStars", {
-      identifier: boardStarId,
+      identifier: idBoardStar,
       isReturnUrl: this.isReturnUrl,
     });
   }
@@ -465,28 +475,30 @@ export class Member extends BaseResource {
     });
   }
 
-  public customBoardBackgrounds(backgroundId: string = ""): BoardBackground {
-    return new BoardBackground(
+  public customBoardBackgrounds(
+    idCustomBoardBackground: string = "",
+  ): CustomBoardBackground {
+    return new CustomBoardBackground(
       this.config,
       this.pathElements,
       "customBoardBackgrounds",
       {
-        identifier: backgroundId,
+        identifier: idCustomBoardBackground,
         isReturnUrl: this.isReturnUrl,
       },
     );
   }
 
-  public customEmojis(customEmojiId: string = ""): CustomEmoji {
+  public customEmojis(idCustomEmoji: string = ""): CustomEmoji {
     return new CustomEmoji(this.config, this.pathElements, "customEmoji", {
-      identifier: customEmojiId,
+      identifier: idCustomEmoji,
       isReturnUrl: this.isReturnUrl,
     });
   }
 
-  public customStickers(customStickerId: string = ""): Sticker {
-    return new Sticker(this.config, this.pathElements, "customStickers", {
-      identifier: customStickerId,
+  public customStickers(idCustomSticker: string = ""): CustomSticker {
+    return new CustomSticker(this.config, this.pathElements, "customStickers", {
+      identifier: idCustomSticker,
       isReturnUrl: this.isReturnUrl,
     });
   }
@@ -514,9 +526,9 @@ export class Member extends BaseResource {
     );
   }
 
-  public savedSearches(savedSearchId: string = ""): SavedSearch {
+  public savedSearches(idSavedSearch: string = ""): SavedSearch {
     return new SavedSearch(this.config, this.pathElements, "savedSearches", {
-      identifier: savedSearchId,
+      identifier: idSavedSearch,
       isReturnUrl: this.isReturnUrl,
     });
   }

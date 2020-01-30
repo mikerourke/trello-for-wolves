@@ -1,6 +1,7 @@
 import { BaseResource } from "./BaseResource";
 import {
-  AllOfOrListOf,
+  AllOrFieldOrListOf,
+  AllOrNone,
   FileUpload,
   TypedFetch,
   ValidResourceFields,
@@ -47,31 +48,23 @@ export interface CustomStickerRecord {
 
 export type StickerField = ValidResourceFields<StickerRecord>;
 
-export type AnyStickerRecord = StickerRecord & CustomStickerRecord;
-
-/**
- * This class handles both the "stickers" and "customStickers" resources.
- * Stickers are associated with cards while custom stickers are associated
- * with a member.
- * @class
- */
 export class Sticker extends BaseResource {
   public getSticker(params?: {
-    fields?: AllOfOrListOf<StickerField>;
-  }): TypedFetch<AnyStickerRecord> {
+    fields?: AllOrFieldOrListOf<StickerField>;
+  }): TypedFetch<StickerRecord> {
     return this.apiGet("/", params);
   }
 
   public getStickers(params?: {
-    fields?: AllOfOrListOf<StickerField>;
-  }): TypedFetch<AnyStickerRecord[]> {
+    fields?: AllOrFieldOrListOf<StickerField>;
+  }): TypedFetch<StickerRecord[]> {
     return this.apiGet("/", params);
   }
 
-  public getNestedStickers<TPayload extends object>(params?: {
-    stickers?: AllOfOrListOf<StickerField>;
-  }): TypedFetch<TPayload & { stickers: AnyStickerRecord[] }> {
-    return this.apiGetNested(params);
+  public getNestedStickers<TPayload extends object>(
+    filter?: AllOrNone,
+  ): TypedFetch<TPayload & { stickers: StickerRecord[] }> {
+    return this.apiGetNested({ stickers: filter });
   }
 
   public addSticker(params: {
@@ -80,14 +73,8 @@ export class Sticker extends BaseResource {
     top: number;
     zIndex: number;
     rotate?: number;
-  }): TypedFetch<AnyStickerRecord> {
+  }): TypedFetch<StickerRecord> {
     return this.apiPost("/", params);
-  }
-
-  public uploadCustomSticker(
-    file: FileUpload,
-  ): TypedFetch<CustomStickerRecord> {
-    return this.apiPost("/", { file });
   }
 
   public updateSticker(params: {
@@ -101,6 +88,32 @@ export class Sticker extends BaseResource {
 
   public removeSticker(): TypedFetch<unknown> {
     return this.apiDelete("/");
+  }
+}
+
+export class CustomSticker extends BaseResource {
+  public getCustomSticker(params?: {
+    fields?: AllOrFieldOrListOf<StickerField>;
+  }): TypedFetch<CustomStickerRecord> {
+    return this.apiGet("/", params);
+  }
+
+  public getCustomStickers(params?: {
+    fields?: AllOrFieldOrListOf<StickerField>;
+  }): TypedFetch<CustomStickerRecord[]> {
+    return this.apiGet("/", params);
+  }
+
+  public getNestedCustomStickers<TPayload extends object>(
+    filter?: AllOrNone,
+  ): TypedFetch<TPayload & { stickers: StickerRecord[] }> {
+    return this.apiGetNested({ customStickers: filter });
+  }
+
+  public uploadCustomSticker(
+    file: FileUpload,
+  ): TypedFetch<CustomStickerRecord> {
+    return this.apiPost("/", { file });
   }
 
   public deleteCustomSticker(): TypedFetch<unknown> {

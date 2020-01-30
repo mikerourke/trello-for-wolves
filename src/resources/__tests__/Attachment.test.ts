@@ -42,7 +42,7 @@ describe("the Attachment resource", () => {
   });
 
   test("uploads an attachment", async () => {
-    const testFile = new File(["test"], "test");
+    const testFile = new File(["test"], "test.txt");
     await trello
       .cards(TEST_CARD_ID)
       .attachments()

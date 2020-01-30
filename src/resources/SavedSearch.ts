@@ -17,6 +17,12 @@ export class SavedSearch extends BaseResource {
     return this.apiGet("/");
   }
 
+  public getNestedSavedSearches<TPayload extends object>(): TypedFetch<
+    TPayload & { savedSearches: SavedSearchRecord[] }
+  > {
+    return this.apiGetNested({ savedSearches: true });
+  }
+
   public addSavedSearch(params: {
     name: string;
     pos: PositionOrFloat;

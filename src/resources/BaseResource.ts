@@ -27,7 +27,7 @@ export class BaseResource {
     protected config: Config,
     protected parentElements: string[],
     protected groupName: string,
-    protected options: BaseResourceOptions = {
+    options: BaseResourceOptions = {
       identifier: "",
       isReturnUrl: false,
     },
@@ -81,6 +81,14 @@ export class BaseResource {
     }
 
     return parentGroupName.includes(groupNameOrNames);
+  }
+
+  protected validateUrl(fieldName: string, value?: string): void {
+    if (value && !/http:\/\/|https:\/\//gi.test(value.toString())) {
+      throw new Error(
+        `The "${fieldName}" field must start with "http://" or "https://"`,
+      );
+    }
   }
 
   protected apiGet<T>(

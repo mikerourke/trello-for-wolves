@@ -3,11 +3,10 @@ import { Action } from "./Action";
 import { Board } from "./Board";
 import { Card, CardField, CardFilter } from "./Card";
 import {
-  AllOfOrListOf,
+  AllOrFieldOrListOf,
   LimitRecord,
   PositionOrFloat,
   TypedFetch,
-  ValidResourceFields,
   ValueResponse,
 } from "../typeDefs";
 import { LabelRecord } from "./Label";
@@ -39,27 +38,35 @@ export interface ListRecord {
   creationMethod?: string | null;
 }
 
-export type ListField = ValidResourceFields<ListRecord>;
+export type ListField =
+  | "id"
+  | "name"
+  | "closed"
+  | "idBoard"
+  | "pos"
+  | "float"
+  | "subscribed"
+  | "softLimit";
 
 export class List extends BaseResource {
   public getList(params?: {
-    fields?: AllOfOrListOf<ListField>;
+    fields?: AllOrFieldOrListOf<ListField>;
   }): TypedFetch<ListRecord> {
     return this.apiGet("/", params);
   }
 
   public getLists(params?: {
     cards?: CardFilter;
-    cardFields?: AllOfOrListOf<CardField>;
+    cardFields?: AllOrFieldOrListOf<CardField>;
     filter?: ListFilter;
-    fields?: AllOfOrListOf<ListField>;
+    fields?: AllOrFieldOrListOf<ListField>;
   }): TypedFetch<LabelRecord[]> {
     return this.apiGet("/", params);
   }
 
   public getNestedLists<TPayload extends object>(params?: {
     lists: ListFilter;
-    listFields?: AllOfOrListOf<ListField>;
+    listFields?: AllOrFieldOrListOf<ListField>;
   }): TypedFetch<TPayload & { lists: ListRecord[] }> {
     return this.apiGetNested(params);
   }
@@ -78,10 +85,17 @@ export class List extends BaseResource {
     idListSource?: string;
     pos?: PositionOrFloat;
   }): TypedFetch<ListRecord> {
-    let updatedParams = params;
+    const updatedParams = { ...params };
     if (this.isChildOf("board")) {
-      updatedParams = { ...params, idBoard: this.pathElements[1] };
+      updatedParams.idBoard = this.pathElements[1];
     }
+
+    if (!updatedParams.idBoard) {
+      throw new Error(
+        `You must specify the "idBoard" param when calling addList()`,
+      );
+    }
+
     return this.apiPost("/", updatedParams);
   }
 
@@ -99,27 +113,8 @@ export class List extends BaseResource {
     return this.apiPut("/closed", { value });
   }
 
-  public moveToBoard(params?: { pos?: PositionOrFloat }): TypedFetch<unknown> {
-    if (!this.isChildOf("board")) {
-      throw new Error(
-        "You can only call `moveToBoard()` from a board resource",
-      );
-    }
-
-    const idBoard = this.pathElements[1];
-    if (idBoard === "") {
-      throw new Error(
-        "You must specify an ID for the board instance (`trello.boards(<NEED ID>).lists('lIsTiD').moveToBoard()`)",
-      );
-    }
-
-    if (!this.identifier) {
-      throw new Error(
-        "You must specify an ID for the lists instance (`trello.boards('bOarDiD').lists(<NEED ID>).moveToBoard()`)",
-      );
-    }
-
-    return this.apiPut(`/${idBoard}`, params);
+  public moveToBoard(idBoard: string): TypedFetch<ListRecord> {
+    return this.apiPut("/idBoard", { value: idBoard });
   }
 
   public updateName(value: string): TypedFetch<ListRecord> {

@@ -105,6 +105,16 @@ describe("the Action resource", () => {
     expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}/entities`);
   });
 
+  test("gets the action's reactions summary", async () => {
+    await trello.actions(TEST_ACTION_ID).getReactionsSummary();
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("GET");
+    expect(result.url.pathname).toBe(
+      `/1/actions/${TEST_ACTION_ID}/reactionsSummary`,
+    );
+  });
+
   test("gets the board for an action", async () => {
     await trello
       .actions(TEST_ACTION_ID)

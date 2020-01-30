@@ -1,6 +1,6 @@
 import { BaseResource } from "./BaseResource";
-import { AllOfOrListOf, TypedFetch } from "../typeDefs";
 import { MemberField, MemberRecord } from "./Member";
+import { AllOrFieldOrListOf, TypedFetch } from "../typeDefs";
 
 export interface EmojiSkinVariationRecord {
   unified: string;
@@ -81,7 +81,7 @@ export class Reaction extends BaseResource {
     reactions?: boolean;
     reactionsSummary?: boolean;
     reactionsMember?: boolean;
-    reactionsMemberFields?: AllOfOrListOf<MemberField>;
+    reactionsMemberFields?: AllOrFieldOrListOf<MemberField>;
     reactionsEmoji?: boolean;
   }): TypedFetch<TPayload & { reactions: ReactionRecord[] }> {
     return this.apiGetNested(params);

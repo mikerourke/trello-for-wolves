@@ -2,7 +2,7 @@ import { BaseResource } from "./BaseResource";
 import { Member } from "./Member";
 import { Webhook } from "./Webhook";
 import {
-  AllOfOrListOf,
+  AllOrFieldOrListOf,
   AllOrNone,
   TypedFetch,
   ValueResponse,
@@ -35,7 +35,7 @@ export type TokenField = keyof TokenRecord;
 
 export class Token extends BaseResource {
   public getToken(params?: {
-    fields?: AllOfOrListOf<TokenField>;
+    fields?: AllOrFieldOrListOf<TokenField>;
     webhooks?: boolean;
   }): TypedFetch<TokenRecord> {
     return this.apiGet("/", params);

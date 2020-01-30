@@ -1,12 +1,20 @@
 import { BaseResource } from "./BaseResource";
 import { NestedMemberField, MemberFilter, Member } from "./Member";
 import { MembershipFilter } from "./Membership";
-import { OrganizationField, OrganizationFilter } from "./Organization";
-import { AllOfOrListOf, TypedFetch, ValidResourceFields } from "../typeDefs";
+import {
+  Organization,
+  OrganizationField,
+  OrganizationFilter,
+} from "./Organization";
+import {
+  AllOrFieldOrListOf,
+  TypedFetch,
+  ValidResourceFields,
+} from "../typeDefs";
 
 export type SortOrder = "asc" | "ascending" | "desc" | "descending" | "id";
 
-type ValueOrArray<T> = Omit<AllOfOrListOf<T>, "all">;
+type ValueOrArray<T> = Omit<AllOrFieldOrListOf<T>, "all">;
 
 export interface EnterprisePrefsRecord {
   ssoOnly: boolean;
@@ -65,7 +73,7 @@ export type EnterpriseField = ValidResourceFields<EnterpriseRecord>;
 
 export class Enterprise extends BaseResource {
   public getEnterprise(params?: {
-    fields?: AllOfOrListOf<EnterpriseField>;
+    fields?: AllOrFieldOrListOf<EnterpriseField>;
     members?: MemberFilter;
     memberFields?: NestedMemberField;
     memberFilter?: "none" | string;
@@ -75,7 +83,7 @@ export class Enterprise extends BaseResource {
     memberStartIndex?: number;
     memberCount?: number;
     organizations?: OrganizationFilter;
-    organizationFields?: AllOfOrListOf<OrganizationField>;
+    organizationFields?: AllOrFieldOrListOf<OrganizationField>;
     organizationPaidAccounts?: boolean;
     organizationMemberships?: ValueOrArray<MembershipFilter>;
   }): TypedFetch<EnterpriseRecord> {
@@ -101,24 +109,24 @@ export class Enterprise extends BaseResource {
     return this.apiGet(`/transferrable/organization/${idOrganization}`);
   }
 
-  public transferToOrganization(idOrganization: string): TypedFetch<unknown> {
-    return this.apiPut("/organizations", { idOrganization });
-  }
-
   public addMemberAsAdmin(idMember: string): TypedFetch<unknown> {
     return this.apiPut(`/admins/${idMember}`);
-  }
-
-  public dissociateOrganization(idOrganization: string): TypedFetch<unknown> {
-    return this.apiDelete(`/organizations/${idOrganization}`);
   }
 
   public removeMemberFromAdmin(idMember: string): TypedFetch<unknown> {
     return this.apiDelete(`/admins/${idMember}`);
   }
 
-  public members(): Member {
+  public members(idMember: string = ""): Member {
     return new Member(this.config, this.pathElements, "members", {
+      identifier: idMember,
+      isReturnUrl: this.isReturnUrl,
+    });
+  }
+
+  public organizations(idOrganization: string = ""): Organization {
+    return new Organization(this.config, this.pathElements, "organizations", {
+      identifier: idOrganization,
       isReturnUrl: this.isReturnUrl,
     });
   }

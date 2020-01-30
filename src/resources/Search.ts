@@ -4,7 +4,7 @@ import { BoardField } from "./Board";
 import { CardField } from "./Card";
 import { MemberInvitedField } from "./Member";
 import { OrganizationField } from "./Organization";
-import { AllOfOrListOf, TypedFetch } from "../typeDefs";
+import { AllOrFieldOrListOf, TypedFetch } from "../typeDefs";
 
 export type ModelType =
   | "actions"
@@ -58,11 +58,11 @@ export class Search extends BaseResource {
    */
   public performSearch(params: {
     query: string;
-    boardFields?: AllOfOrListOf<BoardField>;
+    boardFields?: AllOrFieldOrListOf<BoardField>;
     boardsLimit?: number;
     cardAttachments?: AttachmentFilter;
     cardBoard?: boolean;
-    cardFields?: AllOfOrListOf<CardField>;
+    cardFields?: AllOrFieldOrListOf<CardField>;
     cardList?: boolean;
     cardMembers?: boolean;
     cardsLimit?: number;
@@ -71,10 +71,10 @@ export class Search extends BaseResource {
     idBoards?: "mine" | string[];
     idCards?: string[];
     idOrganizations?: string[];
-    memberFields?: AllOfOrListOf<MemberInvitedField>;
+    memberFields?: AllOrFieldOrListOf<MemberInvitedField>;
     membersLimit?: number;
-    modelTypes?: AllOfOrListOf<ModelType>;
-    organizationFields?: AllOfOrListOf<OrganizationField>;
+    modelTypes?: AllOrFieldOrListOf<ModelType>;
+    organizationFields?: AllOrFieldOrListOf<OrganizationField>;
     organizationsLimit?: number;
     partial?: boolean;
   }): TypedFetch<unknown> {

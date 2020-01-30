@@ -3,12 +3,11 @@ import { Board } from "./Board";
 import { Card, CardFilter } from "./Card";
 import { CheckItem, CheckItemField, CheckItemRecord } from "./CheckItem";
 import {
-  AllOfOrListOf,
+  AllOrFieldOrListOf,
   AllOrNone,
   Limits,
   PositionOrFloat,
   TypedFetch,
-  ValidResourceFields,
   ValueResponse,
 } from "../typeDefs";
 
@@ -38,7 +37,7 @@ export interface ChecklistRecord {
   creationMethod?: string | null;
 }
 
-export type ChecklistField = ValidResourceFields<ChecklistRecord>;
+export type ChecklistField = "id" | "idBoard" | "idCard" | "name" | "pos";
 
 /**
  * Checklists are lists on boards that have items that can be completed or
@@ -49,18 +48,18 @@ export type ChecklistField = ValidResourceFields<ChecklistRecord>;
 export class Checklist extends BaseResource {
   public getChecklist(params?: {
     cards?: CardFilter;
-    checkItemFields?: AllOfOrListOf<CheckItemField>;
+    checkItemFields?: AllOrFieldOrListOf<CheckItemField>;
     checkItems?: AllOrNone;
-    fields?: AllOfOrListOf<ChecklistField>;
+    fields?: AllOrFieldOrListOf<ChecklistField>;
   }): TypedFetch<ChecklistRecord> {
     return this.apiGet("/", params);
   }
 
   public getChecklists(params?: {
     cards?: CardFilter;
-    checkItemFields?: AllOfOrListOf<CheckItemField>;
+    checkItemFields?: AllOrFieldOrListOf<CheckItemField>;
     checkItems?: AllOrNone;
-    fields?: AllOfOrListOf<ChecklistField>;
+    fields?: AllOrFieldOrListOf<ChecklistField>;
     filter?: AllOrNone;
   }): TypedFetch<ChecklistRecord[]> {
     return this.apiGet("/", params);
@@ -68,9 +67,9 @@ export class Checklist extends BaseResource {
 
   public getNestedChecklists<TPayload extends object>(params?: {
     checklists?: AllOrNone;
-    checklistFields?: AllOfOrListOf<ChecklistField>;
+    checklistFields?: AllOrFieldOrListOf<ChecklistField>;
     checkItems?: "all";
-    checkItemFields?: AllOfOrListOf<CheckItemField>;
+    checkItemFields?: AllOrFieldOrListOf<CheckItemField>;
   }): TypedFetch<TPayload & { checklists: ChecklistRecord[] }> {
     return this.apiGetNested(params);
   }
@@ -81,15 +80,22 @@ export class Checklist extends BaseResource {
 
   public addChecklist(params: {
     idCard?: string;
-    idChecklistSource?: string;
     name?: string;
     pos?: PositionOrFloat;
+    idChecklistSource?: string;
   }): TypedFetch<ChecklistRecord> {
-    let updatedArgs = params;
+    const updatedParams = { ...params };
     if (this.isChildOf("card")) {
-      updatedArgs = { ...params, idCard: this.pathElements[1] };
+      updatedParams.idCard = this.pathElements[1];
     }
-    return this.apiPost("/", updatedArgs);
+
+    if (!updatedParams.idCard) {
+      throw new Error(
+        `You must specify the "idCard" param when calling addLabel()`,
+      );
+    }
+
+    return this.apiPost("/", updatedParams);
   }
 
   public updateChecklist(params: {
@@ -119,7 +125,7 @@ export class Checklist extends BaseResource {
     return new Card(this.config, this.pathElements, "cards");
   }
 
-  public checkItem(idCheckItem: string = ""): CheckItem {
+  public checkItem(idCheckItem: string): CheckItem {
     return new CheckItem(this.config, this.pathElements, "checkItem", {
       identifier: idCheckItem,
       isReturnUrl: this.isReturnUrl,

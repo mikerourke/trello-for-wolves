@@ -1,5 +1,5 @@
 import { BaseResource } from "./BaseResource";
-import { AllOfOrListOf, AllOrNone, FileUpload, TypedFetch } from "../typeDefs";
+import { AllOrFieldOrListOf, AllOrNone, FileUpload, TypedFetch } from "../typeDefs";
 
 export interface CustomEmojiRecord {
   id: string;
@@ -11,7 +11,7 @@ export type CustomEmojiField = keyof CustomEmojiRecord;
 
 export class CustomEmoji extends BaseResource {
   public getCustomEmoji(params?: {
-    fields?: AllOfOrListOf<CustomEmojiField>;
+    fields?: AllOrFieldOrListOf<CustomEmojiField>;
   }): TypedFetch<CustomEmojiRecord> {
     return this.apiGet("/", params);
   }

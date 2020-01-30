@@ -38,7 +38,7 @@ describe("the CustomEmoji resource", () => {
   });
 
   test("uploads a custom emoji", async () => {
-    const testFile = new File(["test"], "test");
+    const testFile = new File(["test"], "test.txt");
     await trello
       .members("me")
       .customEmojis()

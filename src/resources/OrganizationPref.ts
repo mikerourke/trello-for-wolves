@@ -46,11 +46,11 @@ export class OrganizationPref extends BaseResource {
     return this.apiPut("/permissionLevel", { value });
   }
 
-  public deleteAssociatedDomain(): TypedFetch<unknown> {
+  public removeAssociatedDomain(): TypedFetch<unknown> {
     return this.apiDelete("/associatedDomain");
   }
 
-  public deleteOrgInviteRestrict(emailAddress: string): TypedFetch<unknown> {
+  public removeOrgInviteRestrict(emailAddress: string): TypedFetch<unknown> {
     return this.apiDelete("/orgInviteRestrict", { value: emailAddress });
   }
 }

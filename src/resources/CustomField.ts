@@ -1,19 +1,11 @@
 import { BaseResource } from "./BaseResource";
-import { TypedFetch } from "../typeDefs";
+import {
+  CustomFieldOption,
+  CustomFieldOptionRecord,
+} from "./CustomFieldOption";
+import { PositionOrFloat, TypedFetch } from "../typeDefs";
 
 export type CustomFieldType = "number" | "date" | "text" | "checkbox" | "list";
-
-type CustomFieldListOptionValue =
-  | { text: string }
-  | { number: number }
-  | { date: string }
-  | { checked: boolean };
-
-export interface CustomFieldListOptionRecord {
-  color: string;
-  pos: number;
-  value: CustomFieldListOptionValue;
-}
 
 /**
  * The data corresponding to a custom field.
@@ -43,9 +35,9 @@ export interface CustomFieldRecord {
   modelType: string;
   fieldGroup: string;
   name: string;
-  pos: string;
+  pos: PositionOrFloat;
   type: CustomFieldType;
-  options?: CustomFieldListOptionRecord[];
+  options?: CustomFieldOptionRecord[];
   display: {
     cardFront: boolean;
   };
@@ -68,98 +60,79 @@ export class CustomField extends BaseResource {
     return this.apiGet("/");
   }
 
-  public getCustomFieldOption(
-    idCustomFieldOption: string,
-  ): TypedFetch<CustomFieldListOptionRecord> {
-    return this.apiGet(`/options/${idCustomFieldOption}`);
-  }
-
   public getCustomFields(): TypedFetch<CustomFieldRecord[]> {
     return this.apiGet("/");
   }
 
-  public getNestedCustomFields<TPayload extends object>(params?: {
-    customFields?: boolean;
-  }): TypedFetch<TPayload & NestedResponse> {
-    return this.apiGetNested(params);
-  }
-
-  public getCustomFieldOptions(): TypedFetch<CustomFieldListOptionRecord[]> {
-    return this.apiGet("/options");
+  public getNestedCustomFields<TPayload extends object>(): TypedFetch<
+    TPayload & NestedResponse
+  > {
+    return this.apiGetNested({ customFields: true });
   }
 
   public addCustomField(params: {
-    idModel: string;
     name: string;
-    pos: string;
+    pos: PositionOrFloat;
     type: CustomFieldType;
-    // The only value value for this is "board":
-    modelType?: "board";
     displayCardFront?: boolean;
-    options?: CustomFieldListOptionRecord[];
+    options?: CustomFieldOptionRecord[];
   }): TypedFetch<CustomFieldRecord> {
-    const validBody = params;
-    if (validBody.displayCardFront) {
-      validBody["display_cardFront"] = validBody.displayCardFront;
-      delete validBody.displayCardFront;
+    if (!this.isChildOf("board")) {
+      throw new Error(
+        "You can only call addCustomField() from a board resource",
+      );
     }
 
-    return this.apiPost("/", {}, validBody);
-  }
-
-  public addCustomFieldOption(
-    option: CustomFieldListOptionRecord,
-  ): TypedFetch<CustomFieldListOptionRecord> {
-    const body = this.stringifyOptionValue(option);
-
-    if (this.isChildOf("card")) {
-      return this.apiPut("/item", {}, body);
+    const idBoard = this.parentElements[1];
+    if (!idBoard) {
+      throw new Error(
+        "You must pass an ID into the board resource when calling addCustomField()",
+      );
     }
 
-    return this.apiPost("/options", {}, body);
+    type Body<T> = {
+      [P in keyof T]?: T[P];
+    };
+    const body = { ...params } as Partial<Body<CustomFieldRecord>> & {
+      displayCardFront: boolean;
+    };
+
+    if (body.displayCardFront) {
+      body["display_cardFront"] = body.displayCardFront;
+      delete body.displayCardFront;
+    }
+
+    // These are required when creating a custom field:
+    body.idModel = idBoard;
+    body.modelType = "board";
+
+    return this.apiPost("/", {}, body);
   }
 
   public updateCustomField(params: {
     name?: string;
-    pos?: number;
+    pos?: PositionOrFloat;
     displayCardFront?: boolean;
   }): TypedFetch<CustomFieldRecord> {
-    const validBody = params;
-    if (validBody.displayCardFront) {
-      validBody["display/cardFront"] = validBody.displayCardFront;
-      delete validBody.displayCardFront;
+    const body = { ...params };
+    if (body.displayCardFront) {
+      body["display/cardFront"] = body.displayCardFront;
+      delete body.displayCardFront;
     }
 
-    return this.apiPut("/", {}, validBody);
-  }
-
-  public updateCustomFieldOption(
-    option: CustomFieldListOptionRecord,
-  ): TypedFetch<CustomFieldListOptionRecord> {
-    if (!this.isChildOf("card")) {
-      throw new Error(
-        "You can only call updateCustomFieldOption() from a parent card",
-      );
-    }
-
-    const body = this.stringifyOptionValue(option);
-    return this.apiPut("/item", {}, body);
+    return this.apiPut("/", {}, body);
   }
 
   public deleteCustomField(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
 
-  public deleteCustomFieldOption(
-    idCustomFieldOption: string,
-  ): TypedFetch<unknown> {
-    return this.apiDelete(`/options/${idCustomFieldOption}`);
-  }
+  public options(idOption: string = ""): CustomFieldOption {
+    const groupName = this.isChildOf("card") ? "item" : "options";
 
-  private stringifyOptionValue(
-    option: CustomFieldListOptionRecord,
-  ): Record<string, string> {
-    // TODO: Add this functionality (https://developers.trello.com/reference#customfielditemsid).
-    return (option as unknown) as Record<string, string>;
+    return new CustomFieldOption(this.config, this.pathElements, groupName, {
+      identifier: idOption,
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 }

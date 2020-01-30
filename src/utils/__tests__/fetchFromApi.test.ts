@@ -108,7 +108,7 @@ describe("the fetchFromApi method", () => {
     });
 
     test("the correct contents are added to the body", async () => {
-      const testFile = new File(["test"], "test");
+      const testFile = new File(["test"], "test.txt");
       await fetchFromApi({
         endpoint: "/test",
         method: "GET",

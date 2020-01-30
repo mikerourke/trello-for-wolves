@@ -2,7 +2,7 @@ import { BaseResource } from "./BaseResource";
 import { ActionField, EntityRecord } from "./Action";
 import { MemberCreatorRecord, MemberInvitedField } from "./Member";
 import {
-  AllOfOrListOf,
+  AllOrFieldOrListOf,
   FilterDate,
   Format,
   Limits,
@@ -38,11 +38,11 @@ export class Comment extends BaseResource {
   public getComment(params?: {
     display?: boolean;
     entities?: boolean;
-    fields?: AllOfOrListOf<ActionField>;
+    fields?: AllOrFieldOrListOf<ActionField>;
     member?: boolean;
-    memberFields?: AllOfOrListOf<MemberInvitedField>;
+    memberFields?: AllOrFieldOrListOf<MemberInvitedField>;
     memberCreator?: boolean;
-    memberCreatorFields?: AllOfOrListOf<MemberInvitedField>;
+    memberCreatorFields?: AllOrFieldOrListOf<MemberInvitedField>;
   }): TypedFetch<CommentRecord[]> {
     return this.apiGet("/", { ...params, filter: "commentCard" });
   }
@@ -50,16 +50,16 @@ export class Comment extends BaseResource {
   public getComments(params?: {
     display?: boolean;
     entities?: boolean;
-    fields?: AllOfOrListOf<ActionField>;
+    fields?: AllOrFieldOrListOf<ActionField>;
     format?: Format;
     before?: FilterDate;
     since?: FilterDate;
     idModels?: string;
     limit?: number;
     member?: boolean;
-    memberFields?: AllOfOrListOf<MemberInvitedField>;
+    memberFields?: AllOrFieldOrListOf<MemberInvitedField>;
     memberCreator?: boolean;
-    memberCreatorFields?: AllOfOrListOf<MemberInvitedField>;
+    memberCreatorFields?: AllOrFieldOrListOf<MemberInvitedField>;
   }): TypedFetch<CommentRecord[]> {
     return this.apiGet("/", { ...params, filter: "commentCard" });
   }

@@ -9,7 +9,7 @@ export type AllOrNone = "all" | "none";
 
 export type FieldOrListOf<T> = T | T[];
 
-export type AllOfOrListOf<T> = FieldOrListOf<T> | "all";
+export type AllOrFieldOrListOf<T> = FieldOrListOf<T> | "all";
 
 export type FilterDate = Date | "lastView" | null;
 

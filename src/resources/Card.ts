@@ -5,12 +5,14 @@ import { Board, BoardField } from "./Board";
 import { CheckItem } from "./CheckItem";
 import { Checklist, ChecklistField } from "./Checklist";
 import { Comment } from "./Comment";
+import { CustomField } from "./CustomField";
+import { CustomFieldOption } from "./CustomFieldOption";
 import { Label, LabelRecord } from "./Label";
 import { List } from "./List";
 import { Member, MemberInvitedField } from "./Member";
-import { Sticker, StickerField } from "./Sticker";
+import { Sticker, StickerField } from "./Stickers";
 import {
-  AllOfOrListOf,
+  AllOrFieldOrListOf,
   AllOrNone,
   FieldOrListOf,
   FileUpload,
@@ -20,7 +22,6 @@ import {
   Limits,
   PositionOrFloat,
   TypedFetch,
-  ValidResourceFields,
   ValueResponse,
 } from "../typeDefs";
 
@@ -114,9 +115,9 @@ export interface CardCoordinatesRecord {
  *                       See the {@link CardCoordinatesRecord} type.
  */
 export interface CardMapPowerUpRecord {
-  address?: string;
-  locationName?: string;
-  coordinates?: CardCoordinatesRecord | string;
+  address: string;
+  locationName: string;
+  coordinates: CardCoordinatesRecord | string;
 }
 
 /**
@@ -190,60 +191,87 @@ export interface CardRecord extends CardMapPowerUpRecord {
   creationMethod?: string | null;
 }
 
-export type CardField = ValidResourceFields<CardRecord>;
+export type CardField =
+  | "id"
+  | "checkItemStates"
+  | "closed"
+  | "dateLastActivity"
+  | "desc"
+  | "descData"
+  | "due"
+  | "dueComplete"
+  | "idAttachmentCover"
+  | "idBoard"
+  | "idChecklists"
+  | "idLabels"
+  | "idList"
+  | "idMembers"
+  | "idMembersVoted"
+  | "idShort"
+  | "labels"
+  | "manualCoverAttachment"
+  | "name"
+  | "pos"
+  | "shortLink"
+  | "shortUrl"
+  | "subscribed"
+  | "url"
+  | "address"
+  | "locationName"
+  | "coordinates";
 
 export class Card extends BaseResource {
   public getCard(params?: {
-    fields?: AllOfOrListOf<CardField>;
-    actions?: AllOfOrListOf<CardActionType>;
+    fields?: AllOrFieldOrListOf<CardField>;
+    actions?: AllOrFieldOrListOf<CardActionType>;
     attachments?: AttachmentFilter;
-    attachmentFields?: AllOfOrListOf<AttachmentField>;
+    attachmentFields?: AllOrFieldOrListOf<AttachmentField>;
     members?: boolean;
-    memberFields?: AllOfOrListOf<MemberInvitedField>;
+    memberFields?: AllOrFieldOrListOf<MemberInvitedField>;
     membersVoted?: boolean;
-    memberVotedFields?: AllOfOrListOf<MemberInvitedField>;
+    memberVotedFields?: AllOrFieldOrListOf<MemberInvitedField>;
     checkItemStates?: boolean;
     checklists?: AllOrNone;
-    checklistFields?: AllOfOrListOf<ChecklistField>;
+    checklistFields?: AllOrFieldOrListOf<ChecklistField>;
     board?: boolean;
-    boardFields?: AllOfOrListOf<BoardField>;
+    boardFields?: AllOrFieldOrListOf<BoardField>;
     list?: boolean;
     pluginData?: boolean;
     stickers?: boolean;
-    stickerFields?: AllOfOrListOf<StickerField>;
+    stickerFields?: AllOrFieldOrListOf<StickerField>;
     customFieldItems?: boolean;
   }): TypedFetch<CardRecord> {
     return this.apiGet("/", params);
   }
 
   public getCards(params?: {
-    actions?: AllOfOrListOf<CardActionType>;
-    attachmentFields?: AllOfOrListOf<AttachmentField>;
+    fields?: AllOrFieldOrListOf<CardField>;
+    filter?: CardFilter;
+    actions?: AllOrFieldOrListOf<CardActionType>;
     attachments?: AttachmentFilter;
-    before?: FilterDate;
+    attachmentFields?: AllOrFieldOrListOf<AttachmentField>;
+    members?: boolean;
+    memberFields?: AllOrFieldOrListOf<MemberInvitedField>;
     checkItemStates?: boolean;
     checklists?: AllOrNone;
-    customFieldItems?: boolean;
-    fields?: AllOfOrListOf<CardField>;
-    filter?: CardFilter;
-    limit?: number;
-    memberFields?: AllOfOrListOf<MemberInvitedField>;
-    members?: boolean;
     pluginData?: boolean;
+    stickers?: boolean;
+    customFieldItems?: boolean;
+    before?: FilterDate;
     since?: FilterDate;
     sort: "none" | "-id";
-    stickers?: boolean;
+    limit?: number;
   }): TypedFetch<CardRecord[]> {
     return this.apiGet("/", params);
   }
 
   public getNestedCards<TPayload extends object>(params?: {
-    cards?: AllOfOrListOf<CardFilter>;
-    cardFields?: AllOfOrListOf<CardField>;
+    cards?: AllOrFieldOrListOf<CardFilter>;
+    cardFields?: AllOrFieldOrListOf<CardField>;
     cardMembers?: boolean;
-    cardMemberFields?: AllOfOrListOf<MemberInvitedField>;
+    cardMemberFields?: AllOrFieldOrListOf<MemberInvitedField>;
     cardAttachments?: AttachmentFilter;
-    cardAttachmentFields?: AllOfOrListOf<AttachmentField>;
+    cardAttachmentFields?: AllOrFieldOrListOf<AttachmentField>;
     cardStickers?: boolean;
     cardsModifiedSince?: string | null;
     cardCustomFieldItems?: boolean;
@@ -259,62 +287,56 @@ export class Card extends BaseResource {
     return this.apiGet(`/${field}`);
   }
 
-  public voteOnCard(idMember: string): TypedFetch<unknown> {
-    return this.apiPost("/membersVoted", { value: idMember });
-  }
-
-  public removeVoteFromCard(idMember: string): TypedFetch<unknown> {
-    return this.apiDelete(`/membersVoted/${idMember}`);
-  }
-
   public getPluginData(): TypedFetch<unknown> {
     return this.apiGet("/pluginData");
   }
 
-  public addCard(
-    params: {
-      name?: string;
-      desc?: string;
-      pos?: PositionOrFloat;
-      due?: Date | null;
-      dueComplete?: boolean;
-      idList?: string;
-      idMembers?: string[];
-      idLabels?: string[];
-      urlSource?: string | null;
-      fileSource?: FileUpload;
-      idCardSource?: string;
-      keepFromSource?: FieldOrListOf<KeepFromSourceField>;
-      labels?: AllOfOrListOf<ColorName>;
-    } & CardMapPowerUpRecord,
-  ): TypedFetch<CardRecord> {
+  public addCard(params: {
+    name?: string;
+    desc?: string;
+    pos?: PositionOrFloat;
+    due?: Date | null;
+    dueComplete?: boolean;
+    idList?: string;
+    idMembers?: string[];
+    idLabels?: string[];
+    urlSource?: string | null;
+    fileSource?: FileUpload;
+    idCardSource?: string;
+    keepFromSource?: FieldOrListOf<KeepFromSourceField>;
+    labels?: AllOrFieldOrListOf<ColorName>;
+    address?: string;
+    locationName?: string;
+    coordinates?: CardCoordinatesRecord | string;
+  }): TypedFetch<CardRecord> {
     return this.apiPost("/", { ...params, separator: "/" });
   }
 
-  public associateLabel(labelId: string): TypedFetch<unknown> {
-    return this.apiPost("/idLabels", { value: labelId });
+  public associateLabel(idLabel: string): TypedFetch<unknown> {
+    return this.apiPost("/idLabels", { value: idLabel });
   }
 
-  public associateMember(memberId: string): TypedFetch<unknown> {
-    return this.apiPost("/idMembers", { value: memberId });
+  public associateMember(idMember: string): TypedFetch<unknown> {
+    return this.apiPost("/idMembers", { value: idMember });
   }
 
-  public updateCard(
-    params: {
-      name?: string;
-      desc?: string;
-      closed?: boolean;
-      idMembers?: string[];
-      idAttachmentCover?: string;
-      idList?: string;
-      idLabels?: string[];
-      idBoard?: string;
-      pos?: PositionOrFloat;
-      due?: Date | null;
-      dueComplete?: boolean;
-      subscribed?: boolean;
-    } & CardMapPowerUpRecord,
-  ): TypedFetch<CardRecord> {
+  public updateCard(params: {
+    name?: string;
+    desc?: string;
+    closed?: boolean;
+    idMembers?: string[];
+    idAttachmentCover?: string;
+    idList?: string;
+    idLabels?: string[];
+    idBoard?: string;
+    pos?: PositionOrFloat;
+    due?: Date | null;
+    dueComplete?: boolean;
+    subscribed?: boolean;
+    address?: string;
+    locationName?: string;
+    coordinates?: CardCoordinatesRecord | string;
+  }): TypedFetch<CardRecord> {
     return this.apiPut("/", params);
   }
 
@@ -326,7 +348,7 @@ export class Card extends BaseResource {
     return this.apiPut("/desc", { value });
   }
 
-  public updateDueDate(value: Date | null): TypedFetch<CardRecord> {
+  public updateDueDate(value: string | null): TypedFetch<CardRecord> {
     return this.apiPut("/due", { value });
   }
 
@@ -409,8 +431,17 @@ export class Card extends BaseResource {
     return new Board(this.config, this.pathElements, "board");
   }
 
+  public checkItem(idCheckItem: string): CheckItem {
+    return new CheckItem(this.config, this.pathElements, "checkItem", {
+      identifier: idCheckItem,
+      isReturnUrl: this.isReturnUrl,
+    });
+  }
+
   public checkItemStates(): CheckItem {
-    return new CheckItem(this.config, this.pathElements, "checkItemStates");
+    return new CheckItem(this.config, this.pathElements, "checkItemStates", {
+      isReturnUrl: this.isReturnUrl,
+    });
   }
 
   public checklist(idChecklist: string): Checklist {
@@ -427,18 +458,36 @@ export class Card extends BaseResource {
     });
   }
 
-  public checkItem(idCheckItem: string): CheckItem {
-    return new CheckItem(this.config, this.pathElements, "checkItem", {
-      identifier: idCheckItem,
-      isReturnUrl: this.isReturnUrl,
-    });
-  }
-
   public comments(idComment: string = ""): Comment {
     return new Comment(this.config, this.pathElements, "actions", {
       identifier: idComment,
       isReturnUrl: this.isReturnUrl,
     });
+  }
+
+  public customField(idCustomField: string): CustomField {
+    const updatedPathElements = this.pathElements.reduce((acc, pathElement) => {
+      if (pathElement === "cards") {
+        return [...acc, "card"];
+      }
+      return [...acc, pathElement];
+    }, [] as string[]);
+
+    return new CustomField(this.config, updatedPathElements, "customField", {
+      identifier: idCustomField,
+      isReturnUrl: this.isReturnUrl,
+    });
+  }
+
+  public customFieldItems(): CustomFieldOption {
+    return new CustomFieldOption(
+      this.config,
+      this.pathElements,
+      "customFieldItems",
+      {
+        isReturnUrl: this.isReturnUrl,
+      },
+    );
   }
 
   public labels(): Label {
@@ -455,6 +504,13 @@ export class Card extends BaseResource {
 
   public members(): Member {
     return new Member(this.config, this.pathElements, "members", {
+      isReturnUrl: this.isReturnUrl,
+    });
+  }
+
+  public membersVoted(idMember: string = ""): Member {
+    return new Member(this.config, this.pathElements, "membersVoted", {
+      identifier: idMember,
       isReturnUrl: this.isReturnUrl,
     });
   }

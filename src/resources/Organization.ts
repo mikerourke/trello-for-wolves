@@ -15,13 +15,12 @@ import {
   OrganizationPrefsRecord,
 } from "./OrganizationPref";
 import {
-  AllOfOrListOf,
+  AllOrFieldOrListOf,
   FileUpload,
   FilterDate,
   Format,
   PermissionLevel,
   TypedFetch,
-  ValidResourceFields,
   ValueResponse,
 } from "../typeDefs";
 
@@ -71,7 +70,23 @@ export interface OrganizationRecord {
   website: string;
 }
 
-export type OrganizationField = ValidResourceFields<OrganizationRecord>;
+export type OrganizationField =
+  | "id"
+  | "billableMemberCount"
+  | "desc"
+  | "descData"
+  | "displayName"
+  | "idBoards"
+  | "invitations"
+  | "logoHash"
+  | "memberships"
+  | "name"
+  | "powerUps"
+  | "prefs"
+  | "premiumFeatures"
+  | "products"
+  | "url"
+  | "website";
 
 /**
  * Organizations, or as they are referred to in Trello, "Teams", represent
@@ -81,31 +96,31 @@ export type OrganizationField = ValidResourceFields<OrganizationRecord>;
  */
 export class Organization extends BaseResource {
   public getOrganization(params?: {
-    actionFields?: AllOfOrListOf<ActionField>;
-    actions?: AllOfOrListOf<ActionType>;
+    actionFields?: AllOrFieldOrListOf<ActionField>;
+    actions?: AllOrFieldOrListOf<ActionType>;
     actionsDisplay?: boolean;
     actionsEntities?: boolean;
     actionsLimit?: number;
-    boardActionFields?: AllOfOrListOf<ActionField>;
-    boardActions?: AllOfOrListOf<ActionType>;
+    boardActionFields?: AllOrFieldOrListOf<ActionField>;
+    boardActions?: AllOrFieldOrListOf<ActionType>;
     boardActionsDisplay?: boolean;
     boardActionsEntities?: boolean;
     boardActionsFormat?: Format;
     boardActionsLimit?: number;
     boardActionsSince?: FilterDate;
-    boardFields?: AllOfOrListOf<BoardField>;
-    boardLists?: AllOfOrListOf<ListFilter>;
+    boardFields?: AllOrFieldOrListOf<BoardField>;
+    boardLists?: AllOrFieldOrListOf<ListFilter>;
     boardPluginData?: boolean;
-    boards?: AllOfOrListOf<BoardFilter>;
-    fields?: AllOfOrListOf<OrganizationField>;
+    boards?: BoardFilter;
+    fields?: AllOrFieldOrListOf<OrganizationField>;
     memberActivity?: boolean;
-    memberFields?: AllOfOrListOf<MemberField>;
+    memberFields?: AllOrFieldOrListOf<MemberField>;
     members?: MemberFilter;
-    memberships?: AllOfOrListOf<MembershipFilter>;
+    memberships?: AllOrFieldOrListOf<MembershipFilter>;
     membershipsMember?: boolean;
-    membershipsMemberFields?: AllOfOrListOf<MemberField>;
+    membershipsMemberFields?: AllOrFieldOrListOf<MemberField>;
     membersInvited?: MemberFilter;
-    membersInvitedFields?: AllOfOrListOf<MemberInvitedField>;
+    membersInvitedFields?: AllOrFieldOrListOf<MemberInvitedField>;
     paidAccount?: boolean;
     pluginData?: boolean;
   }): TypedFetch<OrganizationRecord> {
@@ -114,16 +129,15 @@ export class Organization extends BaseResource {
 
   public getOrganizations(params?: {
     filter?: OrganizationFilter;
-    fields?: AllOfOrListOf<OrganizationField>;
+    fields?: AllOrFieldOrListOf<OrganizationField>;
     paidAccount?: boolean;
   }): TypedFetch<OrganizationRecord[]> {
     return this.apiGet("/", params);
   }
 
-  // TODO: Ensure this works, it isn't actually documented.
   public getNestedOrganizations<TPayload extends object>(params?: {
     organizations?: OrganizationFilter;
-    organizationFields?: AllOfOrListOf<OrganizationField>;
+    organizationFields?: AllOrFieldOrListOf<OrganizationField>;
   }): TypedFetch<TPayload & { organizations: OrganizationRecord[] }> {
     return this.apiGetNested(params);
   }
@@ -140,9 +154,9 @@ export class Organization extends BaseResource {
     return this.apiGet(`/${field}`);
   }
 
-  public getDeltas(params: {
-    ixLastUpdate: number;
-    tags: string;
+  public getDeltas(params?: {
+    ixLastUpdate?: number;
+    tags?: string;
   }): TypedFetch<unknown> {
     return this.apiGet("/deltas", params);
   }
@@ -155,13 +169,35 @@ export class Organization extends BaseResource {
     return this.apiGet("/tags");
   }
 
+  public getIfTransferrableToEnterprise(): TypedFetch<unknown> {
+    if (!this.isChildOf("enterprise")) {
+      throw new Error(
+        "You can only call getIfTransferrableToEnterprise() from an enterprise resource",
+      );
+    }
+
+    const existingPathElements = [...this.pathElements];
+    this.pathElements = [
+      ...this.parentElements,
+      "transferrable",
+      "organization",
+      this.identifier,
+    ];
+    const response = this.apiGet("/");
+    this.pathElements = existingPathElements;
+
+    return response;
+  }
+
   public addOrganization(params: {
     displayName: string;
     desc?: string;
     name?: string;
     website?: string;
   }): TypedFetch<OrganizationRecord> {
-    return this.apiPost("/", { ...params, separator: "/" });
+    this.validateUrl("website", params.website);
+
+    return this.apiPost("/", params);
   }
 
   public uploadLogo(file: FileUpload): TypedFetch<unknown> {
@@ -212,11 +248,20 @@ export class Organization extends BaseResource {
   public transferToEnterprise(): TypedFetch<unknown> {
     if (!this.isChildOf("enterprise")) {
       throw new Error(
-        "You can only call `transferToEnterprise()` on an enterprise",
+        "You can only call transferToEnterprise() from an enterprise resource",
       );
     }
 
-    return this.apiPut("/");
+    if (this.identifier) {
+      this.pathElements.pop();
+    } else {
+      throw new Error(
+        "You must pass an organization ID to the organization resource when " +
+          "calling transferToEnterprise()",
+      );
+    }
+
+    return this.apiPut("/", { idOrganization: this.identifier });
   }
 
   public deleteOrganization(): TypedFetch<unknown> {
@@ -225,6 +270,16 @@ export class Organization extends BaseResource {
 
   public deleteLogo(): TypedFetch<unknown> {
     return this.apiDelete("/logo");
+  }
+
+  public removeFromEnterprise(): TypedFetch<unknown> {
+    if (!this.isChildOf("enterprise")) {
+      throw new Error(
+        "You can only call removeFromEnterprise() from an enterprise resource",
+      );
+    }
+
+    return this.apiDelete("/");
   }
 
   public actions(): Action {
@@ -252,9 +307,9 @@ export class Organization extends BaseResource {
     });
   }
 
-  public memberships(membershipId: string = ""): Membership {
+  public memberships(idMembership: string = ""): Membership {
     return new Membership(this.config, this.pathElements, "memberships", {
-      identifier: membershipId,
+      identifier: idMembership,
       isReturnUrl: this.isReturnUrl,
     });
   }

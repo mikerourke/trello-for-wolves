@@ -51,7 +51,8 @@ async function fetchWithRetries<T>(
     if (response.status === 429) {
       if (attemptsRemaining === 0) {
         throw new Error(
-          "Maximum retry attempts reached, try increasing the `backoffTime` or `maxRetryAttempts`",
+          `Maximum retry attempts reached, try increasing the "backoffTime" ` +
+            `or "maxRetryAttempts"`,
         );
       }
 

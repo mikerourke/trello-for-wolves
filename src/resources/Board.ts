@@ -13,7 +13,7 @@ import { Membership, MembershipFilter } from "./Membership";
 import { Organization, OrganizationField } from "./Organization";
 import { Plugin } from "./Plugin";
 import {
-  AllOfOrListOf,
+  AllOrFieldOrListOf,
   AllOrNone,
   FilterDate,
   Format,
@@ -25,6 +25,7 @@ import {
   ValidResourceFields,
   ValueResponse,
 } from "../typeDefs";
+import { BoardPref } from "./BoardPref";
 
 export type BoardActionType =
   | "addAttachmentToCard"
@@ -89,6 +90,7 @@ export type BoardBackgroundColor =
   | "grey";
 
 export type BoardFilter =
+  | "all"
   | "closed"
   | "members"
   | "open"
@@ -248,45 +250,45 @@ export type BoardField = ValidResourceFields<BoardRecord>;
  */
 export class Board extends BaseResource {
   public getBoard(params?: {
-    actions?: AllOfOrListOf<BoardActionType>;
-    actionFields?: AllOfOrListOf<ActionField>;
+    actions?: AllOrFieldOrListOf<BoardActionType>;
+    actionFields?: AllOrFieldOrListOf<ActionField>;
     actionMember?: boolean;
     actionMemberCreator?: boolean;
-    actionMemberCreatorFields?: AllOfOrListOf<MemberInvitedField>;
-    actionMemberFields?: AllOfOrListOf<MemberInvitedField>;
+    actionMemberCreatorFields?: AllOrFieldOrListOf<MemberInvitedField>;
+    actionMemberFields?: AllOrFieldOrListOf<MemberInvitedField>;
     actionsDisplay?: boolean;
     actionsEntities?: boolean;
     actionsFormat?: Format;
     actionsLimit?: number;
     actionsSince?: FilterDate;
     boardStars?: BoardStarsFilter;
-    cardAttachmentFields?: AllOfOrListOf<AttachmentField>;
+    cardAttachmentFields?: AllOrFieldOrListOf<AttachmentField>;
     cardAttachments?: AttachmentFilter;
     cardChecklists?: AllOrNone;
-    cardFields?: AllOfOrListOf<CardField>;
+    cardFields?: AllOrFieldOrListOf<CardField>;
     cardPluginData?: boolean;
     cards?: CardFilter;
     cardStickers?: boolean;
-    checklistFields?: AllOfOrListOf<ChecklistField>;
+    checklistFields?: AllOrFieldOrListOf<ChecklistField>;
     checklists?: AllOrNone;
     customFields?: boolean;
-    fields?: AllOfOrListOf<BoardField>;
-    labelFields?: AllOfOrListOf<LabelField>;
+    fields?: AllOrFieldOrListOf<BoardField>;
+    labelFields?: AllOrFieldOrListOf<LabelField>;
     labels?: AllOrNone;
     labelsLimit?: number;
-    listFields?: AllOfOrListOf<ListField>;
+    listFields?: AllOrFieldOrListOf<ListField>;
     lists?: ListFilter;
-    memberFields?: AllOfOrListOf<MemberInvitedField>;
+    memberFields?: AllOrFieldOrListOf<MemberInvitedField>;
     members?: MemberFilter;
-    memberships?: AllOfOrListOf<MembershipFilter>;
+    memberships?: AllOrFieldOrListOf<MembershipFilter>;
     membershipsMember?: boolean;
-    membershipsMemberFields?: AllOfOrListOf<MemberInvitedField>;
+    membershipsMemberFields?: AllOrFieldOrListOf<MemberInvitedField>;
     membersInvited?: MemberFilter;
-    membersInvitedFields?: AllOfOrListOf<MemberInvitedField>;
+    membersInvitedFields?: AllOrFieldOrListOf<MemberInvitedField>;
     myPrefs?: boolean;
     organization?: boolean;
-    organizationFields?: AllOfOrListOf<OrganizationField>;
-    organizationMemberships?: AllOfOrListOf<MembershipFilter>;
+    organizationFields?: AllOrFieldOrListOf<OrganizationField>;
+    organizationMemberships?: AllOrFieldOrListOf<MembershipFilter>;
     organizationPluginData?: boolean;
     pluginData?: boolean;
     tags?: boolean;
@@ -295,40 +297,38 @@ export class Board extends BaseResource {
   }
 
   public getBoards(params?: {
-    actions?: AllOfOrListOf<BoardActionType>;
-    actionFields?: AllOfOrListOf<ActionField>;
+    actions?: AllOrFieldOrListOf<BoardActionType>;
+    actionFields?: AllOrFieldOrListOf<ActionField>;
     actionsEntities?: boolean;
     actionsFormat?: Format;
     actionsLimit?: number;
     actionsSince?: FilterDate;
-    fields?: AllOfOrListOf<BoardField>;
-    filter?: AllOfOrListOf<BoardFilter>;
+    fields?: AllOrFieldOrListOf<BoardField>;
+    filter?: BoardFilter;
     lists?: ListFilter;
-    memberships?: AllOfOrListOf<MembershipFilter>;
+    memberships?: AllOrFieldOrListOf<MembershipFilter>;
     organization?: boolean;
-    organizationFields?: AllOfOrListOf<OrganizationField>;
+    organizationFields?: AllOrFieldOrListOf<OrganizationField>;
   }): TypedFetch<BoardRecord[]> {
     return this.apiGet("/", params);
   }
 
   public getNestedBoards<TPayload extends object>(params?: {
-    boards?: AllOfOrListOf<BoardFilter>;
-    boardFields?: AllOfOrListOf<BoardField>;
-    boardActions?: AllOfOrListOf<BoardActionType>;
+    boards?: AllOrFieldOrListOf<BoardFilter>;
+    boardFields?: AllOrFieldOrListOf<BoardField>;
+    boardActions?: AllOrFieldOrListOf<BoardActionType>;
     boardActionsEntities?: boolean;
     boardActionsDisplay?: boolean;
     boardActionsFormat?: Format;
     boardActionsSince?: FilterDate;
     boardActionsLimit?: number;
-    boardActionFields?: AllOfOrListOf<ActionField>;
+    boardActionFields?: AllOrFieldOrListOf<ActionField>;
     boardLists?: ListFilter;
   }): TypedFetch<TPayload & { boards: BoardRecord[] }> {
     return this.apiGetNested(params);
   }
 
-  public getBoardsFilteredBy(
-    filter: AllOfOrListOf<BoardFilter>,
-  ): TypedFetch<unknown> {
+  public getBoardsFilteredBy(filter: BoardFilter): TypedFetch<unknown> {
     return this.apiGet("/", { filter });
   }
 
@@ -351,8 +351,8 @@ export class Board extends BaseResource {
     desc?: string;
     idOrganization?: string;
     idBoardSource?: string;
-    keepFromSource?: AllOfOrListOf<KeepFromSourceField>;
-    powerUps?: AllOfOrListOf<PowerUp>;
+    keepFromSource?: AllOrFieldOrListOf<KeepFromSourceField>;
+    powerUps?: AllOrFieldOrListOf<PowerUp>;
     prefs?: {
       permissionLevel?: PermissionLevel;
       voting?: GroupPermission;
@@ -448,44 +448,6 @@ export class Board extends BaseResource {
     return this.apiPut("/subscribed", { value });
   }
 
-  public updateBackground(value: string): TypedFetch<BoardRecord> {
-    return this.apiPut("/prefs/background", { value });
-  }
-
-  public updateCalendarFeedEnabled(value: boolean): TypedFetch<BoardRecord> {
-    return this.apiPut("/prefs/calendarFeedEnabled", { value });
-  }
-
-  public updateCardAging(value: CardAging): TypedFetch<BoardRecord> {
-    return this.apiPut("/prefs/cardAging", { value });
-  }
-
-  public updateCardCovers(value: boolean): TypedFetch<BoardRecord> {
-    return this.apiPut("/prefs/cardCovers", { value });
-  }
-
-  public updateComments(value: GroupPermission): TypedFetch<BoardRecord> {
-    return this.apiPut("/prefs/comments", { value });
-  }
-
-  public updateInvitations(value: Invitation): TypedFetch<BoardRecord> {
-    return this.apiPut("/prefs/invitations", { value });
-  }
-
-  public updatePermissionLevel(
-    value: BoardPermissionLevel,
-  ): TypedFetch<BoardRecord> {
-    return this.apiPut("/prefs/permissionLevel", { value });
-  }
-
-  public updateSelfJoin(value: boolean): TypedFetch<BoardRecord> {
-    return this.apiPut("/prefs/selfJoin", { value });
-  }
-
-  public updateVoting(value: GroupPermission): TypedFetch<BoardRecord> {
-    return this.apiPut("/prefs/voting", { value });
-  }
-
   public deleteBoard(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
@@ -531,9 +493,8 @@ export class Board extends BaseResource {
     });
   }
 
-  public customFields(idCustomField: string = ""): CustomField {
+  public customFields(): CustomField {
     return new CustomField(this.config, this.pathElements, "customFields", {
-      identifier: idCustomField,
       isReturnUrl: this.isReturnUrl,
     });
   }
@@ -586,6 +547,12 @@ export class Board extends BaseResource {
 
   public plugins(): Plugin {
     return new Plugin(this.config, this.pathElements, "plugins", {
+      isReturnUrl: this.isReturnUrl,
+    });
+  }
+
+  public prefs(): BoardPref {
+    return new BoardPref(this.config, this.pathElements, "prefs", {
       isReturnUrl: this.isReturnUrl,
     });
   }

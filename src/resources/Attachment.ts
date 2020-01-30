@@ -1,6 +1,6 @@
 import { BaseResource } from "./BaseResource";
 import {
-  AllOfOrListOf,
+  AllOrFieldOrListOf,
   FileUpload,
   Limits,
   TypedFetch,
@@ -74,14 +74,14 @@ export type AttachmentField = ValidResourceFields<AttachmentRecord>;
  */
 export class Attachment extends BaseResource {
   public getAttachment(params?: {
-    fields?: AllOfOrListOf<AttachmentField>;
+    fields?: AllOrFieldOrListOf<AttachmentField>;
   }): TypedFetch<AttachmentRecord> {
     return this.apiGet("/", params);
   }
 
   public getAttachments(params?: {
-    fields?: AllOfOrListOf<AttachmentField>;
-    filter?: AllOfOrListOf<AttachmentFilter>;
+    fields?: AllOrFieldOrListOf<AttachmentField>;
+    filter?: AllOrFieldOrListOf<AttachmentFilter>;
   }): TypedFetch<AttachmentRecord[]> {
     return this.apiGet("/", params);
   }
@@ -94,21 +94,17 @@ export class Attachment extends BaseResource {
   }): TypedFetch<AttachmentRecord> {
     if ((params.name ?? "").length > 256) {
       throw new Error(
-        "The `name` field for an attachment cannot exceed 256 characters",
+        `The "name" field for an attachment cannot exceed 256 characters`,
       );
     }
 
     if ((params.mimeType ?? "").length > 256) {
       throw new Error(
-        "The `mimeType` field for an attachment cannot exceed 256 characters",
+        `The "mimeType" field for an attachment cannot exceed 256 characters`,
       );
     }
 
-    if (params.url && !/http:\/\/|https:\/\//gi.test(params.url.toString())) {
-      throw new Error(
-        "The `url` field must start with `http://` or `https://`",
-      );
-    }
+    this.validateUrl("url", params.url);
 
     return this.apiPost("/", params);
   }

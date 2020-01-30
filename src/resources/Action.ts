@@ -10,7 +10,7 @@ import {
 } from "./Member";
 import { Organization } from "./Organization";
 import {
-  AllOfOrListOf,
+  AllOrFieldOrListOf,
   FilterDate,
   Format,
   Limits,
@@ -161,11 +161,11 @@ export class Action<TActionType = ActionType> extends BaseResource {
   public getAction(params?: {
     display?: boolean;
     entities?: boolean;
-    fields?: AllOfOrListOf<ActionField>;
+    fields?: AllOrFieldOrListOf<ActionField>;
     member?: boolean;
-    memberFields?: AllOfOrListOf<MemberInvitedField>;
+    memberFields?: AllOrFieldOrListOf<MemberInvitedField>;
     memberCreator?: boolean;
-    memberCreatorFields?: AllOfOrListOf<MemberInvitedField>;
+    memberCreatorFields?: AllOrFieldOrListOf<MemberInvitedField>;
   }): TypedFetch<ActionRecord<TActionType>> {
     return this.apiGet("/", params);
   }
@@ -173,8 +173,8 @@ export class Action<TActionType = ActionType> extends BaseResource {
   public getActions(params?: {
     entities?: boolean;
     display?: boolean;
-    filter?: AllOfOrListOf<TActionType>;
-    fields?: AllOfOrListOf<ActionField>;
+    filter?: AllOrFieldOrListOf<TActionType>;
+    fields?: AllOrFieldOrListOf<ActionField>;
     limit?: number;
     format?: Format;
     since?: FilterDate;
@@ -182,25 +182,25 @@ export class Action<TActionType = ActionType> extends BaseResource {
     page?: number; // Not allowed for Card resources
     idModels?: string;
     member?: boolean;
-    memberFields?: AllOfOrListOf<MemberInvitedField>;
+    memberFields?: AllOrFieldOrListOf<MemberInvitedField>;
     memberCreator?: boolean;
-    memberCreatorFields?: AllOfOrListOf<MemberInvitedField>;
+    memberCreatorFields?: AllOrFieldOrListOf<MemberInvitedField>;
   }): TypedFetch<ActionRecord<TActionType>[]> {
     return this.apiGet("/", params);
   }
 
   public getNestedActions<TPayload extends object>(params?: {
-    actions?: AllOfOrListOf<TActionType>;
+    actions?: AllOrFieldOrListOf<TActionType>;
     actionsEntities?: boolean;
     actionsDisplay?: boolean;
     actionsFormat?: Format;
     actionsSince?: string;
     actionsLimit?: number;
-    actionFields?: AllOfOrListOf<ActionField>;
+    actionFields?: AllOrFieldOrListOf<ActionField>;
     actionMember?: boolean;
-    actionMemberFields?: AllOfOrListOf<MemberField>;
+    actionMemberFields?: AllOrFieldOrListOf<MemberField>;
     actionMemberCreator?: boolean;
-    actionMemberCreatorFields?: AllOfOrListOf<MemberField>;
+    actionMemberCreatorFields?: AllOrFieldOrListOf<MemberField>;
   }): TypedFetch<TPayload & { actions: ActionRecord<TActionType>[] }> {
     return this.apiGetNested(params);
   }

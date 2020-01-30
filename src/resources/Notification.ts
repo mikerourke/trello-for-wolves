@@ -6,12 +6,7 @@ import { List } from "./List";
 import { Member, MemberField, MemberRecord } from "./Member";
 import { Organization, OrganizationField } from "./Organization";
 import { ReactionRecord } from "./Reaction";
-import {
-  AllOfOrListOf,
-  TypedFetch,
-  ValidResourceFields,
-  ValueResponse,
-} from "../typeDefs";
+import { AllOrFieldOrListOf, TypedFetch, ValueResponse } from "../typeDefs";
 
 export type NotificationType =
   | "addAdminToBoard"
@@ -73,27 +68,30 @@ export interface NotificationRecord {
   reactions?: ReactionRecord[];
 }
 
-export type NotificationField = Omit<
-  ValidResourceFields<NotificationRecord>,
-  "dateRead" | "idAction" | "reactions"
->;
+export type NotificationField =
+  | "id"
+  | "data"
+  | "date"
+  | "idMemberCreator"
+  | "type"
+  | "unread";
 
 export class Notification extends BaseResource {
   public getNotification(params?: {
     board?: boolean;
-    boardFields?: AllOfOrListOf<BoardField>;
+    boardFields?: AllOrFieldOrListOf<BoardField>;
     card?: boolean;
-    cardFields?: AllOfOrListOf<CardField>;
+    cardFields?: AllOrFieldOrListOf<CardField>;
     display?: boolean;
     entities?: boolean;
-    fields?: AllOfOrListOf<NotificationField>;
+    fields?: AllOrFieldOrListOf<NotificationField>;
     list?: boolean;
     member?: boolean;
-    memberFields?: AllOfOrListOf<MemberField>;
+    memberFields?: AllOrFieldOrListOf<MemberField>;
     memberCreator?: boolean;
-    memberCreatorFields?: AllOfOrListOf<MemberField>;
+    memberCreatorFields?: AllOrFieldOrListOf<MemberField>;
     organization?: boolean;
-    organizationFields?: AllOfOrListOf<OrganizationField>;
+    organizationFields?: AllOrFieldOrListOf<OrganizationField>;
   }): TypedFetch<NotificationRecord> {
     return this.apiGet("/", params);
   }
@@ -101,27 +99,27 @@ export class Notification extends BaseResource {
   public getNotifications(params?: {
     entities?: boolean;
     display?: boolean;
-    filter?: AllOfOrListOf<NotificationType>;
+    filter?: AllOrFieldOrListOf<NotificationType>;
     readFilter?: ReadFilter;
-    fields?: AllOfOrListOf<NotificationField>;
+    fields?: AllOrFieldOrListOf<NotificationField>;
     limit?: number;
     page?: number;
     before?: string | null;
     since?: string | null;
     memberCreator?: boolean;
-    memberCreatorFields?: AllOfOrListOf<MemberField>;
+    memberCreatorFields?: AllOrFieldOrListOf<MemberField>;
   }): TypedFetch<NotificationRecord[]> {
     return this.apiGet("/", params);
   }
 
   public getNestedNotifications<TPayload extends object>(params?: {
-    notifications?: AllOfOrListOf<NotificationType>;
+    notifications?: AllOrFieldOrListOf<NotificationType>;
     notificationsEntities?: boolean;
     notificationsDisplay?: boolean;
     notificationsLimit?: number;
-    notificationFields?: AllOfOrListOf<NotificationField>;
+    notificationFields?: AllOrFieldOrListOf<NotificationField>;
     notificationMemberCreator?: boolean;
-    notificationMemberCreatorFields?: AllOfOrListOf<MemberField>;
+    notificationMemberCreatorFields?: AllOrFieldOrListOf<MemberField>;
     notificationBefore?: string | null;
     notificationSince?: string | null;
   }): TypedFetch<TPayload & { notifications: NotificationRecord[] }> {
@@ -129,7 +127,7 @@ export class Notification extends BaseResource {
   }
 
   public getNotificationsFilteredBy(
-    filter: AllOfOrListOf<NotificationType>,
+    filter: AllOrFieldOrListOf<NotificationType>,
   ): TypedFetch<NotificationRecord[]> {
     return this.apiGet("/", { filter });
   }

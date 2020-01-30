@@ -43,7 +43,7 @@ export * from "./resources/Plugin";
 export * from "./resources/Reaction";
 export * from "./resources/SavedSearch";
 export * from "./resources/Search";
-export * from "./resources/Sticker";
+export * from "./resources/Stickers";
 export * from "./resources/Token";
 export * from "./resources/Type";
 export * from "./resources/Webhook";
@@ -84,7 +84,7 @@ export class Trello {
     });
   }
 
-  public customField(idCustomField: string = ""): CustomField {
+  public customFields(idCustomField: string = ""): CustomField {
     return new CustomField(this.config, [], "customFields", {
       identifier: idCustomField,
     });
@@ -95,7 +95,7 @@ export class Trello {
   }
 
   public enterprises(idEnterprise: string = ""): Enterprise {
-    return new Enterprise(this.config, [], "enterprise", {
+    return new Enterprise(this.config, [], "enterprises", {
       identifier: idEnterprise,
     });
   }

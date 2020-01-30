@@ -1,7 +1,7 @@
 import { BaseResource } from "./BaseResource";
 import { Board } from "./Board";
 import {
-  AllOfOrListOf,
+  AllOrFieldOrListOf,
   AllOrNone,
   ColorName,
   Limits,
@@ -32,14 +32,14 @@ export type LabelField = ValidResourceFields<LabelRecord>;
 
 export class Label extends BaseResource {
   public getLabel(params?: {
-    fields?: AllOfOrListOf<LabelField>;
+    fields?: AllOrFieldOrListOf<LabelField>;
     limit?: number;
   }): TypedFetch<LabelRecord> {
     return this.apiGet("/", params);
   }
 
   public getLabels(params?: {
-    fields?: AllOfOrListOf<LabelField>;
+    fields?: AllOrFieldOrListOf<LabelField>;
     limit?: number;
   }): TypedFetch<LabelRecord[]> {
     return this.apiGet("/", params);
@@ -47,7 +47,7 @@ export class Label extends BaseResource {
 
   public getNestedLabels<TPayload extends object>(params?: {
     labels?: AllOrNone;
-    labelFields?: AllOfOrListOf<LabelField>;
+    labelFields?: AllOrFieldOrListOf<LabelField>;
     /** A number from 0 to 1000. */
     labelsLimit?: number;
   }): TypedFetch<TPayload & { labels: LabelRecord[] }> {
@@ -55,20 +55,27 @@ export class Label extends BaseResource {
   }
 
   public addLabel(params: {
-    color: ColorName | null;
     name: string;
+    color: ColorName | null;
     idBoard?: string;
   }): TypedFetch<LabelRecord> {
     const updatedParams = { ...params };
     if (this.isChildOf("board")) {
       updatedParams.idBoard = this.pathElements[1];
     }
+
+    if (!updatedParams.idBoard) {
+      throw new Error(
+        `You must specify the "idBoard" param when calling addLabel()`,
+      );
+    }
+
     return this.apiPost("/", updatedParams);
   }
 
   public updateLabel(params: {
-    color?: ColorName | null;
     name?: string;
+    color?: ColorName | null;
   }): TypedFetch<LabelRecord> {
     return this.apiPut("/", params);
   }

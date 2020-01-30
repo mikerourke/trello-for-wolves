@@ -1,5 +1,5 @@
 import { BaseResource } from "./BaseResource";
-import { AllOfOrListOf, ColorName, FileUpload, TypedFetch } from "../typeDefs";
+import { AllOrFieldOrListOf, ColorName, FileUpload, TypedFetch } from "../typeDefs";
 
 export type BoardBackgroundBrightness = "dark" | "light" | "unknown";
 
@@ -44,8 +44,11 @@ export interface BoardBackgroundImageRecord
   scaled: BoardBackgroundImageScaledRecord[];
 }
 
-export type AnyBoardBackgroundRecord = BoardBackground &
-  BoardBackgroundImageRecord;
+export type CustomBoardBackgroundRecord = BoardBackgroundImageRecord;
+
+export type AnyBoardBackgroundRecord =
+  | BoardBackgroundRecord
+  | CustomBoardBackgroundRecord;
 
 export type BoardBackgroundField =
   | "brightness"
@@ -61,7 +64,7 @@ export type BoardBackgroundField =
  */
 export class BoardBackground extends BaseResource {
   public getBoardBackground(params?: {
-    fields?: AllOfOrListOf<BoardBackgroundField>;
+    fields?: AllOrFieldOrListOf<BoardBackgroundField>;
   }): TypedFetch<AnyBoardBackgroundRecord> {
     return this.apiGet("/", params);
   }
@@ -74,18 +77,49 @@ export class BoardBackground extends BaseResource {
 
   public uploadBoardBackground(
     file: FileUpload,
-  ): TypedFetch<BoardBackgroundImageRecord> {
+  ): TypedFetch<CustomBoardBackgroundRecord> {
     return this.apiPost("/", { file });
   }
 
   public updateBoardBackground(params: {
     brightness?: BoardBackgroundBrightness;
     tile?: boolean;
-  }): TypedFetch<AnyBoardBackgroundRecord> {
+  }): TypedFetch<CustomBoardBackgroundRecord> {
     return this.apiPut("/", params);
   }
 
   public deleteBoardBackground(): TypedFetch<unknown> {
+    return this.apiDelete("/");
+  }
+}
+
+export class CustomBoardBackground extends BaseResource {
+  public getCustomBoardBackground(params?: {
+    fields?: AllOrFieldOrListOf<BoardBackgroundField>;
+  }): TypedFetch<CustomBoardBackgroundRecord> {
+    return this.apiGet("/", params);
+  }
+
+  public getCustomBoardBackgrounds(): TypedFetch<
+    CustomBoardBackgroundRecord[]
+  > {
+    return this.apiGet("/");
+  }
+
+  public uploadCustomBoardBackground(
+    file: FileUpload,
+  ): TypedFetch<CustomBoardBackgroundRecord> {
+    return this.apiPost("/", { file });
+  }
+
+  public updateCustomBoardBackground(params: {
+    brightness?: BoardBackgroundBrightness;
+    tile?: boolean;
+  }): TypedFetch<CustomBoardBackgroundRecord> {
+    return this.apiPut("/", params);
+  }
+
+  public deleteCustomBoardBackground(): TypedFetch<unknown> {
     return this.apiDelete("/");
   }
 }

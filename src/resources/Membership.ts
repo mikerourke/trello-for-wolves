@@ -5,9 +5,8 @@ import {
   MemberFilter,
   MemberInvitedField,
   MemberRecord,
-  MemberType,
 } from "./Member";
-import { AllOfOrListOf, TypedFetch } from "../typeDefs";
+import { AllOrFieldOrListOf, TypedFetch } from "../typeDefs";
 
 export type MembershipFilter =
   | "active"
@@ -31,7 +30,7 @@ export interface MembershipRecord {
 export class Membership extends BaseResource {
   public getMembership(params?: {
     member?: boolean;
-    memberFields?: AllOfOrListOf<MemberField>;
+    memberFields?: AllOrFieldOrListOf<MemberField>;
   }): TypedFetch<MembershipRecord> {
     return this.apiGet("/", params);
   }
@@ -42,20 +41,27 @@ export class Membership extends BaseResource {
     // These are callable from a Board only:
     activity?: boolean;
     orgMemberType?: boolean;
-    memberFields?: AllOfOrListOf<MemberField>;
+    memberFields?: AllOrFieldOrListOf<MemberField>;
   }): TypedFetch<MembershipRecord[]> {
     return this.apiGet("/", params);
   }
 
-  /**
-   * Use the BoardMemberType when calling this from a board and MemberType
-   * when calling from a member or organization.
-   */
+  public getNestedMemberships<TPayload extends object>(
+    filter?: AllOrFieldOrListOf<MembershipFilter>,
+  ): TypedFetch<TPayload & { memberships: MembershipRecord[] }> {
+    return this.apiGetNested({ memberships: filter });
+  }
+
   public updateMembership(params: {
-    // When called from Member or Organization:
-    type: BoardMemberType | MemberType;
-    fields?: AllOfOrListOf<MemberInvitedField>;
+    type: BoardMemberType;
+    memberFields?: AllOrFieldOrListOf<MemberInvitedField>;
   }): TypedFetch<MembershipRecord> {
-    return this.apiPut("/", params);
+    if (!this.identifier) {
+      throw new Error(
+        "You must pass a membership ID to memberships() when calling updateMembership() from a board",
+      );
+    }
+
+    return this.apiPut("/", { ...params, idMembership: this.identifier });
   }
 }

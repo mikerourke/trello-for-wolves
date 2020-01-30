@@ -1,12 +1,12 @@
 import { BaseResource } from "./BaseResource";
 import {
-  AllOfOrListOf,
+  AllOrFieldOrListOf,
   AllOrNone,
   PositionOrFloat,
   TypedFetch,
 } from "../typeDefs";
 
-export type CheckItemState = "complete" | "false" | "incomplete" | "true";
+export type CheckItemState = "complete" | "incomplete";
 
 export type CheckItemStateField = "idCheckItem" | "state";
 
@@ -41,21 +41,27 @@ export type CheckItemField = "name" | "nameData" | "pos" | "state" | "type";
 
 export class CheckItem extends BaseResource {
   public getCheckItem(params?: {
-    fields?: AllOfOrListOf<CheckItemField>;
+    fields?: AllOrFieldOrListOf<CheckItemField>;
   }): TypedFetch<CheckItemRecord> {
     return this.apiGet("/", params);
   }
 
   public getCheckItems(params?: {
     filter?: AllOrNone;
-    fields?: AllOfOrListOf<CheckItemField>;
+    fields?: AllOrFieldOrListOf<CheckItemField>;
   }): TypedFetch<CheckItemRecord[]> {
     return this.apiGet("/", params);
   }
 
   public getCheckItemStates(params?: {
-    fields?: AllOfOrListOf<CheckItemStateField>;
+    fields?: AllOrFieldOrListOf<CheckItemStateField>;
   }): TypedFetch<unknown> {
+    if (!this.isChildOf("card")) {
+      throw new Error(
+        "You can only call getCheckItemStates() from a card resource",
+      );
+    }
+
     return this.apiGet("/", params);
   }
 
@@ -72,12 +78,34 @@ export class CheckItem extends BaseResource {
   }
 
   public updateCheckItem(params: {
-    idChecklist?: string | null;
     name?: string;
-    pos?: PositionOrFloat;
     state?: CheckItemState;
+    idChecklist?: string;
+    pos?: PositionOrFloat;
   }): TypedFetch<CheckItemRecord> {
-    return this.apiPut("/", params);
+    if (!this.isChildOf("card")) {
+      throw new Error(
+        "You can only call updateCheckItem() from a card resource",
+      );
+    }
+
+    const updatedParams = { ...params };
+
+    // If this method is called from the path
+    // /cards/{idCard}/checklist/{idChecklist}/checkItem/{idCheckItem}
+    // Set the idChecklist equal to the {idChecklist}:
+    const firstChildPath = this.parentElements[2] ?? "";
+    if (firstChildPath === "checklist") {
+      updatedParams.idChecklist = params.idChecklist || this.parentElements[3];
+    }
+
+    if (!updatedParams.idChecklist) {
+      throw new Error(
+        `You must specify the "idChecklist" param when calling updateCheckItem()`,
+      );
+    }
+
+    return this.apiPut("/", updatedParams);
   }
 
   public updateName(value: string): TypedFetch<CheckItemRecord> {
