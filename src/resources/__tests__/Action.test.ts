@@ -124,6 +124,32 @@ describe("the Action resource", () => {
     );
   });
 
+  test("updates an action", async () => {
+    await trello.actions(TEST_ACTION_ID).updateAction({ text: "Test" });
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("PUT");
+    expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}`);
+    expect(result.url.searchParams.get("text")).toBe("Test");
+  });
+
+  test("updates the text for an action", async () => {
+    await trello.actions(TEST_ACTION_ID).updateText("Test");
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("PUT");
+    expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}/text`);
+    expect(result.url.searchParams.get("value")).toBe("Test");
+  });
+
+  test("deletes an action", async () => {
+    await trello.actions(TEST_ACTION_ID).deleteAction();
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("DELETE");
+    expect(result.url.pathname).toBe(`/1/actions/${TEST_ACTION_ID}`);
+  });
+
   test("gets the board for an action", async () => {
     await trello
       .actions(TEST_ACTION_ID)

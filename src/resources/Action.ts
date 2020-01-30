@@ -221,6 +221,20 @@ export class Action<TActionType = ActionType> extends BaseResource {
     return this.apiGet("/reactionsSummary");
   }
 
+  public updateAction(params: {
+    text: string;
+  }): TypedFetch<ActionRecord<TActionType>> {
+    return this.apiPut("/", params);
+  }
+
+  public updateText(value: string): TypedFetch<ActionRecord<TActionType>> {
+    return this.apiPut("/text", { value });
+  }
+
+  public deleteAction(): TypedFetch<ValueResponse<null>> {
+    return this.apiDelete("/");
+  }
+
   public board(): Board {
     return new Board(this.config, this.pathElements, "board", {
       isReturnUrl: this.isReturnUrl,
