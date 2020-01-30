@@ -1,10 +1,8 @@
-import { buildApiUrl } from "../utils/buildApiUrl";
 import { fetchFromApi, HttpMethod } from "../utils/fetchFromApi";
-import { Config, TypedResponse } from "../typeDefs";
+import { Config, TypedFetch } from "../typeDefs";
 
 interface BaseResourceOptions {
   identifier?: string;
-  isReturnUrl?: boolean;
 }
 
 /**
@@ -13,7 +11,6 @@ interface BaseResourceOptions {
  */
 export class BaseResource {
   protected identifier: string = "";
-  protected isReturnUrl: boolean = false;
   protected pathElements: string[];
 
   /**
@@ -29,12 +26,10 @@ export class BaseResource {
     protected groupName: string,
     options: BaseResourceOptions = {
       identifier: "",
-      isReturnUrl: false,
     },
   ) {
     this.pathElements = [...parentElements, groupName];
     this.identifier = options.identifier ?? "";
-    this.isReturnUrl = options.isReturnUrl ?? false;
 
     if (this.identifier) {
       this.pathElements.push(this.identifier);
@@ -42,28 +37,16 @@ export class BaseResource {
   }
 
   /**
-   * Sets the flag to return the URL string from the method call instead of
-   * actually making the fetch request.
-   * @example
-   *   const result = trello.boards("boardid").urlFor().actions().getActions({ filter: "all" });
-   *   console.log(result); // logs /boards/boardid/actions?filter=all
-   */
-  public urlFor(): this {
-    this.isReturnUrl = true;
-    return this;
-  }
-
-  /**
    * Returns true if the path elements of this resource instance contains the
    * contents of the specified group name/names argument.
    * @example
-   *   const resource = trello.boards("boardid").actions().getActions();
+   *   const resource = trello.boards("74836e2c91e31d1746008921").actions().getActions();
    *   // From the `actions` instance:
    *   console.log(this.isChildOf("board")); // true
    *   console.log(this.isChildOf("action")); // false
    *
    * @example
-   *   const resource = trello.boards("boardid").actions().getActions();
+   *   const resource = trello.boards("74836e2c91e31d1746008921").actions().getActions();
    *   // From the `actions` instance:
    *   console.log(this.isChildOf(["board", "enterprise"])); // true
    *   console.log(this.isChildOf(["action", "organization"])); // false
@@ -95,14 +78,12 @@ export class BaseResource {
     endpoint: string,
     queryParamsByName?: object,
     body?: unknown,
-  ): Promise<TypedResponse<T>> {
+  ): TypedFetch<T> {
     const fullEndpoint = this.pathElements.join("/").concat(endpoint);
     return this.onApiFetch("GET", fullEndpoint, queryParamsByName, body);
   }
 
-  protected apiGetNested<T>(
-    queryParamsByName: object = {},
-  ): Promise<TypedResponse<T>> {
+  protected apiGetNested<T>(queryParamsByName: object = {}): TypedFetch<T> {
     const validParams = {
       ...queryParamsByName,
       [this.groupName]: queryParamsByName[this.groupName] ?? "all",
@@ -127,7 +108,7 @@ export class BaseResource {
     endpoint: string,
     queryParamsByName?: object,
     body?: unknown,
-  ): Promise<TypedResponse<T>> {
+  ): TypedFetch<T> {
     const fullEndpoint = this.pathElements.join("/").concat(endpoint);
     return this.onApiFetch("PUT", fullEndpoint, queryParamsByName, body);
   }
@@ -136,7 +117,7 @@ export class BaseResource {
     endpoint: string,
     queryParamsByName?: object,
     body?: unknown,
-  ): Promise<TypedResponse<T>> {
+  ): TypedFetch<T> {
     const fullEndpoint = this.pathElements.join("/").concat(endpoint);
     return this.onApiFetch("POST", fullEndpoint, queryParamsByName, body);
   }
@@ -145,7 +126,7 @@ export class BaseResource {
     endpoint: string,
     queryParamsByName?: object,
     body?: unknown,
-  ): Promise<TypedResponse<T>> {
+  ): TypedFetch<T> {
     const fullEndpoint = this.pathElements.join("/").concat(endpoint);
     return this.onApiFetch("DELETE", fullEndpoint, queryParamsByName, body);
   }
@@ -163,12 +144,7 @@ export class BaseResource {
     endpoint: string,
     queryParamsByName?: object,
     body?: unknown,
-  ): Promise<TypedResponse<T>> {
-    if (this.isReturnUrl) {
-      this.isReturnUrl = false;
-      return this.getUrl(endpoint, queryParamsByName);
-    }
-
+  ): TypedFetch<T> {
     return fetchFromApi<T>({
       endpoint,
       method,
@@ -176,17 +152,5 @@ export class BaseResource {
       queryParamsByName,
       body,
     });
-  }
-
-  private getUrl<T>(
-    endpoint: string,
-    queryParamsByName?: object,
-  ): Promise<TypedResponse<T>> {
-    return (buildApiUrl({
-      endpoint,
-      config: this.config,
-      queryParamsByName,
-      isReturnOnly: true,
-    }) as unknown) as Promise<TypedResponse<T>>;
   }
 }

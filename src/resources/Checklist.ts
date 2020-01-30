@@ -128,14 +128,12 @@ export class Checklist extends BaseResource {
   public checkItem(idCheckItem: string): CheckItem {
     return new CheckItem(this.config, this.pathElements, "checkItem", {
       identifier: idCheckItem,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public checkItems(idCheckItem: string = ""): CheckItem {
     return new CheckItem(this.config, this.pathElements, "checkItems", {
       identifier: idCheckItem,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 }

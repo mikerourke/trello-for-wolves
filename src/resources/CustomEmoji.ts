@@ -1,5 +1,10 @@
 import { BaseResource } from "./BaseResource";
-import { AllOrFieldOrListOf, AllOrNone, FileUpload, TypedFetch } from "../typeDefs";
+import {
+  AllOrFieldOrListOf,
+  AllOrNone,
+  FileUpload,
+  TypedFetch,
+} from "../typeDefs";
 
 export interface CustomEmojiRecord {
   id: string;

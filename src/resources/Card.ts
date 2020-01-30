@@ -423,7 +423,6 @@ export class Card extends BaseResource {
   public attachments(idAttachment: string = ""): Attachment {
     return new Attachment(this.config, this.pathElements, "attachments", {
       identifier: idAttachment,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
@@ -434,34 +433,28 @@ export class Card extends BaseResource {
   public checkItem(idCheckItem: string): CheckItem {
     return new CheckItem(this.config, this.pathElements, "checkItem", {
       identifier: idCheckItem,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public checkItemStates(): CheckItem {
-    return new CheckItem(this.config, this.pathElements, "checkItemStates", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new CheckItem(this.config, this.pathElements, "checkItemStates");
   }
 
   public checklist(idChecklist: string): Checklist {
     return new Checklist(this.config, this.pathElements, "checklist", {
       identifier: idChecklist,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public checklists(idChecklist: string = ""): Checklist {
     return new Checklist(this.config, this.pathElements, "checklists", {
       identifier: idChecklist,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public comments(idComment: string = ""): Comment {
     return new Comment(this.config, this.pathElements, "actions", {
       identifier: idComment,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
@@ -475,7 +468,6 @@ export class Card extends BaseResource {
 
     return new CustomField(this.config, updatedPathElements, "customField", {
       identifier: idCustomField,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
@@ -484,41 +476,30 @@ export class Card extends BaseResource {
       this.config,
       this.pathElements,
       "customFieldItems",
-      {
-        isReturnUrl: this.isReturnUrl,
-      },
     );
   }
 
   public labels(): Label {
-    return new Label(this.config, this.pathElements, "labels", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Label(this.config, this.pathElements, "labels");
   }
 
   public list(): List {
-    return new List(this.config, this.pathElements, "list", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new List(this.config, this.pathElements, "list");
   }
 
   public members(): Member {
-    return new Member(this.config, this.pathElements, "members", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Member(this.config, this.pathElements, "members");
   }
 
   public membersVoted(idMember: string = ""): Member {
     return new Member(this.config, this.pathElements, "membersVoted", {
       identifier: idMember,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public stickers(idSticker: string = ""): Sticker {
     return new Sticker(this.config, this.pathElements, "stickers", {
       identifier: idSticker,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 }

@@ -433,9 +433,7 @@ export class Member extends BaseResource {
   }
 
   public actions(): Action {
-    return new Action(this.config, this.pathElements, "actions", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Action(this.config, this.pathElements, "actions");
   }
 
   public boardBackgrounds(idBoardBackground: string = ""): BoardBackground {
@@ -445,7 +443,6 @@ export class Member extends BaseResource {
       "boardBackgrounds",
       {
         identifier: idBoardBackground,
-        isReturnUrl: this.isReturnUrl,
       },
     );
   }
@@ -453,26 +450,19 @@ export class Member extends BaseResource {
   public boardStars(idBoardStar: string = ""): BoardStar {
     return new BoardStar(this.config, this.pathElements, "boardStars", {
       identifier: idBoardStar,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public boards(): Board {
-    return new Board(this.config, this.pathElements, "boards", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Board(this.config, this.pathElements, "boards");
   }
 
   public boardsInvited(): Board {
-    return new Board(this.config, this.pathElements, "boardsInvited", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Board(this.config, this.pathElements, "boardsInvited");
   }
 
   public cards(): Card {
-    return new Card(this.config, this.pathElements, "cards", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Card(this.config, this.pathElements, "cards");
   }
 
   public customBoardBackgrounds(
@@ -484,7 +474,6 @@ export class Member extends BaseResource {
       "customBoardBackgrounds",
       {
         identifier: idCustomBoardBackground,
-        isReturnUrl: this.isReturnUrl,
       },
     );
   }
@@ -492,27 +481,21 @@ export class Member extends BaseResource {
   public customEmojis(idCustomEmoji: string = ""): CustomEmoji {
     return new CustomEmoji(this.config, this.pathElements, "customEmoji", {
       identifier: idCustomEmoji,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public customStickers(idCustomSticker: string = ""): CustomSticker {
     return new CustomSticker(this.config, this.pathElements, "customStickers", {
       identifier: idCustomSticker,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public notifications(): Notification {
-    return new Notification(this.config, this.pathElements, "notifications", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Notification(this.config, this.pathElements, "notifications");
   }
 
   public organizations(): Organization {
-    return new Organization(this.config, this.pathElements, "organizations", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Organization(this.config, this.pathElements, "organizations");
   }
 
   public organizationsInvited(): Organization {
@@ -520,22 +503,16 @@ export class Member extends BaseResource {
       this.config,
       this.pathElements,
       "organizationsInvited",
-      {
-        isReturnUrl: this.isReturnUrl,
-      },
     );
   }
 
   public savedSearches(idSavedSearch: string = ""): SavedSearch {
     return new SavedSearch(this.config, this.pathElements, "savedSearches", {
       identifier: idSavedSearch,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public tokens(): Token {
-    return new Token(this.config, this.pathElements, "tokens", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Token(this.config, this.pathElements, "tokens");
   }
 }

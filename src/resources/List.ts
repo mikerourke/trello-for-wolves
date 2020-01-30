@@ -154,20 +154,14 @@ export class List extends BaseResource {
   }
 
   public actions(): Action {
-    return new Action(this.config, this.pathElements, "actions", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Action(this.config, this.pathElements, "actions");
   }
 
   public board(): Board {
-    return new Board(this.config, this.pathElements, "board", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Board(this.config, this.pathElements, "board");
   }
 
   public cards(): Card {
-    return new Card(this.config, this.pathElements, "cards", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Card(this.config, this.pathElements, "cards");
   }
 }

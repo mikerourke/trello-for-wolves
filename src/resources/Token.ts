@@ -57,15 +57,12 @@ export class Token extends BaseResource {
   }
 
   public member(): Member {
-    return new Member(this.config, this.pathElements, "member", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Member(this.config, this.pathElements, "member");
   }
 
   public webhooks(webhookId: string = ""): Webhook {
     return new Webhook(this.config, this.pathElements, "webhooks", {
       identifier: webhookId,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 }

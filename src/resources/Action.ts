@@ -236,45 +236,32 @@ export class Action<TActionType = ActionType> extends BaseResource {
   }
 
   public board(): Board {
-    return new Board(this.config, this.pathElements, "board", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Board(this.config, this.pathElements, "board");
   }
 
   public card(): Card {
-    return new Card(this.config, this.pathElements, "card", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Card(this.config, this.pathElements, "card");
   }
 
   public list(): List {
-    return new List(this.config, this.pathElements, "list", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new List(this.config, this.pathElements, "list");
   }
 
   public member(): Member {
-    return new Member(this.config, this.pathElements, "member", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Member(this.config, this.pathElements, "member");
   }
 
   public memberCreator(): Member {
-    return new Member(this.config, this.pathElements, "memberCreator", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Member(this.config, this.pathElements, "memberCreator");
   }
 
   public organization(): Organization {
-    return new Organization(this.config, this.pathElements, "organization", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Organization(this.config, this.pathElements, "organization");
   }
 
   public reactions(idReaction: string = ""): Reaction {
     return new Reaction(this.config, this.pathElements, "reactions", {
       identifier: idReaction,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 }

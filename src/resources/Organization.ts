@@ -283,40 +283,30 @@ export class Organization extends BaseResource {
   }
 
   public actions(): Action {
-    return new Action(this.config, this.pathElements, "actions", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Action(this.config, this.pathElements, "actions");
   }
 
   public boards(): Board {
-    return new Board(this.config, this.pathElements, "boards", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Board(this.config, this.pathElements, "boards");
   }
 
   public members(memberId: string = ""): Member {
     return new Member(this.config, this.pathElements, "members", {
       identifier: memberId,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public membersInvited(): Member {
-    return new Member(this.config, this.pathElements, "membersInvited", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Member(this.config, this.pathElements, "membersInvited");
   }
 
   public memberships(idMembership: string = ""): Membership {
     return new Membership(this.config, this.pathElements, "memberships", {
       identifier: idMembership,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public prefs(): OrganizationPref {
-    return new OrganizationPref(this.config, this.pathElements, "prefs", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new OrganizationPref(this.config, this.pathElements, "prefs");
   }
 }

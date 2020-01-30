@@ -14,15 +14,6 @@ describe("the Action resource", () => {
     global.resetFetchMocks();
   });
 
-  test("gets the URL for an action endpoint", () => {
-    const result = trello
-      .actions(TEST_ACTION_ID)
-      .urlFor()
-      .getAction({ display: true });
-
-    expect(result).toBe(`/actions/${TEST_ACTION_ID}?display=true`);
-  });
-
   test("gets a single action", async () => {
     await trello.actions(TEST_ACTION_ID).getAction({
       display: true,

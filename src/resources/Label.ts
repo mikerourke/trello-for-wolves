@@ -93,8 +93,6 @@ export class Label extends BaseResource {
   }
 
   public board(): Board {
-    return new Board(this.config, this.pathElements, "board", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Board(this.config, this.pathElements, "board");
   }
 }

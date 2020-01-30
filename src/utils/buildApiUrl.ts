@@ -8,23 +8,16 @@ export function buildApiUrl({
   endpoint,
   config,
   queryParamsByName,
-  isReturnOnly = false,
 }: {
   endpoint: string;
   config: Config;
   queryParamsByName?: object;
-  isReturnOnly?: boolean;
 }): string {
   const validParamsByName = {
     ...(queryParamsByName ?? {}),
+    key: config.key,
+    token: config.token,
   } as Record<string, string>;
-
-  // Don't include the key and token if only getting the URL. We don't need it
-  // for making batch requests:
-  if (!isReturnOnly) {
-    validParamsByName.key = config.key;
-    validParamsByName.token = config.token;
-  }
 
   // We don't want to attempt to stringify the "file" query param:
   if ("file" in validParamsByName) {
@@ -44,12 +37,6 @@ export function buildApiUrl({
   // Remove any duplicate `/` values. We're omitting the `https://` from the
   // URL to ensure the `//` doesn't get removed:
   const validUrl = sanitizeUrl(`/${endpoint}`);
-
-  // If the user is calling `urlFor()` from the resource (for batching), don't
-  // include the Trello url:
-  if (isReturnOnly) {
-    return queryString === "" ? validUrl : `${validUrl}?${queryString}`;
-  }
 
   return `https://api.trello.com/1${validUrl}?${queryString}`;
 }

@@ -1,25 +1,25 @@
 import { buildApiUrl } from "../buildApiUrl";
 
 describe("the buildApiUrl method", () => {
-  test("returns the correct URL if isReturnOnly = true queryParamsByName are not empty", () => {
+  test("returns the correct URL if queryParamsByName are not empty", () => {
     const result = buildApiUrl({
       endpoint: "/test",
       config: global.trelloConfig,
       queryParamsByName: { filter: "all" },
-      isReturnOnly: true,
     });
 
-    expect(result).toBe("/test?filter=all");
+    expect(result).toBe(
+      "https://api.trello.com/1/test?filter=all&key=KEY&token=TOKEN",
+    );
   });
 
-  test("returns the correct URL if isReturnOnly = true and queryParamsByName are empty", () => {
+  test("returns the correct URL if queryParamsByName are empty", () => {
     const result = buildApiUrl({
       endpoint: "/test",
       config: global.trelloConfig,
       queryParamsByName: {},
-      isReturnOnly: true,
     });
 
-    expect(result).toBe("/test");
+    expect(result).toBe("https://api.trello.com/1/test?key=KEY&token=TOKEN");
   });
 });

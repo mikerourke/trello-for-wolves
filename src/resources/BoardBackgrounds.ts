@@ -1,5 +1,10 @@
 import { BaseResource } from "./BaseResource";
-import { AllOrFieldOrListOf, ColorName, FileUpload, TypedFetch } from "../typeDefs";
+import {
+  AllOrFieldOrListOf,
+  ColorName,
+  FileUpload,
+  TypedFetch,
+} from "../typeDefs";
 
 export type BoardBackgroundBrightness = "dark" | "light" | "unknown";
 

@@ -467,7 +467,6 @@ export class Board extends BaseResource {
       "actions",
       {
         identifier: idAction,
-        isReturnUrl: this.isReturnUrl,
       },
     );
   }
@@ -475,85 +474,66 @@ export class Board extends BaseResource {
   public boardStars(idBoardStar: string = ""): BoardStar {
     return new BoardStar(this.config, this.pathElements, "boardStars", {
       identifier: idBoardStar,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public cards(idCard: string = ""): Card {
     return new Card(this.config, this.pathElements, "cards", {
       identifier: idCard,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public checklists(idChecklist: string = ""): Checklist {
     return new Checklist(this.config, this.pathElements, "checklists", {
       identifier: idChecklist,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public customFields(): CustomField {
-    return new CustomField(this.config, this.pathElements, "customFields", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new CustomField(this.config, this.pathElements, "customFields");
   }
 
   public labels(idLabel: string = ""): Label {
     return new Label(this.config, this.pathElements, "labels", {
       identifier: idLabel,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public lists(idList: string = ""): List {
     return new List(this.config, this.pathElements, "lists", {
       identifier: idList,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public members(idMember: string = ""): Member {
     return new Member(this.config, this.pathElements, "members", {
       identifier: idMember,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public membersInvited(): Member {
-    return new Member(this.config, this.pathElements, "membersInvited", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Member(this.config, this.pathElements, "membersInvited");
   }
 
   public memberships(idMembership: string = ""): Membership {
     return new Membership(this.config, this.pathElements, "memberships", {
       identifier: idMembership,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public myPrefs(): BoardMyPrefs {
-    return new BoardMyPrefs(this.config, this.pathElements, "myPrefs", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new BoardMyPrefs(this.config, this.pathElements, "myPrefs");
   }
 
   public organization(): Organization {
-    return new Organization(this.config, this.pathElements, "organization", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Organization(this.config, this.pathElements, "organization");
   }
 
   public plugins(): Plugin {
-    return new Plugin(this.config, this.pathElements, "plugins", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new Plugin(this.config, this.pathElements, "plugins");
   }
 
   public prefs(): BoardPref {
-    return new BoardPref(this.config, this.pathElements, "prefs", {
-      isReturnUrl: this.isReturnUrl,
-    });
+    return new BoardPref(this.config, this.pathElements, "prefs");
   }
 }

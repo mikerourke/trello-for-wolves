@@ -120,14 +120,12 @@ export class Enterprise extends BaseResource {
   public members(idMember: string = ""): Member {
     return new Member(this.config, this.pathElements, "members", {
       identifier: idMember,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 
   public organizations(idOrganization: string = ""): Organization {
     return new Organization(this.config, this.pathElements, "organizations", {
       identifier: idOrganization,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 }

@@ -132,7 +132,6 @@ export class CustomField extends BaseResource {
 
     return new CustomFieldOption(this.config, this.pathElements, groupName, {
       identifier: idOption,
-      isReturnUrl: this.isReturnUrl,
     });
   }
 }
