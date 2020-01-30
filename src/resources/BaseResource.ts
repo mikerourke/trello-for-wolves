@@ -1,5 +1,6 @@
 import { fetchFromApi, HttpMethod } from "../utils/fetchFromApi";
-import { Config, TypedFetch } from "../typeDefs";
+import { Config, DateValue, TypedFetch, FilterDate } from "../typeDefs";
+import { isEmpty } from "../utils/isEmpty";
 
 interface BaseResourceOptions {
   identifier?: string;
@@ -72,6 +73,36 @@ export class BaseResource {
         `The "${fieldName}" field must start with "http://" or "https://"`,
       );
     }
+  }
+
+  /**
+   * Loops through the specified field names and updates the corresponding param
+   * to be a valid ISO date string (or null/existing value).
+   */
+  protected setValidDateParams<T>(
+    fieldNames: string[],
+    params?: T,
+  ): T | undefined {
+    if (isEmpty(params)) {
+      return params;
+    }
+
+    const validParams = { ...params };
+    for (const fieldName of fieldNames) {
+      if (validParams[fieldName]) {
+        validParams[fieldName] = this.dateToIsoString(validParams[fieldName]);
+      }
+    }
+
+    return validParams as T;
+  }
+
+  /**
+   * Since dates have to be a valid ISO string (or null), this converts a
+   * date instance passed in to a valid value.
+   */
+  protected dateToIsoString(dateValue: DateValue | FilterDate): string | null {
+    return dateValue instanceof Date ? dateValue.toISOString() : dateValue;
   }
 
   protected apiGet<T>(

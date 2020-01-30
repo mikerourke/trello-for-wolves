@@ -14,11 +14,12 @@ import { Sticker, StickerField } from "./Stickers";
 import {
   AllOrFieldOrListOf,
   AllOrNone,
+  ColorName,
+  DateValue,
   FieldOrListOf,
   FileUpload,
   FilterDate,
   KeepFromSourceField,
-  ColorName,
   Limits,
   PositionOrFloat,
   TypedFetch,
@@ -169,7 +170,7 @@ export interface CardRecord extends CardMapPowerUpRecord {
   dateLastActivity: string;
   desc: string;
   descData: string;
-  due: string;
+  due: string | null;
   dueComplete: boolean;
   idAttachmentCover: string;
   idBoard: string;
@@ -262,7 +263,8 @@ export class Card extends BaseResource {
     sort: "none" | "-id";
     limit?: number;
   }): TypedFetch<CardRecord[]> {
-    return this.apiGet("/", params);
+    const validParams = this.setValidDateParams(["before", "since"], params);
+    return this.apiGet("/", validParams);
   }
 
   public getNestedCards<TPayload extends object>(params?: {
@@ -273,10 +275,11 @@ export class Card extends BaseResource {
     cardAttachments?: AttachmentFilter;
     cardAttachmentFields?: AllOrFieldOrListOf<AttachmentField>;
     cardStickers?: boolean;
-    cardsModifiedSince?: string | null;
+    cardsModifiedSince?: FilterDate;
     cardCustomFieldItems?: boolean;
   }): TypedFetch<TPayload & { cards: CardRecord[] }> {
-    return this.apiGetNested(params);
+    const validParams = this.setValidDateParams(["cardsModifiedSince"], params);
+    return this.apiGetNested(validParams);
   }
 
   public getCardsFilteredBy(filter: CardFilter): TypedFetch<CardRecord[]> {
@@ -295,7 +298,7 @@ export class Card extends BaseResource {
     name?: string;
     desc?: string;
     pos?: PositionOrFloat;
-    due?: Date | null;
+    due?: DateValue;
     dueComplete?: boolean;
     idList?: string;
     idMembers?: string[];
@@ -309,7 +312,8 @@ export class Card extends BaseResource {
     locationName?: string;
     coordinates?: CardCoordinatesRecord | string;
   }): TypedFetch<CardRecord> {
-    return this.apiPost("/", { ...params, separator: "/" });
+    const validParams = this.setValidDateParams(["due"], params);
+    return this.apiPost("/", { ...validParams, separator: "/" });
   }
 
   public associateLabel(idLabel: string): TypedFetch<unknown> {
@@ -330,14 +334,15 @@ export class Card extends BaseResource {
     idLabels?: string[];
     idBoard?: string;
     pos?: PositionOrFloat;
-    due?: Date | null;
+    due?: DateValue;
     dueComplete?: boolean;
     subscribed?: boolean;
     address?: string;
     locationName?: string;
     coordinates?: CardCoordinatesRecord | string;
   }): TypedFetch<CardRecord> {
-    return this.apiPut("/", params);
+    const validParams = this.setValidDateParams(["due"], params);
+    return this.apiPut("/", validParams);
   }
 
   public updateClosedStatus(value: boolean): TypedFetch<CardRecord> {
@@ -348,8 +353,9 @@ export class Card extends BaseResource {
     return this.apiPut("/desc", { value });
   }
 
-  public updateDueDate(value: string | null): TypedFetch<CardRecord> {
-    return this.apiPut("/due", { value });
+  public updateDueDate(value: DateValue): TypedFetch<CardRecord> {
+    const validValue = this.dateToIsoString(value);
+    return this.apiPut("/due", { value: validValue });
   }
 
   public updateDueComplete(value: boolean): TypedFetch<CardRecord> {

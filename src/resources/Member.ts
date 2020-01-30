@@ -395,8 +395,13 @@ export class Member extends BaseResource {
   }
 
   public voteOnCard(): TypedFetch<unknown> {
+    const existingPathElements = [...this.pathElements];
     this.pathElements.pop();
-    return this.apiPost("/", { value: this.identifier });
+
+    const response = this.apiPost("/", { value: this.identifier });
+
+    this.pathElements = existingPathElements;
+    return response;
   }
 
   public dismissOneTimeMessages(value: string): TypedFetch<unknown> {

@@ -6,11 +6,7 @@ import {
   OrganizationField,
   OrganizationFilter,
 } from "./Organization";
-import {
-  AllOrFieldOrListOf,
-  TypedFetch,
-  ValidResourceFields,
-} from "../typeDefs";
+import { AllOrFieldOrListOf, TypedFetch } from "../typeDefs";
 
 export type SortOrder = "asc" | "ascending" | "desc" | "descending" | "id";
 
@@ -69,7 +65,17 @@ export interface EnterpriseRecord {
   userTypes: Record<EnterpriseUserType, number>;
 }
 
-export type EnterpriseField = ValidResourceFields<EnterpriseRecord>;
+export type EnterpriseField =
+  | "id"
+  | "name"
+  | "displayName"
+  | "prefs"
+  | "ssoActivationFailed"
+  | "idAdmins"
+  | "idMembers"
+  | "idOrganizations"
+  | "products"
+  | "userTypes";
 
 export class Enterprise extends BaseResource {
   public getEnterprise(params?: {

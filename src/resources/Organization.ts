@@ -124,7 +124,8 @@ export class Organization extends BaseResource {
     paidAccount?: boolean;
     pluginData?: boolean;
   }): TypedFetch<OrganizationRecord> {
-    return this.apiGet("/", params);
+    const validParams = this.setValidDateParams(["boardActionsSince"], params);
+    return this.apiGet("/", validParams);
   }
 
   public getOrganizations(params?: {

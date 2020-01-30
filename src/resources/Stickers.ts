@@ -4,7 +4,6 @@ import {
   AllOrNone,
   FileUpload,
   TypedFetch,
-  ValidResourceFields,
 } from "../typeDefs";
 
 export interface StickerScaledRecord {
@@ -46,7 +45,15 @@ export interface CustomStickerRecord {
   scaled: StickerScaledRecord[];
 }
 
-export type StickerField = ValidResourceFields<StickerRecord>;
+export type StickerField =
+  | "id"
+  | "image"
+  | "imageScaled"
+  | "imageUrl"
+  | "left"
+  | "top"
+  | "rotate"
+  | "zIndex";
 
 export class Sticker extends BaseResource {
   public getSticker(params?: {

@@ -4,7 +4,7 @@ import { ColorName, PositionOrFloat, TypedFetch } from "../typeDefs";
 type CustomFieldOptionValueRecord =
   | { text: string }
   | { number: number }
-  | { date: string }
+  | { date: Date | string }
   | { checked: boolean };
 
 export interface CustomFieldOptionRecord {

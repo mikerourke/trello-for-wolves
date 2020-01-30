@@ -2,6 +2,7 @@ import { BaseResource } from "./BaseResource";
 import { Action, ActionField } from "./Action";
 import { AttachmentField, AttachmentFilter } from "./Attachment";
 import { BoardMyPrefs } from "./BoardMyPrefs";
+import { BoardPref } from "./BoardPref";
 import { BoardStar, BoardStarsFilter } from "./BoardStar";
 import { Card, CardAging, CardField, CardFilter } from "./Card";
 import { Checklist, ChecklistField } from "./Checklist";
@@ -22,10 +23,8 @@ import {
   Limits,
   PermissionLevel,
   TypedFetch,
-  ValidResourceFields,
   ValueResponse,
 } from "../typeDefs";
-import { BoardPref } from "./BoardPref";
 
 export type BoardActionType =
   | "addAttachmentToCard"
@@ -240,7 +239,22 @@ export interface BoardPluginRecord {
   idPlugin: string;
 }
 
-export type BoardField = ValidResourceFields<BoardRecord>;
+export type BoardField =
+  | "id"
+  | "name"
+  | "desc"
+  | "descData"
+  | "closed"
+  | "idOrganization"
+  | "pinned"
+  | "url"
+  | "shortUrl"
+  | "prefs"
+  | "labelNames"
+  | "starred"
+  | "limits"
+  | "memberships"
+  | "enterpriseOwned";
 
 /**
  * Boards are fundamental to Trello. A board may belong to 0 or 1 teams and can
@@ -293,7 +307,8 @@ export class Board extends BaseResource {
     pluginData?: boolean;
     tags?: boolean;
   }): TypedFetch<BoardRecord> {
-    return this.apiGet("/", params);
+    const validParams = this.setValidDateParams(["actionsSince"], params);
+    return this.apiGet("/", validParams);
   }
 
   public getBoards(params?: {
@@ -310,7 +325,8 @@ export class Board extends BaseResource {
     organization?: boolean;
     organizationFields?: AllOrFieldOrListOf<OrganizationField>;
   }): TypedFetch<BoardRecord[]> {
-    return this.apiGet("/", params);
+    const validParams = this.setValidDateParams(["actionsSince"], params);
+    return this.apiGet("/", validParams);
   }
 
   public getNestedBoards<TPayload extends object>(params?: {
@@ -325,7 +341,8 @@ export class Board extends BaseResource {
     boardActionFields?: AllOrFieldOrListOf<ActionField>;
     boardLists?: ListFilter;
   }): TypedFetch<TPayload & { boards: BoardRecord[] }> {
-    return this.apiGetNested(params);
+    const validParams = this.setValidDateParams(["boardActionsSince"], params);
+    return this.apiGetNested(validParams);
   }
 
   public getBoardsFilteredBy(filter: BoardFilter): TypedFetch<unknown> {

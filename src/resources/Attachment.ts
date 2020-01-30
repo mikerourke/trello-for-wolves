@@ -4,7 +4,6 @@ import {
   FileUpload,
   Limits,
   TypedFetch,
-  ValidResourceFields,
 } from "../typeDefs";
 
 export type AttachmentFilter = boolean | "cover";
@@ -64,7 +63,18 @@ export interface AttachmentRecord {
   creationMethod?: string | null;
 }
 
-export type AttachmentField = ValidResourceFields<AttachmentRecord>;
+export type AttachmentField =
+  | "id"
+  | "bytes"
+  | "date"
+  | "edgeColor"
+  | "idMember"
+  | "isUpload"
+  | "mimeType"
+  | "name"
+  | "pos"
+  | "previews"
+  | "url";
 
 /**
  * Used to manage attachments on cards. Cards can have up to 100 attachments.

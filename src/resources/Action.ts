@@ -15,7 +15,6 @@ import {
   Format,
   Limits,
   TypedFetch,
-  ValidResourceFields,
   ValueResponse,
 } from "../typeDefs";
 import { Reaction, ReactionSummaryRecord } from "./Reaction";
@@ -139,7 +138,7 @@ export interface DisplayRecord<T = ActionType> {
   entities: EntityRecord<T>[];
 }
 
-export type ActionField = ValidResourceFields<ActionRecord>;
+export type ActionField = "id" | "data" | "date" | "idMemberCreator" | "type";
 
 /**
  * Actions are generated whenever an action occurs in Trello. For instance, when
@@ -186,7 +185,8 @@ export class Action<TActionType = ActionType> extends BaseResource {
     memberCreator?: boolean;
     memberCreatorFields?: AllOrFieldOrListOf<MemberInvitedField>;
   }): TypedFetch<ActionRecord<TActionType>[]> {
-    return this.apiGet("/", params);
+    const validParams = this.setValidDateParams(["since", "before"], params);
+    return this.apiGet("/", validParams);
   }
 
   public getNestedActions<TPayload extends object>(params?: {
@@ -194,7 +194,7 @@ export class Action<TActionType = ActionType> extends BaseResource {
     actionsEntities?: boolean;
     actionsDisplay?: boolean;
     actionsFormat?: Format;
-    actionsSince?: string;
+    actionsSince?: FilterDate;
     actionsLimit?: number;
     actionFields?: AllOrFieldOrListOf<ActionField>;
     actionMember?: boolean;
@@ -202,7 +202,8 @@ export class Action<TActionType = ActionType> extends BaseResource {
     actionMemberCreator?: boolean;
     actionMemberCreatorFields?: AllOrFieldOrListOf<MemberField>;
   }): TypedFetch<TPayload & { actions: ActionRecord<TActionType>[] }> {
-    return this.apiGetNested(params);
+    const validParams = this.setValidDateParams(["actionsSince"], params);
+    return this.apiGetNested(validParams);
   }
 
   public getFieldValue<T>(field: ActionField): TypedFetch<ValueResponse<T>> {

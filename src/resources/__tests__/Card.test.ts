@@ -145,6 +145,20 @@ describe("the Card resource", () => {
     expect(result.url.searchParams.get("name")).toBe("Test");
   });
 
+  test("updates a card when due is a Date", async () => {
+    const now = new Date();
+    await trello.cards(TEST_CARD_ID).updateCard({
+      name: "Test",
+      due: now,
+    });
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("PUT");
+    expect(result.url.pathname).toBe(`/1/cards/${TEST_CARD_ID}`);
+    expect(result.url.searchParams.get("name")).toBe("Test");
+    expect(result.url.searchParams.get("due")).toBe(now.toISOString());
+  });
+
   test("updates the closed status of a card", async () => {
     await trello.cards(TEST_CARD_ID).updateClosedStatus(true);
     const result = global.getLastFetchCall();
@@ -163,8 +177,8 @@ describe("the Card resource", () => {
     expect(result.url.searchParams.get("value")).toBe("Test");
   });
 
-  test("updates the due date of a card", async () => {
-    const expected = new Date().toString();
+  test("updates the due date of a card when date is a string", async () => {
+    const expected = new Date().toISOString();
     await trello.cards(TEST_CARD_ID).updateDueDate(expected);
     const result = global.getLastFetchCall();
 

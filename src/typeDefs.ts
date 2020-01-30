@@ -11,7 +11,9 @@ export type FieldOrListOf<T> = T | T[];
 
 export type AllOrFieldOrListOf<T> = FieldOrListOf<T> | "all";
 
-export type FilterDate = Date | "lastView" | null;
+export type DateValue = Date | string | null;
+
+export type FilterDate = DateValue | "lastView";
 
 export type Format = "count" | "list" | "minimal";
 
@@ -42,8 +44,6 @@ export type PermissionLevel = "private" | "public";
 export type Position = "bottom" | "top";
 
 export type PositionOrFloat = Position | number;
-
-export type ValidResourceFields<T> = Omit<keyof T, "limits" | "creationMethod">;
 
 export interface TypedResponse<TPayload = unknown> extends Response {
   json<TResult = TPayload>(): Promise<TResult>;

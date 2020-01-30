@@ -6,7 +6,6 @@ import {
   ColorName,
   Limits,
   TypedFetch,
-  ValidResourceFields,
 } from "../typeDefs";
 
 /**
@@ -28,7 +27,7 @@ export interface LabelRecord {
   creationMethod?: string | null;
 }
 
-export type LabelField = ValidResourceFields<LabelRecord>;
+export type LabelField = "id" | "idBoard" | "name" | "color";
 
 export class Label extends BaseResource {
   public getLabel(params?: {

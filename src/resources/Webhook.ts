@@ -1,5 +1,5 @@
 import { BaseResource } from "./BaseResource";
-import { TypedFetch, ValidResourceFields, ValueResponse } from "../typeDefs";
+import { TypedFetch, ValueResponse } from "../typeDefs";
 
 /**
  * The data corresponding to a webhook.
@@ -19,7 +19,12 @@ export interface WebhookRecord {
   active: boolean;
 }
 
-export type WebhookField = ValidResourceFields<WebhookRecord>;
+export type WebhookField =
+  | "id"
+  | "description"
+  | "idModel"
+  | "callbackURL"
+  | "active";
 
 /**
  * Webhooks allow developers to receive updates regarding actions that have
