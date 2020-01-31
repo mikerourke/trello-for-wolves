@@ -57,7 +57,8 @@ describe("the Enterprise resource", () => {
   test("gets if the enterprise organization is transferrable", async () => {
     await trello
       .enterprises(TEST_ENTERPRISE_ID)
-      .getIfOrgTransferrable(TEST_CHILD_ID);
+      .organizations(TEST_CHILD_ID)
+      .getIfTransferrableToEnterprise();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -69,7 +70,8 @@ describe("the Enterprise resource", () => {
   test("adds a member as an admin", async () => {
     await trello
       .enterprises(TEST_ENTERPRISE_ID)
-      .addMemberAsAdmin(TEST_CHILD_ID);
+      .members(TEST_CHILD_ID)
+      .makeAdminForEnterprise();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -81,7 +83,8 @@ describe("the Enterprise resource", () => {
   test("removes a member as an admin", async () => {
     await trello
       .enterprises(TEST_ENTERPRISE_ID)
-      .removeMemberFromAdmin(TEST_CHILD_ID);
+      .members(TEST_CHILD_ID)
+      .removeAdminForEnterprise();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");

@@ -84,24 +84,75 @@ describe("the Member resource", () => {
     expect(result.url.pathname).toBe(`/1/members/${TEST_MEMBER_ID}/deltas`);
   });
 
-  test("throws an error when adding a member to a non-organization resource", async () => {
+  test("throws an error when associating a member with a non-board/card/organization resource", async () => {
     expect.assertions(1);
 
     try {
-      await trello.members().addMember({
+      await trello.members(TEST_MEMBER_ID).associateMember({
         email: "test@stuff.com",
+        type: "admin",
         fullName: "Suzy Test",
       });
     } catch (err) {
-      expect(err.message).toMatch(/You can only call addMember/gi);
+      expect(err.message).toMatch(/You can only call associateMember/gi);
     }
   });
 
-  test("adds a member to an organization", async () => {
+  test("throws an error if the ID and email are missing when associating a member with a non-board resource", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello
+        .boards(TEST_PARENT_ID)
+        .members()
+        .associateMember({
+          type: "admin",
+          fullName: "Suzy Test",
+        });
+    } catch (err) {
+      expect(err.message).toMatch(/You must specify the "email" param/gi);
+    }
+  });
+
+  test("associates a member with a board when fullName is specified", async () => {
+    await trello
+      .boards(TEST_PARENT_ID)
+      .members()
+      .associateMember({
+        email: "test@stuff.com",
+        allowBillableGuest: true,
+        fullName: "Suzy Test",
+      });
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("PUT");
+    expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/members`);
+    expect(result.url.searchParams.get("email")).toBe("test@stuff.com");
+    expect(result.url.searchParams.get("allowBillableGuest")).toBe("true");
+    expect(result.config.body).toBe(JSON.stringify({ fullName: "Suzy Test" }));
+  });
+
+  test("associates a member with a board when fullName is not specified", async () => {
+    await trello
+      .boards(TEST_PARENT_ID)
+      .members()
+      .associateMember({
+        email: "test@stuff.com",
+        allowBillableGuest: true,
+      });
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("PUT");
+    expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/members`);
+    expect(result.url.searchParams.get("email")).toBe("test@stuff.com");
+    expect(result.url.searchParams.get("allowBillableGuest")).toBe("true");
+  });
+
+  test("associates a member with an organization", async () => {
     await trello
       .organizations(TEST_PARENT_ID)
       .members()
-      .addMember({
+      .associateMember({
         email: "test@stuff.com",
         fullName: "Suzy Test",
       });
@@ -113,6 +164,19 @@ describe("the Member resource", () => {
     );
     expect(result.url.searchParams.get("email")).toBe("test@stuff.com");
     expect(result.url.searchParams.get("fullName")).toBe("Suzy Test");
+  });
+
+  test("throws an error when associating multiple members from a non-card resource", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello
+        .boards(TEST_PARENT_ID)
+        .members(TEST_MEMBER_ID)
+        .associateMembers(["test"]);
+    } catch (err) {
+      expect(err.message).toMatch(/You can only call associateMembers/gi);
+    }
   });
 
   test("uploads an avatar for a member", async () => {
@@ -134,22 +198,6 @@ describe("the Member resource", () => {
     expect(result.config.method).toBe("PUT");
     expect(result.url.pathname).toBe(`/1/members/${TEST_MEMBER_ID}`);
     expect(result.url.searchParams.get("fullName")).toBe("Suzy Test");
-  });
-
-  test("moves the fullName param to the body if updating a member from a board", async () => {
-    await trello
-      .boards(TEST_PARENT_ID)
-      .members(TEST_MEMBER_ID)
-      .updateMember({
-        fullName: "Suzy Test",
-      });
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("PUT");
-    expect(result.url.pathname).toBe(
-      `/1/boards/${TEST_PARENT_ID}/members/${TEST_MEMBER_ID}`,
-    );
-    expect(result.config.body).toBe(JSON.stringify({ fullName: "Suzy Test" }));
   });
 
   test("updates the avatar source of a member", async () => {
@@ -197,6 +245,16 @@ describe("the Member resource", () => {
     expect(result.config.method).toBe("PUT");
     expect(result.url.pathname).toBe(`/1/members/${TEST_MEMBER_ID}/username`);
     expect(result.url.searchParams.get("value")).toBe("test");
+  });
+
+  test("throws an error when trying to make admin for an enterprise from non-enterprise resource", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello.members(TEST_MEMBER_ID).makeAdminForEnterprise();
+    } catch (err) {
+      expect(err.message).toMatch(/You can only call makeAdminForEnterprise/gi);
+    }
   });
 
   test("throws an error when updating the deactivated status of a member for an invalid resource", async () => {
@@ -299,11 +357,36 @@ describe("the Member resource", () => {
     expect(result.url.searchParams.get("value")).toBe("test");
   });
 
-  test("deletes a member", async () => {
+  test("throws an error if trying to dissociate a member from an invalid resource", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello.members(TEST_MEMBER_ID).dissociateMember();
+    } catch (err) {
+      expect(err.message).toMatch(/You can only call dissociateMember/gi);
+    }
+  });
+
+  test("throws an error if the ID is missing when dissociating a member from a card", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello
+        .cards(TEST_PARENT_ID)
+        .members()
+        .dissociateMember();
+    } catch (err) {
+      expect(err.message).toMatch(
+        /You must pass a member ID into the members/gi,
+      );
+    }
+  });
+
+  test("dissociates a member from a board", async () => {
     await trello
       .boards(TEST_PARENT_ID)
       .members(TEST_MEMBER_ID)
-      .deleteMember();
+      .dissociateMember();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");
@@ -316,7 +399,7 @@ describe("the Member resource", () => {
     await trello
       .organizations(TEST_PARENT_ID)
       .members(TEST_MEMBER_ID)
-      .dissociateMember();
+      .dissociateMember(false);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");
@@ -329,13 +412,25 @@ describe("the Member resource", () => {
     await trello
       .organizations(TEST_PARENT_ID)
       .members(TEST_MEMBER_ID)
-      .dissociateMemberFromAll();
+      .dissociateMember(true);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");
     expect(result.url.pathname).toBe(
       `/1/organizations/${TEST_PARENT_ID}/members/${TEST_MEMBER_ID}/all`,
     );
+  });
+
+  test("throws an error when trying to remove admin for an enterprise from non-enterprise resource", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello.members(TEST_MEMBER_ID).removeAdminForEnterprise();
+    } catch (err) {
+      expect(err.message).toMatch(
+        /You can only call removeAdminForEnterprise/gi,
+      );
+    }
   });
 
   test("gets the actions for a member", async () => {

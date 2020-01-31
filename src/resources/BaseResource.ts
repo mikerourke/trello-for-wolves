@@ -25,9 +25,7 @@ export class BaseResource {
     protected config: Config,
     protected parentElements: string[],
     protected groupName: string,
-    options: BaseResourceOptions = {
-      identifier: "",
-    },
+    options: BaseResourceOptions = {},
   ) {
     this.pathElements = [...parentElements, groupName];
     this.identifier = options.identifier ?? "";

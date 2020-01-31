@@ -50,7 +50,7 @@ export class OrganizationPref extends BaseResource {
     return this.apiDelete("/associatedDomain");
   }
 
-  public removeOrgInviteRestrict(emailAddress: string): TypedFetch<unknown> {
-    return this.apiDelete("/orgInviteRestrict", { value: emailAddress });
+  public removeOrgInviteRestrict(): TypedFetch<unknown> {
+    return this.apiDelete("/orgInviteRestrict");
   }
 }

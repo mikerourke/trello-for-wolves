@@ -361,6 +361,27 @@ export class Board extends BaseResource {
     return this.apiGet("/idTags");
   }
 
+  /**
+   * This method can be used before moving a board into a paid organization to
+   * see if the board contains members that aren't already paid for in the
+   * organization.
+   * @see https://developers.trello.com/reference#organizationsidnewbillableguestsidboard
+   */
+  public getIfHasNewBillableGuests(): TypedFetch<unknown> {
+    if (!this.isChildOf("organization")) {
+      throw new Error(
+        `You can only call getIfHasNewBillableGuests() from an organization`,
+      );
+    }
+
+    this.pathElements = [
+      ...this.parentElements,
+      "newBillableGuests",
+      this.identifier,
+    ];
+    return this.apiGet("/");
+  }
+
   public addBoard(params: {
     name: string;
     defaultLabels?: boolean;
@@ -388,11 +409,11 @@ export class Board extends BaseResource {
     return this.apiPost("/boardPlugins", { idPlugin });
   }
 
-  public addPowerUp(value: PowerUp): TypedFetch<unknown> {
+  public enablePowerUp(value: PowerUp): TypedFetch<unknown> {
     return this.apiPost("/powerUps", { value });
   }
 
-  public addTags(value: string): TypedFetch<unknown> {
+  public addTag(value: string): TypedFetch<unknown> {
     return this.apiPost("/idTags", { value });
   }
 
@@ -473,7 +494,7 @@ export class Board extends BaseResource {
     return this.apiDelete(`/boardPlugins/${idPlugin}`);
   }
 
-  public deletePowerUp(powerUp: PowerUp): TypedFetch<unknown> {
+  public disablePowerUp(powerUp: PowerUp): TypedFetch<unknown> {
     return this.apiDelete(`/powerUps/${powerUp}`);
   }
 

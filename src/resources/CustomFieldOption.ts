@@ -22,6 +22,14 @@ export class CustomFieldOption extends BaseResource {
     return this.apiGet("/");
   }
 
+  /**
+   * This is the same as `getOptions()`, I added it to make more sense in the
+   * context of a card resource.
+   */
+  public getCustomFieldItems(): TypedFetch<CustomFieldOptionRecord[]> {
+    return this.apiGet("/");
+  }
+
   public addOption(
     option: CustomFieldOptionRecord,
   ): TypedFetch<CustomFieldOptionRecord> {

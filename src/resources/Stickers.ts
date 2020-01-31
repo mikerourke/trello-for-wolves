@@ -6,6 +6,61 @@ import {
   TypedFetch,
 } from "../typeDefs";
 
+export type DefaultFreeStickerName =
+  | "check"
+  | "heart"
+  | "warning"
+  | "clock"
+  | "smile"
+  | "laugh"
+  | "huh"
+  | "frown"
+  | "thumbsup"
+  | "thumbsdown"
+  | "star"
+  | "rocketship";
+
+export type DefaultPremiumStickerName =
+  | "taco-love"
+  | "taco-confused"
+  | "taco-cool"
+  | "taco-angry"
+  | "taco-celebrate"
+  | "taco-robot"
+  | "taco-alert"
+  | "taco-active"
+  | "taco-money"
+  | "taco-reading"
+  | "taco-trophy"
+  | "taco-sleeping"
+  | "taco-pixel"
+  | "taco-proto"
+  | "taco-embarrassed"
+  | "taco-clean"
+  | "pete-happy"
+  | "pete-love"
+  | "pete-broken"
+  | "pete-alert"
+  | "pete-talk"
+  | "pete-vacation"
+  | "pete-confused"
+  | "pete-shipped"
+  | "pete-busy"
+  | "pete-completed"
+  | "pete-space"
+  | "pete-sketch"
+  | "pete-ghost"
+  | "pete-award"
+  | "pete-music";
+
+/**
+ * Trello has a set of built-in stickers that are available to members.
+ * @typedef {string} DefaultStickerName
+ * @see https://developers.trello.com/reference#stickers
+ */
+export type DefaultStickerName = DefaultFreeStickerName &
+  DefaultPremiumStickerName;
+
 export interface StickerScaledRecord {
   _id: string;
   url: string;
@@ -75,7 +130,7 @@ export class Sticker extends BaseResource {
   }
 
   public addSticker(params: {
-    image: string;
+    image: DefaultStickerName | string;
     left: number;
     top: number;
     zIndex: number;

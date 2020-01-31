@@ -60,11 +60,14 @@ describe("the Plugin resource", () => {
       description: "Test Description",
       locale: "en-us",
     };
-    await trello.plugins(TEST_PLUGIN_ID).addListing(TEST_LISTING);
+    await trello
+      .plugins(TEST_PLUGIN_ID)
+      .listings()
+      .addListing(TEST_LISTING);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
-    expect(result.url.pathname).toBe(`/1/plugins/${TEST_PLUGIN_ID}/listing`);
+    expect(result.url.pathname).toBe(`/1/plugins/${TEST_PLUGIN_ID}/listings`);
     expect(result.config.body).toEqual(JSON.stringify(TEST_LISTING));
   });
 
@@ -85,12 +88,13 @@ describe("the Plugin resource", () => {
     };
     await trello
       .plugins(TEST_PLUGIN_ID)
-      .updateListing(TEST_LISTING_ID, TEST_LISTING);
+      .listings(TEST_LISTING_ID)
+      .updateListing(TEST_LISTING);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
     expect(result.url.pathname).toBe(
-      `/1/plugins/${TEST_PLUGIN_ID}/listing/${TEST_LISTING_ID}`,
+      `/1/plugins/${TEST_PLUGIN_ID}/listings/${TEST_LISTING_ID}`,
     );
     expect(result.config.body).toEqual(JSON.stringify(TEST_LISTING));
   });

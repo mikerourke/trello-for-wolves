@@ -70,7 +70,7 @@ describe("the BoardStar resource", () => {
     await trello
       .members("me")
       .boardStars(TEST_BOARD_STAR_ID)
-      .moveBoardStarToBoard(TEST_BOARD_ID);
+      .moveToBoard(TEST_BOARD_ID);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");

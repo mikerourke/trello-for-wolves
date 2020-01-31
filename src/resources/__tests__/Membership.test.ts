@@ -31,13 +31,24 @@ describe("the Membership resource", () => {
     await trello
       .organizations(TEST_PARENT_ID)
       .memberships()
-      .getMemberships();
+      .getMemberships({
+        filter: "owners",
+        member: true,
+        activity: true,
+        orgMemberType: true,
+        memberFields: "all",
+      });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
     expect(result.url.pathname).toBe(
       `/1/organizations/${TEST_PARENT_ID}/memberships`,
     );
+    expect(result.url.searchParams.get("filter")).toBe("owners");
+    expect(result.url.searchParams.get("member")).toBe("true");
+    expect(result.url.searchParams.get("activity")).toBe("true");
+    expect(result.url.searchParams.get("orgMemberType")).toBe("true");
+    expect(result.url.searchParams.get("member_fields")).toBe("all");
   });
 
   test("gets nested memberships", async () => {

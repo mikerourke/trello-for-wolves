@@ -36,7 +36,7 @@ export class BoardStar extends BaseResource {
     return this.apiPut("/", params);
   }
 
-  public moveBoardStarToBoard(idBoard: string): TypedFetch<unknown> {
+  public moveToBoard(idBoard: string): TypedFetch<unknown> {
     return this.apiPut("/idBoard", { value: idBoard });
   }
 

@@ -1,7 +1,7 @@
 import { isEmpty } from "../utils/isEmpty";
 import { BaseResource } from "./BaseResource";
 import { Action, ActionType } from "./Action";
-import { Board, BoardField, BoardFilter } from "./Board";
+import { Board, BoardField, BoardFilter, BoardMemberType } from "./Board";
 import {
   CustomBoardBackground,
   BoardBackground,
@@ -290,19 +290,68 @@ export class Member extends BaseResource {
   }
 
   /**
-   * Adds a member to an organization.
-   * @see https://developers.trello.com/advanced-reference/organization#put-1-organizations-idorg-or-name-members
+   * Associates a member with a board, card, or organization.
+   * @see https://developers.trello.com/reference#boardsidlabelnamesmembers
+   * @see https://developers.trello.com/reference#boardsidlabelnamesmembersidmember
+   * @see https://developers.trello.com/reference#cardsididmembers
+   * @see https://developers.trello.com/reference#organizationsidmembers-1
+   * @see https://developers.trello.com/reference#organizationsidmembersidmember
    */
-  public addMember(params: {
-    email: string;
-    fullName: string;
-    type?: MemberType;
+  public associateMember(params?: {
+    email?: string;
+    type?: BoardMemberType;
+    allowBillableGuest?: boolean;
+    fullName?: string;
   }): TypedFetch<MemberRecord> {
-    if (!this.isChildOf("organization")) {
-      throw new Error("You can only call addMember() on an organization");
+    if (!this.isChildOf(["board", "card", "organization"])) {
+      throw new Error(
+        "You can only call associateMember() from a board, card, or organization",
+      );
+    }
+
+    if (this.isChildOf("card")) {
+      if (!this.identifier) {
+        throw new Error(
+          `You must pass a member ID into the members() instance when calling associateMember()`,
+        );
+      }
+
+      if (!isEmpty(params)) {
+        throw new Error(
+          "No params are allowed when calling associateMember() from a card",
+        );
+      }
+
+      this.pathElements = [...this.parentElements, "idMembers"];
+      return this.apiPost("/", { value: this.identifier });
+    }
+
+    if (!params?.email && !this.identifier) {
+      throw new Error(
+        `You must specify the "email" param or pass a member ID into the members() instance when calling associateMember()`,
+      );
+    }
+
+    if (this.isChildOf("board")) {
+      const body = {} as { fullName?: string };
+      if (params?.fullName) {
+        body.fullName = params.fullName;
+        delete params.fullName;
+      }
+
+      return this.apiPut("/", params, body);
     }
 
     return this.apiPut("/", params);
+  }
+
+  public associateMembers(idMembers: string[]): TypedFetch<unknown> {
+    if (!this.isChildOf("card")) {
+      throw new Error("You can only call associateMembers() from a card");
+    }
+
+    this.pathElements = [...this.parentElements, "idMembers"];
+    return this.apiPut("/", { value: idMembers });
   }
 
   public uploadAvatar(file: FileUpload): TypedFetch<unknown> {
@@ -321,14 +370,7 @@ export class Member extends BaseResource {
       minutesBetweenSummaries?: number;
     };
   }): TypedFetch<MemberRecord> {
-    const body = {} as { fullName?: string };
-
-    if (this.isChildOf("board") && params?.fullName) {
-      body.fullName = params.fullName;
-      delete params.fullName;
-    }
-
-    return this.apiPut("/", { ...params, separator: "/" }, body);
+    return this.apiPut("/", { ...params, separator: "/" });
   }
 
   public updateAvatarSource(value: AvatarSourceField): TypedFetch<unknown> {
@@ -349,6 +391,17 @@ export class Member extends BaseResource {
 
   public updateUsername(value: string): TypedFetch<unknown> {
     return this.apiPut("/username", { value });
+  }
+
+  public makeAdminForEnterprise(): TypedFetch<unknown> {
+    if (!this.isChildOf("enterprise")) {
+      throw new Error(
+        "You can only call makeAdminForEnterprise() on an enterprise",
+      );
+    }
+
+    this.pathElements = [...this.parentElements, "admins", this.identifier];
+    return this.apiPut("/");
   }
 
   /**
@@ -395,13 +448,10 @@ export class Member extends BaseResource {
   }
 
   public voteOnCard(): TypedFetch<unknown> {
-    const existingPathElements = [...this.pathElements];
+    // Remove the identifier from the path elements, we pass the member ID to
+    // the request via the `value` param:
     this.pathElements.pop();
-
-    const response = this.apiPost("/", { value: this.identifier });
-
-    this.pathElements = existingPathElements;
-    return response;
+    return this.apiPost("/", { value: this.identifier });
   }
 
   public dismissOneTimeMessages(value: string): TypedFetch<unknown> {
@@ -409,28 +459,52 @@ export class Member extends BaseResource {
   }
 
   /**
-   * Deletes a member created for a board.
-   * @see https://developers.trello.com/advanced-reference/board#delete-1-boards-board-id-members-idmember
+   * Removes a member's association with a board, card, or organization (and
+   * optionally all team boards), doesn't actually delete it.
+   * @param [isRemovedFromBoards=false] Removes the member from all of the boards
+   *                                    for an organization as well.
+   * @see https://developers.trello.com/reference#boardsidmembersidmember
+   * @see https://developers.trello.com/reference#organizationsidmembersidmember-1
+   * @see https://developers.trello.com/reference#organizationsidmembersidmember-1
    */
-  public deleteMember(): TypedFetch<unknown> {
-    return this.apiDelete("/");
+  public dissociateMember(
+    isRemovedFromBoards: boolean = false,
+  ): TypedFetch<unknown> {
+    if (!this.isChildOf(["board", "card", "organization"])) {
+      throw new Error(
+        "You can only call dissociateMember() on a board, card, or organization",
+      );
+    }
+
+    if (this.isChildOf("card")) {
+      if (!this.identifier) {
+        throw new Error(
+          `You must pass a member ID into the members() instance when calling dissociateMember()`,
+        );
+      }
+
+      this.pathElements = [
+        ...this.parentElements,
+        "idMembers",
+        this.identifier,
+      ];
+
+      return this.apiDelete("/");
+    }
+
+    const endpoint = isRemovedFromBoards ? "/all" : "/";
+    return this.apiDelete(endpoint);
   }
 
-  /**
-   * Removes a member's association with an organization, doesn't actually delete it.
-   * @see https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember
-   */
-  public dissociateMember(): TypedFetch<unknown> {
-    return this.apiDelete("/");
-  }
+  public removeAdminForEnterprise(): TypedFetch<unknown> {
+    if (!this.isChildOf("enterprise")) {
+      throw new Error(
+        "You can only call removeAdminForEnterprise() on an enterprise",
+      );
+    }
 
-  /**
-   * This will remove a member from your organization AND remove the member from
-   * all boards associated with an organization.
-   * @see https://developers.trello.com/advanced-reference/organization#delete-1-organizations-idorg-or-name-members-idmember-all
-   */
-  public dissociateMemberFromAll(): TypedFetch<unknown> {
-    return this.apiDelete("/all");
+    this.pathElements = [...this.parentElements, "admins", this.identifier];
+    return this.apiDelete("/");
   }
 
   public removeVoteFromCard(): TypedFetch<unknown> {

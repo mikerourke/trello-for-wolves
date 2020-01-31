@@ -91,9 +91,23 @@ describe("the Card resource", () => {
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/cards/all`);
   });
 
+  test("throws an error if the ID isn't specified when adding a card to a list", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello
+        .lists()
+        .cards()
+        .addCard();
+    } catch (err) {
+      expect(err.message).toMatch(/You must pass specify the "idList" param/gi);
+    }
+  });
+
   test("adds a card", async () => {
     await trello.cards().addCard({
       name: "Test",
+      idList: TEST_CHILD_ID,
       keepFromSource: "attachments",
     });
     const result = global.getLastFetchCall();
@@ -101,11 +115,28 @@ describe("the Card resource", () => {
     expect(result.config.method).toBe("POST");
     expect(result.url.pathname).toBe(`/1/cards`);
     expect(result.url.searchParams.get("name")).toBe("Test");
+    expect(result.url.searchParams.get("idList")).toBe(TEST_CHILD_ID);
     expect(result.url.searchParams.get("keepFromSource")).toBe("attachments");
   });
 
+  test("throws an error if the ID isn't specified when associating a label with a card", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello
+        .cards(TEST_CARD_ID)
+        .labels()
+        .associateLabel();
+    } catch (err) {
+      expect(err.message).toMatch(/You must pass a label ID into the label/gi);
+    }
+  });
+
   test("associates a label with a card", async () => {
-    await trello.cards(TEST_CARD_ID).associateLabel(TEST_CHILD_ID);
+    await trello
+      .cards(TEST_CARD_ID)
+      .labels(TEST_CHILD_ID)
+      .associateLabel();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -113,8 +144,41 @@ describe("the Card resource", () => {
     expect(result.url.searchParams.get("value")).toBe(TEST_CHILD_ID);
   });
 
+  test("throws an error if the ID isn't specified when adding a member to a card", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello
+        .cards(TEST_CARD_ID)
+        .members()
+        .associateMember();
+    } catch (err) {
+      expect(err.message).toMatch(
+        /You must pass a member ID into the member/gi,
+      );
+    }
+  });
+
+  test("throws an error if the params are specified when adding a member to a card", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello
+        .cards(TEST_CARD_ID)
+        .members(TEST_CHILD_ID)
+        .associateMember({ email: "test@stuff.com" });
+    } catch (err) {
+      expect(err.message).toMatch(
+        /No params are allowed when calling associateMember/gi,
+      );
+    }
+  });
+
   test("associates a member with a card", async () => {
-    await trello.cards(TEST_CARD_ID).associateMember(TEST_CHILD_ID);
+    await trello
+      .cards(TEST_CARD_ID)
+      .members(TEST_CHILD_ID)
+      .associateMember();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -122,7 +186,7 @@ describe("the Card resource", () => {
     expect(result.url.searchParams.get("value")).toBe(TEST_CHILD_ID);
   });
 
-  test("associates a member with a card", async () => {
+  test("updates a member's vote on a card", async () => {
     await trello
       .cards(TEST_CARD_ID)
       .membersVoted(TEST_CHILD_ID)
@@ -232,7 +296,10 @@ describe("the Card resource", () => {
       "e90c438897a3ae65f4285568",
     ];
 
-    await trello.cards(TEST_CARD_ID).associateMembers(TEST_MEMBER_IDS);
+    await trello
+      .cards(TEST_CARD_ID)
+      .members()
+      .associateMembers(TEST_MEMBER_IDS);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -301,7 +368,10 @@ describe("the Card resource", () => {
   });
 
   test("dissociates a member from a card", async () => {
-    await trello.cards(TEST_CARD_ID).dissociateMember(TEST_CHILD_ID);
+    await trello
+      .cards(TEST_CARD_ID)
+      .members(TEST_CHILD_ID)
+      .dissociateMember();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");
@@ -311,7 +381,10 @@ describe("the Card resource", () => {
   });
 
   test("dissociates a label from a card", async () => {
-    await trello.cards(TEST_CARD_ID).dissociateLabel(TEST_CHILD_ID);
+    await trello
+      .cards(TEST_CARD_ID)
+      .labels(TEST_CHILD_ID)
+      .dissociateLabel();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");
@@ -457,7 +530,7 @@ describe("the Card resource", () => {
     await trello
       .cards(TEST_CARD_ID)
       .customFieldItems()
-      .getOptions();
+      .getCustomFieldItems();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");

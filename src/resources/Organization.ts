@@ -170,6 +170,10 @@ export class Organization extends BaseResource {
     return this.apiGet("/tags");
   }
 
+  public getExports(): TypedFetch<unknown> {
+    return this.apiGet("/exports");
+  }
+
   public getIfTransferrableToEnterprise(): TypedFetch<unknown> {
     if (!this.isChildOf("enterprise")) {
       throw new Error(
@@ -177,17 +181,13 @@ export class Organization extends BaseResource {
       );
     }
 
-    const existingPathElements = [...this.pathElements];
     this.pathElements = [
       ...this.parentElements,
       "transferrable",
       "organization",
       this.identifier,
     ];
-    const response = this.apiGet("/");
-    this.pathElements = existingPathElements;
-
-    return response;
+    return this.apiGet("/");
   }
 
   public addOrganization(params: {
@@ -205,8 +205,12 @@ export class Organization extends BaseResource {
     return this.apiPost("/logo", { file });
   }
 
-  public addTags(name: string): TypedFetch<unknown> {
+  public addTag(name: string): TypedFetch<unknown> {
     return this.apiPost("/tags", { name });
+  }
+
+  public startExport(params?: { attachments?: boolean }): TypedFetch<unknown> {
+    return this.apiPost("/exports", params);
   }
 
   public updateOrganization(params: {
@@ -273,6 +277,10 @@ export class Organization extends BaseResource {
     return this.apiDelete("/logo");
   }
 
+  public deleteTag(idTag: string): TypedFetch<unknown> {
+    return this.apiDelete(`/tags/${idTag}`);
+  }
+
   public removeFromEnterprise(): TypedFetch<unknown> {
     if (!this.isChildOf("enterprise")) {
       throw new Error(
@@ -287,8 +295,10 @@ export class Organization extends BaseResource {
     return new Action(this.config, this.pathElements, "actions");
   }
 
-  public boards(): Board {
-    return new Board(this.config, this.pathElements, "boards");
+  public boards(idBoard: string = ""): Board {
+    return new Board(this.config, this.pathElements, "boards", {
+      identifier: idBoard,
+    });
   }
 
   public members(memberId: string = ""): Member {

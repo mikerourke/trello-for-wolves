@@ -25,7 +25,6 @@ describe("the Comment resource", () => {
     expect(result.url.pathname).toBe(
       `/1/cards/${TEST_CARD_ID}/actions/${TEST_COMMENT_ID}`,
     );
-    expect(result.url.searchParams.get("filter")).toBe("commentCard");
   });
 
   test("gets multiple comments", async () => {
@@ -48,7 +47,9 @@ describe("the Comment resource", () => {
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
-    expect(result.url.pathname).toBe(`/1/cards/${TEST_CARD_ID}/actions`);
+    expect(result.url.pathname).toBe(
+      `/1/cards/${TEST_CARD_ID}/actions/comments`,
+    );
     expect(result.url.searchParams.get("text")).toBe("This is a comment");
   });
 
@@ -61,7 +62,7 @@ describe("the Comment resource", () => {
 
     expect(result.config.method).toBe("PUT");
     expect(result.url.pathname).toBe(
-      `/1/cards/${TEST_CARD_ID}/actions/${TEST_COMMENT_ID}`,
+      `/1/cards/${TEST_CARD_ID}/actions/${TEST_COMMENT_ID}/comments`,
     );
     expect(result.url.searchParams.get("text")).toBe(
       "This is a different comment",
@@ -93,7 +94,7 @@ describe("the Comment resource", () => {
 
     expect(result.config.method).toBe("DELETE");
     expect(result.url.pathname).toBe(
-      `/1/cards/${TEST_CARD_ID}/actions/${TEST_COMMENT_ID}`,
+      `/1/cards/${TEST_CARD_ID}/actions/${TEST_COMMENT_ID}/comments`,
     );
   });
 });

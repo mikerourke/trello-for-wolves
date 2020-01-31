@@ -24,7 +24,9 @@ export * from "./resources/Action";
 export * from "./resources/Attachment";
 export * from "./resources/Batch";
 export * from "./resources/Board";
+export * from "./resources/BoardBackgrounds";
 export * from "./resources/BoardMyPrefs";
+export * from "./resources/BoardPref";
 export * from "./resources/BoardStar";
 export * from "./resources/Card";
 export * from "./resources/CheckItem";
@@ -32,6 +34,7 @@ export * from "./resources/Checklist";
 export * from "./resources/Comment";
 export * from "./resources/CustomEmoji";
 export * from "./resources/CustomField";
+export * from "./resources/CustomFieldOption";
 export * from "./resources/Enterprise";
 export * from "./resources/Label";
 export * from "./resources/List";
@@ -153,7 +156,7 @@ export class Trello {
   }
 
   public search(): Search {
-    return new Search(this.config, [], "search", {});
+    return new Search(this.config, [], "search");
   }
 
   public tokens(tokenName: string): Token {
@@ -162,8 +165,10 @@ export class Trello {
     });
   }
 
-  public types(): Type {
-    return new Type(this.config, [], "types", {});
+  public types(idOrganizationOrUser: string): Type {
+    return new Type(this.config, [], "types", {
+      identifier: idOrganizationOrUser,
+    });
   }
 
   public webhooks(idWebhook: string = ""): Webhook {

@@ -72,6 +72,21 @@ export class Label extends BaseResource {
     return this.apiPost("/", updatedParams);
   }
 
+  public associateLabel(): TypedFetch<unknown> {
+    if (!this.isChildOf("card")) {
+      throw new Error("You can only call associateLabel() on a card");
+    }
+
+    if (!this.identifier) {
+      throw new Error(
+        `You must pass a label ID into the labels() instance when calling associateLabel()`,
+      );
+    }
+
+    this.pathElements = [...this.parentElements, "idLabels"];
+    return this.apiPost("/", { value: this.identifier });
+  }
+
   public updateLabel(params: {
     name?: string;
     color?: ColorName | null;
@@ -88,6 +103,21 @@ export class Label extends BaseResource {
   }
 
   public deleteLabel(): TypedFetch<{ limits: unknown }> {
+    return this.apiDelete("/");
+  }
+
+  public dissociateLabel(): TypedFetch<unknown> {
+    if (!this.isChildOf("card")) {
+      throw new Error("You can only call dissociateLabel() on a card");
+    }
+
+    if (!this.identifier) {
+      throw new Error(
+        `You must pass a label ID into the labels() instance when calling associateLabel()`,
+      );
+    }
+
+    this.pathElements = [...this.parentElements, "idLabels", this.identifier];
     return this.apiDelete("/");
   }
 

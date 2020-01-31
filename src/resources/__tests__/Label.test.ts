@@ -1,6 +1,6 @@
 import { Trello } from "../../index";
 
-const TEST_BOARD_ID = "d9a04f38b919f23b8cc7bf01";
+const TEST_PARENT_ID = "d9a04f38b919f23b8cc7bf01";
 const TEST_LABEL_ID = "60024c859ab0c51945243414";
 
 describe("the Label resource", () => {
@@ -24,24 +24,24 @@ describe("the Label resource", () => {
 
   test("gets multiple labels", async () => {
     await trello
-      .boards(TEST_BOARD_ID)
+      .boards(TEST_PARENT_ID)
       .labels()
       .getLabels();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/boards/${TEST_BOARD_ID}/labels`);
+    expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/labels`);
   });
 
   test("gets nested labels", async () => {
     await trello
-      .boards(TEST_BOARD_ID)
+      .boards(TEST_PARENT_ID)
       .labels()
       .getNestedLabels({ labels: "all" });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/boards/${TEST_BOARD_ID}`);
+    expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}`);
     expect(result.url.searchParams.get("labels")).toBe("all");
   });
 
@@ -62,7 +62,7 @@ describe("the Label resource", () => {
     await trello.labels().addLabel({
       name: "Test",
       color: "black",
-      idBoard: TEST_BOARD_ID,
+      idBoard: TEST_PARENT_ID,
     });
     const result = global.getLastFetchCall();
 
@@ -70,12 +70,12 @@ describe("the Label resource", () => {
     expect(result.url.pathname).toBe(`/1/labels`);
     expect(result.url.searchParams.get("name")).toBe("Test");
     expect(result.url.searchParams.get("color")).toBe("black");
-    expect(result.url.searchParams.get("idBoard")).toBe(TEST_BOARD_ID);
+    expect(result.url.searchParams.get("idBoard")).toBe(TEST_PARENT_ID);
   });
 
   test("adds a new label from a board", async () => {
     await trello
-      .boards(TEST_BOARD_ID)
+      .boards(TEST_PARENT_ID)
       .labels()
       .addLabel({
         name: "Test",
@@ -84,10 +84,20 @@ describe("the Label resource", () => {
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
-    expect(result.url.pathname).toBe(`/1/boards/${TEST_BOARD_ID}/labels`);
+    expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/labels`);
     expect(result.url.searchParams.get("name")).toBe("Test");
     expect(result.url.searchParams.get("color")).toBe("black");
-    expect(result.url.searchParams.get("idBoard")).toBe(TEST_BOARD_ID);
+    expect(result.url.searchParams.get("idBoard")).toBe(TEST_PARENT_ID);
+  });
+
+  test("throws an error if associating a label from a non-card resource", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello.labels().associateLabel();
+    } catch (err) {
+      expect(err.message).toMatch(/You can only call associateLabel/gi);
+    }
   });
 
   test("updates a label", async () => {
@@ -127,6 +137,29 @@ describe("the Label resource", () => {
 
     expect(result.config.method).toBe("DELETE");
     expect(result.url.pathname).toBe(`/1/labels/${TEST_LABEL_ID}`);
+  });
+
+  test("throws an error if dissociating a label from a non-card resource", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello.labels().dissociateLabel();
+    } catch (err) {
+      expect(err.message).toMatch(/You can only call dissociateLabel/gi);
+    }
+  });
+
+  test("throws an error if dissociating a label without an ID", async () => {
+    expect.assertions(1);
+
+    try {
+      await trello
+        .cards(TEST_PARENT_ID)
+        .labels()
+        .dissociateLabel();
+    } catch (err) {
+      expect(err.message).toMatch(/You must pass a label ID into the labels/gi);
+    }
   });
 
   test("gets the board for a label", async () => {

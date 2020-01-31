@@ -92,12 +92,38 @@ describe("the Board resource", () => {
     expect(result.url.pathname).toBe(`/1/boards/${TEST_BOARD_ID}/idTags`);
   });
 
+  test("throws an error if getting new billable guests from a non-organization resource", async () => {
+    try {
+      await trello.boards(TEST_BOARD_ID).getIfHasNewBillableGuests();
+    } catch (err) {
+      expect(err.message).toMatch(
+        /You can only call getIfHasNewBillableGuests/gi,
+      );
+    }
+  });
+
+  test("gets if the board has new billable guests in an organization", async () => {
+    const TEST_ORGANIZATION_ID = "49944289a59febdcd8180fa2";
+    await trello
+      .organizations(TEST_ORGANIZATION_ID)
+      .boards(TEST_BOARD_ID)
+      .getIfHasNewBillableGuests();
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("GET");
+    expect(result.url.pathname).toBe(
+      `/1/organizations/${TEST_ORGANIZATION_ID}/newBillableGuests/${TEST_BOARD_ID}`,
+    );
+  });
+
   test("adds a new board", async () => {
     await trello.boards().addBoard({
       name: "Test Board",
       defaultLabels: false,
       defaultLists: true,
       idOrganization: TEST_CHILD_ID,
+      keepFromSource: "none",
+      powerUps: ["cardAging", "recap"],
       prefs: {
         permissionLevel: "private",
       },
@@ -110,12 +136,14 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("defaultLabels")).toBe("false");
     expect(result.url.searchParams.get("defaultLists")).toBe("true");
     expect(result.url.searchParams.get("idOrganization")).toBe(TEST_CHILD_ID);
+    expect(result.url.searchParams.get("keepFromSource")).toBe("none");
+    expect(result.url.searchParams.get("powerUps")).toBe("cardAging,recap");
     expect(result.url.searchParams.get("prefs_permissionLevel")).toBe(
       "private",
     );
   });
 
-  test("adds a new board plugin", async () => {
+  test("enables a board plugin on a board", async () => {
     await trello.boards(TEST_BOARD_ID).enableBoardPlugin(TEST_CHILD_ID);
     const result = global.getLastFetchCall();
 
@@ -124,8 +152,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("idPlugin")).toBe(TEST_CHILD_ID);
   });
 
-  test("adds a new power up to a board", async () => {
-    await trello.boards(TEST_BOARD_ID).addPowerUp("calendar");
+  test("enables a power up on a board", async () => {
+    await trello.boards(TEST_BOARD_ID).enablePowerUp("calendar");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -133,8 +161,8 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("value")).toBe("calendar");
   });
 
-  test("adds tags to a board", async () => {
-    await trello.boards(TEST_BOARD_ID).addTags(TEST_CHILD_ID);
+  test("adds tag to a board", async () => {
+    await trello.boards(TEST_BOARD_ID).addTag(TEST_CHILD_ID);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -375,7 +403,7 @@ describe("the Board resource", () => {
     expect(result.url.pathname).toBe(`/1/boards/${TEST_BOARD_ID}`);
   });
 
-  test("disables the board plugin", async () => {
+  test("disables the board plugin for a board", async () => {
     await trello.boards(TEST_BOARD_ID).disableBoardPlugin(TEST_CHILD_ID);
     const result = global.getLastFetchCall();
 
@@ -385,8 +413,8 @@ describe("the Board resource", () => {
     );
   });
 
-  test("deletes the board power up", async () => {
-    await trello.boards(TEST_BOARD_ID).deletePowerUp("recap");
+  test("disables the power up for a board", async () => {
+    await trello.boards(TEST_BOARD_ID).disablePowerUp("recap");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");

@@ -14,7 +14,7 @@ describe("the Type resource", () => {
   });
 
   test("gets a type for the specified ID", async () => {
-    await trello.types().getType(TEST_ID);
+    await trello.types(TEST_ID).getType();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");

@@ -37,6 +37,7 @@ export type KeepFromSourceField =
   | "due"
   | "labels"
   | "members"
+  | "none"
   | "stickers";
 
 export type PermissionLevel = "private" | "public";

@@ -5,6 +5,7 @@ type ValidQueryParams<T> = T & { separator: string };
 // These param names should not be re-cased. The API documentation specifies
 // that these are the actual values to be passed in.
 export const UNCHANGED_PARAM_NAMES = [
+  "allowBillableGuest",
   "avatarSource",
   "boardBackgrounds",
   "boardStars",

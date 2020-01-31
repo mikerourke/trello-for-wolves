@@ -111,18 +111,6 @@ export class Enterprise extends BaseResource {
     return this.apiGet("/signupUrl", params);
   }
 
-  public getIfOrgTransferrable(idOrganization: string): TypedFetch<unknown> {
-    return this.apiGet(`/transferrable/organization/${idOrganization}`);
-  }
-
-  public addMemberAsAdmin(idMember: string): TypedFetch<unknown> {
-    return this.apiPut(`/admins/${idMember}`);
-  }
-
-  public removeMemberFromAdmin(idMember: string): TypedFetch<unknown> {
-    return this.apiDelete(`/admins/${idMember}`);
-  }
-
   public members(idMember: string = ""): Member {
     return new Member(this.config, this.pathElements, "members", {
       identifier: idMember,

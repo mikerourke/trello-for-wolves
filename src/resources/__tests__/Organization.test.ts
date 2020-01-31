@@ -100,6 +100,16 @@ describe("the Organization resource", () => {
     );
   });
 
+  test("gets the exports status for an organization", async () => {
+    await trello.organizations(TEST_ORGANIZATION_ID).getExports();
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("GET");
+    expect(result.url.pathname).toBe(
+      `/1/organizations/${TEST_ORGANIZATION_ID}/exports`,
+    );
+  });
+
   test("throws an error if trying to get if can transfer to an enterprise from a non-enterprise resource", async () => {
     expect.assertions(1);
 
@@ -170,7 +180,7 @@ describe("the Organization resource", () => {
   });
 
   test("adds tags to an organization", async () => {
-    await trello.organizations(TEST_ORGANIZATION_ID).addTags("test");
+    await trello.organizations(TEST_ORGANIZATION_ID).addTag("test");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -178,6 +188,19 @@ describe("the Organization resource", () => {
       `/1/organizations/${TEST_ORGANIZATION_ID}/tags`,
     );
     expect(result.url.searchParams.get("name")).toBe("test");
+  });
+
+  test("starts the export for an organization", async () => {
+    await trello
+      .organizations(TEST_ORGANIZATION_ID)
+      .startExport({ attachments: true });
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("POST");
+    expect(result.url.pathname).toBe(
+      `/1/organizations/${TEST_ORGANIZATION_ID}/exports`,
+    );
+    expect(result.url.searchParams.get("attachments")).toBe("true");
   });
 
   test("updates an organization", async () => {
@@ -301,6 +324,16 @@ describe("the Organization resource", () => {
     expect(result.config.method).toBe("DELETE");
     expect(result.url.pathname).toBe(
       `/1/organizations/${TEST_ORGANIZATION_ID}/logo`,
+    );
+  });
+
+  test("deletes a tag from an organization", async () => {
+    await trello.organizations(TEST_ORGANIZATION_ID).deleteTag(TEST_CHILD_ID);
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("DELETE");
+    expect(result.url.pathname).toBe(
+      `/1/organizations/${TEST_ORGANIZATION_ID}/tags/${TEST_CHILD_ID}`,
     );
   });
 
@@ -519,13 +552,12 @@ describe("the Organization resource", () => {
     await trello
       .organizations(TEST_ORGANIZATION_ID)
       .prefs()
-      .removeOrgInviteRestrict("test@stuff.com");
+      .removeOrgInviteRestrict();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");
     expect(result.url.pathname).toBe(
       `/1/organizations/${TEST_ORGANIZATION_ID}/prefs/orgInviteRestrict`,
     );
-    expect(result.url.searchParams.get("value")).toBe("test@stuff.com");
   });
 });

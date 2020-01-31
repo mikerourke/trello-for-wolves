@@ -92,6 +92,23 @@ export interface VendorPluginRecord extends Omit<PluginRecord, "listings"> {
   listing?: PluginListingRecord;
 }
 
+export class PluginListing extends BaseResource {
+  public addListing(
+    params: PluginListingRecord,
+  ): TypedFetch<PluginListingRecord> {
+    return this.apiPost("/", {}, params);
+  }
+
+  public updateListing(params: {
+    name?: string;
+    locale?: string;
+    description?: string;
+    overview?: string;
+  }): TypedFetch<PluginListingRecord> {
+    return this.apiPut("/", {}, params);
+  }
+}
+
 /**
  * Plugins are how Power-Ups are managed via the API.
  * @see https://developers.trello.com/reference#plugins
@@ -120,20 +137,29 @@ export class Plugin extends BaseResource {
     return this.apiGet(`/compliance/memberPrivacy`);
   }
 
-  public addListing(
-    params: PluginListingRecord,
-  ): TypedFetch<PluginListingRecord> {
-    return this.apiPost("/listing", {}, params);
+  public updatePlugin(params?: {
+    capabilities?: PluginCapability[];
+    iframeConnectorUrl?: string;
+    name?: string;
+    public?: boolean;
+    icon: {
+      url: string;
+    };
+    listings?: PluginListingRecord[];
+    compliance?: {
+      lastPolled?: {
+        memberPrivacy?: string;
+      };
+      dateUpdatedStoresPersonalData?: string;
+      storesPersonalData?: boolean;
+    };
+  }): TypedFetch<PluginRecord> {
+    return this.apiPut("/", {}, params);
   }
 
-  public updatePlugin(): TypedFetch<PluginRecord> {
-    return this.apiPut("/");
-  }
-
-  public updateListing(
-    idListing: string,
-    params: PluginListingRecord,
-  ): TypedFetch<PluginListingRecord> {
-    return this.apiPut(`/listing/${idListing}`, {}, params);
+  public listings(idListing: string = ""): PluginListing {
+    return new PluginListing(this.config, this.pathElements, "listings", {
+      identifier: idListing,
+    });
   }
 }

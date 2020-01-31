@@ -294,7 +294,7 @@ export class Card extends BaseResource {
     return this.apiGet("/pluginData");
   }
 
-  public addCard(params: {
+  public addCard(params?: {
     name?: string;
     desc?: string;
     pos?: PositionOrFloat;
@@ -312,16 +312,19 @@ export class Card extends BaseResource {
     locationName?: string;
     coordinates?: CardCoordinatesRecord | string;
   }): TypedFetch<CardRecord> {
-    const validParams = this.setValidDateParams(["due"], params);
+    const validParams = this.setValidDateParams(["due"], params) ?? {};
+
+    if (this.isChildOf("list")) {
+      validParams.idList = validParams.idList ?? this.identifier;
+    }
+
+    if (!validParams.idList) {
+      throw new Error(
+        `You must pass specify the "idList" param or pass a list ID to the lists() instance when calling addCard()`,
+      );
+    }
+
     return this.apiPost("/", { ...validParams, separator: "/" });
-  }
-
-  public associateLabel(idLabel: string): TypedFetch<unknown> {
-    return this.apiPost("/idLabels", { value: idLabel });
-  }
-
-  public associateMember(idMember: string): TypedFetch<unknown> {
-    return this.apiPost("/idMembers", { value: idMember });
   }
 
   public updateCard(params: {
@@ -386,10 +389,6 @@ export class Card extends BaseResource {
     return this.apiPut("/idList", { value: idList });
   }
 
-  public associateMembers(idMembers: string[]): TypedFetch<unknown> {
-    return this.apiPut("/idMembers", { value: idMembers });
-  }
-
   public updateName(value: string): TypedFetch<CardRecord> {
     return this.apiPut("/name", { value });
   }
@@ -408,14 +407,6 @@ export class Card extends BaseResource {
 
   public deleteCard(): TypedFetch<unknown> {
     return this.apiDelete("/");
-  }
-
-  public dissociateMember(idMember: string): TypedFetch<unknown> {
-    return this.apiDelete(`/idMembers/${idMember}`);
-  }
-
-  public dissociateLabel(idLabel: string): TypedFetch<unknown> {
-    return this.apiDelete(`/idLabels/${idLabel}`);
   }
 
   public actions(): Action<CardActionType> {
@@ -485,16 +476,20 @@ export class Card extends BaseResource {
     );
   }
 
-  public labels(): Label {
-    return new Label(this.config, this.pathElements, "labels");
+  public labels(idLabel: string = ""): Label {
+    return new Label(this.config, this.pathElements, "labels", {
+      identifier: idLabel,
+    });
   }
 
   public list(): List {
     return new List(this.config, this.pathElements, "list");
   }
 
-  public members(): Member {
-    return new Member(this.config, this.pathElements, "members");
+  public members(idMember: string = ""): Member {
+    return new Member(this.config, this.pathElements, "members", {
+      identifier: idMember,
+    });
   }
 
   public membersVoted(idMember: string = ""): Member {

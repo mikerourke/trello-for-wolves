@@ -44,7 +44,7 @@ export class Comment extends BaseResource {
     memberCreator?: boolean;
     memberCreatorFields?: AllOrFieldOrListOf<MemberInvitedField>;
   }): TypedFetch<CommentRecord[]> {
-    return this.apiGet("/", { ...params, filter: "commentCard" });
+    return this.apiGet("/", params);
   }
 
   public getComments(params?: {
@@ -65,11 +65,11 @@ export class Comment extends BaseResource {
   }
 
   public addComment(text: string): TypedFetch<CommentRecord> {
-    return this.apiPost("/", { text });
+    return this.apiPost("/comments", { text });
   }
 
   public updateComment(text: string): TypedFetch<CommentRecord> {
-    return this.apiPut("/", { text });
+    return this.apiPut("/comments", { text });
   }
 
   public updateText(value: string): TypedFetch<CommentRecord> {
@@ -77,6 +77,6 @@ export class Comment extends BaseResource {
   }
 
   public deleteComment(): TypedFetch<unknown> {
-    return this.apiDelete("/");
+    return this.apiDelete("/comments");
   }
 }

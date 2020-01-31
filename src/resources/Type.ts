@@ -14,7 +14,7 @@ export interface TypeRecord {
  * @class
  */
 export class Type extends BaseResource {
-  public getType(idOrganizationOrUser: string): TypedFetch<TypeRecord> {
-    return this.apiGet(`/${idOrganizationOrUser}`);
+  public getType(): TypedFetch<TypeRecord> {
+    return this.apiGet("/");
   }
 }
