@@ -607,6 +607,19 @@ describe("the Member resource", () => {
     );
   });
 
+  test("gets the enterprises for a member", async () => {
+    await trello
+      .members(TEST_MEMBER_ID)
+      .enterprises()
+      .getEnterprises();
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("GET");
+    expect(result.url.pathname).toBe(
+      `/1/members/${TEST_MEMBER_ID}/enterprises`,
+    );
+  });
+
   test("gets the notifications for a member", async () => {
     await trello
       .members(TEST_MEMBER_ID)

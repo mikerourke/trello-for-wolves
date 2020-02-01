@@ -10,7 +10,7 @@ import {
 import { BoardStar } from "./BoardStar";
 import { Card, CardFilter } from "./Card";
 import { CustomEmoji } from "./CustomEmoji";
-import { SortOrder } from "./Enterprise";
+import { Enterprise, SortOrder } from "./Enterprise";
 import { Notification, NotificationType } from "./Notification";
 import {
   Organization,
@@ -567,6 +567,10 @@ export class Member extends BaseResource {
     return new CustomSticker(this.config, this.pathElements, "customStickers", {
       identifier: idCustomSticker,
     });
+  }
+
+  public enterprises(): Enterprise {
+    return new Enterprise(this.config, this.pathElements, "enterprises");
   }
 
   public notifications(): Notification {

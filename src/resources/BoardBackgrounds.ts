@@ -111,10 +111,11 @@ export class CustomBoardBackground extends BaseResource {
     return this.apiGet("/");
   }
 
-  public uploadCustomBoardBackground(
-    file: FileUpload,
-  ): TypedFetch<CustomBoardBackgroundRecord> {
-    return this.apiPost("/", { file });
+  public uploadCustomBoardBackground(params: {
+    file: FileUpload;
+    name: string;
+  }): TypedFetch<CustomBoardBackgroundRecord> {
+    return this.apiPost("/", params);
   }
 
   public updateCustomBoardBackground(params: {

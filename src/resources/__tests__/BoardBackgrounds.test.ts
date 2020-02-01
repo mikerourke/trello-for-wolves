@@ -124,7 +124,7 @@ describe("within BoardBackgrounds", () => {
       await trello
         .members("me")
         .customBoardBackgrounds()
-        .uploadCustomBoardBackground(testFile);
+        .uploadCustomBoardBackground({ file: testFile, name: "test" });
       const result = global.getLastFetchCall();
 
       expect(result.config.method).toBe("POST");

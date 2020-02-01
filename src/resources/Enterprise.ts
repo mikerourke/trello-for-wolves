@@ -33,6 +33,15 @@ export type EnterpriseUserType =
   | "saml"
   | "none";
 
+export type EnterpriseMemberFilter =
+  | "member"
+  | "collaborator"
+  | "saml"
+  | "none"
+  | "member-unconfirmed"
+  | "collaborator-unconfirmed"
+  | "all";
+
 /**
  The data corresponding to an enterprise. The fields that are present in the
  * record are contingent on the `fields` param passed to the method used to
@@ -51,6 +60,8 @@ export type EnterpriseUserType =
  * @property products Array of products that the enterprise has enabled.
  * @property userTypes Object containing keys for every member type and values
  *                     representing the count of each type of member.
+ * @property [ssoDateDelayed] I don't know what this value is and I can't check because
+ *                            I'm not part of an enterprise.
  */
 export interface EnterpriseRecord {
   id: string;
@@ -63,6 +74,7 @@ export interface EnterpriseRecord {
   idOrganizations: string[];
   products: number[];
   userTypes: Record<EnterpriseUserType, number>;
+  ssoDateDelayed?: unknown;
 }
 
 export type EnterpriseField =
@@ -76,6 +88,14 @@ export type EnterpriseField =
   | "idOrganizations"
   | "products"
   | "userTypes";
+
+export type GetEnterprisesField =
+  | "name"
+  | "displayName"
+  | "prefs"
+  | "ssoActivationFailed"
+  | "ssoDateDelayed"
+  | "idAdmins";
 
 export class Enterprise extends BaseResource {
   public getEnterprise(params?: {
@@ -96,8 +116,21 @@ export class Enterprise extends BaseResource {
     return this.apiGet("/", params);
   }
 
+  public getEnterprises(params?: {
+    fields?: AllOrFieldOrListOf<GetEnterprisesField>;
+    filter?: EnterpriseMemberFilter;
+  }): TypedFetch<EnterpriseRecord[]> {
+    return this.apiGet("/", params);
+  }
+
+  public getNestedEnterprises<TPayload extends object>(params?: {
+    enterpriseFields?: AllOrFieldOrListOf<GetEnterprisesField>;
+  }): TypedFetch<TPayload & { enterprises: EnterpriseRecord[] }> {
+    return this.apiGetNested(params);
+  }
+
   public getAdmins(params?: {
-    fields: "fullName" | "userName";
+    fields?: "fullName" | "userName";
   }): TypedFetch<unknown> {
     return this.apiGet("/admins", params);
   }
