@@ -17,8 +17,8 @@ import { Search } from "./resources/Search";
 import { Token } from "./resources/Token";
 import { Type } from "./resources/Type";
 import { Webhook } from "./resources/Webhook";
-import { fetchFromApi, HttpMethod } from "./utils/fetchFromApi";
-import { Config, TypedFetch } from "./typeDefs";
+import { fetchFromApi } from "./utils/fetchFromApi";
+import { TrelloConfig, TypedFetch } from "./typeDefs";
 
 export * from "./resources/Action";
 export * from "./resources/Attachment";
@@ -54,125 +54,123 @@ export * from "./resources/Webhook";
 export * from "./typeDefs";
 
 export class Trello {
-  public config: Config;
+  public trelloConfig: TrelloConfig;
 
-  public constructor(config: Config) {
-    this.config = config;
+  public constructor(trelloConfig: TrelloConfig) {
+    this.trelloConfig = trelloConfig;
   }
 
   public makeApiRequest(
     endpoint: string,
-    method: HttpMethod,
-    queryParamsByName?: unknown,
-    body?: unknown,
+    paramsByName?: unknown,
+    fetchConfig: RequestInit | null = null,
   ): TypedFetch<unknown> {
     return fetchFromApi({
       endpoint,
-      method,
-      config: this.config,
-      queryParamsByName: queryParamsByName as object,
-      body,
+      trelloConfig: this.trelloConfig,
+      fetchConfig,
+      paramsByName: paramsByName as Record<string, unknown>,
     });
   }
 
   public actions(idAction: string): Action {
-    return new Action(this.config, [], "actions", {
+    return new Action(this.trelloConfig, [], "actions", {
       identifier: idAction,
     });
   }
 
   public batch(): Batch {
-    return new Batch(this.config, [], "batch");
+    return new Batch(this.trelloConfig, [], "batch");
   }
 
   public boards(idBoard: string = ""): Board {
-    return new Board(this.config, [], "boards", {
+    return new Board(this.trelloConfig, [], "boards", {
       identifier: idBoard,
     });
   }
 
   public cards(idCard: string = ""): Card {
-    return new Card(this.config, [], "cards", {
+    return new Card(this.trelloConfig, [], "cards", {
       identifier: idCard,
     });
   }
 
   public checklists(idChecklist: string = ""): Checklist {
-    return new Checklist(this.config, [], "checklists", {
+    return new Checklist(this.trelloConfig, [], "checklists", {
       identifier: idChecklist,
     });
   }
 
   public customFields(idCustomField: string = ""): CustomField {
-    return new CustomField(this.config, [], "customFields", {
+    return new CustomField(this.trelloConfig, [], "customFields", {
       identifier: idCustomField,
     });
   }
 
   public emoji(): Emoji {
-    return new Emoji(this.config, [], "emoji");
+    return new Emoji(this.trelloConfig, [], "emoji");
   }
 
   public enterprises(idEnterprise: string): Enterprise {
-    return new Enterprise(this.config, [], "enterprises", {
+    return new Enterprise(this.trelloConfig, [], "enterprises", {
       identifier: idEnterprise,
     });
   }
 
   public labels(idLabel: string = ""): Label {
-    return new Label(this.config, [], "labels", {
+    return new Label(this.trelloConfig, [], "labels", {
       identifier: idLabel,
     });
   }
 
   public lists(idList: string = ""): List {
-    return new List(this.config, [], "lists", {
+    return new List(this.trelloConfig, [], "lists", {
       identifier: idList,
     });
   }
 
   public members(idMemberOrUserName: string = ""): Member {
-    return new Member(this.config, [], "members", {
+    return new Member(this.trelloConfig, [], "members", {
       identifier: idMemberOrUserName,
     });
   }
 
   public notifications(idNotification: string = ""): Notification {
-    return new Notification(this.config, [], "notifications", {
+    return new Notification(this.trelloConfig, [], "notifications", {
       identifier: idNotification,
     });
   }
 
   public organizations(idOrganizationOrName: string = ""): Organization {
-    return new Organization(this.config, [], "organizations", {
+    return new Organization(this.trelloConfig, [], "organizations", {
       identifier: idOrganizationOrName,
     });
   }
 
   public plugins(idPlugin: string = ""): Plugin {
-    return new Plugin(this.config, [], "plugins", {
+    return new Plugin(this.trelloConfig, [], "plugins", {
       identifier: idPlugin,
     });
   }
 
   public search(): Search {
-    return new Search(this.config, [], "search");
+    return new Search(this.trelloConfig, [], "search");
   }
 
   public tokens(tokenName: string): Token {
-    return new Token(this.config, [], "tokens", {
+    return new Token(this.trelloConfig, [], "tokens", {
       identifier: tokenName,
     });
   }
 
   public types(idOrganizationOrUser: string): Type {
-    return new Type(this.config, [], "types", {
+    return new Type(this.trelloConfig, [], "types", {
       identifier: idOrganizationOrUser,
     });
   }
 
   public webhooks(idWebhook: string = ""): Webhook {
-    return new Webhook(this.config, [], "webhooks", {
+    return new Webhook(this.trelloConfig, [], "webhooks", {
       identifier: idWebhook,
     });
   }

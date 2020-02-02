@@ -262,7 +262,7 @@ export class Member extends BaseResource {
       );
     }
 
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getNestedMembers<TPayload extends object>(params?: {

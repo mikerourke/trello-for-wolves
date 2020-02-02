@@ -1,37 +1,24 @@
 import { stringifyQueryParams } from "./stringifyQueryParams";
-import { Config } from "../typeDefs";
+import { TrelloConfig } from "../typeDefs";
 
 /**
  * Constructs the endpoint for performing the API request.
  */
 export function buildApiUrl({
   endpoint,
-  config,
-  queryParamsByName,
+  trelloConfig,
+  paramsByName,
 }: {
   endpoint: string;
-  config: Config;
-  queryParamsByName?: object;
+  trelloConfig: TrelloConfig;
+  paramsByName: Record<string, unknown>;
 }): string {
   const validParamsByName = {
-    ...(queryParamsByName ?? {}),
-    key: config.key,
-    token: config.token,
-  } as Record<string, string>;
+    ...paramsByName,
+    key: trelloConfig.key,
+    token: trelloConfig.token,
+  };
 
-  // We don't want to attempt to stringify the "file" query param:
-  if ("file" in validParamsByName) {
-    delete validParamsByName.file;
-
-    // The "name" and "mimeType" will be in the FormData body of the request:
-    if ("name" in validParamsByName) {
-      delete validParamsByName.name;
-    }
-
-    if ("mimeType" in validParamsByName) {
-      delete validParamsByName.mimeType;
-    }
-  }
   const queryString = stringifyQueryParams(validParamsByName);
 
   // Remove any duplicate `/` values. We're omitting the `https://` from the

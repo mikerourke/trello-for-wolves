@@ -1,4 +1,4 @@
-export interface Config {
+export interface TrelloConfig {
   key: string;
   token: string;
   backoffTime?: number;

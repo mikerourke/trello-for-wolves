@@ -106,7 +106,7 @@ export class CustomField extends BaseResource {
     body.idModel = idBoard;
     body.modelType = "board";
 
-    return this.apiPost("/", {}, body);
+    return this.apiPost("/", undefined, body);
   }
 
   public updateCustomField(params: {

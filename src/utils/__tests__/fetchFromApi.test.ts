@@ -9,30 +9,28 @@ describe("the fetchFromApi method", () => {
     global.resetFetchMocks();
   });
 
-  test("throws an error if the key is missing from the config object", async () => {
+  test("throws an error if the key is missing from the trelloConfig object", async () => {
     expect.assertions(1);
 
     try {
       await fetchFromApi({
         endpoint: "/test",
-        method: "GET",
-        config: { token: "TEST" } as any,
-        queryParamsByName: { filter: "all" },
+        trelloConfig: { token: "TEST" } as any,
+        paramsByName: { filter: "all" },
       });
     } catch (err) {
       expect(err.message).toMatch(/You must provide a "key" to the/gi);
     }
   });
 
-  test("throws an error if the token is missing from the config object", async () => {
+  test("throws an error if the token is missing from the trelloConfig object", async () => {
     expect.assertions(1);
 
     try {
       await fetchFromApi({
         endpoint: "/test",
-        method: "GET",
-        config: { key: "TEST" } as any,
-        queryParamsByName: { filter: "all" },
+        trelloConfig: { key: "TEST" } as any,
+        paramsByName: { filter: "all" },
       });
     } catch (err) {
       expect(err.message).toMatch(/You must provide a "token" to the/gi);
@@ -42,9 +40,8 @@ describe("the fetchFromApi method", () => {
   test("correctly builds the API url based on the query params", async () => {
     await fetchFromApi({
       endpoint: "/test",
-      method: "GET",
-      config: global.trelloConfig,
-      queryParamsByName: { filter: "all" },
+      trelloConfig: global.trelloConfig,
+      paramsByName: { filter: "all" },
     });
     const result = global.getLastFetchCall();
 
@@ -52,13 +49,15 @@ describe("the fetchFromApi method", () => {
     expect(result.url.searchParams.get("filter")).toBe("all");
   });
 
-  test("correctly builds the fetch config based on the body", async () => {
+  test("correctly builds the fetch trelloConfig based on the body", async () => {
     await fetchFromApi({
       endpoint: "/test",
-      method: "GET",
-      config: global.trelloConfig,
-      body: {
-        fullName: "Test Person",
+      trelloConfig: global.trelloConfig,
+      fetchConfig: {
+        method: "GET",
+        body: {
+          fullName: "Test Person",
+        } as any,
       },
     });
     const result = global.getLastFetchCall();
@@ -77,8 +76,7 @@ describe("the fetchFromApi method", () => {
 
     await fetchFromApi({
       endpoint: "/test",
-      method: "GET",
-      config: { ...global.trelloConfig, backoffTime: 1 },
+      trelloConfig: { ...global.trelloConfig, backoffTime: 1 },
     });
     expect(global.fetch.mock.calls).toHaveLength(2);
   });
@@ -93,8 +91,7 @@ describe("the fetchFromApi method", () => {
     try {
       await fetchFromApi({
         endpoint: "/test",
-        method: "GET",
-        config: global.trelloConfig,
+        trelloConfig: global.trelloConfig,
       });
     } catch (err) {
       expect(err.message).toMatch(/Error/gi);
@@ -109,8 +106,11 @@ describe("the fetchFromApi method", () => {
     try {
       await fetchFromApi({
         endpoint: "/test",
-        method: "GET",
-        config: { ...global.trelloConfig, backoffTime: 1, maxRetryAttempts: 5 },
+        trelloConfig: {
+          ...global.trelloConfig,
+          backoffTime: 1,
+          maxRetryAttempts: 5,
+        },
       });
     } catch (err) {
       expect(err.message).toMatch(/Maximum retry attempts reached/gi);
@@ -121,9 +121,8 @@ describe("the fetchFromApi method", () => {
     test("the API url is correctly built", async () => {
       await fetchFromApi({
         endpoint: "/test",
-        method: "GET",
-        config: global.trelloConfig,
-        queryParamsByName: {
+        trelloConfig: global.trelloConfig,
+        paramsByName: {
           file: new File(["test"], "test"),
           name: "Test",
           mimeType: "text/plain",
@@ -133,17 +132,16 @@ describe("the fetchFromApi method", () => {
 
       expect(result.url.pathname).toBe("/1/test");
       expect(result.url.searchParams.get("file")).toBeNull();
-      expect(result.url.searchParams.get("name")).toBeNull();
-      expect(result.url.searchParams.get("mimeType")).toBeNull();
+      expect(result.config.body.get("name")).toBe("Test");
+      expect(result.config.body.get("mimeType")).toBe("text/plain");
     });
 
     test("the correct contents are added to the body", async () => {
       const testFile = new File(["test"], "test.txt");
       await fetchFromApi({
         endpoint: "/test",
-        method: "GET",
-        config: global.trelloConfig,
-        queryParamsByName: {
+        trelloConfig: global.trelloConfig,
+        paramsByName: {
           file: testFile,
           name: "Test",
           mimeType: "text/plain",

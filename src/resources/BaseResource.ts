@@ -1,6 +1,6 @@
 import { fetchFromApi, HttpMethod } from "../utils/fetchFromApi";
-import { Config, DateValue, TypedFetch, FilterDate } from "../typeDefs";
 import { isEmpty } from "../utils/isEmpty";
+import { DateValue, FilterDate, TrelloConfig, TypedFetch } from "../typeDefs";
 
 interface BaseResourceOptions {
   identifier?: string;
@@ -15,14 +15,14 @@ export class BaseResource {
   protected pathElements: string[];
 
   /**
-   * @param config Config object containing Trello API key, token and rate limiting options.
+   * @param config TrelloConfig object containing Trello API key, token and rate limiting options.
    * @param parentElements Parent path elements.
    * @param groupName Group name associated with the resource.
    * @param [options] Additional options for the resource.
    * @constructor
    */
   constructor(
-    protected config: Config,
+    protected config: TrelloConfig,
     protected parentElements: string[],
     protected groupName: string,
     options: BaseResourceOptions = {},
@@ -105,23 +105,25 @@ export class BaseResource {
 
   protected apiGet<T>(
     endpoint: string,
-    queryParamsByName?: object,
+    paramsByName?: Record<string, unknown>,
     body?: unknown,
   ): TypedFetch<T> {
     const fullEndpoint = this.pathElements.join("/").concat(endpoint);
-    return this.onApiFetch("GET", fullEndpoint, queryParamsByName, body);
+    return this.onApiFetch("GET", fullEndpoint, paramsByName, body);
   }
 
-  protected apiGetNested<T>(queryParamsByName: object = {}): TypedFetch<T> {
+  protected apiGetNested<T>(
+    paramsByName: Record<string, unknown> = {},
+  ): TypedFetch<T> {
     const validParams = {
-      ...queryParamsByName,
-      [this.groupName]: queryParamsByName[this.groupName] ?? "all",
-    } as Record<string, string>;
+      ...paramsByName,
+      [this.groupName]: paramsByName[this.groupName] ?? "all",
+    };
 
     if (this.groupName === "reactions") {
-      validParams.reactions = queryParamsByName[this.groupName] ?? true;
+      validParams.reactions = paramsByName[this.groupName] ?? true;
     } else {
-      validParams[this.groupName] = queryParamsByName[this.groupName] ?? "all";
+      validParams[this.groupName] = paramsByName[this.groupName] ?? "all";
     }
 
     const fullEndpoint = this.pathElements
@@ -135,29 +137,29 @@ export class BaseResource {
 
   protected apiPut<T>(
     endpoint: string,
-    queryParamsByName?: object,
+    paramsByName?: Record<string, unknown>,
     body?: unknown,
   ): TypedFetch<T> {
     const fullEndpoint = this.pathElements.join("/").concat(endpoint);
-    return this.onApiFetch("PUT", fullEndpoint, queryParamsByName, body);
+    return this.onApiFetch("PUT", fullEndpoint, paramsByName, body);
   }
 
   protected apiPost<T>(
     endpoint: string,
-    queryParamsByName?: object,
+    paramsByName?: Record<string, unknown>,
     body?: unknown,
   ): TypedFetch<T> {
     const fullEndpoint = this.pathElements.join("/").concat(endpoint);
-    return this.onApiFetch("POST", fullEndpoint, queryParamsByName, body);
+    return this.onApiFetch("POST", fullEndpoint, paramsByName, body);
   }
 
   protected apiDelete<T>(
     endpoint: string,
-    queryParamsByName?: object,
+    paramsByName?: Record<string, unknown>,
     body?: unknown,
   ): TypedFetch<T> {
     const fullEndpoint = this.pathElements.join("/").concat(endpoint);
-    return this.onApiFetch("DELETE", fullEndpoint, queryParamsByName, body);
+    return this.onApiFetch("DELETE", fullEndpoint, paramsByName, body);
   }
 
   /**
@@ -165,21 +167,20 @@ export class BaseResource {
    * URL string associated with the endpoint.
    * @param endpoint API endpoint for making request.
    * @param method Method to perform (GET, DELETE, POST, PUT).
-   * @param queryParamsByName Query params to build the full URL.
+   * @param paramsByName Params to build the full URL.
    * @param body Body of the fetch call.
    */
   private onApiFetch<T>(
     method: HttpMethod,
     endpoint: string,
-    queryParamsByName?: object,
-    body?: unknown,
+    paramsByName?: Record<string, unknown>,
+    body: unknown = {},
   ): TypedFetch<T> {
     return fetchFromApi<T>({
       endpoint,
-      method,
-      config: this.config,
-      queryParamsByName,
-      body,
+      trelloConfig: this.config,
+      fetchConfig: { body: body as BodyInit, method },
+      paramsByName,
     });
   }
 }

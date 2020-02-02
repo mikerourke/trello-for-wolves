@@ -324,6 +324,8 @@ export class Card extends BaseResource {
       );
     }
 
+    // TODO: Find out how to handle fileSource.
+
     return this.apiPost("/", { ...validParams, separator: "/" });
   }
 

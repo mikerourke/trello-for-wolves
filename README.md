@@ -81,7 +81,7 @@ const trello = new Trello({
 
 ### Authorization
 
-You'll need to create a new instance of `Trello` and pass in an "config" object
+You'll need to create a new instance of `Trello` and pass in an "trelloConfig" object
 containing a `key` and `token`.  There isn't any async voodoo associated with
 this, the credentials are passed to each function call through the magic of
 class constructors.
