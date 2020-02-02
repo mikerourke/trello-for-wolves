@@ -119,6 +119,24 @@ describe("the Card resource", () => {
     expect(result.url.searchParams.get("keepFromSource")).toBe("attachments");
   });
 
+  test("adds a card with fileSource", async () => {
+    const testFile = new File(["test"], "test.txt");
+    await trello.cards().addCard({
+      name: "Test",
+      idList: TEST_CHILD_ID,
+      keepFromSource: "attachments",
+      fileSource: testFile,
+    });
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("POST");
+    expect(result.url.pathname).toBe(`/1/cards`);
+    expect(result.url.searchParams.get("name")).toBe("Test");
+    expect(result.url.searchParams.get("idList")).toBe(TEST_CHILD_ID);
+    expect(result.url.searchParams.get("keepFromSource")).toBe("attachments");
+    expect(result.config.body.get("fileSource")).toEqual(testFile);
+  });
+
   test("throws an error if the ID isn't specified when associating a label with a card", async () => {
     expect.assertions(1);
 

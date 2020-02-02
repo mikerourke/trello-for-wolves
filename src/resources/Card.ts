@@ -1,3 +1,4 @@
+import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { BaseResource } from "./BaseResource";
 import { Action } from "./Action";
 import { Attachment, AttachmentField, AttachmentFilter } from "./Attachment";
@@ -319,12 +320,10 @@ export class Card extends BaseResource {
     }
 
     if (!validParams.idList) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         `You must pass specify the "idList" param or pass a list ID to the lists() instance when calling addCard()`,
       );
     }
-
-    // TODO: Find out how to handle fileSource.
 
     return this.apiPost("/", { ...validParams, separator: "/" });
   }

@@ -1,3 +1,4 @@
+import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { BaseResource } from "./BaseResource";
 import {
   AllOrFieldOrListOf,
@@ -103,13 +104,13 @@ export class Attachment extends BaseResource {
     url?: string;
   }): TypedFetch<AttachmentRecord> {
     if ((params.name ?? "").length > 256) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         `The "name" field for an attachment cannot exceed 256 characters`,
       );
     }
 
     if ((params.mimeType ?? "").length > 256) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         `The "mimeType" field for an attachment cannot exceed 256 characters`,
       );
     }

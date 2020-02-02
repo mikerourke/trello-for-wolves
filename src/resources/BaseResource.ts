@@ -1,3 +1,4 @@
+import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { fetchFromApi, HttpMethod } from "../utils/fetchFromApi";
 import { isEmpty } from "../utils/isEmpty";
 import { DateValue, FilterDate, TrelloConfig, TypedFetch } from "../typeDefs";
@@ -67,7 +68,7 @@ export class BaseResource {
 
   protected validateUrl(fieldName: string, value?: string): void {
     if (value && !/http:\/\/|https:\/\//gi.test(value.toString())) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         `The "${fieldName}" field must start with "http://" or "https://"`,
       );
     }

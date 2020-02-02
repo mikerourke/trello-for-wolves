@@ -1,3 +1,4 @@
+import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { isEmpty } from "../utils/isEmpty";
 import { BaseResource } from "./BaseResource";
 import { Action, ActionType } from "./Action";
@@ -257,7 +258,7 @@ export class Member extends BaseResource {
       | GetMembersForEnterpriseParams,
   ): TypedFetch<MemberRecord[]> {
     if (!isEmpty(params) && !params?.fields && !this.isChildOf("enterprise")) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         `Only the "fields" param is allowed when calling getMembers() from a non-enterprise resource`,
       );
     }
@@ -304,20 +305,20 @@ export class Member extends BaseResource {
     fullName?: string;
   }): TypedFetch<MemberRecord> {
     if (!this.isChildOf(["board", "card", "organization"])) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You can only call associateMember() from a board, card, or organization",
       );
     }
 
     if (this.isChildOf("card")) {
       if (!this.identifier) {
-        throw new Error(
+        throw new TrelloForWolvesError(
           `You must pass a member ID into the members() instance when calling associateMember()`,
         );
       }
 
       if (!isEmpty(params)) {
-        throw new Error(
+        throw new TrelloForWolvesError(
           "No params are allowed when calling associateMember() from a card",
         );
       }
@@ -327,7 +328,7 @@ export class Member extends BaseResource {
     }
 
     if (!params?.email && !this.identifier) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         `You must specify the "email" param or pass a member ID into the members() instance when calling associateMember()`,
       );
     }
@@ -347,7 +348,9 @@ export class Member extends BaseResource {
 
   public associateMembers(idMembers: string[]): TypedFetch<unknown> {
     if (!this.isChildOf("card")) {
-      throw new Error("You can only call associateMembers() from a card");
+      throw new TrelloForWolvesError(
+        "You can only call associateMembers() from a card",
+      );
     }
 
     this.pathElements = [...this.parentElements, "idMembers"];
@@ -395,7 +398,7 @@ export class Member extends BaseResource {
 
   public makeAdminForEnterprise(): TypedFetch<unknown> {
     if (!this.isChildOf("enterprise")) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You can only call makeAdminForEnterprise() on an enterprise",
       );
     }
@@ -412,7 +415,7 @@ export class Member extends BaseResource {
    */
   public updateDeactivatedStatus(value: boolean): TypedFetch<unknown> {
     if (!this.isChildOf(["enterprise", "organization"])) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You can only call updateDeactivatedStatus() on an enterprise or organization",
       );
     }
@@ -427,7 +430,7 @@ export class Member extends BaseResource {
    */
   public updateMemberType(type: MemberType): TypedFetch<unknown> {
     if (!this.isChildOf(["board", "organization"])) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You can only call updateMemberType() on a board or organization",
       );
     }
@@ -471,14 +474,14 @@ export class Member extends BaseResource {
     isRemovedFromBoards: boolean = false,
   ): TypedFetch<unknown> {
     if (!this.isChildOf(["board", "card", "organization"])) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You can only call dissociateMember() on a board, card, or organization",
       );
     }
 
     if (this.isChildOf("card")) {
       if (!this.identifier) {
-        throw new Error(
+        throw new TrelloForWolvesError(
           `You must pass a member ID into the members() instance when calling dissociateMember()`,
         );
       }
@@ -498,7 +501,7 @@ export class Member extends BaseResource {
 
   public removeAdminForEnterprise(): TypedFetch<unknown> {
     if (!this.isChildOf("enterprise")) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You can only call removeAdminForEnterprise() on an enterprise",
       );
     }

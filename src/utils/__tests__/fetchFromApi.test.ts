@@ -81,23 +81,6 @@ describe("the fetchFromApi method", () => {
     expect(global.fetch.mock.calls).toHaveLength(2);
   });
 
-  test("throws an error if the response is not ok and status is not 429", async () => {
-    global.fetch.mockImplementationOnce(() =>
-      Promise.resolve({ ok: false, status: 400, statusText: "Error" }),
-    );
-
-    expect.assertions(1);
-
-    try {
-      await fetchFromApi({
-        endpoint: "/test",
-        trelloConfig: global.trelloConfig,
-      });
-    } catch (err) {
-      expect(err.message).toMatch(/Error/gi);
-    }
-  });
-
   test("throws an error if the max retry attempts are reached", async () => {
     global.fetch.mockImplementation(() => ({ ok: false, status: 429 }));
 

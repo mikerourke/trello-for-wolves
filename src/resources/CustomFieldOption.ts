@@ -1,3 +1,4 @@
+import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { BaseResource } from "./BaseResource";
 import { ColorName, PositionOrFloat, TypedFetch } from "../typeDefs";
 
@@ -46,7 +47,7 @@ export class CustomFieldOption extends BaseResource {
     option: CustomFieldOptionRecord,
   ): TypedFetch<CustomFieldOptionRecord> {
     if (!this.isChildOf("card")) {
-      throw new Error("You can only call updateOption() from a parent card");
+      throw new TrelloForWolvesError("You can only call updateOption() from a parent card");
     }
 
     const body = this.stringifyOptionValue(option);

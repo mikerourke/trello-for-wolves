@@ -1,3 +1,4 @@
+import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { BaseResource } from "./BaseResource";
 import { Action } from "./Action";
 import { Board } from "./Board";
@@ -91,7 +92,7 @@ export class List extends BaseResource {
     }
 
     if (!updatedParams.idBoard) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         `You must specify the "idBoard" param when calling addList()`,
       );
     }

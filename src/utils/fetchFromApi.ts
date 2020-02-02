@@ -1,3 +1,4 @@
+import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { buildApiUrl } from "./buildApiUrl";
 import { isEmpty } from "./isEmpty";
 import { TrelloConfig, TypedResponse } from "../typeDefs";
@@ -8,7 +9,7 @@ export type HttpMethod = "GET" | "PUT" | "POST" | "DELETE";
  * Returns a resolved Promise with the results of the Trello API call.
  * @private
  */
-export async function fetchFromApi<TResponse>({
+export async function fetchFromApi<T>({
   endpoint,
   trelloConfig,
   fetchConfig = null,
@@ -18,15 +19,15 @@ export async function fetchFromApi<TResponse>({
   trelloConfig: TrelloConfig;
   fetchConfig?: RequestInit | null;
   paramsByName?: Record<string, unknown> | null;
-}): Promise<TypedResponse<TResponse>> {
+}): Promise<TypedResponse<T>> {
   if (!trelloConfig.key) {
-    throw new Error(
+    throw new TrelloForWolvesError(
       `You must provide a "key" to the Trello instance config object`,
     );
   }
 
   if (!trelloConfig.token) {
-    throw new Error(
+    throw new TrelloForWolvesError(
       `You must provide a "token" to the Trello instance config object`,
     );
   }
@@ -37,7 +38,7 @@ export async function fetchFromApi<TResponse>({
   const validFetchConfig =
     fetchConfig === null ? { method: "GET" } : fetchConfig;
 
-  validFetchConfig.body = getFetchBodyByEnvironment(
+  validFetchConfig.body = await getFetchBodyByEnvironment(
     trelloConfig,
     validFetchConfig.body ?? null,
     validParamsByName,
@@ -45,6 +46,10 @@ export async function fetchFromApi<TResponse>({
 
   if ("file" in validParamsByName) {
     delete validParamsByName.file;
+  }
+
+  if ("fileSource" in validParamsByName) {
+    delete validParamsByName.fileSource;
   }
 
   const apiUrl = buildApiUrl({
@@ -62,28 +67,40 @@ export async function fetchFromApi<TResponse>({
 }
 
 /**
- * Returns the `body` for the fetch trelloConfig object.
+ * Returns the "body" for the fetchConfig object based on whether a file needs
+ * to be attached. If using this library in the browser, use window.FormData,
+ * otherwise use the form-data library.
  */
-function getFetchBodyByEnvironment(
+async function getFetchBodyByEnvironment(
   trelloConfig: TrelloConfig,
   body: BodyInit | null,
   paramsByName: Record<string, unknown>,
-): BodyInit | null {
+): Promise<BodyInit | null> {
   // If the user stringifies the body when calling `makeApiRequest`, we don't
   // want to stringify it again:
-  if (typeof body === "string") {
+  if (typeof body === "string" || body instanceof String) {
     return body;
   }
 
-  if (!isEmpty(paramsByName) && "file" in paramsByName) {
+  const hasFileInParams =
+    "file" in paramsByName || "fileSource" in paramsByName;
+
+  if (!isEmpty(paramsByName) && hasFileInParams) {
     // We're working in the browser, so we should use FormData to send file
     // upload details:
-    if (typeof window?.FormData !== "undefined") {
+    if (
+      typeof window !== "undefined" &&
+      typeof window.FormData !== "undefined"
+    ) {
       const formData = new window.FormData();
       return appendDataToForm(formData, trelloConfig, paramsByName);
     }
 
-    return paramsByName.file as BodyInit;
+    // We're working in Node.js. We can't use streams because Trello requires
+    // that all attachments use multipart/form-data:
+    const { default: FormData } = await import("form-data");
+    const formData = new FormData();
+    return appendDataToForm(formData, trelloConfig, paramsByName);
   }
 
   return JSON.stringify(body);
@@ -97,7 +114,9 @@ function appendDataToForm(
   const validFormData = formData as FormData;
   validFormData.append("key", trelloConfig.key);
   validFormData.append("token", trelloConfig.token);
-  validFormData.append("file", paramsByName.file as Blob);
+
+  const fileParamName = "fileSource" in paramsByName ? "fileSource" : "file";
+  validFormData.append(fileParamName, paramsByName[fileParamName] as Blob);
 
   if ("name" in paramsByName) {
     validFormData.append("name", paramsByName.name as string);
@@ -117,15 +136,11 @@ async function fetchWithRetries<T>(
   attemptsRemaining: number,
 ): Promise<TypedResponse<T>> {
   const response = await fetch(apiUrl, fetchConfig);
-  if (response.ok) {
-    return response;
-  }
 
   if (response.status === 429) {
     if (attemptsRemaining === 0) {
-      throw new Error(
-        `Maximum retry attempts reached, try increasing the "backoffTime" ` +
-          `or "maxRetryAttempts"`,
+      throw new TrelloForWolvesError(
+        `Maximum retry attempts reached, try increasing the "backoffTime" or "maxRetryAttempts"`,
       );
     }
 
@@ -138,7 +153,7 @@ async function fetchWithRetries<T>(
     );
   }
 
-  throw new Error(response.statusText);
+  return response;
 }
 
 /**

@@ -1,3 +1,4 @@
+import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { BaseResource } from "./BaseResource";
 import { BoardMemberType } from "./Board";
 import {
@@ -57,7 +58,7 @@ export class Membership extends BaseResource {
     memberFields?: AllOrFieldOrListOf<MemberInvitedField>;
   }): TypedFetch<MembershipRecord> {
     if (!this.identifier) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You must pass a membership ID to memberships() when calling updateMembership() from a board",
       );
     }

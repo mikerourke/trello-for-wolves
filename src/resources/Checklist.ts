@@ -1,3 +1,4 @@
+import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { BaseResource } from "./BaseResource";
 import { Board } from "./Board";
 import { Card, CardFilter } from "./Card";
@@ -90,7 +91,7 @@ export class Checklist extends BaseResource {
     }
 
     if (!updatedParams.idCard) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         `You must specify the "idCard" param when calling addLabel()`,
       );
     }

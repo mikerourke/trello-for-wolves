@@ -1,3 +1,4 @@
+import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { BaseResource } from "./BaseResource";
 import {
   AllOrFieldOrListOf,
@@ -57,7 +58,7 @@ export class CheckItem extends BaseResource {
     fields?: AllOrFieldOrListOf<CheckItemStateField>;
   }): TypedFetch<unknown> {
     if (!this.isChildOf("card")) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You can only call getCheckItemStates() from a card resource",
       );
     }
@@ -84,7 +85,7 @@ export class CheckItem extends BaseResource {
     pos?: PositionOrFloat;
   }): TypedFetch<CheckItemRecord> {
     if (!this.isChildOf("card")) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You can only call updateCheckItem() from a card resource",
       );
     }
@@ -100,7 +101,7 @@ export class CheckItem extends BaseResource {
     }
 
     if (!updatedParams.idChecklist) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         `You must specify the "idChecklist" param when calling updateCheckItem()`,
       );
     }

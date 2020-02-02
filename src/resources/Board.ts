@@ -1,3 +1,4 @@
+import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { BaseResource } from "./BaseResource";
 import { Action, ActionField } from "./Action";
 import { AttachmentField, AttachmentFilter } from "./Attachment";
@@ -369,7 +370,7 @@ export class Board extends BaseResource {
    */
   public getIfHasNewBillableGuests(): TypedFetch<unknown> {
     if (!this.isChildOf("organization")) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         `You can only call getIfHasNewBillableGuests() from an organization`,
       );
     }

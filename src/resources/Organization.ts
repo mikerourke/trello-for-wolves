@@ -1,3 +1,4 @@
+import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { BaseResource } from "./BaseResource";
 import { Action, ActionField, ActionType } from "./Action";
 import { Board, BoardField, BoardFilter } from "./Board";
@@ -176,7 +177,7 @@ export class Organization extends BaseResource {
 
   public getIfTransferrableToEnterprise(): TypedFetch<unknown> {
     if (!this.isChildOf("enterprise")) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You can only call getIfTransferrableToEnterprise() from an enterprise resource",
       );
     }
@@ -252,7 +253,7 @@ export class Organization extends BaseResource {
 
   public transferToEnterprise(): TypedFetch<unknown> {
     if (!this.isChildOf("enterprise")) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You can only call transferToEnterprise() from an enterprise resource",
       );
     }
@@ -260,7 +261,7 @@ export class Organization extends BaseResource {
     if (this.identifier) {
       this.pathElements.pop();
     } else {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You must pass an organization ID to the organization resource when " +
           "calling transferToEnterprise()",
       );
@@ -283,7 +284,7 @@ export class Organization extends BaseResource {
 
   public removeFromEnterprise(): TypedFetch<unknown> {
     if (!this.isChildOf("enterprise")) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You can only call removeFromEnterprise() from an enterprise resource",
       );
     }

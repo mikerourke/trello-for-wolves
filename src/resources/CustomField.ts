@@ -1,3 +1,4 @@
+import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { BaseResource } from "./BaseResource";
 import {
   CustomFieldOption,
@@ -78,14 +79,14 @@ export class CustomField extends BaseResource {
     options?: CustomFieldOptionRecord[];
   }): TypedFetch<CustomFieldRecord> {
     if (!this.isChildOf("board")) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You can only call addCustomField() from a board resource",
       );
     }
 
     const idBoard = this.parentElements[1];
     if (!idBoard) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         "You must pass an ID into the board resource when calling addCustomField()",
       );
     }

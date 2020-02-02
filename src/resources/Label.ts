@@ -1,3 +1,4 @@
+import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { BaseResource } from "./BaseResource";
 import { Board } from "./Board";
 import {
@@ -64,7 +65,7 @@ export class Label extends BaseResource {
     }
 
     if (!updatedParams.idBoard) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         `You must specify the "idBoard" param when calling addLabel()`,
       );
     }
@@ -74,11 +75,13 @@ export class Label extends BaseResource {
 
   public associateLabel(): TypedFetch<unknown> {
     if (!this.isChildOf("card")) {
-      throw new Error("You can only call associateLabel() on a card");
+      throw new TrelloForWolvesError(
+        "You can only call associateLabel() on a card",
+      );
     }
 
     if (!this.identifier) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         `You must pass a label ID into the labels() instance when calling associateLabel()`,
       );
     }
@@ -108,11 +111,13 @@ export class Label extends BaseResource {
 
   public dissociateLabel(): TypedFetch<unknown> {
     if (!this.isChildOf("card")) {
-      throw new Error("You can only call dissociateLabel() on a card");
+      throw new TrelloForWolvesError(
+        "You can only call dissociateLabel() on a card",
+      );
     }
 
     if (!this.identifier) {
-      throw new Error(
+      throw new TrelloForWolvesError(
         `You must pass a label ID into the labels() instance when calling associateLabel()`,
       );
     }
