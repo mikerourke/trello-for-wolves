@@ -3,7 +3,8 @@
   "coveragePathIgnorePatterns": [
     "/node_modules/",
     "declarations.d.ts",
-    "jestHelpers.ts"
+    "jestHelpers.ts",
+    "typeDefs.ts"
   ],
   "coverageReporters": ["lcov"],
   "globals": {
