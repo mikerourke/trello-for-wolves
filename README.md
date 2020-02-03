@@ -164,6 +164,13 @@ Here are the list of breaking changes from version 1 to 2:
 ```javascript
 import Trello from "trello-for-wolves";
 
+const trello = new Trello({
+  key: API_KEY,
+  token: AUTH_TOKEN,
+  backoffTime: 1000,
+  maxWaitingTime: 300,
+});
+
 trello.members("me").boards().getBoards()
   .then((response) => {
     console.log(response.data);  // <- Hooray! An array of Boards!
@@ -175,6 +182,13 @@ trello.members("me").boards().getBoards()
 
 ```typescript
 import { Trello } from "trello-for-wolves"; // <- No longer the default export!
+
+const trello = new Trello({
+  key: API_KEY,
+  token: AUTH_TOKEN,
+  backoffTime: 1000,
+  maxRetryAttempts: 3,
+});
 
 trello.members('me').boards().getBoards()
   .then((response) => {
