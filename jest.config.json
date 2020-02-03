@@ -1,0 +1,28 @@
+{
+  "collectCoverageFrom": ["src/**/*.ts"],
+  "coveragePathIgnorePatterns": [
+    "/node_modules/",
+    "declarations.d.ts",
+    "jestHelpers.ts",
+    "typeDefs.ts"
+  ],
+  "coverageReporters": ["lcov"],
+  "globals": {
+    "window": true,
+    "ts-jest": {
+      "diagnostics": {
+        "ignoreCodes": ["2339"]
+      }
+    }
+  },
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "preset": "ts-jest",
+  "roots": ["<rootDir>/src/"],
+  "setupFilesAfterEnv": ["<rootDir>/src/setupJest.ts"],
+  "testEnvironment": "node",
+  "testMatch": [
+    "<rootDir>/src/**/__tests__/**/*.ts",
+    "<rootDir>/src/**/?(*.)(spec|test).ts"
+  ],
+  "testURL": "http://localhost"
+}
