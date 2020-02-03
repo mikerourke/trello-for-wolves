@@ -103,6 +103,10 @@ async function getFetchBodyByEnvironment(
     return appendDataToForm(formData, trelloConfig, paramsByName);
   }
 
+  if (isEmpty(body)) {
+    return null;
+  }
+
   return JSON.stringify(body);
 }
 

@@ -80,10 +80,26 @@ async function getMyBoards(): Promise<BoardRecord[]> {
 }
 ```
 
-You can also use the library from the browser and reference methods from the global `TrelloForWolves` object:
+You can also import the library from [unpkg](https://unpkg.com/) and create a new `Trello` instance via the global `TrelloForWolves` object:
 
 ```html
-<script src=""
+<head>
+  <script src="https://unpkg.com/trello-for-wolves/umd/trello-for-wolves.min.js"></script>
+</head>
+<body>
+  <script>
+    var trello = new TrelloForWolves.Trello({
+      key: "<YOUR KEY>",
+      token: "<YOUR TOKEN>"
+    });
+
+    trello.members("me").boards().getBoards()
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+      });
+  </script>
+</body>
 ```
 
 ## Rate Limits
