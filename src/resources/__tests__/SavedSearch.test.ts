@@ -35,18 +35,6 @@ describe("the SavedSearch resource", () => {
     expect(result.url.pathname).toBe(`/1/members/me/savedSearches`);
   });
 
-  test("gets nested saved searches", async () => {
-    await trello
-      .members("me")
-      .savedSearches()
-      .getNestedSavedSearches();
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/members/me`);
-    expect(result.url.searchParams.get("savedSearches")).toBe("true");
-  });
-
   test("adds a new saved search", async () => {
     await trello
       .members("me")

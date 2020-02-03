@@ -1,31 +1,15 @@
 import { BaseResource } from "./BaseResource";
-import { ActionField, EntityRecord } from "./Action";
-import { MemberCreatorRecord, MemberInvitedField } from "./Member";
 import {
+  ActionField,
   AllOrFieldOrListOf,
+  CommentRecord,
   FilterDate,
   Format,
-  Limits,
+  NestedMemberCreatorParams,
+  NestedMemberParams,
+  NestedReactionsParams,
   TypedFetch,
 } from "../typeDefs";
-
-export interface CommentRecord {
-  id: string;
-  idMemberCreator: string;
-  data: {
-    text: string;
-    textData?: {
-      emoji?: Record<string, string>;
-    };
-  };
-  card: EntityRecord;
-  board: EntityRecord;
-  list: EntityRecord;
-  type: string;
-  date: string | null;
-  memberCreator?: MemberCreatorRecord;
-  limits?: Limits;
-}
 
 /**
  * Comments are Action records with a "type" of "commentCard". They are the
@@ -35,32 +19,32 @@ export interface CommentRecord {
  * @class
  */
 export class Comment extends BaseResource {
-  public getComment(params?: {
-    display?: boolean;
-    entities?: boolean;
-    fields?: AllOrFieldOrListOf<ActionField>;
-    member?: boolean;
-    memberFields?: AllOrFieldOrListOf<MemberInvitedField>;
-    memberCreator?: boolean;
-    memberCreatorFields?: AllOrFieldOrListOf<MemberInvitedField>;
-  }): TypedFetch<CommentRecord[]> {
+  public getComment(
+    params?: {
+      display?: boolean;
+      entities?: boolean;
+      fields?: AllOrFieldOrListOf<ActionField>;
+    } & NestedMemberParams &
+      NestedMemberCreatorParams &
+      NestedReactionsParams,
+  ): TypedFetch<CommentRecord[]> {
     return this.apiGet("/", params);
   }
 
-  public getComments(params?: {
-    display?: boolean;
-    entities?: boolean;
-    fields?: AllOrFieldOrListOf<ActionField>;
-    format?: Format;
-    before?: FilterDate;
-    since?: FilterDate;
-    idModels?: string;
-    limit?: number;
-    member?: boolean;
-    memberFields?: AllOrFieldOrListOf<MemberInvitedField>;
-    memberCreator?: boolean;
-    memberCreatorFields?: AllOrFieldOrListOf<MemberInvitedField>;
-  }): TypedFetch<CommentRecord[]> {
+  public getComments(
+    params?: {
+      display?: boolean;
+      entities?: boolean;
+      fields?: AllOrFieldOrListOf<ActionField>;
+      format?: Format;
+      before?: FilterDate;
+      since?: FilterDate;
+      idModels?: string;
+      limit?: number;
+    } & NestedMemberParams &
+      NestedMemberCreatorParams &
+      NestedReactionsParams,
+  ): TypedFetch<CommentRecord[]> {
     return this.apiGet("/", { ...params, filter: "commentCard" });
   }
 

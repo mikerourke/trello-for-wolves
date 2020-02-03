@@ -58,51 +58,6 @@ describe("the Attachment resource", () => {
     expect(result.config.body.get("name")).toBe("TEST");
   });
 
-  test("throws an error if the name param is longer than 256 characters", async () => {
-    expect.assertions(1);
-
-    try {
-      await trello
-        .cards(TEST_CARD_ID)
-        .attachments()
-        .uploadAttachment({
-          name: "TEST".repeat(80),
-        });
-    } catch (err) {
-      expect(err.message).toMatch(/cannot exceed 256/gi);
-    }
-  });
-
-  test("throws an error if the mimeType param is longer than 256 characters", async () => {
-    expect.assertions(1);
-
-    try {
-      await trello
-        .cards(TEST_CARD_ID)
-        .attachments()
-        .uploadAttachment({
-          mimeType: "TEST".repeat(80),
-        });
-    } catch (err) {
-      expect(err.message).toMatch(/cannot exceed 256/gi);
-    }
-  });
-
-  test("throws an error if the url param is invalid", async () => {
-    expect.assertions(1);
-
-    try {
-      await trello
-        .cards(TEST_CARD_ID)
-        .attachments()
-        .uploadAttachment({
-          url: "TEST",
-        });
-    } catch (err) {
-      expect(err.message).toMatch(/must start with/gi);
-    }
-  });
-
   test("deletes an attachment", async () => {
     await trello
       .cards(TEST_CARD_ID)

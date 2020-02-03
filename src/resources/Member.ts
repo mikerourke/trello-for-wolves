@@ -1,222 +1,44 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { isEmpty } from "../utils/isEmpty";
 import { BaseResource } from "./BaseResource";
-import { Action, ActionType } from "./Action";
-import { Board, BoardField, BoardFilter, BoardMemberType } from "./Board";
-import {
-  CustomBoardBackground,
-  BoardBackground,
-  BoardBackgroundFilter,
-} from "./BoardBackgrounds";
+import { Action } from "./Action";
+import { Board } from "./Board";
+import { BoardBackground, CustomBoardBackground } from "./BoardBackgrounds";
 import { BoardStar } from "./BoardStar";
-import { Card, CardFilter } from "./Card";
+import { Card } from "./Card";
 import { CustomEmoji } from "./CustomEmoji";
-import { Enterprise, SortOrder } from "./Enterprise";
-import { Notification, NotificationType } from "./Notification";
-import {
-  Organization,
-  OrganizationField,
-  OrganizationFilter,
-} from "./Organization";
+import { Enterprise } from "./Enterprise";
+import { Notification } from "./Notification";
+import { Organization } from "./Organization";
 import { SavedSearch } from "./SavedSearch";
 import { CustomSticker } from "./Stickers";
 import { Token } from "./Token";
 import {
   AllOrFieldOrListOf,
   AllOrNone,
+  AnyParams,
+  AvatarSourceField,
+  BoardBackgroundFilter,
+  BoardField,
+  BoardFilter,
+  BoardMemberType,
   FileUpload,
-  Limits,
+  MemberField,
+  MemberFilter,
+  MemberRecord,
+  MemberType,
+  NestedActionsParams,
+  NestedBoardsParams,
+  NestedCardsParams,
+  NestedEnterprisesParams,
+  NestedNotificationsParams,
+  NestedOrganizationsParams,
+  OrganizationField,
+  OrganizationFilter,
+  SortOrder,
   TypedFetch,
   ValueResponse,
 } from "../typeDefs";
-
-export type AvatarSourceField = "gravatar" | "none" | "upload";
-
-export type MemberType = "admin" | "normal";
-
-export type MemberLoginType = "password" | "saml" | "google" | "android";
-
-export type MemberFilter = "admins" | "all" | "none" | "normal" | "owners";
-
-export enum MemberProduct {
-  BusinessClass = 10,
-  GoldMonthly = 37,
-  GoldAnnual = 38,
-}
-
-export interface MemberPrefsRecord {
-  sendSummaries: boolean;
-  minutesBetweenSummaries: number;
-  minutesBeforeDeadlineToNotify: number;
-  colorBlind: boolean;
-  locale: string;
-  timezoneInfo: {
-    timezoneNext: string;
-    dateNext: string;
-    offsetNext: number;
-    timezoneCurrent: string;
-    offsetCurrent: number;
-  };
-  twoFactor: {
-    enabled: boolean;
-    needsNewBackups: false;
-  };
-  privacy: {
-    fullName: string;
-    avatar: string;
-  };
-}
-
-export interface MessageDismissedRecord {
-  _id: string;
-  name: string;
-  count: number;
-  lastDismissed: string;
-}
-
-/**
- * @typedef {Object} NestedMemberRecord
- * @property id The ID of the member.
- * @property avatarHash Member profile image.
- * @property avatarUrl The URL of the current avatar being used, regardless of
- *                     whether it is a gravatar or uploaded avatar.
- * @property initials The member's initials, used for display when there isn't an avatar set.
- * @property fullName The full display name for the member.
- * @property username The username for the member. What is shown in @mentions for example.
- * @property confirmed Whether the member has confirmed their email address after signing up.
- * @property memberType Type of member ("ghost" has been invited to join but has not
- *                      created a Trello account.
- */
-export interface NestedMemberRecord {
-  id: string;
-  avatarHash: string | null;
-  avatarUrl: string;
-  initials: string;
-  fullName: string;
-  username: string;
-  confirmed: boolean;
-  memberType: "normal" | "ghost";
-}
-
-export type NestedMemberField = keyof NestedMemberRecord;
-
-/**
- * Member data associated with an invited member. It builds upon the properties
- * of the {@link NestedMemberRecord}.
- * @typedef {Object} MemberInvitedRecord
- * @property bio Optional bio for the member.
- * @property bioData If the bio includes custom emoji, this object will contain the
- *                   information necessary to display them.
- * @property idPremOrgsAdmin An array of organization IDs this member is an admin of.
- * @property products Array of numbers that represent premium features.
- *                    10: member has Trello Gold as a result of being in a Business Class team.
- *                    37: member has monthly Trello Gold.
- *                    38: member has annual Trello Gold.
- * @property status Status of the member.
- * @property url The URL to the member's profile page.
- * @property idEnterprisesDeactivated
- */
-export interface MemberInvitedRecord extends NestedMemberRecord {
-  bio: string;
-  bioData: { emoji: unknown } | null;
-  idPremOrgsAdmin: string[];
-  products: number[] | MemberProduct[];
-  status: string;
-  url: string;
-  idEnterprisesDeactivated?: string[];
-}
-
-export type MemberInvitedField = keyof MemberInvitedRecord;
-
-export interface MemberCreatorRecord extends MemberInvitedRecord {
-  activityBlocked: boolean;
-  nonPublic: unknown;
-  nonPublicAvailable: boolean;
-  aaEmail: string | null;
-  aaEnrolledDate: string | null;
-  aaId: string | null;
-  idMemberReferrer: string | null;
-  isAaMastered: boolean;
-  ixUpdate: string;
-  limits: Limits;
-  messagesDismissed?: MessageDismissedRecord[];
-  marketingOptIn?: { optedIn: boolean; date: string };
-  idEnterprise?: string | null;
-}
-
-/**
- * The data corresponding to a member. The fields that are present in the
- * record are contingent on the `fields`/`memberFields` param passed to
- * the method used to retrieve the member data. This contains the most
- * comprehensive data. It includes all of the fields in {@link NestedMemberRecord}
- * and {@link MemberInvitedRecord}.
- * @typedef {Object} MemberRecord
- * @property avatarSource The source of the user's avatar - either via "upload" or "gravatar".
- * @property email The primary email address for the member. You can only read your own.
- * @property gravatarHash Same as avatarHash.
- * @property idBoards An array of board IDs this member is on.
- * @property idBoardsPinned An array of pinned board IDs.
- * @property idOrganizations An array of organization IDs this member is in.
- * @property idEnterprisesAdmin An array of enterprise IDs this member is an admin of.
- * @property loginTypes The types of logins a user can use.
- * @property oneTimeMessagesDismissed Array of message IDs that were dismissed.
- * @property prefs Preferences associated with the member.
- * @property premiumFeatures Array of premium feature details.
- * @property trophies Array of trophies.
- * @property uploadedAvatarHash Same as avatar hash.
- * @property uploadedAvatarUrl The URL of the uploaded avatar if one has been uploaded.
- */
-export interface MemberRecord extends MemberCreatorRecord {
-  avatarSource: Omit<AvatarSourceField, "none"> | null;
-  email: string | null;
-  gravatarHash: string | null;
-  idBoards: string[];
-  idBoardsPinned: string[];
-  idOrganizations: string[];
-  idEnterprisesAdmin: string[];
-  loginTypes: MemberLoginType[];
-  oneTimeMessagesDismissed: string[];
-  prefs: MemberPrefsRecord;
-  premiumFeatures: unknown[];
-  trophies: unknown[];
-  uploadedAvatarHash: unknown | null;
-  uploadedAvatarUrl: string;
-}
-
-export type MemberField = keyof MemberRecord;
-
-/**
- * @typedef {Object} GetMembersForEnterpriseParams
- * @property fields
- * @property filter Pass a SCIM-style query to filter members. This takes precedence over the
- *                  all/normal/admins value of members. If any of the below member_* args are set,
- *                  the member array will be paginated.
- * @property sort This parameter expects a SCIM-style sorting value prefixed by a - to sort
- *                descending. If no - is prefixed, it will be sorted ascending. Note that the
- *                members array returned will be paginated if members is "normal" or "admins".
- *                Pagination can be controlled with member_startIndex, etc, but the API
- *                response will not contain the total available result count or pagination status data.
- * @property sortBy This parameter expects a SCIM-style sorting value. Note that the members array
- *                  returned will be paginated if members is "normal" or "admins". Pagination
- *                  can be controlled with member_startIndex, etc, but the API response will not
- *                  contain the total available result count or pagination status data.
- * @property sortOrder Order to sort records by.
- * @property startIndex Any integer between 0 and 9999.
- * @property count SCIM-style filter.
- * @property organizationFields Organization fields to include in response.
- * @property boardFields Board fields to include in response.
- */
-export interface GetMembersForEnterpriseParams {
-  fields?: AllOrFieldOrListOf<MemberInvitedRecord>;
-  filter?: string | "none";
-  sort?: string;
-  sortBy?: string;
-  sortOrder?: SortOrder;
-  startIndex?: number;
-  count?: string | "none";
-  organizationFields?: AllOrFieldOrListOf<OrganizationField>;
-  boardFields?: AllOrFieldOrListOf<BoardField>;
-}
 
 /**
  * Everyone with a Trello account is called a member.
@@ -224,53 +46,65 @@ export interface GetMembersForEnterpriseParams {
  * @class
  */
 export class Member extends BaseResource {
-  public getMember(params?: {
-    actions?: AllOrFieldOrListOf<ActionType>;
-    boards?: BoardFilter;
-    boardFields?: AllOrFieldOrListOf<BoardField>;
-    boardBackgrounds?: AllOrFieldOrListOf<BoardBackgroundFilter>;
-    boardsInvited?: BoardFilter;
-    boardsInvitedFields?: AllOrFieldOrListOf<BoardField>;
-    boardStars?: boolean;
-    cards?: CardFilter;
-    customBoardBackgrounds?: AllOrNone;
-    customEmoji?: AllOrNone;
-    customStickers?: AllOrNone;
-    fields?: AllOrFieldOrListOf<MemberField>;
-    notifications?: AllOrFieldOrListOf<NotificationType>;
-    organizations?: AllOrFieldOrListOf<OrganizationFilter>;
-    organizationFields?: AllOrFieldOrListOf<OrganizationField>;
-    organizationPaidAccount?: boolean;
-    organizationsInvited?: OrganizationFilter;
-    organizationsInvitedFields?: AllOrFieldOrListOf<OrganizationField>;
-    paidAccount?: boolean;
-    savedSearches?: boolean;
-    tokens?: AllOrNone;
-  }): TypedFetch<MemberRecord> {
+  public getMember(
+    params?: {
+      boardBackgrounds?: AllOrFieldOrListOf<BoardBackgroundFilter>;
+      boardsInvited?: BoardFilter;
+      boardsInvitedFields?: AllOrFieldOrListOf<BoardField>;
+      boardStars?: boolean;
+      customBoardBackgrounds?: AllOrNone;
+      customEmoji?: AllOrNone;
+      customStickers?: AllOrNone;
+      fields?: AllOrFieldOrListOf<MemberField>;
+      organizationPaidAccount?: boolean;
+      organizationsInvited?: OrganizationFilter;
+      organizationsInvitedFields?: AllOrFieldOrListOf<OrganizationField>;
+      paidAccount?: boolean;
+      savedSearches?: boolean;
+      tokens?: AllOrNone;
+    } & NestedActionsParams &
+      NestedBoardsParams &
+      NestedCardsParams &
+      NestedEnterprisesParams &
+      NestedNotificationsParams &
+      NestedOrganizationsParams,
+  ): TypedFetch<MemberRecord> {
     return this.apiGet("/", params);
   }
 
-  public getMembers(
-    params?:
-      | {
-          fields: AllOrFieldOrListOf<MemberField>;
-        }
-      | GetMembersForEnterpriseParams,
-  ): TypedFetch<MemberRecord[]> {
-    if (!isEmpty(params) && !params?.fields && !this.isChildOf("enterprise")) {
-      throw new TrelloForWolvesError(
-        `Only the "fields" param is allowed when calling getMembers() from a non-enterprise resource`,
-      );
-    }
-
-    return this.apiGet("/", params as Record<string, unknown>);
-  }
-
-  public getNestedMembers<TPayload extends object>(params?: {
-    members?: MemberFilter;
-    memberFields?: AllOrFieldOrListOf<MemberField>;
-  }): TypedFetch<TPayload & { members: MemberRecord[] }> {
-    return this.apiGetNested(params);
+  /**
+   * @param [params] Options for data to return.
+   * @param [params.fields]
+   * @param [params.filter] Pass a SCIM-style query to filter members. This takes precedence over the
+   *                        all/normal/admins value of members. If any of the below member_* args are set,
+   *                        the member array will be paginated.
+   * @param [params.sort] This parameter expects a SCIM-style sorting value prefixed by a - to sort
+   *                      descending. If no - is prefixed, it will be sorted ascending. Note that the
+   *                      members array returned will be paginated if members is "normal" or "admins".
+   *                      Pagination can be controlled with member_startIndex, etc, but the API
+   *                      response will not contain the total available result count or pagination status data.
+   * @param [params.sortBy] This parameter expects a SCIM-style sorting value. Note that the members array
+   *                        returned will be paginated if members is "normal" or "admins". Pagination
+   *                        can be controlled with member_startIndex, etc, but the API response will not
+   *                        contain the total available result count or pagination status data.
+   * @param [params.sortOrder] Order to sort records by.
+   * @param [params.startIndex] Any integer between 0 and 9999.
+   * @param [params.count] SCIM-style filter.
+   * @param [params.organizationFields] Organization fields to include in response.
+   * @param [params.boardFields] Board fields to include in response.
+   */
+  public getMembers(params?: {
+    fields?: AllOrFieldOrListOf<MemberField>;
+    filter?: string | "none";
+    sort?: string;
+    sortBy?: string;
+    sortOrder?: SortOrder;
+    startIndex?: number;
+    count?: string | "none";
+    organizationFields?: AllOrFieldOrListOf<OrganizationField>;
+    boardFields?: AllOrFieldOrListOf<BoardField>;
+  }): TypedFetch<MemberRecord[]> {
+    return this.apiGet("/", params as AnyParams);
   }
 
   public getMembersFilteredBy(

@@ -23,6 +23,11 @@ describe("the Action resource", () => {
       memberFields: "all",
       memberCreator: true,
       memberCreatorFields: ["bioData", "status", "url"],
+      reactions: true,
+      reactionsSummary: true,
+      reactionsMember: true,
+      reactionsMemberFields: "all",
+      reactionsEmoji: true,
     });
     const result = global.getLastFetchCall();
 
@@ -37,6 +42,11 @@ describe("the Action resource", () => {
     expect(result.url.searchParams.get("memberCreator_fields")).toBe(
       "bioData,status,url",
     );
+    expect(result.url.searchParams.get("reactions")).toBe("true");
+    expect(result.url.searchParams.get("reactionsSummary")).toBe("true");
+    expect(result.url.searchParams.get("reactions_member")).toBe("true");
+    expect(result.url.searchParams.get("reactions_member_fields")).toBe("all");
+    expect(result.url.searchParams.get("reactions_emoji")).toBe("true");
   });
 
   test("gets multiple actions", async () => {
@@ -44,6 +54,8 @@ describe("the Action resource", () => {
       .boards(TEST_BOARD_ID)
       .actions()
       .getActions({
+        display: false,
+        entities: false,
         fields: "all",
         format: "count",
         memberFields: "all",
@@ -53,30 +65,12 @@ describe("the Action resource", () => {
 
     expect(result.config.method).toBe("GET");
     expect(result.url.pathname).toBe(`/1/boards/${TEST_BOARD_ID}/actions`);
+    expect(result.url.searchParams.get("display")).toBe("false");
+    expect(result.url.searchParams.get("entities")).toBe("false");
     expect(result.url.searchParams.get("fields")).toBe("all");
     expect(result.url.searchParams.get("format")).toBe("count");
     expect(result.url.searchParams.get("member_fields")).toBe("all");
     expect(result.url.searchParams.get("memberCreator_fields")).toBe("all");
-  });
-
-  test("gets nested actions", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .actions()
-      .getNestedActions({
-        actions: "all",
-        actionsLimit: 10,
-        actionMemberCreatorFields: "all",
-      });
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/boards/${TEST_BOARD_ID}`);
-    expect(result.url.searchParams.get("actions")).toBe("all");
-    expect(result.url.searchParams.get("actions_limit")).toBe("10");
-    expect(result.url.searchParams.get("action_memberCreator_fields")).toBe(
-      "all",
-    );
   });
 
   test("gets an action field", async () => {

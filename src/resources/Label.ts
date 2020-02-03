@@ -3,55 +3,30 @@ import { BaseResource } from "./BaseResource";
 import { Board } from "./Board";
 import {
   AllOrFieldOrListOf,
-  AllOrNone,
   ColorName,
-  Limits,
+  LabelField,
+  LabelRecord,
+  NestedActionsParams,
   TypedFetch,
 } from "../typeDefs";
 
-/**
- * @typedef {Object} LabelRecord
- * @property id The ID of the label.
- * @property idBoard The ID of the board the label is on.
- * @property name The optional name of the label (0 - 16384 chars).
- * @property color The color of the label (null means no color, and the label will
- *                 not show on the front of cards).
- * @property [limits] Limit data associated with the label.
- * @property [creationMethod] Creation method for the label.
- */
-export interface LabelRecord {
-  id: string;
-  idBoard: string;
-  name: string;
-  color: ColorName | null;
-  limits?: Limits;
-  creationMethod?: string | null;
-}
-
-export type LabelField = "id" | "idBoard" | "name" | "color";
-
 export class Label extends BaseResource {
-  public getLabel(params?: {
-    fields?: AllOrFieldOrListOf<LabelField>;
-    limit?: number;
-  }): TypedFetch<LabelRecord> {
+  public getLabel(
+    params?: {
+      fields?: AllOrFieldOrListOf<LabelField>;
+      limit?: number;
+    } & NestedActionsParams,
+  ): TypedFetch<LabelRecord> {
     return this.apiGet("/", params);
   }
 
-  public getLabels(params?: {
-    fields?: AllOrFieldOrListOf<LabelField>;
-    limit?: number;
-  }): TypedFetch<LabelRecord[]> {
+  public getLabels(
+    params?: {
+      fields?: AllOrFieldOrListOf<LabelField>;
+      limit?: number;
+    } & NestedActionsParams,
+  ): TypedFetch<LabelRecord[]> {
     return this.apiGet("/", params);
-  }
-
-  public getNestedLabels<TPayload extends object>(params?: {
-    labels?: AllOrNone;
-    labelFields?: AllOrFieldOrListOf<LabelField>;
-    /** A number from 0 to 1000. */
-    labelsLimit?: number;
-  }): TypedFetch<TPayload & { labels: LabelRecord[] }> {
-    return this.apiGetNested(params);
   }
 
   public addLabel(params: {

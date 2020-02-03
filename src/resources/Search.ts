@@ -1,17 +1,14 @@
 import { BaseResource } from "./BaseResource";
-import { AttachmentFilter } from "./Attachment";
-import { BoardField } from "./Board";
-import { CardField } from "./Card";
-import { MemberInvitedField } from "./Member";
-import { OrganizationField } from "./Organization";
-import { AllOrFieldOrListOf, TypedFetch } from "../typeDefs";
-
-export type ModelType =
-  | "actions"
-  | "boards"
-  | "cards"
-  | "members"
-  | "organizations";
+import {
+  AllOrFieldOrListOf,
+  AttachmentFilter,
+  BoardField,
+  CardField,
+  MemberField,
+  ModelType,
+  OrganizationField,
+  TypedFetch,
+} from "../typeDefs";
 
 /**
  * The Search API allows you to perform the same search that is available within
@@ -71,7 +68,7 @@ export class Search extends BaseResource {
     idBoards?: "mine" | string[];
     idCards?: string[];
     idOrganizations?: string[];
-    memberFields?: AllOrFieldOrListOf<MemberInvitedField>;
+    memberFields?: AllOrFieldOrListOf<MemberField>;
     membersLimit?: number;
     modelTypes?: AllOrFieldOrListOf<ModelType>;
     organizationFields?: AllOrFieldOrListOf<OrganizationField>;

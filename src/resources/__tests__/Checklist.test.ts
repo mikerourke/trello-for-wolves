@@ -24,6 +24,15 @@ describe("the Checklist resource", () => {
     expect(result.url.pathname).toBe(`/1/checklists/${TEST_CHECKLIST_ID}`);
   });
 
+  test("gets nested data for a single card", async () => {
+    await trello.checklists(TEST_CHECKLIST_ID).getChecklist({ cards: "all" });
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("GET");
+    expect(result.url.pathname).toBe(`/1/checklists/${TEST_CHECKLIST_ID}`);
+    expect(result.url.searchParams.get("cards")).toBe("all");
+  });
+
   test("gets multiple checklists", async () => {
     await trello
       .boards(TEST_BOARD_ID)
@@ -33,18 +42,6 @@ describe("the Checklist resource", () => {
 
     expect(result.config.method).toBe("GET");
     expect(result.url.pathname).toBe(`/1/boards/${TEST_BOARD_ID}/checklists`);
-  });
-
-  test("gets nested checklists", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .checklists()
-      .getNestedChecklists({ checklists: "all" });
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/boards/${TEST_BOARD_ID}`);
-    expect(result.url.searchParams.get("checklists")).toBe("all");
   });
 
   test("gets the field value for a checklist", async () => {

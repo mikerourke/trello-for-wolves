@@ -1,7 +1,5 @@
-import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { fetchFromApi, HttpMethod } from "../utils/fetchFromApi";
-import { isEmpty } from "../utils/isEmpty";
-import { DateValue, FilterDate, TrelloConfig, TypedFetch } from "../typeDefs";
+import { AnyParams, TrelloConfig, TypedFetch } from "../typeDefs";
 
 interface BaseResourceOptions {
   identifier?: string;
@@ -66,79 +64,18 @@ export class BaseResource {
     return parentGroupName.includes(groupNameOrNames);
   }
 
-  protected validateUrl(fieldName: string, value?: string): void {
-    if (value && !/http:\/\/|https:\/\//gi.test(value.toString())) {
-      throw new TrelloForWolvesError(
-        `The "${fieldName}" field must start with "http://" or "https://"`,
-      );
-    }
-  }
-
-  /**
-   * Loops through the specified field names and updates the corresponding param
-   * to be a valid ISO date string (or null/existing value).
-   */
-  protected setValidDateParams<T>(
-    fieldNames: string[],
-    params?: T,
-  ): T | undefined {
-    if (isEmpty(params)) {
-      return params;
-    }
-
-    const validParams = { ...params };
-    for (const fieldName of fieldNames) {
-      if (validParams[fieldName]) {
-        validParams[fieldName] = this.dateToIsoString(validParams[fieldName]);
-      }
-    }
-
-    return validParams as T;
-  }
-
-  /**
-   * Since dates have to be a valid ISO string (or null), this converts a
-   * date instance passed in to a valid value.
-   */
-  protected dateToIsoString(dateValue: DateValue | FilterDate): string | null {
-    return dateValue instanceof Date ? dateValue.toISOString() : dateValue;
-  }
-
   protected apiGet<T>(
     endpoint: string,
-    paramsByName?: Record<string, unknown>,
+    paramsByName?: AnyParams,
     body?: unknown,
   ): TypedFetch<T> {
     const fullEndpoint = this.pathElements.join("/").concat(endpoint);
     return this.onApiFetch("GET", fullEndpoint, paramsByName, body);
   }
 
-  protected apiGetNested<T>(
-    paramsByName: Record<string, unknown> = {},
-  ): TypedFetch<T> {
-    const validParams = {
-      ...paramsByName,
-      [this.groupName]: paramsByName[this.groupName] ?? "all",
-    };
-
-    if (this.groupName === "reactions") {
-      validParams.reactions = paramsByName[this.groupName] ?? true;
-    } else {
-      validParams[this.groupName] = paramsByName[this.groupName] ?? "all";
-    }
-
-    const fullEndpoint = this.pathElements
-      .filter(
-        pathElement => ![this.groupName, this.identifier].includes(pathElement),
-      )
-      .join("/");
-
-    return this.onApiFetch("GET", fullEndpoint, validParams);
-  }
-
   protected apiPut<T>(
     endpoint: string,
-    paramsByName?: Record<string, unknown>,
+    paramsByName?: AnyParams,
     body?: unknown,
   ): TypedFetch<T> {
     const fullEndpoint = this.pathElements.join("/").concat(endpoint);
@@ -147,7 +84,7 @@ export class BaseResource {
 
   protected apiPost<T>(
     endpoint: string,
-    paramsByName?: Record<string, unknown>,
+    paramsByName?: AnyParams,
     body?: unknown,
   ): TypedFetch<T> {
     const fullEndpoint = this.pathElements.join("/").concat(endpoint);
@@ -156,7 +93,7 @@ export class BaseResource {
 
   protected apiDelete<T>(
     endpoint: string,
-    paramsByName?: Record<string, unknown>,
+    paramsByName?: AnyParams,
     body?: unknown,
   ): TypedFetch<T> {
     const fullEndpoint = this.pathElements.join("/").concat(endpoint);
@@ -174,7 +111,7 @@ export class BaseResource {
   private onApiFetch<T>(
     method: HttpMethod,
     endpoint: string,
-    paramsByName?: Record<string, unknown>,
+    paramsByName?: AnyParams,
     body: unknown = {},
   ): TypedFetch<T> {
     return fetchFromApi<T>({

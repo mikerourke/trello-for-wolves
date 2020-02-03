@@ -3,42 +3,13 @@ import { BaseResource } from "./BaseResource";
 import {
   AllOrFieldOrListOf,
   AllOrNone,
+  CheckItemField,
+  CheckItemRecord,
+  CheckItemState,
+  CheckItemStateField,
   PositionOrFloat,
   TypedFetch,
 } from "../typeDefs";
-
-export type CheckItemState = "complete" | "incomplete";
-
-export type CheckItemStateField = "idCheckItem" | "state";
-
-/**
- * The data corresponding to a check item. The fields that are present in the
- * record are contingent on the `fields` param passed to the method used to
- * retrieve the check item data.
- * @typedef {Object} CheckItemRecord
- * @property id The ID of the check item.
- * @property idChecklist The ID of the parent checklist.
- * @property name The name of the check item.
- * @property nameData Additional data associated with the check item.
- * @property pos Position of the check item in the checklist.
- * @property state Current state of the check item.
- * @property due Date the check item is due.
- * @property type Type of the check item (this is usually null).
- * @property [creationMethod] Creation method for the check item.
- */
-export type CheckItemRecord = {
-  id: string;
-  idChecklist: string;
-  name: string;
-  nameData: string | null;
-  pos: number;
-  state: CheckItemState;
-  due: string | null;
-  type: string | null;
-  creationMethod?: string | null;
-};
-
-export type CheckItemField = "name" | "nameData" | "pos" | "state" | "type";
 
 export class CheckItem extends BaseResource {
   public getCheckItem(params?: {
@@ -57,12 +28,6 @@ export class CheckItem extends BaseResource {
   public getCheckItemStates(params?: {
     fields?: AllOrFieldOrListOf<CheckItemStateField>;
   }): TypedFetch<unknown> {
-    if (!this.isChildOf("card")) {
-      throw new TrelloForWolvesError(
-        "You can only call getCheckItemStates() from a card resource",
-      );
-    }
-
     return this.apiGet("/", params);
   }
 
@@ -84,12 +49,6 @@ export class CheckItem extends BaseResource {
     idChecklist?: string;
     pos?: PositionOrFloat;
   }): TypedFetch<CheckItemRecord> {
-    if (!this.isChildOf("card")) {
-      throw new TrelloForWolvesError(
-        "You can only call updateCheckItem() from a card resource",
-      );
-    }
-
     const updatedParams = { ...params };
 
     // If this method is called from the path

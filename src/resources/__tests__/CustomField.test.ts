@@ -36,18 +36,6 @@ describe("the CustomField resource", () => {
     );
   });
 
-  test("gets nested custom fields", async () => {
-    await trello
-      .boards(TEST_PARENT_ID)
-      .customFields()
-      .getNestedCustomFields();
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}`);
-    expect(result.url.searchParams.get("customFields")).toBe("true");
-  });
-
   test("throws an error when trying to add a custom field from a non-board resource", async () => {
     expect.assertions(1);
 

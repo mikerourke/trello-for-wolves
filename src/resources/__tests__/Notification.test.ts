@@ -76,18 +76,6 @@ describe("the Notification resource", () => {
     );
   });
 
-  test("gets nested notifications", async () => {
-    await trello
-      .members("me")
-      .notifications()
-      .getNestedNotifications({ notifications: "all" });
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/members/me`);
-    expect(result.url.searchParams.get("notifications")).toBe("all");
-  });
-
   test("updates a notification", async () => {
     await trello.notifications(TEST_NOTIFICATION_ID).updateNotification({
       unread: true,

@@ -51,31 +51,6 @@ describe("the Membership resource", () => {
     expect(result.url.searchParams.get("member_fields")).toBe("all");
   });
 
-  test("gets nested memberships", async () => {
-    await trello
-      .organizations(TEST_PARENT_ID)
-      .memberships()
-      .getNestedMemberships("active");
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/organizations/${TEST_PARENT_ID}`);
-    expect(result.url.searchParams.get("memberships")).toBe("active");
-  });
-
-  test("throws an error if the membership ID isn't specified when updating from a board", async () => {
-    expect.assertions(1);
-
-    try {
-      await trello
-        .boards(TEST_PARENT_ID)
-        .memberships()
-        .updateMembership({ type: "admin" });
-    } catch (err) {
-      expect(err.message).toMatch(/must pass a membership ID/gi);
-    }
-  });
-
   test("updates the membership from a board", async () => {
     await trello
       .boards(TEST_PARENT_ID)

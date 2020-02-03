@@ -1,118 +1,35 @@
 import { BaseResource } from "./BaseResource";
-import { NestedMemberField, MemberFilter, Member } from "./Member";
-import { MembershipFilter } from "./Membership";
+import { Member } from "./Member";
+import { Organization } from "./Organization";
 import {
-  Organization,
-  OrganizationField,
-  OrganizationFilter,
-} from "./Organization";
-import { AllOrFieldOrListOf, TypedFetch } from "../typeDefs";
-
-export type SortOrder = "asc" | "ascending" | "desc" | "descending" | "id";
-
-type ValueOrArray<T> = Omit<AllOrFieldOrListOf<T>, "all">;
-
-export interface EnterprisePrefsRecord {
-  ssoOnly: boolean;
-  signup: {
-    message: string;
-    confirmation: string;
-    banner: string;
-    bannerHtml: string;
-    confirmationHtml: string;
-    messageHtml: string;
-  };
-  mandatoryTransferDate: string | null;
-  maxMembers: number | null;
-}
-
-export type EnterpriseUserType =
-  | "all"
-  | "member"
-  | "collaborator"
-  | "saml"
-  | "none";
-
-export type EnterpriseMemberFilter =
-  | "member"
-  | "collaborator"
-  | "saml"
-  | "none"
-  | "member-unconfirmed"
-  | "collaborator-unconfirmed"
-  | "all";
-
-/**
- The data corresponding to an enterprise. The fields that are present in the
- * record are contingent on the `fields` param passed to the method used to
- * retrieve the enterprise data.
- * @typedef {Object} EnterpriseRecord
- * @property id The ID of the enterprise.
- * @property name Short-form name of the enterprise.
- * @property displayName Long-form name of the enterprise used when displaying
- *                       the full name of the enterprise.
- * @property prefs JSON Object containing information about the preferences set
- *                 within the enterprise.
- * @property ssoActivationFailed Determines whether SSO successfully activated.
- * @property idAdmins Array of Member IDs that are admins of the enterprise.
- * @property idMembers Array of Member IDs that belong to the enterprise.
- * @property idOrganizations Array of Organization IDs that belong to the enterprise.
- * @property products Array of products that the enterprise has enabled.
- * @property userTypes Object containing keys for every member type and values
- *                     representing the count of each type of member.
- * @property [ssoDateDelayed] I don't know what this value is and I can't check because
- *                            I'm not part of an enterprise.
- */
-export interface EnterpriseRecord {
-  id: string;
-  name: string;
-  displayName: string;
-  prefs: EnterprisePrefsRecord;
-  ssoActivationFailed: boolean;
-  idAdmins: string[];
-  idMembers: string[];
-  idOrganizations: string[];
-  products: number[];
-  userTypes: Record<EnterpriseUserType, number>;
-  ssoDateDelayed?: unknown;
-}
-
-export type EnterpriseField =
-  | "id"
-  | "name"
-  | "displayName"
-  | "prefs"
-  | "ssoActivationFailed"
-  | "idAdmins"
-  | "idMembers"
-  | "idOrganizations"
-  | "products"
-  | "userTypes";
-
-export type GetEnterprisesField =
-  | "name"
-  | "displayName"
-  | "prefs"
-  | "ssoActivationFailed"
-  | "ssoDateDelayed"
-  | "idAdmins";
+  AllOrFieldOrListOf,
+  EnterpriseField,
+  EnterpriseMemberFilter,
+  EnterpriseRecord,
+  FieldOrListOf,
+  GetEnterprisesField,
+  MembershipFilter,
+  NestedMembersParams,
+  NestedOrganizationsParams,
+  SortOrder,
+  TypedFetch,
+} from "../typeDefs";
 
 export class Enterprise extends BaseResource {
-  public getEnterprise(params?: {
-    fields?: AllOrFieldOrListOf<EnterpriseField>;
-    members?: MemberFilter;
-    memberFields?: NestedMemberField;
-    memberFilter?: "none" | string;
-    memberSort?: string;
-    memberSortBy?: "none" | string;
-    memberSortOrder?: SortOrder;
-    memberStartIndex?: number;
-    memberCount?: number;
-    organizations?: OrganizationFilter;
-    organizationFields?: AllOrFieldOrListOf<OrganizationField>;
-    organizationPaidAccounts?: boolean;
-    organizationMemberships?: ValueOrArray<MembershipFilter>;
-  }): TypedFetch<EnterpriseRecord> {
+  public getEnterprise(
+    params?: {
+      fields?: AllOrFieldOrListOf<EnterpriseField>;
+      memberFilter?: "none" | string;
+      memberSort?: string;
+      memberSortBy?: "none" | string;
+      memberSortOrder?: SortOrder;
+      memberStartIndex?: number;
+      memberCount?: number;
+      organizationPaidAccounts?: boolean;
+      organizationMemberships?: FieldOrListOf<MembershipFilter>;
+    } & NestedMembersParams &
+      NestedOrganizationsParams,
+  ): TypedFetch<EnterpriseRecord> {
     return this.apiGet("/", params);
   }
 
@@ -121,12 +38,6 @@ export class Enterprise extends BaseResource {
     filter?: EnterpriseMemberFilter;
   }): TypedFetch<EnterpriseRecord[]> {
     return this.apiGet("/", params);
-  }
-
-  public getNestedEnterprises<TPayload extends object>(params?: {
-    enterpriseFields?: AllOrFieldOrListOf<GetEnterprisesField>;
-  }): TypedFetch<TPayload & { enterprises: EnterpriseRecord[] }> {
-    return this.apiGetNested(params);
   }
 
   public getAdmins(params?: {

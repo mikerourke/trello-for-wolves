@@ -1,12 +1,5 @@
 import { BaseResource } from "./BaseResource";
-import { PositionOrFloat, TypedFetch } from "../typeDefs";
-
-export interface SavedSearchRecord {
-  id: string;
-  name: string;
-  query: string;
-  pos: number;
-}
+import { PositionOrFloat, SavedSearchRecord, TypedFetch } from "../typeDefs";
 
 export class SavedSearch extends BaseResource {
   public getSavedSearch(): TypedFetch<SavedSearchRecord> {
@@ -15,12 +8,6 @@ export class SavedSearch extends BaseResource {
 
   public getSavedSearches(): TypedFetch<SavedSearchRecord[]> {
     return this.apiGet("/");
-  }
-
-  public getNestedSavedSearches<TPayload extends object>(): TypedFetch<
-    TPayload & { savedSearches: SavedSearchRecord[] }
-  > {
-    return this.apiGetNested({ savedSearches: true });
   }
 
   public addSavedSearch(params: {

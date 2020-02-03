@@ -1,5 +1,5 @@
 import { stringifyQueryParams } from "./stringifyQueryParams";
-import { TrelloConfig } from "../typeDefs";
+import { AnyParams, TrelloConfig } from "../typeDefs";
 
 /**
  * Constructs the endpoint for performing the API request.
@@ -11,7 +11,7 @@ export function buildApiUrl({
 }: {
   endpoint: string;
   trelloConfig: TrelloConfig;
-  paramsByName: Record<string, unknown>;
+  paramsByName: AnyParams;
 }): string {
   const validParamsByName = {
     ...paramsByName,

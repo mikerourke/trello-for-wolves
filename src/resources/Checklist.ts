@@ -1,44 +1,32 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { BaseResource } from "./BaseResource";
 import { Board } from "./Board";
-import { Card, CardFilter } from "./Card";
-import { CheckItem, CheckItemField, CheckItemRecord } from "./CheckItem";
+import { Card } from "./Card";
+import { CheckItem } from "./CheckItem";
 import {
   AllOrFieldOrListOf,
   AllOrNone,
-  Limits,
+  AnyParams,
+  CheckItemField,
+  ChecklistField,
+  ChecklistRecord,
+  NestedActionsParams,
+  NestedBoardParams,
+  NestedCardsParams,
+  NestedChecklistsParams,
   PositionOrFloat,
   TypedFetch,
   ValueResponse,
 } from "../typeDefs";
 
-/**
- * The data corresponding to a checklist. The fields that are present in the
- * record are contingent on the `fields`/`checklistFields` param passed to the
- * method used to retrieve the checklist data.
- * @typedef {Object} ChecklistRecord
- * @property id The ID of the checklist.
- * @property idBoard The ID of the board the checklist is on.
- * @property idCard The ID of the card the checklist is on.
- * @property name The name of the checklist.
- * @property pos The position of the checklist on the card (relative to any other
- *               checklists on the card).
- * @property checkItems Array of check items in the checklist.
- * @property [limits] Limit data associated with the checklist.
- * @property [creationMethod] Creation method for the checklist.
- */
-export interface ChecklistRecord {
-  id: string;
-  idBoard: string;
-  idCard: string;
-  name: string;
-  pos: number;
-  checkItems?: CheckItemRecord[];
-  limits?: Limits;
-  creationMethod?: string | null;
-}
-
-export type ChecklistField = "id" | "idBoard" | "idCard" | "name" | "pos";
+type GetChecklistsParams =
+  | {
+      fields?: AllOrFieldOrListOf<ChecklistField>;
+      filter?: AllOrNone;
+      checkItems?: AllOrNone;
+      checkItemFields?: AllOrFieldOrListOf<CheckItemField>;
+    }
+  | NestedChecklistsParams;
 
 /**
  * Checklists are lists on boards that have items that can be completed or
@@ -47,32 +35,22 @@ export type ChecklistField = "id" | "idBoard" | "idCard" | "name" | "pos";
  * @class
  */
 export class Checklist extends BaseResource {
-  public getChecklist(params?: {
-    cards?: CardFilter;
-    checkItemFields?: AllOrFieldOrListOf<CheckItemField>;
-    checkItems?: AllOrNone;
-    fields?: AllOrFieldOrListOf<ChecklistField>;
-  }): TypedFetch<ChecklistRecord> {
+  public getChecklist(
+    params?: {
+      fields?: AllOrFieldOrListOf<ChecklistField>;
+      checkItems?: AllOrNone;
+      checkItemFields?: AllOrFieldOrListOf<CheckItemField>;
+    } & NestedActionsParams &
+      NestedBoardParams &
+      NestedCardsParams,
+  ): TypedFetch<ChecklistRecord> {
     return this.apiGet("/", params);
   }
 
-  public getChecklists(params?: {
-    cards?: CardFilter;
-    checkItemFields?: AllOrFieldOrListOf<CheckItemField>;
-    checkItems?: AllOrNone;
-    fields?: AllOrFieldOrListOf<ChecklistField>;
-    filter?: AllOrNone;
-  }): TypedFetch<ChecklistRecord[]> {
-    return this.apiGet("/", params);
-  }
-
-  public getNestedChecklists<TPayload extends object>(params?: {
-    checklists?: AllOrNone;
-    checklistFields?: AllOrFieldOrListOf<ChecklistField>;
-    checkItems?: "all";
-    checkItemFields?: AllOrFieldOrListOf<CheckItemField>;
-  }): TypedFetch<TPayload & { checklists: ChecklistRecord[] }> {
-    return this.apiGetNested(params);
+  public getChecklists(
+    params?: GetChecklistsParams & NestedActionsParams & NestedBoardParams,
+  ): TypedFetch<ChecklistRecord[]> {
+    return this.apiGet("/", params as AnyParams);
   }
 
   public getFieldValue<T>(field: ChecklistField): TypedFetch<ValueResponse<T>> {
@@ -87,7 +65,7 @@ export class Checklist extends BaseResource {
   }): TypedFetch<ChecklistRecord> {
     const updatedParams = { ...params };
     if (this.isChildOf("card")) {
-      updatedParams.idCard = this.pathElements[1];
+      updatedParams.idCard = this.parentElements[1];
     }
 
     if (!updatedParams.idCard) {

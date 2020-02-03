@@ -18,7 +18,7 @@ import { Token } from "./resources/Token";
 import { Type } from "./resources/Type";
 import { Webhook } from "./resources/Webhook";
 import { fetchFromApi } from "./utils/fetchFromApi";
-import { TrelloConfig, TypedFetch } from "./typeDefs";
+import { AnyParams, TrelloConfig, TypedFetch } from "./typeDefs";
 
 export * from "./resources/Action";
 export * from "./resources/Attachment";
@@ -69,7 +69,7 @@ export class Trello {
       endpoint,
       trelloConfig: this.trelloConfig,
       fetchConfig,
-      paramsByName: paramsByName as Record<string, unknown>,
+      paramsByName: paramsByName as AnyParams,
     });
   }
 

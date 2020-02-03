@@ -1,52 +1,15 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { BaseResource } from "./BaseResource";
+import { CustomFieldOption } from "./CustomFieldOption";
 import {
-  CustomFieldOption,
+  AnyParams,
   CustomFieldOptionRecord,
-} from "./CustomFieldOption";
-import { PositionOrFloat, TypedFetch } from "../typeDefs";
-
-export type CustomFieldType = "number" | "date" | "text" | "checkbox" | "list";
-
-/**
- * The data corresponding to a custom field.
- * @typedef {Object} CustomFieldRecord
- * @property id The ID of the Custom Field definition.
- * @property idModel The ID of the model that the Custom Field is defined on. This
- *                   should always be an ID of a board.
- * @property modelType The type of model that the Custom Field is being defined for.
- *                     This should always be "board".
- * @property fieldGroup A hash created from the fields of a Custom Field used to manage
- *                      Custom Fields and values between boards. For more on its use,
- *                      check out the Grouping Custom Fields Across Boards section of
- *                      the Custom Fields guide.
- *                      @see https://developers.trello.com/v1.0/docs/getting-started-custom-fields#section-grouping-custom-fields-across-boards
- * @property name The name of the Custom Field. This is displayed to the user in the Trello clients.
- * @property pos The position of the Custom Field. This will be used to determine the
- *               order that Custom Fields should be listed when being shown to the user.
- * @property type Determines the type of values that can be used when setting values for
- *                Custom Fields on cards.
- * @property options An array of objects used for Custom Fields of the list type. The
- *                   objects contain data about the options available for the dropdown.
- * @property display An object that contains this custom fields display properties.
- */
-export interface CustomFieldRecord {
-  id: string;
-  idModel: string;
-  modelType: string;
-  fieldGroup: string;
-  name: string;
-  pos: PositionOrFloat;
-  type: CustomFieldType;
-  options?: CustomFieldOptionRecord[];
-  display: {
-    cardFront: boolean;
-  };
-}
-
-type NestedResponse =
-  | { customFields: CustomFieldRecord[] }
-  | { customFieldItems: CustomFieldRecord[] };
+  CustomFieldRecord,
+  CustomFieldType,
+  NestedActionsParams,
+  PositionOrFloat,
+  TypedFetch,
+} from "../typeDefs";
 
 /**
  * Custom Fields are extra bits of structured data attached to cards when our
@@ -55,20 +18,17 @@ type NestedResponse =
  * @see https://developers.trello.com/reference#custom-fields
  * @class
  */
-// TODO: Add handling for cards (https://developers.trello.com/reference#setting-custom-field-values-on-cards).
 export class CustomField extends BaseResource {
-  public getCustomField(): TypedFetch<CustomFieldRecord> {
-    return this.apiGet("/");
+  public getCustomField(
+    params?: NestedActionsParams,
+  ): TypedFetch<CustomFieldRecord> {
+    return this.apiGet("/", params as AnyParams);
   }
 
-  public getCustomFields(): TypedFetch<CustomFieldRecord[]> {
-    return this.apiGet("/");
-  }
-
-  public getNestedCustomFields<TPayload extends object>(): TypedFetch<
-    TPayload & NestedResponse
-  > {
-    return this.apiGetNested({ customFields: true });
+  public getCustomFields(
+    params?: NestedActionsParams,
+  ): TypedFetch<CustomFieldRecord[]> {
+    return this.apiGet("/", params as AnyParams);
   }
 
   public addCustomField(params: {

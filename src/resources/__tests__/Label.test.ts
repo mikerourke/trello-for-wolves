@@ -33,18 +33,6 @@ describe("the Label resource", () => {
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/labels`);
   });
 
-  test("gets nested labels", async () => {
-    await trello
-      .boards(TEST_PARENT_ID)
-      .labels()
-      .getNestedLabels({ labels: "all" });
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}`);
-    expect(result.url.searchParams.get("labels")).toBe("all");
-  });
-
   test("throws an error if the idBoard isn't present when adding a label", async () => {
     expect.assertions(1);
 

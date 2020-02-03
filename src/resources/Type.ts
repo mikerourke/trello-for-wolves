@@ -1,10 +1,5 @@
 import { BaseResource } from "./BaseResource";
-import { TypedFetch } from "../typeDefs";
-
-export interface TypeRecord {
-  id: string;
-  type: string;
-}
+import { TypedFetch, TypeRecord } from "../typeDefs";
 
 /**
  * Because Trello teams and members are not prefixed differently, we need a way to

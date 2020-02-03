@@ -33,18 +33,6 @@ describe("the List resource", () => {
     expect(result.url.pathname).toBe(`/1/boards/${TEST_BOARD_ID}/lists`);
   });
 
-  test("gets nested lists", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .lists()
-      .getNestedLists({ lists: "all" });
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/boards/${TEST_BOARD_ID}`);
-    expect(result.url.searchParams.get("lists")).toBe("all");
-  });
-
   test("gets filtered lists", async () => {
     await trello
       .boards(TEST_BOARD_ID)

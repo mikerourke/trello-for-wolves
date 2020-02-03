@@ -41,19 +41,6 @@ describe("the CheckItem resource", () => {
     );
   });
 
-  test("throws an error if getting check items states from a non-card resource", async () => {
-    expect.assertions(1);
-
-    try {
-      await trello
-        .checklists(TEST_CHECKLIST_ID)
-        .checkItems()
-        .getCheckItemStates({ fields: "idCheckItem" });
-    } catch (err) {
-      expect(err.message).toMatch(/you can only call getCheckItemStates/gi);
-    }
-  });
-
   test("gets check items states for a card", async () => {
     await trello
       .cards(TEST_CARD_ID)
@@ -97,23 +84,6 @@ describe("the CheckItem resource", () => {
     expect(result.url.pathname).toBe(
       `/1/checklists/${TEST_CHECKLIST_ID}/checkItems/${TEST_CHECK_ITEM_ID}/convertToCard`,
     );
-  });
-
-  test("throws an error if attempting to update a check item from a non-card resource", async () => {
-    expect.assertions(1);
-
-    try {
-      await trello
-        .checklists(TEST_CHECKLIST_ID)
-        .checkItem(TEST_CHECK_ITEM_ID)
-        .updateCheckItem({
-          name: "Test",
-        });
-    } catch (err) {
-      expect(err.message).toMatch(
-        /can only call updateCheckItem\(\) from a card resource/,
-      );
-    }
   });
 
   test("throws an error if the idChecklist isn't valid when updating a check item from a card", async () => {

@@ -1,16 +1,10 @@
 import { BaseResource } from "./BaseResource";
-import { PositionOrFloat, TypedFetch } from "../typeDefs";
-
-export type BoardStarsFilter = "mine" | "none";
-
-export type BoardStarRecord<T = { id: string }> = T & {
-  idBoard: string;
-  pos: number;
-};
-
-type GetBoardStarsForBoardResponse<TPayload> = TPayload & {
-  boardStars: BoardStarRecord<{ _id: string }>;
-};
+import {
+  BoardStarRecord,
+  BoardStarsFilter,
+  PositionOrFloat,
+  TypedFetch,
+} from "../typeDefs";
 
 export class BoardStar extends BaseResource {
   public getBoardStar(): TypedFetch<BoardStarRecord> {
@@ -19,7 +13,7 @@ export class BoardStar extends BaseResource {
 
   public getBoardStars<TPayload extends object = {}>(params?: {
     filter: BoardStarsFilter;
-  }): TypedFetch<GetBoardStarsForBoardResponse<TPayload> | BoardStarRecord[]> {
+  }): TypedFetch<BoardStarRecord[]> {
     return this.apiGet("/", params);
   }
 

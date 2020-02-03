@@ -1,6 +1,5 @@
 import { Trello } from "../../index";
 
-const TEST_BOARD_ID = "d9a04f38b919f23b8cc7bf01";
 const TEST_PLUGIN_ID = "60024c859ab0c51945243414";
 const TEST_LISTING_ID = "dd7d4048bed6c23daebf1070";
 
@@ -29,18 +28,6 @@ describe("the Plugin resource", () => {
 
     expect(result.config.method).toBe("GET");
     expect(result.url.pathname).toBe(`/1/plugins`);
-  });
-
-  test("gets nested plugins", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .plugins()
-      .getNestedPlugins();
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/boards/${TEST_BOARD_ID}`);
-    expect(result.url.searchParams.get("plugins")).toBe("all");
   });
 
   test("gets the member privacy for a plugin", async () => {

@@ -1,17 +1,5 @@
 import { BaseResource } from "./BaseResource";
-import { TypedFetch } from "../typeDefs";
-
-export type EmailPosition = "bottom" | "top";
-
-export interface BoardMyPrefsRecord {
-  emailPosition: EmailPosition;
-  idEmailList: string;
-  showListGuide: boolean;
-  showSidebar: boolean;
-  showSidebarActivity: boolean;
-  showSidebarBoardActions: boolean;
-  showSidebarMembers: boolean;
-}
+import { BoardMyPrefsRecord, EmailPosition, TypedFetch } from "../typeDefs";
 
 export class BoardMyPrefs extends BaseResource {
   public getMyPrefs(): TypedFetch<BoardMyPrefsRecord> {

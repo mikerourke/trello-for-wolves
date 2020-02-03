@@ -47,18 +47,6 @@ describe("the Member resource", () => {
     );
   });
 
-  test("gets nested members", async () => {
-    await trello
-      .organizations(TEST_PARENT_ID)
-      .members()
-      .getNestedMembers({ members: "all" });
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/organizations/${TEST_PARENT_ID}`);
-    expect(result.url.searchParams.get("members")).toBe("all");
-  });
-
   test("gets filtered members", async () => {
     await trello.members().getMembersFilteredBy("all");
     const result = global.getLastFetchCall();

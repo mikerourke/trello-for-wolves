@@ -22,6 +22,21 @@ describe("the Board resource", () => {
     expect(result.url.pathname).toBe(`/1/boards/${TEST_BOARD_ID}`);
   });
 
+  test("gets nested data for a single board", async () => {
+    await trello.boards(TEST_BOARD_ID).getBoard({
+      actions: "all",
+      actionFields: "all",
+      cards: "all",
+    });
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("GET");
+    expect(result.url.pathname).toBe(`/1/boards/${TEST_BOARD_ID}`);
+    expect(result.url.searchParams.get("actions")).toBe("all");
+    expect(result.url.searchParams.get("action_fields")).toBe("all");
+    expect(result.url.searchParams.get("cards")).toBe("all");
+  });
+
   test("gets multiple boards", async () => {
     await trello
       .members("me")
@@ -38,22 +53,6 @@ describe("the Board resource", () => {
     expect(result.url.searchParams.get("fields")).toBe("all");
     expect(result.url.searchParams.get("filter")).toBe("all");
     expect(result.url.searchParams.get("lists")).toBe("all");
-  });
-
-  test("gets nested boards", async () => {
-    await trello
-      .members("me")
-      .boards()
-      .getNestedBoards({
-        boards: "closed",
-        boardActions: "all",
-      });
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe("/1/members/me");
-    expect(result.url.searchParams.get("boards")).toBe("closed");
-    expect(result.url.searchParams.get("board_actions")).toBe("all");
   });
 
   test("gets filtered boards", async () => {

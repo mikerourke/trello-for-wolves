@@ -2,17 +2,11 @@ import { BaseResource } from "./BaseResource";
 import {
   AllOrFieldOrListOf,
   AllOrNone,
+  CustomEmojiField,
+  CustomEmojiRecord,
   FileUpload,
   TypedFetch,
 } from "../typeDefs";
-
-export interface CustomEmojiRecord {
-  id: string;
-  name: string;
-  url: string;
-}
-
-export type CustomEmojiField = keyof CustomEmojiRecord;
 
 export class CustomEmoji extends BaseResource {
   public getCustomEmoji(params?: {

@@ -1,22 +1,10 @@
 import { BaseResource } from "./BaseResource";
-import { PermissionLevel, TypedFetch } from "../typeDefs";
-
-export type BoardVisibilityFilter = "admin" | "none" | "org";
-
-export type BoardVisibilityRestrictionLevel = "org" | "private" | "public";
-
-export interface OrganizationPrefsRecord {
-  associatedDomain: string;
-  boardVisibilityRestrict: {
-    orgRestriction: BoardVisibilityFilter;
-    privateRestriction: BoardVisibilityFilter;
-    publicRestriction: BoardVisibilityFilter;
-  };
-  externalMembersDisabled: boolean;
-  googleAppsVersion: number;
-  orgInviteRestrict: string;
-  permissionLevel: PermissionLevel;
-}
+import {
+  BoardVisibilityFilter,
+  BoardVisibilityRestrictionLevel,
+  PermissionLevel,
+  TypedFetch,
+} from "../typeDefs";
 
 export class OrganizationPref extends BaseResource {
   public updateAssociatedDomain(value: string): TypedFetch<unknown> {

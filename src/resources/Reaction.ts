@@ -1,52 +1,5 @@
 import { BaseResource } from "./BaseResource";
-import { MemberField, MemberRecord } from "./Member";
-import { AllOrFieldOrListOf, TypedFetch } from "../typeDefs";
-
-export interface EmojiSkinVariationRecord {
-  unified: string;
-  native: string;
-  sheetX: number;
-  sheetY: number;
-}
-
-export interface EmojiRecord extends ReactionEmojiRecord {
-  shortNames: string[];
-  text: string | null;
-  texts: string[] | null;
-  category: string;
-  sheetX: number;
-  sheetY: number;
-  skinVariations: Record<string, EmojiSkinVariationRecord>;
-  tts?: string;
-  keywords?: string[];
-}
-
-export interface ReactionEmojiRecord {
-  unified: string;
-  native: string;
-  name: string;
-  skinVariation: string;
-  shortName: string;
-}
-
-export interface ReactionRecord {
-  id: string;
-  idMember: string;
-  idModel: string;
-  idEmoji: string;
-  member?: MemberRecord;
-  emoji?: EmojiRecord;
-}
-
-export interface ReactionSummaryRecord {
-  count: number;
-  id: string;
-  firstReacted: string;
-  idEmoji: string;
-  idModel: string;
-  idReaction: string;
-  emoji: ReactionEmojiRecord;
-}
+import { EmojiRecord, ReactionRecord, TypedFetch } from "../typeDefs";
 
 export class Emoji extends BaseResource {
   public getEmoji(params?: {
@@ -75,16 +28,6 @@ export class Reaction extends BaseResource {
     emoji?: boolean;
   }): TypedFetch<ReactionRecord[]> {
     return this.apiGet("/", params);
-  }
-
-  public getNestedReactions<TPayload extends object>(params?: {
-    reactions?: boolean;
-    reactionsSummary?: boolean;
-    reactionsMember?: boolean;
-    reactionsMemberFields?: AllOrFieldOrListOf<MemberField>;
-    reactionsEmoji?: boolean;
-  }): TypedFetch<TPayload & { reactions: ReactionRecord[] }> {
-    return this.apiGetNested(params);
   }
 
   public addReaction(params: {

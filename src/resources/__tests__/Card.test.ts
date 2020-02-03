@@ -30,6 +30,17 @@ describe("the Card resource", () => {
     expect(result.url.searchParams.get("customFieldItems")).toBe("true");
   });
 
+  test("gets nested data for a single card", async () => {
+    await trello.cards(TEST_CARD_ID).getCard({
+      list: true,
+    });
+    const result = global.getLastFetchCall();
+
+    expect(result.config.method).toBe("GET");
+    expect(result.url.pathname).toBe(`/1/cards/${TEST_CARD_ID}`);
+    expect(result.url.searchParams.get("list")).toBe("true");
+  });
+
   test("gets multiple cards", async () => {
     await trello
       .boards(TEST_PARENT_ID)
@@ -39,18 +50,6 @@ describe("the Card resource", () => {
 
     expect(result.config.method).toBe("GET");
     expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}/cards`);
-  });
-
-  test("gets nested cards", async () => {
-    await trello
-      .boards(TEST_PARENT_ID)
-      .cards()
-      .getNestedCards();
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/boards/${TEST_PARENT_ID}`);
-    expect(result.url.searchParams.get("cards")).toBe("all");
   });
 
   test("gets filtered cards", async () => {

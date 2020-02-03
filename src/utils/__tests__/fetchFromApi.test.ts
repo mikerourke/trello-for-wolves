@@ -81,25 +81,6 @@ describe("the fetchFromApi method", () => {
     expect(global.fetch.mock.calls).toHaveLength(2);
   });
 
-  test("throws an error if the max retry attempts are reached", async () => {
-    global.fetch.mockImplementation(() => ({ ok: false, status: 429 }));
-
-    expect.assertions(1);
-
-    try {
-      await fetchFromApi({
-        endpoint: "/test",
-        trelloConfig: {
-          ...global.trelloConfig,
-          backoffTime: 1,
-          maxRetryAttempts: 5,
-        },
-      });
-    } catch (err) {
-      expect(err.message).toMatch(/Maximum retry attempts reached/gi);
-    }
-  });
-
   describe("when the query params contains a `file` key", () => {
     test("the API url is correctly built", async () => {
       await fetchFromApi({

@@ -1,7 +1,7 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { buildApiUrl } from "./buildApiUrl";
 import { isEmpty } from "./isEmpty";
-import { TrelloConfig, TypedResponse } from "../typeDefs";
+import { AnyParams, TrelloConfig, TypedResponse } from "../typeDefs";
 
 export type HttpMethod = "GET" | "PUT" | "POST" | "DELETE";
 
@@ -18,7 +18,7 @@ export async function fetchFromApi<T>({
   endpoint: string;
   trelloConfig: TrelloConfig;
   fetchConfig?: RequestInit | null;
-  paramsByName?: Record<string, unknown> | null;
+  paramsByName?: AnyParams | null;
 }): Promise<TypedResponse<T>> {
   if (!trelloConfig.key) {
     throw new TrelloForWolvesError(
@@ -74,7 +74,7 @@ export async function fetchFromApi<T>({
 async function getFetchBodyByEnvironment(
   trelloConfig: TrelloConfig,
   body: BodyInit | null,
-  paramsByName: Record<string, unknown>,
+  paramsByName: AnyParams,
 ): Promise<BodyInit | null> {
   // If the user stringifies the body when calling `makeApiRequest`, we don't
   // want to stringify it again:
@@ -109,7 +109,7 @@ async function getFetchBodyByEnvironment(
 function appendDataToForm(
   formData: unknown,
   trelloConfig: TrelloConfig,
-  paramsByName: Record<string, unknown>,
+  paramsByName: AnyParams,
 ): FormData {
   const validFormData = formData as FormData;
   validFormData.append("key", trelloConfig.key);
@@ -137,13 +137,7 @@ async function fetchWithRetries<T>(
 ): Promise<TypedResponse<T>> {
   const response = await fetch(apiUrl, fetchConfig);
 
-  if (response.status === 429) {
-    if (attemptsRemaining === 0) {
-      throw new TrelloForWolvesError(
-        `Maximum retry attempts reached, try increasing the "backoffTime" or "maxRetryAttempts"`,
-      );
-    }
-
+  if (response.status === 429 && attemptsRemaining > 0) {
     await pause(backoffTime);
     return await fetchWithRetries(
       apiUrl,

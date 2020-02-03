@@ -1,93 +1,27 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
 import { BaseResource } from "./BaseResource";
-import { Action, ActionField, ActionType } from "./Action";
-import { Board, BoardField, BoardFilter } from "./Board";
-import { ListFilter } from "./List";
-import {
-  Member,
-  MemberInvitedField,
-  MemberFilter,
-  MemberField,
-} from "./Member";
-import { Membership, MembershipFilter, MembershipRecord } from "./Membership";
-import {
-  BoardVisibilityFilter,
-  OrganizationPref,
-  OrganizationPrefsRecord,
-} from "./OrganizationPref";
+import { Action } from "./Action";
+import { Board } from "./Board";
+import { Member } from "./Member";
+import { Membership } from "./Membership";
+import { OrganizationPref } from "./OrganizationPref";
 import {
   AllOrFieldOrListOf,
+  BoardVisibilityFilter,
   FileUpload,
-  FilterDate,
-  Format,
+  MemberField,
+  NestedActionsParams,
+  NestedBoardsParams,
+  NestedMembershipsParams,
+  NestedMembersInvitedParams,
+  NestedMembersParams,
+  OrganizationField,
+  OrganizationFilter,
+  OrganizationRecord,
   PermissionLevel,
   TypedFetch,
   ValueResponse,
 } from "../typeDefs";
-
-export type OrganizationFilter = "all" | "members" | "none" | "public";
-
-/**
- * The data corresponding to an Organization. The fields that are present in the
- * record are contingent on the `fields`/`organizationFields` param passed to
- * the method used to retrieve the Organization data.
- * @typedef {Object} OrganizationRecord
- * @property id The ID of the organization.
- * @property billableMemberCount
- * @property desc The description for the team
- * @property descData If there are custom emoji in the desc this will contain
- *                    information about them.
- * @property displayName The name for the team. For example: Trello Inc.
- * @property idBoards An array of board IDs that are in the team.
- * @property invitations Array of invitations.
- * @property invited Indicates if invited.
- * @property logoHash Hash string for the organization logo.
- * @property memberships Array of memberships associated with the organization.
- * @property name The programmatic name for the team. For example: `trelloinc`.
- * @property powerUps Array of power ups associated with the organization.
- * @property prefs The preferences (settings) for the team.
- * @property premiumFeatures Array of premium features associated with the organization.
- * @property products Array of products associated with the organization.
- * @property url The URL to the team page on Trello.
- * @property website Website for the organization.
- */
-export interface OrganizationRecord {
-  id: string;
-  billableMemberCount: string;
-  desc: string;
-  descData: object;
-  displayName: string;
-  idBoards: string[];
-  invitations: unknown[];
-  invited: string;
-  logoHash: string;
-  memberships: MembershipRecord[];
-  name: string;
-  powerUps: number[];
-  prefs: OrganizationPrefsRecord;
-  premiumFeatures: string[];
-  products: number[];
-  url: string;
-  website: string;
-}
-
-export type OrganizationField =
-  | "id"
-  | "billableMemberCount"
-  | "desc"
-  | "descData"
-  | "displayName"
-  | "idBoards"
-  | "invitations"
-  | "logoHash"
-  | "memberships"
-  | "name"
-  | "powerUps"
-  | "prefs"
-  | "premiumFeatures"
-  | "products"
-  | "url"
-  | "website";
 
 /**
  * Organizations, or as they are referred to in Trello, "Teams", represent
@@ -96,37 +30,22 @@ export type OrganizationField =
  * @class
  */
 export class Organization extends BaseResource {
-  public getOrganization(params?: {
-    actionFields?: AllOrFieldOrListOf<ActionField>;
-    actions?: AllOrFieldOrListOf<ActionType>;
-    actionsDisplay?: boolean;
-    actionsEntities?: boolean;
-    actionsLimit?: number;
-    boardActionFields?: AllOrFieldOrListOf<ActionField>;
-    boardActions?: AllOrFieldOrListOf<ActionType>;
-    boardActionsDisplay?: boolean;
-    boardActionsEntities?: boolean;
-    boardActionsFormat?: Format;
-    boardActionsLimit?: number;
-    boardActionsSince?: FilterDate;
-    boardFields?: AllOrFieldOrListOf<BoardField>;
-    boardLists?: AllOrFieldOrListOf<ListFilter>;
-    boardPluginData?: boolean;
-    boards?: BoardFilter;
-    fields?: AllOrFieldOrListOf<OrganizationField>;
-    memberActivity?: boolean;
-    memberFields?: AllOrFieldOrListOf<MemberField>;
-    members?: MemberFilter;
-    memberships?: AllOrFieldOrListOf<MembershipFilter>;
-    membershipsMember?: boolean;
-    membershipsMemberFields?: AllOrFieldOrListOf<MemberField>;
-    membersInvited?: MemberFilter;
-    membersInvitedFields?: AllOrFieldOrListOf<MemberInvitedField>;
-    paidAccount?: boolean;
-    pluginData?: boolean;
-  }): TypedFetch<OrganizationRecord> {
-    const validParams = this.setValidDateParams(["boardActionsSince"], params);
-    return this.apiGet("/", validParams);
+  public getOrganization(
+    params?: {
+      boardPluginData?: boolean;
+      fields?: AllOrFieldOrListOf<OrganizationField>;
+      memberActivity?: boolean;
+      membershipsMember?: boolean;
+      membershipsMemberFields?: AllOrFieldOrListOf<MemberField>;
+      paidAccount?: boolean;
+      pluginData?: boolean;
+    } & NestedActionsParams &
+      NestedBoardsParams &
+      NestedMembersParams &
+      NestedMembersInvitedParams &
+      NestedMembershipsParams,
+  ): TypedFetch<OrganizationRecord> {
+    return this.apiGet("/", params);
   }
 
   public getOrganizations(params?: {
@@ -135,13 +54,6 @@ export class Organization extends BaseResource {
     paidAccount?: boolean;
   }): TypedFetch<OrganizationRecord[]> {
     return this.apiGet("/", params);
-  }
-
-  public getNestedOrganizations<TPayload extends object>(params?: {
-    organizations?: OrganizationFilter;
-    organizationFields?: AllOrFieldOrListOf<OrganizationField>;
-  }): TypedFetch<TPayload & { organizations: OrganizationRecord[] }> {
-    return this.apiGetNested(params);
   }
 
   public getOrganizationsFilteredBy(
@@ -197,8 +109,6 @@ export class Organization extends BaseResource {
     name?: string;
     website?: string;
   }): TypedFetch<OrganizationRecord> {
-    this.validateUrl("website", params.website);
-
     return this.apiPost("/", params);
   }
 

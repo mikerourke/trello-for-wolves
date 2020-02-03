@@ -39,18 +39,6 @@ describe("within Stickers", () => {
       expect(result.url.pathname).toBe(`/1/cards/${TEST_CARD_ID}/stickers`);
     });
 
-    test("gets nested stickers", async () => {
-      await trello
-        .cards(TEST_CARD_ID)
-        .stickers()
-        .getNestedStickers();
-      const result = global.getLastFetchCall();
-
-      expect(result.config.method).toBe("GET");
-      expect(result.url.pathname).toBe(`/1/cards/${TEST_CARD_ID}`);
-      expect(result.url.searchParams.get("stickers")).toBe("all");
-    });
-
     test("adds a sticker to a card", async () => {
       await trello
         .cards(TEST_CARD_ID)
@@ -124,18 +112,6 @@ describe("within Stickers", () => {
 
       expect(result.config.method).toBe("GET");
       expect(result.url.pathname).toBe(`/1/members/me/customStickers`);
-    });
-
-    test("gets nested custom stickers", async () => {
-      await trello
-        .members("me")
-        .customStickers()
-        .getNestedCustomStickers("all");
-      const result = global.getLastFetchCall();
-
-      expect(result.config.method).toBe("GET");
-      expect(result.url.pathname).toBe(`/1/members/me`);
-      expect(result.url.searchParams.get("customStickers")).toBe("all");
     });
 
     test("uploads a custom sticker", async () => {

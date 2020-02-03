@@ -1,6 +1,7 @@
 import snakeCase from "lodash.snakecase";
+import { AnyParams } from "../typeDefs";
 
-type ValidQueryParams<T> = T & { separator: string };
+type ValidQueryParams = AnyParams & { separator: string };
 
 // These param names should not be re-cased. The API documentation specifies
 // that these are the actual values to be passed in.
@@ -55,20 +56,23 @@ export const UNCHANGED_PARAM_NAMES = [
  * the request to the Trello API.
  * @param queryParamsByName Params name/value object used to build query string.
  */
-export function stringifyQueryParams(queryParamsByName: object): string {
-  const validParamsByName = queryParamsByName as ValidQueryParams<object>;
+export function stringifyQueryParams(queryParamsByName: AnyParams): string {
+  const validParamsByName = queryParamsByName as ValidQueryParams;
   const nameValuePairs = [];
 
   for (const [queryParamName, queryParamValue] of Object.entries(
     validParamsByName,
   )) {
+    const isParamADate = (queryParamValue as Date | string) instanceof Date;
+    const isNested =
+      typeof queryParamValue === "object" &&
+      !isParamADate &&
+      !Array.isArray(queryParamValue) &&
+      queryParamValue !== null;
+
     // If the value of the entry is an object (rather than a value), the
     // corresponding child properties need to be combined for the URL string.
-    if (
-      typeof queryParamValue === "object" &&
-      !Array.isArray(queryParamValue) &&
-      queryParamValue !== null
-    ) {
+    if (isNested) {
       const nestedString = getNameValueStringForNestedParams(
         queryParamName,
         validParamsByName,
@@ -82,7 +86,8 @@ export function stringifyQueryParams(queryParamsByName: object): string {
       // present in the query string.
       if (queryParamName !== "separator") {
         const validParamName = getParamNameWithValidCasing(queryParamName);
-        nameValuePairs.push(`${validParamName}=${queryParamValue}`);
+        const validParamValue = stringifyParamIfDate(queryParamValue as string);
+        nameValuePairs.push(`${validParamName}=${validParamValue}`);
       }
     }
   }
@@ -108,9 +113,9 @@ export function stringifyQueryParams(queryParamsByName: object): string {
  */
 function getNameValueStringForNestedParams(
   parentParamName: string,
-  queryParams: ValidQueryParams<object>,
+  queryParams: ValidQueryParams,
 ): string {
-  const childGroup = queryParams[parentParamName] as object;
+  const childGroup = queryParams[parentParamName] as AnyParams;
   const nameValuePairs = [];
 
   let separator = "/";
@@ -119,8 +124,9 @@ function getNameValueStringForNestedParams(
   }
 
   for (const [childParamName, childParamValue] of Object.entries(childGroup)) {
+    const validValue = stringifyParamIfDate(childParamValue as string);
     const joinedParamName = `${parentParamName}${separator}${childParamName}`;
-    nameValuePairs.push(`${joinedParamName}=${childParamValue}`);
+    nameValuePairs.push(`${joinedParamName}=${validValue}`);
   }
 
   return nameValuePairs.join("&");
@@ -181,4 +187,12 @@ function reCaseParamNameIfRequired(paramName: string): string {
   }
 
   return validParamName;
+}
+
+/**
+ * Since dates have to be a valid ISO string (or null), this converts a
+ * date instance passed in to a valid value.
+ */
+function stringifyParamIfDate(dateValue: Date | string | null): string | null {
+  return dateValue instanceof Date ? dateValue.toISOString() : dateValue;
 }

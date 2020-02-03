@@ -36,18 +36,6 @@ describe("the Organization resource", () => {
     expect(result.url.pathname).toBe(`/1/members/me/organizations`);
   });
 
-  test("gets nested organizations", async () => {
-    await trello
-      .members("me")
-      .organizations()
-      .getNestedOrganizations();
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/members/me`);
-    expect(result.url.searchParams.get("organizations")).toBe("all");
-  });
-
   test("gets filtered organizations", async () => {
     await trello
       .members("me")
@@ -133,21 +121,6 @@ describe("the Organization resource", () => {
     expect(result.url.pathname).toBe(
       `/1/enterprises/${TEST_PARENT_ID}/transferrable/organization/${TEST_ORGANIZATION_ID}`,
     );
-  });
-
-  test("throws an error when adding a new organization with an invalid website", async () => {
-    expect.assertions(1);
-
-    try {
-      await trello.organizations().addOrganization({
-        displayName: "Test",
-        desc: "Test organization",
-        name: "test-org",
-        website: "test.com",
-      });
-    } catch (err) {
-      expect(err.message).toMatch(/must start with "http/gi);
-    }
   });
 
   test("adds a new organization", async () => {

@@ -22,21 +22,6 @@ describe("the Enterprise resource", () => {
     expect(result.url.pathname).toBe(`/1/enterprises/${TEST_ENTERPRISE_ID}`);
   });
 
-  test("gets nested enterprises", async () => {
-    await trello
-      .members("me")
-      .enterprises()
-      .getNestedEnterprises({
-        enterpriseFields: "all",
-      });
-    const result = global.getLastFetchCall();
-
-    expect(result.config.method).toBe("GET");
-    expect(result.url.pathname).toBe(`/1/members/me`);
-    expect(result.url.searchParams.get("enterprises")).toBe("all");
-    expect(result.url.searchParams.get("enterprise_fields")).toBe("all");
-  });
-
   test("gets the admins for an enterprise", async () => {
     await trello
       .enterprises(TEST_ENTERPRISE_ID)
