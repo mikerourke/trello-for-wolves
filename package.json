@@ -30,14 +30,15 @@
     "typecheck": "tsc -p tsconfig.json --noEmit --skipLibCheck",
     "precompile": "rimraf ./build",
     "test": "jest --config jest.config.json --env=jsdom",
-    "prebuild:browser": "rimraf ./dist",
-    "build:browser": "parcel build src/index.ts --target browser -d dist --no-cache --global TrelloForWolves --no-content-hash --out-file trello-for-wolves.js",
-    "prebuild:commonjs": "rimraf ./lib",
-    "build:commonjs": "tsc -p tsconfig.build.json"
+    "prebuild:umd": "rimraf ./umd",
+    "build:umd": "parcel build src/index.ts --target browser -d umd --no-cache --global TrelloForWolves --no-content-hash --out-file trello-for-wolves.min.js",
+    "prebuild:node": "rimraf ./lib",
+    "build:node": "tsc -p tsconfig.build.json",
+    "build:all": "yarn build:umd && yarn build:node"
   },
   "files": [
-    "dist",
     "lib",
+    "umd",
     "README.md",
     "LICENSE"
   ],
