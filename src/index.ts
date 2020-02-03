@@ -20,6 +20,7 @@ import { Webhook } from "./resources/Webhook";
 import { fetchFromApi } from "./utils/fetchFromApi";
 import { AnyParams, TrelloConfig, TypedFetch } from "./typeDefs";
 
+export { TrelloForWolvesError } from "./TrelloForWolvesError";
 export * from "./resources/Action";
 export * from "./resources/Attachment";
 export * from "./resources/Batch";

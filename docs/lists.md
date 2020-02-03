@@ -241,7 +241,7 @@ const response = await trello
   .lists()
   .addList({
     name: "Test",
-    pos: "top"
+    pos: "top",
   });
 ```
 
@@ -276,10 +276,8 @@ Move all cards in a list
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .lists("55411859be21b8ad7dcd4c78")
-  .moveToBoard({
-    idBoard: "3b9449f1b7d6de3483c1e5d8",
-    idList: "ff584d8ba217fb7d64fb9db0"
-  });
+const response = await trello.lists("55411859be21b8ad7dcd4c78").moveToBoard({
+  idBoard: "3b9449f1b7d6de3483c1e5d8",
+  idList: "ff584d8ba217fb7d64fb9db0",
+});
 ```

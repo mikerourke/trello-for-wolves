@@ -194,7 +194,7 @@ const response = await trello
 
 Used to check whether the given board has new billable guests on it
 
-> This route can be used before moving a board into a paid organization to see 
+> This route can be used before moving a board into a paid organization to see
 > if the board contains members that aren't already paid for in the organization.
 
 **API Call**
@@ -216,8 +216,8 @@ const response = await trello
 
 Retrieve the exports that exist for the given organization
 
-> This route can be used by organizations that have the CSV export feature found 
-> at: https://trello.com/{organizationName}/export. This route is used to get 
+> This route can be used by organizations that have the CSV export feature found
+> at: https://trello.com/{organizationName}/export. This route is used to get
 > information about exports that have been created for the given organization.
 
 **API Call**
@@ -249,7 +249,7 @@ Update an existing organization by id
 ```typescript
 const response = await trello
   .organizations("55411859be21b8ad7dcd4c78")
-  .updateOrganization({ name: "Test" })
+  .updateOrganization({ name: "Test" });
 ```
 
 ## PUT /organizations/{id}/members
@@ -268,7 +268,7 @@ Associates a member with a organization (by email address)
 const response = await trello
   .organizations("55411859be21b8ad7dcd4c78")
   .members()
-  .associateMember({ email: "test@stuff.com", type: "normal" })
+  .associateMember({ email: "test@stuff.com", type: "normal" });
 ```
 
 ## PUT /organizations/{id}/members/{idMember}
@@ -287,7 +287,7 @@ Associates a member with a organization (by member ID)
 const response = await trello
   .organizations("55411859be21b8ad7dcd4c78")
   .members("f2c444c982eb19a7e5b5c423")
-  .associateMember({ type: "admin", allowBillableGuest: false })
+  .associateMember({ type: "admin", allowBillableGuest: false });
 ```
 
 ## PUT /organizations/{id}/members/{idMember}/deactivated
@@ -306,7 +306,7 @@ Deactivate or reactivate a member of a team
 const response = await trello
   .organizations("55411859be21b8ad7dcd4c78")
   .members("f2c444c982eb19a7e5b5c423")
-  .updateDeactivatedStatus(true)
+  .updateDeactivatedStatus(true);
 ```
 
 ## POST /organizations
@@ -322,14 +322,12 @@ Create a new team
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .organizations()
-  .addOrganization({
-    name: "Test",
-    defaultLabels: true,
-    defaultLists: true,
-    keepFromSource: "none"
-  })
+const response = await trello.organizations().addOrganization({
+  name: "Test",
+  defaultLabels: true,
+  defaultLists: true,
+  keepFromSource: "none",
+});
 ```
 
 ## POST /organizations/{id}/logo
@@ -349,7 +347,7 @@ const logoFile = new File(["test"], "test.txt");
 
 const response = await trello
   .organizations("55411859be21b8ad7dcd4c78")
-  .uploadLogo(logoFile)
+  .uploadLogo(logoFile);
 ```
 
 ## POST /organizations/{id}/tags
@@ -392,7 +390,7 @@ const response = await trello
 
 Delete a team
 
-> Deleting a team is permanent. There is no undo. Boards with this team won't 
+> Deleting a team is permanent. There is no undo. Boards with this team won't
 > be deleted. Your boards in this team will appear in your personal boards list.
 
 **API Call**

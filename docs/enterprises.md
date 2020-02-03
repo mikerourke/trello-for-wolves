@@ -59,7 +59,7 @@ const response = await trello
     authenticate: false,
     confirmationAccepted: false,
     returnUrl: "none",
-    tosAccepted: false
+    tosAccepted: false,
   });
 ```
 
@@ -82,7 +82,7 @@ const response = await trello
   .getMembers({
     fields: ["avatarHash", "fullName", "initials", "username"],
     filter: "none",
-    sortBy: "none"
+    sortBy: "none",
   });
 ```
 

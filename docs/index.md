@@ -9,7 +9,7 @@ import { Trello } from "trello-for-wolves";
 
 const trello = new Trello({
   key: API_KEY,
-  token: AUTH_TOKEN
+  token: AUTH_TOKEN,
 });
 
 //... Example code starts here!
@@ -22,7 +22,7 @@ const trello = new Trello({
 - [Boards](./boards.md)
 - [Cards](./cards.md)
 - [Checklists](./checklists.md)
-- [Custom](./custom-fields.md)
+- [Custom Fields](./custom-fields.md)
 - [Enterprises](./enterprises.md)
 - [Labels](./labels.md)
 - [Lists](./lists.md)
@@ -51,12 +51,15 @@ This library allows you to specify a string or array of strings to represent the
 **Example**
 
 ```typescript
-trello.members("me").boards().getBoards({
-  fields: ["desc", "name", "pinned"], // If you don't like using an array, feel free to use a comma-separated string
-  filter: "closed,open,public", // <- Like so
-  organizationFields: "all", // This is organization_fields in the docs
-})
-  .then(/*...*/)
+trello
+  .members("me")
+  .boards()
+  .getBoards({
+    fields: ["desc", "name", "pinned"], // If you don't like using an array, feel free to use a comma-separated string
+    filter: "closed,open,public", // <- Like so
+    organizationFields: "all", // This is organization_fields in the docs
+  })
+  .then(/*...*/);
 ```
 
 ## Nested Params
@@ -67,18 +70,20 @@ This library allows you to use nested objects instead.
 **Example**
 
 ```typescript
-trello.boards("bOaRdId").updateBoard({
-  name: "Hooray Board",
-  prefs: {
-    cardCovers: false, // "prefs/cardCovers"
-    cardAging: "regular" // "prefs/cardAging"
-  },
-  labelNames: {
-    green: "Alligator", // "labelNames/green"
-    yellow: "Bananas!" // "labelNames/yellow"
-  }
-})
-  .then(/*...*/)
+trello
+  .boards("bOaRdId")
+  .updateBoard({
+    name: "Hooray Board",
+    prefs: {
+      cardCovers: false, // "prefs/cardCovers"
+      cardAging: "regular", // "prefs/cardAging"
+    },
+    labelNames: {
+      green: "Alligator", // "labelNames/green"
+      yellow: "Bananas!", // "labelNames/yellow"
+    },
+  })
+  .then(/*...*/);
 ```
 
 ## Uploading Files/Adding Attachments
@@ -86,7 +91,7 @@ trello.boards("bOaRdId").updateBoard({
 If you pass a `file` object into the params, it gets encoded as multipart/form-data and sent to Trello in the body of the request.
 Since this library can be used in the browser or Node.js, I'm using the `form-data` library to ensure the request is sent correctly when using Node.js.
 
-Due to this limitation, you're unable to use streams to upload attachments. So if you're using Node.js, you'll need to read the entire file before sending it to Trello. 
+Due to this limitation, you're unable to use streams to upload attachments. So if you're using Node.js, you'll need to read the entire file before sending it to Trello.
 This shouldn't be too profound of a performance hit unless you're trying to add 1GB attachments to a card. If that's the case, this library may not be for you.
 
 You can use `fs.readFile()` to read the file contents in and specify it in the request. I'm using `fs.readFileSync()` to simplify the example.
@@ -96,19 +101,21 @@ import fs from "fs";
 import path from "path";
 import { Trello } from "trello-for-wolves";
 
-const trello = new Trello(
-  // ...
-);
+const trello = new Trello();
+// ...
 
 const attachPath = path.resolve(__dirname, "bubblegum.jpg");
 const attachFile = fs.readFileSync(attachPath);
 
-trello.cards("cArDiD").attachments().uploadAttachment({
-  file: attachFile,
-  name: "bubblegum.jpg",
-})
+trello
+  .cards("cArDiD")
+  .attachments()
+  .uploadAttachment({
+    file: attachFile,
+    name: "bubblegum.jpg",
+  })
   .then(response => response.json())
-  .then((result) => {
+  .then(result => {
     console.log(result); // <- Hooray!  Attachment details!
   });
 ```

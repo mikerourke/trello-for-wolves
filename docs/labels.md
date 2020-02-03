@@ -94,7 +94,7 @@ const response = await trello
   .labels()
   .addLabel({
     name: "Test",
-    color: "black"
+    color: "black",
   });
 ```
 
@@ -111,7 +111,5 @@ Delete a label by ID
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .labels("55411859be21b8ad7dcd4c78")
-  .deleteLabel();
+const response = await trello.labels("55411859be21b8ad7dcd4c78").deleteLabel();
 ```

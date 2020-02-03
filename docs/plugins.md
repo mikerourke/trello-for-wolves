@@ -17,9 +17,7 @@ Get a single plugin
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .plugins("55411859be21b8ad7dcd4c78")
-  .getPlugin();
+const response = await trello.plugins("55411859be21b8ad7dcd4c78").getPlugin();
 ```
 
 ## GET /plugins/{id}/compliance/memberPrivacy
@@ -53,7 +51,7 @@ curl -X POST \
   -d '{
 		"overview": "A fun Power-Up",
 		"description": "#Wow Markdown \n This is a great Power-Up",
-		"locale": "en-US", 
+		"locale": "en-US",
 		"name": "My Great Power-Up"
 	}'
 ```
@@ -68,7 +66,7 @@ const response = await trello
     overview: "A fun Power-Up",
     description: "#Wow Markdown \n This is a great Power-Up",
     locale: "en-US",
-    name: "My Great Power-Up"
+    name: "My Great Power-Up",
   });
 ```
 
@@ -106,7 +104,7 @@ curl -X PUT \
   -d '{
 		"overview": "A fun Power-Up",
 		"description": "#Wow Markdown \n This is a great Power-Up",
-		"locale": "en-US", 
+		"locale": "en-US",
 		"name": "My Great Power-Up"
 	}'
 ```
@@ -121,6 +119,6 @@ const response = await trello
     overview: "A fun Power-Up",
     description: "#Wow Markdown \n This is a great Power-Up",
     locale: "en-US",
-    name: "My Great Power-Up"
+    name: "My Great Power-Up",
   });
 ```

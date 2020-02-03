@@ -204,7 +204,5 @@ Mark all notifications as read
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .notifications()
-  .markAllAsRead();
+const response = await trello.notifications().markAllAsRead();
 ```

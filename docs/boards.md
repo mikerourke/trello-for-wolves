@@ -1,7 +1,7 @@
 # Boards
 
-Boards are fundamental to Trello. A board may belong to 0 or 1 teams and can have 
-0 or more lists. 
+Boards are fundamental to Trello. A board may belong to 0 or 1 teams and can have
+0 or more lists.
 
 [Trello API Documentation](https://developers.trello.com/reference#boards-2)
 
@@ -38,7 +38,7 @@ Request a single board's field value
 ```typescript
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
-  .getFieldValue("shortUrl")
+  .getFieldValue("shortUrl");
 ```
 
 ## GET /boards/{id}/actions
@@ -227,7 +227,12 @@ Get the lists on a board
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
   .lists()
-  .getLists({ cards: "none", cardFields: "all", filter: "open", fields: "all" });
+  .getLists({
+    cards: "none",
+    cardFields: "all",
+    filter: "open",
+    fields: "all",
+  });
 ```
 
 ## GET /boards/{id}/lists/{filter}
@@ -284,7 +289,11 @@ Get information about the memberships users have to the board
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
   .memberships()
-  .getMemberships({ orgMemberType: true, member: true, memberFields: "fullName" });
+  .getMemberships({
+    orgMemberType: true,
+    member: true,
+    memberFields: "fullName",
+  });
 ```
 
 ## GET /boards/{id}/plugins
@@ -321,7 +330,7 @@ Update an existing board by id
 ```typescript
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
-  .updateBoard({ name: "Test" })
+  .updateBoard({ name: "Test" });
 ```
 
 ## PUT /boards/{id}/members
@@ -340,7 +349,7 @@ Associates a member with a board (by email address)
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
   .members()
-  .associateMember({ email: "test@stuff.com", type: "normal" })
+  .associateMember({ email: "test@stuff.com", type: "normal" });
 ```
 
 ## PUT /boards/{id}/members/{idMember}
@@ -359,7 +368,7 @@ Associates a member with a board (by member ID)
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
   .members("f2c444c982eb19a7e5b5c423")
-  .associateMember({ type: "admin", allowBillableGuest: false })
+  .associateMember({ type: "admin", allowBillableGuest: false });
 ```
 
 ## PUT /boards/{id}/myPrefs/emailPosition
@@ -378,7 +387,7 @@ Updates the email position pref on a board
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
   .myPrefs()
-  .updateEmailPosition("top")
+  .updateEmailPosition("top");
 ```
 
 ## PUT /boards/{id}/myPrefs/idEmailList
@@ -397,7 +406,7 @@ Moves the board to the specified email list
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
   .myPrefs()
-  .moveToEmailList("b0494da996d842cb6c35a3c3")
+  .moveToEmailList("b0494da996d842cb6c35a3c3");
 ```
 
 ## PUT /boards/{id}/myPrefs/showListGuide
@@ -416,7 +425,7 @@ Updates the show list guide pref on a board
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
   .myPrefs()
-  .updateShowListGuide(true)
+  .updateShowListGuide(true);
 ```
 
 ## PUT /boards/{id}/myPrefs/showSidebar
@@ -435,7 +444,7 @@ Updates the show sidebar pref on a board
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
   .myPrefs()
-  .updateShowSidebar(true)
+  .updateShowSidebar(true);
 ```
 
 ## PUT /boards/{id}/myPrefs/showSidebarActivity
@@ -454,7 +463,7 @@ Updates the show sidebar activity pref on a board
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
   .myPrefs()
-  .updateShowSidebarActivity(true)
+  .updateShowSidebarActivity(true);
 ```
 
 ## PUT /boards/{id}/myPrefs/showSidebarBoardActions
@@ -473,7 +482,7 @@ Updates the show sidebar board actions pref on a board
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
   .myPrefs()
-  .updateShowSidebarBoardActions(true)
+  .updateShowSidebarBoardActions(true);
 ```
 
 ## PUT /boards/{id}/myPrefs/showSidebarMembers
@@ -492,7 +501,7 @@ Updates the show sidebar members pref on a board
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
   .myPrefs()
-  .updateShowSidebarMembers(true)
+  .updateShowSidebarMembers(true);
 ```
 
 ## POST /boards
@@ -508,14 +517,12 @@ Create a new board
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .boards()
-  .addBoard({
-    name: "Test",
-    defaultLabels: true,
-    defaultLists: true,
-    keepFromSource: "none"
-  })
+const response = await trello.boards().addBoard({
+  name: "Test",
+  defaultLabels: true,
+  defaultLists: true,
+  keepFromSource: "none",
+});
 ```
 
 ## POST /boards/{id}/boardPlugins
@@ -606,7 +613,7 @@ Adds a label to the board
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
   .labels()
-  .addLabel({ name: "Test", color: "black" })
+  .addLabel({ name: "Test", color: "black" });
 ```
 
 ## POST /boards/{id}/lists
@@ -625,7 +632,7 @@ Adds a list to the board
 const response = await trello
   .boards("55411859be21b8ad7dcd4c78")
   .lists()
-  .addList({ name: "Test", pos: "top" })
+  .addList({ name: "Test", pos: "top" });
 ```
 
 ## POST /boards/{id}/markedAsViewed
@@ -641,9 +648,7 @@ Marks the board as viewed
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .boards("55411859be21b8ad7dcd4c78")
-  .markAsViewed();
+const response = await trello.boards("55411859be21b8ad7dcd4c78").markAsViewed();
 ```
 
 ## POST /boards/{id}/powerUps
@@ -677,9 +682,7 @@ Delete a board
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .boards("55411859be21b8ad7dcd4c78")
-  .deleteBoard();
+const response = await trello.boards("55411859be21b8ad7dcd4c78").deleteBoard();
 ```
 
 ## DELETE /boards/{id}/boardPlugins/{idPlugin}

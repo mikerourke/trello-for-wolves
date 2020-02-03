@@ -1,6 +1,6 @@
 # Custom Fields
 
-Custom Fields are extra bits of structured data attached to cards when our users need 
+Custom Fields are extra bits of structured data attached to cards when our users need
 a bit more than what Trello provides.
 
 To use them users need to enable the [Custom Fields Power-Up](http://help.trello.com/article/1067-using-the-custom-fields-power-up).
@@ -139,8 +139,8 @@ const response = await trello
     displayCardFront: false,
     options: [
       { color: "none", value: { text: "First Option" }, pos: 1024 },
-      { color: "none", value: { text: "Second Option" }, pos: 2048 }
-    ]
+      { color: "none", value: { text: "Second Option" }, pos: 2048 },
+    ],
   });
 ```
 
@@ -151,8 +151,8 @@ Create a new custom field definition option
 **API Call**
 
 ```
-curl -X POST -H "Content-Type: application/json" \ 
-https://api.trello.com/1/customField/5ab0fae54cdab797ed6b206e/options \ 
+curl -X POST -H "Content-Type: application/json" \
+https://api.trello.com/1/customField/5ab0fae54cdab797ed6b206e/options \
 -d '{
   "value": { "text": "Bad" },
   "color": "red",
@@ -170,7 +170,7 @@ const response = await trello
   .addOption({
     value: { text: "Bad" },
     color: "red",
-    pos: "bottom"
+    pos: "bottom",
   });
 ```
 
@@ -178,8 +178,8 @@ const response = await trello
 
 Delete a custom field from a board
 
-> Deleting a custom field definition will also delete all of the values across 
-> all cards that have been set for that custom field. There is no way to get 
+> Deleting a custom field definition will also delete all of the values across
+> all cards that have been set for that custom field. There is no way to get
 > those values back after they have been deleted.
 
 **API Call**

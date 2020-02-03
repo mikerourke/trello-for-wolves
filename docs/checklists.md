@@ -170,7 +170,7 @@ const response = await trello
   .checklists()
   .addChecklist({
     name: "Test",
-    pos: "top"
+    pos: "top",
   });
 ```
 
@@ -193,7 +193,7 @@ const response = await trello
   .addCheckItem({
     name: "Test",
     pos: "top",
-    checked: true
+    checked: true,
   });
 ```
 

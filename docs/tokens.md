@@ -98,7 +98,7 @@ const response = await trello
   .addWebhook({
     idModel: "54a17d76d4a5072e3931736b",
     description: "My Webhook",
-    callbackURL: "https://mycallbackurl.com"
+    callbackURL: "https://mycallbackurl.com",
   });
 ```
 
@@ -134,9 +134,7 @@ Delete a token
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .tokens("55411859be21b8ad7dcd4c78")
-  .deleteToken();
+const response = await trello.tokens("55411859be21b8ad7dcd4c78").deleteToken();
 ```
 
 ## DELETE /tokens/{token}/webhooks/{idWebhook}

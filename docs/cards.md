@@ -263,9 +263,7 @@ Get any shared pluginData on a card
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .cards("55411859be21b8ad7dcd4c78")
-  .getPluginData();
+const response = await trello.cards("55411859be21b8ad7dcd4c78").getPluginData();
 ```
 
 ## GET /cards/{id}/stickers
@@ -344,7 +342,7 @@ const response = await trello
   .actions("f2c444c982eb19a7e5b5c423")
   .updateAction({ text: "Test" });
 
-// Use the nifty `comments()` object: 
+// Use the nifty `comments()` object:
 const response = await trello
   .cards("55411859be21b8ad7dcd4c78")
   .comments("f2c444c982eb19a7e5b5c423")
@@ -429,7 +427,7 @@ const response = await trello
     name: "Test",
     defaultLabels: true,
     defaultLists: true,
-    keepFromSource: "none"
+    keepFromSource: "none",
   });
 ```
 
@@ -473,10 +471,10 @@ import Trello from "trello-for-wolves";
 
 const trello = new Trello({
   key: "KEY",
-  token: "TOKEN"
+  token: "TOKEN",
 });
 
-const attachPath = path.resolve(__dirname, 'bubblegum.jpg');
+const attachPath = path.resolve(__dirname, "bubblegum.jpg");
 const attachFile = fs.readFileSync(attachPath);
 
 const response = await trello
@@ -622,7 +620,7 @@ const response = await trello
     image: "taco-cool",
     top: 50,
     left: 50,
-    zIndex: 1
+    zIndex: 1,
   });
 ```
 
@@ -641,16 +639,14 @@ Delete a card
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .cards("55411859be21b8ad7dcd4c78")
-  .deleteCard();
+const response = await trello.cards("55411859be21b8ad7dcd4c78").deleteCard();
 ```
 
 ## DELETE /cards/{id}/actions/{idAction}/comments
 
 Delete a comment
 
-> This can only be done by the original author of the comment, or someone with 
+> This can only be done by the original author of the comment, or someone with
 > higher permissions than the original author.
 
 **API Call**

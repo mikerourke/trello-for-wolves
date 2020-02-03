@@ -1,6 +1,6 @@
 # Webhooks
 
-Webhooks allow developers to receive updates regarding actions that have 
+Webhooks allow developers to receive updates regarding actions that have
 occurred in Trello.
 
 For more on getting started with Trello's Webhooks, [check out this guide](https://developers.trello.com/page/webhooks).
@@ -20,9 +20,7 @@ Gets a single webhook
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .webhooks("55411859be21b8ad7dcd4c78")
-  .getWebhook();
+const response = await trello.webhooks("55411859be21b8ad7dcd4c78").getWebhook();
 ```
 
 ## GET /webhooks/{id}/{field}
@@ -74,13 +72,11 @@ Create a new webhook
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .webhooks()
-  .addWebhook({
-    idModel: "54a17d76d4a5072e3931736b",
-    description: "My Webhook",
-    callbackURL: "https://mycallbackurl.com"
-  });
+const response = await trello.webhooks().addWebhook({
+  idModel: "54a17d76d4a5072e3931736b",
+  description: "My Webhook",
+  callbackURL: "https://mycallbackurl.com",
+});
 ```
 
 ## DELETE /webhooks/{id}

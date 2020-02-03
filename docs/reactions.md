@@ -17,9 +17,7 @@ List available emoji
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .emoji()
-  .getEmoji({ spritesheets: true });
+const response = await trello.emoji().getEmoji({ spritesheets: true });
 ```
 
 ## GET /actions/{idAction}/reactions
@@ -96,7 +94,7 @@ const response = await trello
   .reactions()
   .addReaction({
     unified: "1F44D-1F3FC",
-    skinVariation: "1F3FF"
+    skinVariation: "1F3FF",
   });
 ```
 

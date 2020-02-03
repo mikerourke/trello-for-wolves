@@ -37,7 +37,7 @@ Get a particular property of a member
 ```typescript
 const response = await trello
   .members("55411859be21b8ad7dcd4c78")
-  .getFieldValue("avatarUrl")
+  .getFieldValue("avatarUrl");
 ```
 
 ## GET /members/{id}/actions
@@ -454,7 +454,7 @@ Update a member
 ```typescript
 const response = await trello
   .members("55411859be21b8ad7dcd4c78")
-  .updateMember({ initials: "TST" })
+  .updateMember({ initials: "TST" });
 ```
 
 ## PUT /members/{id}/boardBackgrounds/{idBackground}
@@ -473,7 +473,7 @@ Update a board background
 const response = await trello
   .members("55411859be21b8ad7dcd4c78")
   .boardBackgrounds("b0494da996d842cb6c35a3c3")
-  .updateBoardBackground({ brightness: "light" })
+  .updateBoardBackground({ brightness: "light" });
 ```
 
 ## PUT /members/{id}/boardStars/{idStar}
@@ -492,7 +492,7 @@ Update the position of a starred board
 const response = await trello
   .members("55411859be21b8ad7dcd4c78")
   .boardStars("b0494da996d842cb6c35a3c3")
-  .updateBoardStar({ pos: "top" })
+  .updateBoardStar({ pos: "top" });
 ```
 
 ## PUT /members/{id}/customBoardBackgrounds/{idBackground}
@@ -511,7 +511,7 @@ Update a custom board background
 const response = await trello
   .members("55411859be21b8ad7dcd4c78")
   .customBoardBackgrounds("b0494da996d842cb6c35a3c3")
-  .updateCustomBoardBackground({ brightness: "light" })
+  .updateCustomBoardBackground({ brightness: "light" });
 ```
 
 ## PUT /members/{id}/savedSearches/{idSearch}
@@ -530,7 +530,7 @@ Update a saved search
 const response = await trello
   .members("55411859be21b8ad7dcd4c78")
   .savedSearches("b0494da996d842cb6c35a3c3")
-  .updateSavedSearch({ pos: "top" })
+  .updateSavedSearch({ pos: "top" });
 ```
 
 ## POST /boards/{id}/avatar
@@ -652,7 +652,7 @@ Dismiss a message
 ```typescript
 const response = await trello
   .members("55411859be21b8ad7dcd4c78")
-  .dismissOneTimeMessages("someMessage")
+  .dismissOneTimeMessages("someMessage");
 ```
 
 ## POST /members/{id}/savedSearches
@@ -671,7 +671,7 @@ Create a new saved search
 const response = await trello
   .members("55411859be21b8ad7dcd4c78")
   .savedSearches()
-  .addSavedSearch({ name: "Test", query: "#label" })
+  .addSavedSearch({ name: "Test", query: "#label" });
 ```
 
 ## DELETE /members/{id}/boardBackgrounds/{idBackground}
@@ -690,7 +690,7 @@ Delete a board background
 const response = await trello
   .members("55411859be21b8ad7dcd4c78")
   .boardBackgrounds("b0494da996d842cb6c35a3c3")
-  .deleteBoardBackground()
+  .deleteBoardBackground();
 ```
 
 ## DELETE /members/{id}/boardStars/{idStar}
@@ -709,7 +709,7 @@ Unstar a board
 const response = await trello
   .members("55411859be21b8ad7dcd4c78")
   .boardStars("b0494da996d842cb6c35a3c3")
-  .deleteBoardStar()
+  .deleteBoardStar();
 ```
 
 ## DELETE /members/{id}/customBoardBackgrounds/{idBackground}
@@ -728,7 +728,7 @@ Delete a custom board background
 const response = await trello
   .members("55411859be21b8ad7dcd4c78")
   .customBoardBackgrounds("b0494da996d842cb6c35a3c3")
-  .deleteCustomBoardBackground()
+  .deleteCustomBoardBackground();
 ```
 
 ## DELETE /members/{id}/customStickers/{idSticker}
@@ -747,7 +747,7 @@ Delete a custom sticker
 const response = await trello
   .members("55411859be21b8ad7dcd4c78")
   .customStickers("b0494da996d842cb6c35a3c3")
-  .deleteCustomSticker()
+  .deleteCustomSticker();
 ```
 
 ## DELETE /members/{id}/savedSearches/{idSearch}
@@ -766,5 +766,5 @@ Delete a saved search
 const response = await trello
   .members("55411859be21b8ad7dcd4c78")
   .savedSearches("b0494da996d842cb6c35a3c3")
-  .deleteSavedSearch()
+  .deleteSavedSearch();
 ```

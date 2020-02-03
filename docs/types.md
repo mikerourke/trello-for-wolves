@@ -1,6 +1,6 @@
 # Types
 
-Because Trello teams and members are not prefixed differently, we need a way to 
+Because Trello teams and members are not prefixed differently, we need a way to
 distinguish between the two.
 
 So for example:
@@ -44,7 +44,5 @@ Get information about an action
 **Trello for Wolves**
 
 ```typescript
-const response = await trello
-  .types("trelloinc")
-  .getType();
+const response = await trello.types("trelloinc").getType();
 ```
