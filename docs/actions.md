@@ -8,7 +8,7 @@ endpoints - e.g. the resource GET `/1/boards/{board_id}/actions` lists all of th
 for the given board. Additionally, data regarding individual action objects can be
 retrieved and updated using the resources listed below.
 
-[Trello API Documentation](https://developers.const response = await trello.com/reference#actions)
+[Trello API Documentation](https://developers.trello.com/reference#actions)
 
 ## GET /actions/{id}
 
