@@ -30,6 +30,7 @@
     "docs",
     "lib",
     "node_modules",
+    "scripts",
     "try.js"
   ]
 }
