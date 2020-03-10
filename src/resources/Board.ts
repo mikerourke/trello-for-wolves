@@ -72,7 +72,7 @@ export class Board extends BaseResource {
       NestedNotificationsParams &
       NestedOrganizationParams,
   ): TypedFetch<BoardRecord> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getBoards(
@@ -84,7 +84,7 @@ export class Board extends BaseResource {
       NestedMembershipsParams &
       NestedOrganizationParams,
   ): TypedFetch<BoardRecord[]> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getBoardsFilteredBy(filter: BoardFilter): TypedFetch<unknown> {

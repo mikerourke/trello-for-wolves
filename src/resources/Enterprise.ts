@@ -30,7 +30,7 @@ export class Enterprise extends BaseResource {
     } & NestedMembersParams &
       NestedOrganizationsParams,
   ): TypedFetch<EnterpriseRecord> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getEnterprises(params?: {

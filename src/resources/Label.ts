@@ -17,7 +17,7 @@ export class Label extends BaseResource {
       limit?: number;
     } & NestedActionsParams,
   ): TypedFetch<LabelRecord> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getLabels(
@@ -26,7 +26,7 @@ export class Label extends BaseResource {
       limit?: number;
     } & NestedActionsParams,
   ): TypedFetch<LabelRecord[]> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public addLabel(params: {

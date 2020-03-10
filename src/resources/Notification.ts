@@ -34,7 +34,7 @@ export class Notification extends BaseResource {
       NestedMemberCreatorParams &
       NestedOrganizationParams,
   ): TypedFetch<NotificationRecord> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getNotifications(
@@ -50,7 +50,7 @@ export class Notification extends BaseResource {
       since?: string | null;
     } & NestedMemberCreatorParams,
   ): TypedFetch<NotificationRecord[]> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getNotificationsFilteredBy(

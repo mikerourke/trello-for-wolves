@@ -25,7 +25,7 @@ export class List extends BaseResource {
       NestedBoardParams &
       NestedCardsParams,
   ): TypedFetch<ListRecord> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getLists(
@@ -34,7 +34,7 @@ export class List extends BaseResource {
       fields?: AllOrFieldOrListOf<ListField>;
     } & NestedCardsParams,
   ): TypedFetch<LabelRecord[]> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getListsFilteredBy(filter: ListFilter): TypedFetch<ListRecord[]> {

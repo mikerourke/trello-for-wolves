@@ -48,7 +48,7 @@ export class Action<TActionType = ActionType> extends BaseResource {
       NestedMemberCreatorParams &
       NestedReactionsParams,
   ): TypedFetch<ActionRecord<TActionType>> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getActions(
@@ -67,7 +67,7 @@ export class Action<TActionType = ActionType> extends BaseResource {
       NestedMemberCreatorParams &
       NestedReactionsParams,
   ): TypedFetch<ActionRecord<TActionType>[]> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getFieldValue<T>(field: ActionField): TypedFetch<ValueResponse<T>> {

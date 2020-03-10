@@ -44,7 +44,7 @@ export class Checklist extends BaseResource {
       NestedBoardParams &
       NestedCardsParams,
   ): TypedFetch<ChecklistRecord> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getChecklists(

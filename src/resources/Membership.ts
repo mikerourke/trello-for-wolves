@@ -27,7 +27,7 @@ export class Membership extends BaseResource {
     } & NestedActionsParams &
       NestedMemberParams,
   ): TypedFetch<MembershipRecord[]> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public updateMembership(params: {

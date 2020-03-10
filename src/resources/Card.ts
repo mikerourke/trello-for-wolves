@@ -57,7 +57,7 @@ export class Card extends BaseResource {
       NestedChecklistsParams &
       NestedMembersParams,
   ): TypedFetch<CardRecord> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getCards(
@@ -74,7 +74,7 @@ export class Card extends BaseResource {
       NestedChecklistsParams &
       NestedMembersParams,
   ): TypedFetch<CardRecord[]> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getCardsFilteredBy(filter: CardFilter): TypedFetch<CardRecord[]> {

@@ -45,7 +45,7 @@ export class Organization extends BaseResource {
       NestedMembersInvitedParams &
       NestedMembershipsParams,
   ): TypedFetch<OrganizationRecord> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getOrganizations(params?: {

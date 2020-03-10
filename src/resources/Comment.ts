@@ -28,7 +28,7 @@ export class Comment extends BaseResource {
       NestedMemberCreatorParams &
       NestedReactionsParams,
   ): TypedFetch<CommentRecord[]> {
-    return this.apiGet("/", params);
+    return this.apiGet("/", params as Record<string, unknown>);
   }
 
   public getComments(
