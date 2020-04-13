@@ -23,20 +23,17 @@
   },
   "homepage": "https://github.com/mikerourke/trello-for-wolves#readme",
   "scripts": {
-    "build:clean": "rimraf lib",
-    "tidy": "rimraf coverage && rimraf lib",
-    "lint": "eslint -c .eslintrc.json --ext .ts src",
-    "prettier": "prettier --write \"{src,docs}/**/*.{md,ts}\"",
-    "typecheck": "tsc -p tsconfig.json --noEmit --skipLibCheck",
-    "precompile": "rimraf ./build",
-    "test": "jest --config jest.config.json --env=jsdom",
-    "test:coverage": "cross-env NODE_ENV=test yarn test --coverage --coverageReporters=lcov",
-    "coverage:local": "cross-env NODE_ENV=test node ./scripts/coverage.js",
     "prebuild:umd": "rimraf ./umd",
     "build:umd": "parcel build src/index.ts --target browser -d umd --no-cache --global TrelloForWolves --no-content-hash --out-file trello-for-wolves.min.js",
     "prebuild:node": "rimraf ./lib",
     "build:node": "tsc -p tsconfig.build.json",
-    "build:all": "yarn build:umd && yarn build:node"
+    "build:all": "yarn build:umd && yarn build:node",
+    "lint": "eslint -c .eslintrc.json --ext .ts src",
+    "prettier": "prettier --write \"{src,docs}/**/*.{md,ts}\"",
+    "test": "jest --config jest.config.json --env=jsdom",
+    "test:coverage": "cross-env NODE_ENV=test yarn test --coverage",
+    "tidy": "rimraf coverage && rimraf lib",
+    "typecheck": "tsc -p tsconfig.json --noEmit --skipLibCheck"
   },
   "files": [
     "lib",
