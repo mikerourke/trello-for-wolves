@@ -94,10 +94,7 @@ describe("the Enterprise resource", () => {
   });
 
   test("gets the members for an enterprise", async () => {
-    await trello
-      .enterprises(TEST_ENTERPRISE_ID)
-      .members()
-      .getMembers();
+    await trello.enterprises(TEST_ENTERPRISE_ID).members().getMembers();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");

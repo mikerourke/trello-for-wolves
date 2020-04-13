@@ -23,10 +23,7 @@ describe("the List resource", () => {
   });
 
   test("gets multiple lists", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .lists()
-      .getLists();
+    await trello.boards(TEST_BOARD_ID).lists().getLists();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -34,10 +31,7 @@ describe("the List resource", () => {
   });
 
   test("gets filtered lists", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .lists()
-      .getListsFilteredBy("closed");
+    await trello.boards(TEST_BOARD_ID).lists().getListsFilteredBy("closed");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -83,12 +77,9 @@ describe("the List resource", () => {
   });
 
   test("adds a new list from a board", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .lists()
-      .addList({
-        name: "Test",
-      });
+    await trello.boards(TEST_BOARD_ID).lists().addList({
+      name: "Test",
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -197,10 +188,7 @@ describe("the List resource", () => {
   });
 
   test("gets the actions for a list", async () => {
-    await trello
-      .lists(TEST_LIST_ID)
-      .actions()
-      .getActions();
+    await trello.lists(TEST_LIST_ID).actions().getActions();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -208,10 +196,7 @@ describe("the List resource", () => {
   });
 
   test("gets the board for a list", async () => {
-    await trello
-      .lists(TEST_LIST_ID)
-      .board()
-      .getBoard();
+    await trello.lists(TEST_LIST_ID).board().getBoard();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -219,10 +204,7 @@ describe("the List resource", () => {
   });
 
   test("gets the cards for a list", async () => {
-    await trello
-      .lists(TEST_LIST_ID)
-      .cards()
-      .getCards();
+    await trello.lists(TEST_LIST_ID).cards().getCards();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");

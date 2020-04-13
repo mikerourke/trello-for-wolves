@@ -29,10 +29,7 @@ describe("the CheckItem resource", () => {
   });
 
   test("gets multiple check items", async () => {
-    await trello
-      .checklists(TEST_CHECKLIST_ID)
-      .checkItems()
-      .getCheckItems();
+    await trello.checklists(TEST_CHECKLIST_ID).checkItems().getCheckItems();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -56,13 +53,10 @@ describe("the CheckItem resource", () => {
   });
 
   test("adds a new check item", async () => {
-    await trello
-      .checklists(TEST_CHECKLIST_ID)
-      .checkItems()
-      .addCheckItem({
-        name: "Test",
-        checked: false,
-      });
+    await trello.checklists(TEST_CHECKLIST_ID).checkItems().addCheckItem({
+      name: "Test",
+      checked: false,
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");

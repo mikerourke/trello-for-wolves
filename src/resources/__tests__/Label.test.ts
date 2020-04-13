@@ -23,10 +23,7 @@ describe("the Label resource", () => {
   });
 
   test("gets multiple labels", async () => {
-    await trello
-      .boards(TEST_PARENT_ID)
-      .labels()
-      .getLabels();
+    await trello.boards(TEST_PARENT_ID).labels().getLabels();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -62,13 +59,10 @@ describe("the Label resource", () => {
   });
 
   test("adds a new label from a board", async () => {
-    await trello
-      .boards(TEST_PARENT_ID)
-      .labels()
-      .addLabel({
-        name: "Test",
-        color: "black",
-      });
+    await trello.boards(TEST_PARENT_ID).labels().addLabel({
+      name: "Test",
+      color: "black",
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -141,20 +135,14 @@ describe("the Label resource", () => {
     expect.assertions(1);
 
     try {
-      await trello
-        .cards(TEST_PARENT_ID)
-        .labels()
-        .dissociateLabel();
+      await trello.cards(TEST_PARENT_ID).labels().dissociateLabel();
     } catch (err) {
       expect(err.message).toMatch(/You must pass a label ID into the labels/gi);
     }
   });
 
   test("gets the board for a label", async () => {
-    await trello
-      .labels(TEST_LABEL_ID)
-      .board()
-      .getBoard();
+    await trello.labels(TEST_LABEL_ID).board().getBoard();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");

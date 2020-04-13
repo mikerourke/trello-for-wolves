@@ -24,10 +24,7 @@ describe("the CustomField resource", () => {
   });
 
   test("gets multiple custom fields", async () => {
-    await trello
-      .boards(TEST_PARENT_ID)
-      .customFields()
-      .getCustomFields();
+    await trello.boards(TEST_PARENT_ID).customFields().getCustomFields();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -54,14 +51,11 @@ describe("the CustomField resource", () => {
     expect.assertions(1);
 
     try {
-      await trello
-        .boards()
-        .customFields()
-        .addCustomField({
-          name: "Test",
-          pos: "top",
-          type: "number",
-        });
+      await trello.boards().customFields().addCustomField({
+        name: "Test",
+        pos: "top",
+        type: "number",
+      });
     } catch (err) {
       expect(err.message).toMatch(
         /You must pass an ID into the board resource/gi,
@@ -182,10 +176,7 @@ describe("the CustomField resource", () => {
   });
 
   test("gets all options for a custom field", async () => {
-    await trello
-      .customFields(TEST_CUSTOM_FIELD_ID)
-      .options()
-      .getOptions();
+    await trello.customFields(TEST_CUSTOM_FIELD_ID).options().getOptions();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");

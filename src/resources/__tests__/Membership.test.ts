@@ -28,16 +28,13 @@ describe("the Membership resource", () => {
   });
 
   test("gets multiple memberships", async () => {
-    await trello
-      .organizations(TEST_PARENT_ID)
-      .memberships()
-      .getMemberships({
-        filter: "owners",
-        member: true,
-        activity: true,
-        orgMemberType: true,
-        memberFields: "all",
-      });
+    await trello.organizations(TEST_PARENT_ID).memberships().getMemberships({
+      filter: "owners",
+      member: true,
+      activity: true,
+      orgMemberType: true,
+      memberFields: "all",
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");

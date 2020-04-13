@@ -14,10 +14,7 @@ describe("the SavedSearch resource", () => {
   });
 
   test("gets a single saved search", async () => {
-    await trello
-      .members("me")
-      .savedSearches(TEST_ID)
-      .getSavedSearch();
+    await trello.members("me").savedSearches(TEST_ID).getSavedSearch();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -25,10 +22,7 @@ describe("the SavedSearch resource", () => {
   });
 
   test("gets multiple saved searches", async () => {
-    await trello
-      .members("me")
-      .savedSearches()
-      .getSavedSearches();
+    await trello.members("me").savedSearches().getSavedSearches();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -36,14 +30,11 @@ describe("the SavedSearch resource", () => {
   });
 
   test("adds a new saved search", async () => {
-    await trello
-      .members("me")
-      .savedSearches()
-      .addSavedSearch({
-        name: "Test",
-        pos: "top",
-        query: "@test",
-      });
+    await trello.members("me").savedSearches().addSavedSearch({
+      name: "Test",
+      pos: "top",
+      query: "@test",
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -54,14 +45,11 @@ describe("the SavedSearch resource", () => {
   });
 
   test("updates a saved search", async () => {
-    await trello
-      .members("me")
-      .savedSearches(TEST_ID)
-      .updateSavedSearch({
-        name: "Test",
-        pos: "top",
-        query: "@test",
-      });
+    await trello.members("me").savedSearches(TEST_ID).updateSavedSearch({
+      name: "Test",
+      pos: "top",
+      query: "@test",
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -72,10 +60,7 @@ describe("the SavedSearch resource", () => {
   });
 
   test("updates the name of a saved search", async () => {
-    await trello
-      .members("me")
-      .savedSearches(TEST_ID)
-      .updateName("Test");
+    await trello.members("me").savedSearches(TEST_ID).updateName("Test");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -86,10 +71,7 @@ describe("the SavedSearch resource", () => {
   });
 
   test("updates the position of a saved search", async () => {
-    await trello
-      .members("me")
-      .savedSearches(TEST_ID)
-      .updatePosition(10);
+    await trello.members("me").savedSearches(TEST_ID).updatePosition(10);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -100,10 +82,7 @@ describe("the SavedSearch resource", () => {
   });
 
   test("updates the query of a saved search", async () => {
-    await trello
-      .members("me")
-      .savedSearches(TEST_ID)
-      .updateQuery("@new");
+    await trello.members("me").savedSearches(TEST_ID).updateQuery("@new");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -114,10 +93,7 @@ describe("the SavedSearch resource", () => {
   });
 
   test("deletes a saved search", async () => {
-    await trello
-      .members("me")
-      .savedSearches(TEST_ID)
-      .deleteSavedSearch();
+    await trello.members("me").savedSearches(TEST_ID).deleteSavedSearch();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");

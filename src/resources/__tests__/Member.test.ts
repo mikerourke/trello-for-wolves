@@ -90,27 +90,21 @@ describe("the Member resource", () => {
     expect.assertions(1);
 
     try {
-      await trello
-        .boards(TEST_PARENT_ID)
-        .members()
-        .associateMember({
-          type: "admin",
-          fullName: "Suzy Test",
-        });
+      await trello.boards(TEST_PARENT_ID).members().associateMember({
+        type: "admin",
+        fullName: "Suzy Test",
+      });
     } catch (err) {
       expect(err.message).toMatch(/You must specify the "email" param/gi);
     }
   });
 
   test("associates a member with a board when fullName is specified", async () => {
-    await trello
-      .boards(TEST_PARENT_ID)
-      .members()
-      .associateMember({
-        email: "test@stuff.com",
-        allowBillableGuest: true,
-        fullName: "Suzy Test",
-      });
+    await trello.boards(TEST_PARENT_ID).members().associateMember({
+      email: "test@stuff.com",
+      allowBillableGuest: true,
+      fullName: "Suzy Test",
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -121,13 +115,10 @@ describe("the Member resource", () => {
   });
 
   test("associates a member with a board when fullName is not specified", async () => {
-    await trello
-      .boards(TEST_PARENT_ID)
-      .members()
-      .associateMember({
-        email: "test@stuff.com",
-        allowBillableGuest: true,
-      });
+    await trello.boards(TEST_PARENT_ID).members().associateMember({
+      email: "test@stuff.com",
+      allowBillableGuest: true,
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -137,13 +128,10 @@ describe("the Member resource", () => {
   });
 
   test("associates a member with an organization", async () => {
-    await trello
-      .organizations(TEST_PARENT_ID)
-      .members()
-      .associateMember({
-        email: "test@stuff.com",
-        fullName: "Suzy Test",
-      });
+    await trello.organizations(TEST_PARENT_ID).members().associateMember({
+      email: "test@stuff.com",
+      fullName: "Suzy Test",
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -359,10 +347,7 @@ describe("the Member resource", () => {
     expect.assertions(1);
 
     try {
-      await trello
-        .cards(TEST_PARENT_ID)
-        .members()
-        .dissociateMember();
+      await trello.cards(TEST_PARENT_ID).members().dissociateMember();
     } catch (err) {
       expect(err.message).toMatch(
         /You must pass a member ID into the members/gi,
@@ -422,10 +407,7 @@ describe("the Member resource", () => {
   });
 
   test("gets the actions for a member", async () => {
-    await trello
-      .members(TEST_MEMBER_ID)
-      .actions()
-      .getActions();
+    await trello.members(TEST_MEMBER_ID).actions().getActions();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -472,10 +454,7 @@ describe("the Member resource", () => {
   });
 
   test("gets the board stars for a member", async () => {
-    await trello
-      .members(TEST_MEMBER_ID)
-      .boardStars()
-      .getBoardStars();
+    await trello.members(TEST_MEMBER_ID).boardStars().getBoardStars();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -483,10 +462,7 @@ describe("the Member resource", () => {
   });
 
   test("gets the boards for a member", async () => {
-    await trello
-      .members(TEST_MEMBER_ID)
-      .boards()
-      .getBoards();
+    await trello.members(TEST_MEMBER_ID).boards().getBoards();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -494,10 +470,7 @@ describe("the Member resource", () => {
   });
 
   test("gets the boards invited for a member", async () => {
-    await trello
-      .members(TEST_MEMBER_ID)
-      .boardsInvited()
-      .getBoards();
+    await trello.members(TEST_MEMBER_ID).boardsInvited().getBoards();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -507,10 +480,7 @@ describe("the Member resource", () => {
   });
 
   test("gets the cards for a member", async () => {
-    await trello
-      .members(TEST_MEMBER_ID)
-      .cards()
-      .getCards();
+    await trello.members(TEST_MEMBER_ID).cards().getCards();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -557,10 +527,7 @@ describe("the Member resource", () => {
   });
 
   test("gets the custom emojis for a member", async () => {
-    await trello
-      .members(TEST_MEMBER_ID)
-      .customEmojis()
-      .getCustomEmojis();
+    await trello.members(TEST_MEMBER_ID).customEmojis().getCustomEmojis();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -583,10 +550,7 @@ describe("the Member resource", () => {
   });
 
   test("gets the custom stickers for a member", async () => {
-    await trello
-      .members(TEST_MEMBER_ID)
-      .customStickers()
-      .getCustomStickers();
+    await trello.members(TEST_MEMBER_ID).customStickers().getCustomStickers();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -596,10 +560,7 @@ describe("the Member resource", () => {
   });
 
   test("gets the enterprises for a member", async () => {
-    await trello
-      .members(TEST_MEMBER_ID)
-      .enterprises()
-      .getEnterprises();
+    await trello.members(TEST_MEMBER_ID).enterprises().getEnterprises();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -609,10 +570,7 @@ describe("the Member resource", () => {
   });
 
   test("gets the notifications for a member", async () => {
-    await trello
-      .members(TEST_MEMBER_ID)
-      .notifications()
-      .getNotifications();
+    await trello.members(TEST_MEMBER_ID).notifications().getNotifications();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -622,10 +580,7 @@ describe("the Member resource", () => {
   });
 
   test("gets the organizations for a member", async () => {
-    await trello
-      .members(TEST_MEMBER_ID)
-      .organizations()
-      .getOrganizations();
+    await trello.members(TEST_MEMBER_ID).organizations().getOrganizations();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -661,10 +616,7 @@ describe("the Member resource", () => {
   });
 
   test("gets the saved searches for a member", async () => {
-    await trello
-      .members(TEST_MEMBER_ID)
-      .savedSearches()
-      .getSavedSearches();
+    await trello.members(TEST_MEMBER_ID).savedSearches().getSavedSearches();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -674,10 +626,7 @@ describe("the Member resource", () => {
   });
 
   test("gets the tokens for a member", async () => {
-    await trello
-      .members(TEST_MEMBER_ID)
-      .tokens()
-      .getTokens();
+    await trello.members(TEST_MEMBER_ID).tokens().getTokens();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");

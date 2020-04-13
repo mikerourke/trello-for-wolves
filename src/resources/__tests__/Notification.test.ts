@@ -24,10 +24,7 @@ describe("the Notification resource", () => {
   });
 
   test("gets multiple notifications", async () => {
-    await trello
-      .members("me")
-      .notifications()
-      .getNotifications();
+    await trello.members("me").notifications().getNotifications();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -109,10 +106,7 @@ describe("the Notification resource", () => {
   });
 
   test("gets the board for a notification", async () => {
-    await trello
-      .notifications(TEST_NOTIFICATION_ID)
-      .board()
-      .getBoard();
+    await trello.notifications(TEST_NOTIFICATION_ID).board().getBoard();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -122,10 +116,7 @@ describe("the Notification resource", () => {
   });
 
   test("gets the card for a notification", async () => {
-    await trello
-      .notifications(TEST_NOTIFICATION_ID)
-      .card()
-      .getCard();
+    await trello.notifications(TEST_NOTIFICATION_ID).card().getCard();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -135,10 +126,7 @@ describe("the Notification resource", () => {
   });
 
   test("gets the list for a notification", async () => {
-    await trello
-      .notifications(TEST_NOTIFICATION_ID)
-      .list()
-      .getList();
+    await trello.notifications(TEST_NOTIFICATION_ID).list().getList();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -148,10 +136,7 @@ describe("the Notification resource", () => {
   });
 
   test("gets the member for a notification", async () => {
-    await trello
-      .notifications(TEST_NOTIFICATION_ID)
-      .member()
-      .getMember();
+    await trello.notifications(TEST_NOTIFICATION_ID).member().getMember();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");

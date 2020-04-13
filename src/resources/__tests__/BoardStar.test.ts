@@ -95,10 +95,7 @@ describe("the BoardStar resource", () => {
   });
 
   test("deletes the board star", async () => {
-    await trello
-      .members("me")
-      .boardStars(TEST_BOARD_STAR_ID)
-      .deleteBoardStar();
+    await trello.members("me").boardStars(TEST_BOARD_STAR_ID).deleteBoardStar();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");

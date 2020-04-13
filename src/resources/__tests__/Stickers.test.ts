@@ -16,10 +16,7 @@ describe("within Stickers", () => {
 
   describe("the Sticker resource", () => {
     test("gets a single sticker", async () => {
-      await trello
-        .cards(TEST_CARD_ID)
-        .stickers(TEST_STICKER_ID)
-        .getSticker();
+      await trello.cards(TEST_CARD_ID).stickers(TEST_STICKER_ID).getSticker();
       const result = global.getLastFetchCall();
 
       expect(result.config.method).toBe("GET");
@@ -29,10 +26,7 @@ describe("within Stickers", () => {
     });
 
     test("gets multiple stickers", async () => {
-      await trello
-        .cards(TEST_CARD_ID)
-        .stickers()
-        .getStickers();
+      await trello.cards(TEST_CARD_ID).stickers().getStickers();
       const result = global.getLastFetchCall();
 
       expect(result.config.method).toBe("GET");
@@ -40,16 +34,13 @@ describe("within Stickers", () => {
     });
 
     test("adds a sticker to a card", async () => {
-      await trello
-        .cards(TEST_CARD_ID)
-        .stickers()
-        .addSticker({
-          image: "taco-cool",
-          top: 0,
-          left: 0,
-          zIndex: 1,
-          rotate: 90,
-        });
+      await trello.cards(TEST_CARD_ID).stickers().addSticker({
+        image: "taco-cool",
+        top: 0,
+        left: 0,
+        zIndex: 1,
+        rotate: 90,
+      });
       const result = global.getLastFetchCall();
 
       expect(result.config.method).toBe("POST");
@@ -104,10 +95,7 @@ describe("within Stickers", () => {
     });
 
     test("gets multiple stickers", async () => {
-      await trello
-        .members("me")
-        .customStickers()
-        .getCustomStickers();
+      await trello.members("me").customStickers().getCustomStickers();
       const result = global.getLastFetchCall();
 
       expect(result.config.method).toBe("GET");
@@ -116,10 +104,7 @@ describe("within Stickers", () => {
 
     test("uploads a custom sticker", async () => {
       const testFile = new File(["test"], "test.txt");
-      await trello
-        .members("me")
-        .customStickers()
-        .uploadCustomSticker(testFile);
+      await trello.members("me").customStickers().uploadCustomSticker(testFile);
       const result = global.getLastFetchCall();
 
       expect(result.config.method).toBe("POST");

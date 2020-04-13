@@ -42,10 +42,7 @@ describe("the Card resource", () => {
   });
 
   test("gets multiple cards", async () => {
-    await trello
-      .boards(TEST_PARENT_ID)
-      .cards()
-      .getCards();
+    await trello.boards(TEST_PARENT_ID).cards().getCards();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -53,10 +50,7 @@ describe("the Card resource", () => {
   });
 
   test("gets filtered cards", async () => {
-    await trello
-      .boards(TEST_PARENT_ID)
-      .cards()
-      .getCardsFilteredBy("all");
+    await trello.boards(TEST_PARENT_ID).cards().getCardsFilteredBy("all");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -80,10 +74,7 @@ describe("the Card resource", () => {
   });
 
   test("gets filtered cards", async () => {
-    await trello
-      .boards(TEST_PARENT_ID)
-      .cards()
-      .getCardsFilteredBy("all");
+    await trello.boards(TEST_PARENT_ID).cards().getCardsFilteredBy("all");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -94,10 +85,7 @@ describe("the Card resource", () => {
     expect.assertions(1);
 
     try {
-      await trello
-        .lists()
-        .cards()
-        .addCard();
+      await trello.lists().cards().addCard();
     } catch (err) {
       expect(err.message).toMatch(/You must pass specify the "idList" param/gi);
     }
@@ -140,20 +128,14 @@ describe("the Card resource", () => {
     expect.assertions(1);
 
     try {
-      await trello
-        .cards(TEST_CARD_ID)
-        .labels()
-        .associateLabel();
+      await trello.cards(TEST_CARD_ID).labels().associateLabel();
     } catch (err) {
       expect(err.message).toMatch(/You must pass a label ID into the label/gi);
     }
   });
 
   test("associates a label with a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .labels(TEST_CHILD_ID)
-      .associateLabel();
+    await trello.cards(TEST_CARD_ID).labels(TEST_CHILD_ID).associateLabel();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -165,10 +147,7 @@ describe("the Card resource", () => {
     expect.assertions(1);
 
     try {
-      await trello
-        .cards(TEST_CARD_ID)
-        .members()
-        .associateMember();
+      await trello.cards(TEST_CARD_ID).members().associateMember();
     } catch (err) {
       expect(err.message).toMatch(
         /You must pass a member ID into the member/gi,
@@ -192,10 +171,7 @@ describe("the Card resource", () => {
   });
 
   test("associates a member with a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .members(TEST_CHILD_ID)
-      .associateMember();
+    await trello.cards(TEST_CARD_ID).members(TEST_CHILD_ID).associateMember();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -204,10 +180,7 @@ describe("the Card resource", () => {
   });
 
   test("updates a member's vote on a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .membersVoted(TEST_CHILD_ID)
-      .voteOnCard();
+    await trello.cards(TEST_CARD_ID).membersVoted(TEST_CHILD_ID).voteOnCard();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -385,10 +358,7 @@ describe("the Card resource", () => {
   });
 
   test("dissociates a member from a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .members(TEST_CHILD_ID)
-      .dissociateMember();
+    await trello.cards(TEST_CARD_ID).members(TEST_CHILD_ID).dissociateMember();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");
@@ -398,10 +368,7 @@ describe("the Card resource", () => {
   });
 
   test("dissociates a label from a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .labels(TEST_CHILD_ID)
-      .dissociateLabel();
+    await trello.cards(TEST_CARD_ID).labels(TEST_CHILD_ID).dissociateLabel();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");
@@ -411,10 +378,7 @@ describe("the Card resource", () => {
   });
 
   test("gets the actions for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .actions()
-      .getActions();
+    await trello.cards(TEST_CARD_ID).actions().getActions();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -422,10 +386,7 @@ describe("the Card resource", () => {
   });
 
   test("gets a specific attachment for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .attachments(TEST_CHILD_ID)
-      .getAttachment();
+    await trello.cards(TEST_CARD_ID).attachments(TEST_CHILD_ID).getAttachment();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -435,10 +396,7 @@ describe("the Card resource", () => {
   });
 
   test("gets the attachments for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .attachments()
-      .getAttachments();
+    await trello.cards(TEST_CARD_ID).attachments().getAttachments();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -446,10 +404,7 @@ describe("the Card resource", () => {
   });
 
   test("gets the board for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .board()
-      .getBoard();
+    await trello.cards(TEST_CARD_ID).board().getBoard();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -457,10 +412,7 @@ describe("the Card resource", () => {
   });
 
   test("gets the check item for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .checkItem(TEST_CHILD_ID)
-      .getCheckItem();
+    await trello.cards(TEST_CARD_ID).checkItem(TEST_CHILD_ID).getCheckItem();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -470,10 +422,7 @@ describe("the Card resource", () => {
   });
 
   test("gets the check item states for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .checkItemStates()
-      .getCheckItemStates();
+    await trello.cards(TEST_CARD_ID).checkItemStates().getCheckItemStates();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -483,10 +432,7 @@ describe("the Card resource", () => {
   });
 
   test("gets a specific checklist for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .checklists(TEST_CHILD_ID)
-      .getChecklist();
+    await trello.cards(TEST_CARD_ID).checklists(TEST_CHILD_ID).getChecklist();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -496,10 +442,7 @@ describe("the Card resource", () => {
   });
 
   test("gets the checklists for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .checklists()
-      .getChecklists();
+    await trello.cards(TEST_CARD_ID).checklists().getChecklists();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -507,10 +450,7 @@ describe("the Card resource", () => {
   });
 
   test("gets a specific comment for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .comments(TEST_CHILD_ID)
-      .getComment();
+    await trello.cards(TEST_CARD_ID).comments(TEST_CHILD_ID).getComment();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -520,10 +460,7 @@ describe("the Card resource", () => {
   });
 
   test("gets the comments for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .comments()
-      .getComments();
+    await trello.cards(TEST_CARD_ID).comments().getComments();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -544,10 +481,7 @@ describe("the Card resource", () => {
   });
 
   test("gets the custom field items for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .customFieldItems()
-      .getCustomFieldItems();
+    await trello.cards(TEST_CARD_ID).customFieldItems().getCustomFieldItems();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -557,10 +491,7 @@ describe("the Card resource", () => {
   });
 
   test("gets the labels for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .labels()
-      .getLabels();
+    await trello.cards(TEST_CARD_ID).labels().getLabels();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -568,10 +499,7 @@ describe("the Card resource", () => {
   });
 
   test("gets the list for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .list()
-      .getList();
+    await trello.cards(TEST_CARD_ID).list().getList();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -579,10 +507,7 @@ describe("the Card resource", () => {
   });
 
   test("gets the members for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .members()
-      .getMembers();
+    await trello.cards(TEST_CARD_ID).members().getMembers();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -590,10 +515,7 @@ describe("the Card resource", () => {
   });
 
   test("gets the members voted for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .membersVoted()
-      .getMembers();
+    await trello.cards(TEST_CARD_ID).membersVoted().getMembers();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -601,10 +523,7 @@ describe("the Card resource", () => {
   });
 
   test("gets a specific sticker for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .stickers(TEST_CHILD_ID)
-      .getSticker();
+    await trello.cards(TEST_CARD_ID).stickers(TEST_CHILD_ID).getSticker();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -614,10 +533,7 @@ describe("the Card resource", () => {
   });
 
   test("gets the stickers for a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .stickers()
-      .getStickers();
+    await trello.cards(TEST_CARD_ID).stickers().getStickers();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");

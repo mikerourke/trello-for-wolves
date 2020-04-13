@@ -47,10 +47,7 @@ describe("the Plugin resource", () => {
       description: "Test Description",
       locale: "en-us",
     };
-    await trello
-      .plugins(TEST_PLUGIN_ID)
-      .listings()
-      .addListing(TEST_LISTING);
+    await trello.plugins(TEST_PLUGIN_ID).listings().addListing(TEST_LISTING);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");

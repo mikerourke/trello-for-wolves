@@ -15,10 +15,7 @@ describe("the Comment resource", () => {
   });
 
   test("gets a single comment", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .comments(TEST_COMMENT_ID)
-      .getComment();
+    await trello.cards(TEST_CARD_ID).comments(TEST_COMMENT_ID).getComment();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -28,10 +25,7 @@ describe("the Comment resource", () => {
   });
 
   test("gets multiple comments", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .comments()
-      .getComments();
+    await trello.cards(TEST_CARD_ID).comments().getComments();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -40,10 +34,7 @@ describe("the Comment resource", () => {
   });
 
   test("adds a new comment", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .comments()
-      .addComment("This is a comment");
+    await trello.cards(TEST_CARD_ID).comments().addComment("This is a comment");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -86,10 +77,7 @@ describe("the Comment resource", () => {
   });
 
   test("deletes a comment", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .comments(TEST_COMMENT_ID)
-      .deleteComment();
+    await trello.cards(TEST_CARD_ID).comments(TEST_COMMENT_ID).deleteComment();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("DELETE");

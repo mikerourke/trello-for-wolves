@@ -27,10 +27,7 @@ describe("the Token resource", () => {
   });
 
   test("gets multiple tokens", async () => {
-    await trello
-      .members("me")
-      .tokens()
-      .getTokens();
+    await trello.members("me").tokens().getTokens();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -54,10 +51,7 @@ describe("the Token resource", () => {
   });
 
   test("gets the member for a token", async () => {
-    await trello
-      .tokens(TEST_TOKEN_ID)
-      .member()
-      .getMember();
+    await trello.tokens(TEST_TOKEN_ID).member().getMember();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -65,10 +59,7 @@ describe("the Token resource", () => {
   });
 
   test("gets the webhooks for a token", async () => {
-    await trello
-      .tokens(TEST_TOKEN_ID)
-      .webhooks()
-      .getWebhooks();
+    await trello.tokens(TEST_TOKEN_ID).webhooks().getWebhooks();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -76,13 +67,10 @@ describe("the Token resource", () => {
   });
 
   test("adds a new webhook to a token", async () => {
-    await trello
-      .tokens(TEST_TOKEN_ID)
-      .webhooks()
-      .addWebhook({
-        callbackURL: "/test",
-        idModel: "abc",
-      });
+    await trello.tokens(TEST_TOKEN_ID).webhooks().addWebhook({
+      callbackURL: "/test",
+      idModel: "abc",
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -92,13 +80,10 @@ describe("the Token resource", () => {
   });
 
   test("updates a webhook for a token", async () => {
-    await trello
-      .tokens(TEST_TOKEN_ID)
-      .webhooks(TEST_WEBHOOK_ID)
-      .updateWebhook({
-        callbackURL: "/test",
-        idModel: "abc",
-      });
+    await trello.tokens(TEST_TOKEN_ID).webhooks(TEST_WEBHOOK_ID).updateWebhook({
+      callbackURL: "/test",
+      idModel: "abc",
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");

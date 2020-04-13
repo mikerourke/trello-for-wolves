@@ -50,17 +50,14 @@ describe("the Action resource", () => {
   });
 
   test("gets multiple actions", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .actions()
-      .getActions({
-        display: false,
-        entities: false,
-        fields: "all",
-        format: "count",
-        memberFields: "all",
-        memberCreatorFields: "all",
-      });
+    await trello.boards(TEST_BOARD_ID).actions().getActions({
+      display: false,
+      entities: false,
+      fields: "all",
+      format: "count",
+      memberFields: "all",
+      memberCreatorFields: "all",
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -136,10 +133,7 @@ describe("the Action resource", () => {
   });
 
   test("gets the board for an action", async () => {
-    await trello
-      .actions(TEST_ACTION_ID)
-      .board()
-      .getBoard();
+    await trello.actions(TEST_ACTION_ID).board().getBoard();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -147,10 +141,7 @@ describe("the Action resource", () => {
   });
 
   test("gets the card for an action", async () => {
-    await trello
-      .actions(TEST_ACTION_ID)
-      .card()
-      .getCard();
+    await trello.actions(TEST_ACTION_ID).card().getCard();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -158,10 +149,7 @@ describe("the Action resource", () => {
   });
 
   test("gets the list for an action", async () => {
-    await trello
-      .actions(TEST_ACTION_ID)
-      .list()
-      .getList();
+    await trello.actions(TEST_ACTION_ID).list().getList();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -169,10 +157,7 @@ describe("the Action resource", () => {
   });
 
   test("gets the member for an action", async () => {
-    await trello
-      .actions(TEST_ACTION_ID)
-      .member()
-      .getMember();
+    await trello.actions(TEST_ACTION_ID).member().getMember();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -180,10 +165,7 @@ describe("the Action resource", () => {
   });
 
   test("gets the member creator for an action", async () => {
-    await trello
-      .actions(TEST_ACTION_ID)
-      .memberCreator()
-      .getMember();
+    await trello.actions(TEST_ACTION_ID).memberCreator().getMember();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -193,10 +175,7 @@ describe("the Action resource", () => {
   });
 
   test("gets the organization for an action", async () => {
-    await trello
-      .actions(TEST_ACTION_ID)
-      .organization()
-      .getOrganization();
+    await trello.actions(TEST_ACTION_ID).organization().getOrganization();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");

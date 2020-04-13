@@ -15,10 +15,7 @@ describe("the BoardMyPrefs resource", () => {
   });
 
   test("gets the myPrefs value for a board", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .myPrefs()
-      .getMyPrefs();
+    await trello.boards(TEST_BOARD_ID).myPrefs().getMyPrefs();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -26,10 +23,7 @@ describe("the BoardMyPrefs resource", () => {
   });
 
   test("updates the email position myPref for a board", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .myPrefs()
-      .updateEmailPosition("bottom");
+    await trello.boards(TEST_BOARD_ID).myPrefs().updateEmailPosition("bottom");
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -40,10 +34,7 @@ describe("the BoardMyPrefs resource", () => {
   });
 
   test("moves the board to the specified email list", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .myPrefs()
-      .moveToEmailList(TEST_CHILD_ID);
+    await trello.boards(TEST_BOARD_ID).myPrefs().moveToEmailList(TEST_CHILD_ID);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -54,10 +45,7 @@ describe("the BoardMyPrefs resource", () => {
   });
 
   test("updates the show list guide myPref", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .myPrefs()
-      .updateShowListGuide(true);
+    await trello.boards(TEST_BOARD_ID).myPrefs().updateShowListGuide(true);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -68,10 +56,7 @@ describe("the BoardMyPrefs resource", () => {
   });
 
   test("updates the show sidebar myPref", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .myPrefs()
-      .updateShowSidebar(true);
+    await trello.boards(TEST_BOARD_ID).myPrefs().updateShowSidebar(true);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");
@@ -110,10 +95,7 @@ describe("the BoardMyPrefs resource", () => {
   });
 
   test("updates the show sidebar members myPref", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .myPrefs()
-      .updateShowSidebarMembers(true);
+    await trello.boards(TEST_BOARD_ID).myPrefs().updateShowSidebarMembers(true);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("PUT");

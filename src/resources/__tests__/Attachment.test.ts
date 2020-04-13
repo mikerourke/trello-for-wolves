@@ -28,12 +28,9 @@ describe("the Attachment resource", () => {
   });
 
   test("gets multiple attachments", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .attachments()
-      .getAttachments({
-        filter: "all",
-      });
+    await trello.cards(TEST_CARD_ID).attachments().getAttachments({
+      filter: "all",
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -43,13 +40,10 @@ describe("the Attachment resource", () => {
 
   test("uploads an attachment", async () => {
     const testFile = new File(["test"], "test.txt");
-    await trello
-      .cards(TEST_CARD_ID)
-      .attachments()
-      .uploadAttachment({
-        name: "TEST",
-        file: testFile,
-      });
+    await trello.cards(TEST_CARD_ID).attachments().uploadAttachment({
+      name: "TEST",
+      file: testFile,
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");

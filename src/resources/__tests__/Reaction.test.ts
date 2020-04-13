@@ -36,10 +36,7 @@ describe("the Reaction resource", () => {
   });
 
   test("gets multiple reactions", async () => {
-    await trello
-      .actions(TEST_ACTION_ID)
-      .reactions()
-      .getReactions();
+    await trello.actions(TEST_ACTION_ID).reactions().getReactions();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -51,10 +48,7 @@ describe("the Reaction resource", () => {
       shortName: "Test",
       skinVariation: "1F3FF",
     };
-    await trello
-      .actions(TEST_ACTION_ID)
-      .reactions()
-      .addReaction(TEST_REACTION);
+    await trello.actions(TEST_ACTION_ID).reactions().addReaction(TEST_REACTION);
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");

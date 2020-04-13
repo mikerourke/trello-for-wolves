@@ -34,10 +34,7 @@ describe("the Checklist resource", () => {
   });
 
   test("gets multiple checklists", async () => {
-    await trello
-      .boards(TEST_BOARD_ID)
-      .checklists()
-      .getChecklists();
+    await trello.boards(TEST_BOARD_ID).checklists().getChecklists();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -78,12 +75,9 @@ describe("the Checklist resource", () => {
   });
 
   test("adds a new checklist from a card", async () => {
-    await trello
-      .cards(TEST_CARD_ID)
-      .checklists()
-      .addChecklist({
-        name: "Test",
-      });
+    await trello.cards(TEST_CARD_ID).checklists().addChecklist({
+      name: "Test",
+    });
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("POST");
@@ -132,10 +126,7 @@ describe("the Checklist resource", () => {
   });
 
   test("gets the board for a checklist", async () => {
-    await trello
-      .checklists(TEST_CHECKLIST_ID)
-      .board()
-      .getBoard();
+    await trello.checklists(TEST_CHECKLIST_ID).board().getBoard();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -145,10 +136,7 @@ describe("the Checklist resource", () => {
   });
 
   test("gets the cards for a checklist", async () => {
-    await trello
-      .checklists(TEST_CHECKLIST_ID)
-      .cards()
-      .getCard();
+    await trello.checklists(TEST_CHECKLIST_ID).cards().getCard();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -171,10 +159,7 @@ describe("the Checklist resource", () => {
   });
 
   test("gets the check items for a checklist", async () => {
-    await trello
-      .checklists(TEST_CHECKLIST_ID)
-      .checkItems()
-      .getCheckItems();
+    await trello.checklists(TEST_CHECKLIST_ID).checkItems().getCheckItems();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");

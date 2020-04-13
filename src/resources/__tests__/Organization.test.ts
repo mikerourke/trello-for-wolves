@@ -26,10 +26,7 @@ describe("the Organization resource", () => {
   });
 
   test("gets multiple organizations", async () => {
-    await trello
-      .members("me")
-      .organizations()
-      .getOrganizations();
+    await trello.members("me").organizations().getOrganizations();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -334,10 +331,7 @@ describe("the Organization resource", () => {
   });
 
   test("gets the actions for an organization", async () => {
-    await trello
-      .organizations(TEST_ORGANIZATION_ID)
-      .actions()
-      .getActions();
+    await trello.organizations(TEST_ORGANIZATION_ID).actions().getActions();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -347,10 +341,7 @@ describe("the Organization resource", () => {
   });
 
   test("gets the boards for an organization", async () => {
-    await trello
-      .organizations(TEST_ORGANIZATION_ID)
-      .boards()
-      .getBoards();
+    await trello.organizations(TEST_ORGANIZATION_ID).boards().getBoards();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
@@ -373,10 +364,7 @@ describe("the Organization resource", () => {
   });
 
   test("gets the members for an organization", async () => {
-    await trello
-      .organizations(TEST_ORGANIZATION_ID)
-      .members()
-      .getMembers();
+    await trello.organizations(TEST_ORGANIZATION_ID).members().getMembers();
     const result = global.getLastFetchCall();
 
     expect(result.config.method).toBe("GET");
