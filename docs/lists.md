@@ -22,7 +22,7 @@ const response = await trello
   .getList({ fields: ["name", "closed", "idBoard", "pos"] });
 ```
 
-## GET /checklists/{id}/{field}
+## GET /lists/{id}/{field}
 
 Get a specific property of a list
 
