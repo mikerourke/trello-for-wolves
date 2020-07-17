@@ -37,7 +37,7 @@ export class Attachment extends BaseResource {
     return this.apiPost("/", params);
   }
 
-  public deleteAttachment(): TypedFetch<{}> {
+  public deleteAttachment(): TypedFetch<Record<string, unknown>> {
     return this.apiDelete("/");
   }
 }

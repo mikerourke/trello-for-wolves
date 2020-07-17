@@ -1435,7 +1435,7 @@ export interface OrganizationRecord {
   id: string;
   billableMemberCount: string;
   desc: string;
-  descData: object;
+  descData: Record<string, unknown>;
   displayName: string;
   idBoards: string[];
   invitations: unknown[];

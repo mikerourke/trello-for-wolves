@@ -11,7 +11,8 @@ export class BoardStar extends BaseResource {
     return this.apiGet("/");
   }
 
-  public getBoardStars<TPayload extends object = {}>(params?: {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  public getBoardStars<TPayload extends Record<string, unknown> = {}>(params?: {
     filter: BoardStarsFilter;
   }): TypedFetch<BoardStarRecord[]> {
     return this.apiGet("/", params);
