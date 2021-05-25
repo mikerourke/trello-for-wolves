@@ -1,4 +1,3 @@
-import { BaseResource } from "./BaseResource";
 import {
   AllOrFieldOrListOf,
   AnyBoardBackgroundRecord,
@@ -9,6 +8,8 @@ import {
   FileUpload,
   TypedFetch,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 /**
  * This class handles both the "boardBackground" and "customBoardBackground"

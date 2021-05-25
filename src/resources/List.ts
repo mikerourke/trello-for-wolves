@@ -1,8 +1,5 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
-import { BaseResource } from "./BaseResource";
-import { Action } from "./Action";
-import { Board } from "./Board";
-import { Card } from "./Card";
+
 import {
   AllOrFieldOrListOf,
   LabelRecord,
@@ -16,6 +13,11 @@ import {
   TypedFetch,
   ValueResponse,
 } from "../typeDefs";
+
+import { Action } from "./Action";
+import { BaseResource } from "./BaseResource";
+import { Board } from "./Board";
+import { Card } from "./Card";
 
 export class List extends BaseResource {
   public getList(

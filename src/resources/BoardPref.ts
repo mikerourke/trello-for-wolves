@@ -1,4 +1,3 @@
-import { BaseResource } from "./BaseResource";
 import {
   BoardPermissionLevel,
   BoardRecord,
@@ -7,6 +6,8 @@ import {
   Invitation,
   TypedFetch,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 export class BoardPref extends BaseResource {
   public updateBackground(value: string): TypedFetch<BoardRecord> {

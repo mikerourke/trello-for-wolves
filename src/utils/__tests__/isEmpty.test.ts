@@ -1,10 +1,11 @@
 import cases from "jest-in-case";
+
 import { isEmpty } from "../isEmpty";
 
 describe("the isEmpty method", () => {
   cases(
     "returns true when the value arg meets requirements",
-    options => {
+    (options) => {
       const result = isEmpty(options.value);
 
       expect(result).toBe(true);
@@ -31,7 +32,7 @@ describe("the isEmpty method", () => {
 
   cases(
     "returns false when the value arg meets requirements",
-    options => {
+    (options) => {
       const result = isEmpty(options.value);
 
       expect(result).toBe(false);

@@ -1,4 +1,5 @@
 import snakeCase from "lodash.snakecase";
+
 import { AnyParams } from "../typeDefs";
 
 type ValidQueryParams = AnyParams & { separator: string };

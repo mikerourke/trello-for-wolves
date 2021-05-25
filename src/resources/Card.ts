@@ -1,18 +1,4 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
-import { isEmpty } from "../utils/isEmpty";
-import { BaseResource } from "./BaseResource";
-import { Action } from "./Action";
-import { Attachment } from "./Attachment";
-import { Board } from "./Board";
-import { CheckItem } from "./CheckItem";
-import { Checklist } from "./Checklist";
-import { Comment } from "./Comment";
-import { CustomField } from "./CustomField";
-import { CustomFieldOption } from "./CustomFieldOption";
-import { Label } from "./Label";
-import { List } from "./List";
-import { Member } from "./Member";
-import { Sticker } from "./Stickers";
 import {
   AllOrFieldOrListOf,
   AttachmentField,
@@ -37,6 +23,21 @@ import {
   TypedFetch,
   ValueResponse,
 } from "../typeDefs";
+import { isEmpty } from "../utils/isEmpty";
+
+import { Action } from "./Action";
+import { Attachment } from "./Attachment";
+import { BaseResource } from "./BaseResource";
+import { Board } from "./Board";
+import { CheckItem } from "./CheckItem";
+import { Checklist } from "./Checklist";
+import { Comment } from "./Comment";
+import { CustomField } from "./CustomField";
+import { CustomFieldOption } from "./CustomFieldOption";
+import { Label } from "./Label";
+import { List } from "./List";
+import { Member } from "./Member";
+import { Sticker } from "./Stickers";
 
 export class Card extends BaseResource {
   public getCard(

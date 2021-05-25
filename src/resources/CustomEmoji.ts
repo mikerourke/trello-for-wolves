@@ -1,4 +1,3 @@
-import { BaseResource } from "./BaseResource";
 import {
   AllOrFieldOrListOf,
   AllOrNone,
@@ -7,6 +6,8 @@ import {
   FileUpload,
   TypedFetch,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 export class CustomEmoji extends BaseResource {
   public getCustomEmoji(params?: {

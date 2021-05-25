@@ -1,18 +1,5 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
-import { BaseResource } from "./BaseResource";
-import { Action } from "./Action";
-import { BoardMyPrefs } from "./BoardMyPrefs";
-import { BoardPref } from "./BoardPref";
-import { BoardStar } from "./BoardStar";
-import { Card } from "./Card";
-import { Checklist } from "./Checklist";
-import { CustomField } from "./CustomField";
-import { Label } from "./Label";
-import { List } from "./List";
-import { Member } from "./Member";
-import { Membership } from "./Membership";
-import { Organization } from "./Organization";
-import { Plugin } from "./Plugin";
+
 import {
   AllOrFieldOrListOf,
   BoardActionType,
@@ -43,6 +30,21 @@ import {
   TypedFetch,
   ValueResponse,
 } from "../typeDefs";
+
+import { Action } from "./Action";
+import { BaseResource } from "./BaseResource";
+import { BoardMyPrefs } from "./BoardMyPrefs";
+import { BoardPref } from "./BoardPref";
+import { BoardStar } from "./BoardStar";
+import { Card } from "./Card";
+import { Checklist } from "./Checklist";
+import { CustomField } from "./CustomField";
+import { Label } from "./Label";
+import { List } from "./List";
+import { Member } from "./Member";
+import { Membership } from "./Membership";
+import { Organization } from "./Organization";
+import { Plugin } from "./Plugin";
 
 /**
  * Boards are fundamental to Trello. A board may belong to 0 or 1 teams and can

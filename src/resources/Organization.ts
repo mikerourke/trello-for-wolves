@@ -1,10 +1,5 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
-import { BaseResource } from "./BaseResource";
-import { Action } from "./Action";
-import { Board } from "./Board";
-import { Member } from "./Member";
-import { Membership } from "./Membership";
-import { OrganizationPref } from "./OrganizationPref";
+
 import {
   AllOrFieldOrListOf,
   BoardVisibilityFilter,
@@ -22,6 +17,13 @@ import {
   TypedFetch,
   ValueResponse,
 } from "../typeDefs";
+
+import { Action } from "./Action";
+import { BaseResource } from "./BaseResource";
+import { Board } from "./Board";
+import { Member } from "./Member";
+import { Membership } from "./Membership";
+import { OrganizationPref } from "./OrganizationPref";
 
 /**
  * Organizations, or as they are referred to in Trello, "Teams", represent

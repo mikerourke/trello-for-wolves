@@ -1,8 +1,5 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
-import { BaseResource } from "./BaseResource";
-import { Board } from "./Board";
-import { Card } from "./Card";
-import { CheckItem } from "./CheckItem";
+
 import {
   AllOrFieldOrListOf,
   AllOrNone,
@@ -18,6 +15,11 @@ import {
   TypedFetch,
   ValueResponse,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
+import { Board } from "./Board";
+import { Card } from "./Card";
+import { CheckItem } from "./CheckItem";
 
 type GetChecklistsParams =
   | {

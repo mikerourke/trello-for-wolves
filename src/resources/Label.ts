@@ -1,6 +1,5 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
-import { BaseResource } from "./BaseResource";
-import { Board } from "./Board";
+
 import {
   AllOrFieldOrListOf,
   ColorName,
@@ -9,6 +8,9 @@ import {
   NestedActionsParams,
   TypedFetch,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
+import { Board } from "./Board";
 
 export class Label extends BaseResource {
   public getLabel(

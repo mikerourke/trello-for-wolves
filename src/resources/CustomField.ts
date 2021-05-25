@@ -1,6 +1,5 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
-import { BaseResource } from "./BaseResource";
-import { CustomFieldOption } from "./CustomFieldOption";
+
 import {
   AnyParams,
   CustomFieldOptionRecord,
@@ -10,6 +9,9 @@ import {
   PositionOrFloat,
   TypedFetch,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
+import { CustomFieldOption } from "./CustomFieldOption";
 
 /**
  * Custom Fields are extra bits of structured data attached to cards when our
@@ -55,10 +57,10 @@ export class CustomField extends BaseResource {
       [P in keyof T]?: T[P];
     };
     const body = { ...params } as Partial<Body<CustomFieldRecord>> & {
-      displayCardFront: boolean;
+      displayCardFront?: boolean;
     };
 
-    if (body.displayCardFront) {
+    if (typeof body.displayCardFront !== "undefined") {
       body["display_cardFront"] = body.displayCardFront;
       delete body.displayCardFront;
     }

@@ -1,6 +1,8 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
-import { BaseResource } from "./BaseResource";
+
 import { CustomFieldOptionRecord, TypedFetch } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 export class CustomFieldOption extends BaseResource {
   public getOption(): TypedFetch<CustomFieldOptionRecord> {
@@ -64,6 +66,6 @@ export class CustomFieldOption extends BaseResource {
     const [[key, value]] = Object.entries(validOption.value);
     validOption.value[key] = value.toString();
 
-    return (validOption as unknown) as Record<string, string>;
+    return validOption as unknown as Record<string, string>;
   }
 }

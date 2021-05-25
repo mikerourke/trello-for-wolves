@@ -1,5 +1,6 @@
-import { stringifyQueryParams } from "./stringifyQueryParams";
 import { AnyParams, TrelloConfig } from "../typeDefs";
+
+import { stringifyQueryParams } from "./stringifyQueryParams";
 
 /**
  * Constructs the endpoint for performing the API request.

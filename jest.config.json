@@ -19,7 +19,7 @@
   "preset": "ts-jest",
   "roots": ["<rootDir>/src/"],
   "setupFilesAfterEnv": ["<rootDir>/src/setupJest.ts"],
-  "testEnvironment": "node",
+  "testEnvironment": "jsdom",
   "testMatch": [
     "<rootDir>/src/**/__tests__/**/*.ts",
     "<rootDir>/src/**/?(*.)(spec|test).ts"

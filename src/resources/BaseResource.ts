@@ -1,5 +1,5 @@
-import { fetchFromApi, HttpMethod } from "../utils/fetchFromApi";
 import { AnyParams, TrelloConfig, TypedFetch } from "../typeDefs";
+import { fetchFromApi, HttpMethod } from "../utils/fetchFromApi";
 
 interface BaseResourceOptions {
   identifier?: string;

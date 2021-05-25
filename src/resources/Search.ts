@@ -1,4 +1,3 @@
-import { BaseResource } from "./BaseResource";
 import {
   AllOrFieldOrListOf,
   AttachmentFilter,
@@ -9,6 +8,8 @@ import {
   OrganizationField,
   TypedFetch,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 /**
  * The Search API allows you to perform the same search that is available within

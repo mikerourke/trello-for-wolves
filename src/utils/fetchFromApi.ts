@@ -1,7 +1,9 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
+
+import { AnyParams, TrelloConfig, TypedResponse } from "../typeDefs";
+
 import { buildApiUrl } from "./buildApiUrl";
 import { isEmpty } from "./isEmpty";
-import { AnyParams, TrelloConfig, TypedResponse } from "../typeDefs";
 
 export type HttpMethod = "GET" | "PUT" | "POST" | "DELETE";
 
@@ -158,5 +160,5 @@ async function fetchWithRetries<T>(
  * Pauses execution for the specified duration (in milliseconds).
  */
 function pause(duration: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, duration));
+  return new Promise((resolve) => setTimeout(resolve, duration));
 }

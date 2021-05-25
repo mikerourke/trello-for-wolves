@@ -1,5 +1,6 @@
-import { BaseResource } from "./BaseResource";
 import { BoardMyPrefsRecord, EmailPosition, TypedFetch } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 export class BoardMyPrefs extends BaseResource {
   public getMyPrefs(): TypedFetch<BoardMyPrefsRecord> {
