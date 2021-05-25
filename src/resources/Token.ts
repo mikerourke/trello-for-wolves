@@ -1,6 +1,3 @@
-import { BaseResource } from "./BaseResource";
-import { Member } from "./Member";
-import { Webhook } from "./Webhook";
 import {
   AllOrFieldOrListOf,
   AllOrNone,
@@ -10,6 +7,10 @@ import {
   TypedFetch,
   ValueResponse,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
+import { Member } from "./Member";
+import { Webhook } from "./Webhook";
 
 export class Token extends BaseResource {
   public getToken(params?: {

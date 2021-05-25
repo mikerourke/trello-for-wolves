@@ -114,8 +114,8 @@ trello
     file: attachFile,
     name: "bubblegum.jpg",
   })
-  .then(response => response.json())
-  .then(result => {
+  .then((response) => response.json())
+  .then((result) => {
     console.log(result); // <- Hooray!  Attachment details!
   });
 ```

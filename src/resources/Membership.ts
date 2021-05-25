@@ -1,4 +1,3 @@
-import { BaseResource } from "./BaseResource";
 import {
   AllOrFieldOrListOf,
   AnyParams,
@@ -11,6 +10,8 @@ import {
   NestedMemberParams,
   TypedFetch,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 export class Membership extends BaseResource {
   public getMembership(

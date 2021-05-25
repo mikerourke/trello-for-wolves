@@ -1,9 +1,3 @@
-import { BaseResource } from "./BaseResource";
-import { Board } from "./Board";
-import { Card } from "./Card";
-import { List } from "./List";
-import { Member } from "./Member";
-import { Organization } from "./Organization";
 import {
   AllOrFieldOrListOf,
   DisplayRecord,
@@ -20,6 +14,13 @@ import {
   TypedFetch,
   ValueResponse,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
+import { Board } from "./Board";
+import { Card } from "./Card";
+import { List } from "./List";
+import { Member } from "./Member";
+import { Organization } from "./Organization";
 
 export class Notification extends BaseResource {
   public getNotification(

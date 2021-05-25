@@ -1,4 +1,3 @@
-import { BaseResource } from "./BaseResource";
 import {
   AllOrFieldOrListOf,
   CustomStickerRecord,
@@ -8,6 +7,8 @@ import {
   StickerRecord,
   TypedFetch,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 export class Sticker extends BaseResource {
   public getSticker(params?: {

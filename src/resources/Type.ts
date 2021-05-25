@@ -1,5 +1,6 @@
-import { BaseResource } from "./BaseResource";
 import { TypedFetch, TypeRecord } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 /**
  * Because Trello teams and members are not prefixed differently, we need a way to

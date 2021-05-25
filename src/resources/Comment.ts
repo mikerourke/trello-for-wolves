@@ -1,4 +1,3 @@
-import { BaseResource } from "./BaseResource";
 import {
   ActionField,
   AllOrFieldOrListOf,
@@ -10,6 +9,8 @@ import {
   NestedReactionsParams,
   TypedFetch,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 /**
  * Comments are Action records with a "type" of "commentCard". They are the

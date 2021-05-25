@@ -1,4 +1,3 @@
-import { BaseResource } from "./BaseResource";
 import {
   BoardStarRecord,
   BoardStarsFilter,
@@ -6,13 +5,15 @@ import {
   TypedFetch,
 } from "../typeDefs";
 
+import { BaseResource } from "./BaseResource";
+
 export class BoardStar extends BaseResource {
   public getBoardStar(): TypedFetch<BoardStarRecord> {
     return this.apiGet("/");
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-types
-  public getBoardStars<TPayload extends Record<string, unknown> = {}>(params?: {
+  public getBoardStars(params?: {
     filter: BoardStarsFilter;
   }): TypedFetch<BoardStarRecord[]> {
     return this.apiGet("/", params);

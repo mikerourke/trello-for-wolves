@@ -1,5 +1,6 @@
-import { BaseResource } from "./BaseResource";
 import { PositionOrFloat, SavedSearchRecord, TypedFetch } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 export class SavedSearch extends BaseResource {
   public getSavedSearch(): TypedFetch<SavedSearchRecord> {

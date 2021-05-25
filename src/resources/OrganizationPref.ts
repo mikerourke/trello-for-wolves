@@ -1,10 +1,11 @@
-import { BaseResource } from "./BaseResource";
 import {
   BoardVisibilityFilter,
   BoardVisibilityRestrictionLevel,
   PermissionLevel,
   TypedFetch,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 export class OrganizationPref extends BaseResource {
   public updateAssociatedDomain(value: string): TypedFetch<unknown> {

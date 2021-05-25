@@ -1,5 +1,6 @@
-import { BaseResource } from "./BaseResource";
 import { EmojiRecord, ReactionRecord, TypedFetch } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 export class Emoji extends BaseResource {
   public getEmoji(params?: {

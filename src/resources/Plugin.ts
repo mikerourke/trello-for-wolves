@@ -1,4 +1,3 @@
-import { BaseResource } from "./BaseResource";
 import {
   PluginCapability,
   PluginFilter,
@@ -8,6 +7,8 @@ import {
   ValueResponse,
   VendorPluginRecord,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 export class PluginListing extends BaseResource {
   public addListing(

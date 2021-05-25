@@ -1,5 +1,6 @@
-import { BaseResource } from "./BaseResource";
 import { TypedFetch } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 /**
  * The batch endpoint allows you to make multiple GET requests to the Trello
@@ -11,7 +12,7 @@ import { TypedFetch } from "../typeDefs";
  */
 export class Batch extends BaseResource {
   public makeRequests(urls: string[]): TypedFetch<unknown> {
-    const validUrls = urls.map(url => url.replace(/,/gi, "%2C"));
+    const validUrls = urls.map((url) => url.replace(/,/gi, "%2C"));
     const urlString = validUrls.join(",");
 
     return this.apiGet("/", { urls: urlString });

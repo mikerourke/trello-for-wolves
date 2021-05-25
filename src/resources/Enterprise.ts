@@ -1,6 +1,3 @@
-import { BaseResource } from "./BaseResource";
-import { Member } from "./Member";
-import { Organization } from "./Organization";
 import {
   AllOrFieldOrListOf,
   EnterpriseField,
@@ -14,6 +11,10 @@ import {
   SortOrder,
   TypedFetch,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
+import { Member } from "./Member";
+import { Organization } from "./Organization";
 
 export class Enterprise extends BaseResource {
   public getEnterprise(

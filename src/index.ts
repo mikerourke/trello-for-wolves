@@ -17,8 +17,8 @@ import { Search } from "./resources/Search";
 import { Token } from "./resources/Token";
 import { Type } from "./resources/Type";
 import { Webhook } from "./resources/Webhook";
-import { fetchFromApi } from "./utils/fetchFromApi";
 import { AnyParams, TrelloConfig, TypedFetch } from "./typeDefs";
+import { fetchFromApi } from "./utils/fetchFromApi";
 
 export { TrelloForWolvesError } from "./TrelloForWolvesError";
 export * from "./resources/Action";

@@ -1,18 +1,4 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
-import { isEmpty } from "../utils/isEmpty";
-import { BaseResource } from "./BaseResource";
-import { Action } from "./Action";
-import { Board } from "./Board";
-import { BoardBackground, CustomBoardBackground } from "./BoardBackgrounds";
-import { BoardStar } from "./BoardStar";
-import { Card } from "./Card";
-import { CustomEmoji } from "./CustomEmoji";
-import { Enterprise } from "./Enterprise";
-import { Notification } from "./Notification";
-import { Organization } from "./Organization";
-import { SavedSearch } from "./SavedSearch";
-import { CustomSticker } from "./Stickers";
-import { Token } from "./Token";
 import {
   AllOrFieldOrListOf,
   AllOrNone,
@@ -39,6 +25,21 @@ import {
   TypedFetch,
   ValueResponse,
 } from "../typeDefs";
+import { isEmpty } from "../utils/isEmpty";
+
+import { Action } from "./Action";
+import { BaseResource } from "./BaseResource";
+import { Board } from "./Board";
+import { BoardBackground, CustomBoardBackground } from "./BoardBackgrounds";
+import { BoardStar } from "./BoardStar";
+import { Card } from "./Card";
+import { CustomEmoji } from "./CustomEmoji";
+import { Enterprise } from "./Enterprise";
+import { Notification } from "./Notification";
+import { Organization } from "./Organization";
+import { SavedSearch } from "./SavedSearch";
+import { CustomSticker } from "./Stickers";
+import { Token } from "./Token";
 
 /**
  * Everyone with a Trello account is called a member.

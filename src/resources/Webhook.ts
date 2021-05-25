@@ -1,10 +1,11 @@
-import { BaseResource } from "./BaseResource";
 import {
   TypedFetch,
   ValueResponse,
   WebhookField,
   WebhookRecord,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 /**
  * Webhooks allow developers to receive updates regarding actions that have

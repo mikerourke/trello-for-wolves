@@ -1,4 +1,5 @@
 import cases from "jest-in-case";
+
 import {
   stringifyQueryParams,
   UNCHANGED_PARAM_NAMES,
@@ -25,7 +26,7 @@ describe("the stringifyQueryParams method", () => {
     );
     const result = stringifyQueryParams(unchangedQueryParams);
     const expected = UNCHANGED_PARAM_NAMES.map(
-      paramName => `${paramName}=TEST`,
+      (paramName) => `${paramName}=TEST`,
     ).join("&");
 
     expect(result).toBe(expected);
@@ -74,7 +75,7 @@ describe("the stringifyQueryParams method", () => {
 
   cases(
     "re-cases param names when conditions are met",
-    options => {
+    (options) => {
       const result = stringifyQueryParams(options.paramsByName);
 
       expect(result).toBe(options.expected);

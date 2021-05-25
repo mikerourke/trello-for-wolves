@@ -1,5 +1,5 @@
 import { TrelloForWolvesError } from "../TrelloForWolvesError";
-import { BaseResource } from "./BaseResource";
+
 import {
   AllOrFieldOrListOf,
   AllOrNone,
@@ -10,6 +10,8 @@ import {
   PositionOrFloat,
   TypedFetch,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 export class CheckItem extends BaseResource {
   public getCheckItem(params?: {

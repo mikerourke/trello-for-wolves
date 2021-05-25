@@ -1,10 +1,3 @@
-import { BaseResource } from "./BaseResource";
-import { Board } from "./Board";
-import { Card } from "./Card";
-import { List } from "./List";
-import { Member } from "./Member";
-import { Organization } from "./Organization";
-import { Reaction } from "./Reaction";
 import {
   ActionField,
   ActionRecord,
@@ -21,6 +14,14 @@ import {
   TypedFetch,
   ValueResponse,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
+import { Board } from "./Board";
+import { Card } from "./Card";
+import { List } from "./List";
+import { Member } from "./Member";
+import { Organization } from "./Organization";
+import { Reaction } from "./Reaction";
 
 /**
  * Actions are generated whenever an action occurs in Trello. For instance, when

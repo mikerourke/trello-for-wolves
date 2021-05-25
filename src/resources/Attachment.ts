@@ -1,4 +1,3 @@
-import { BaseResource } from "./BaseResource";
 import {
   AllOrFieldOrListOf,
   AttachmentField,
@@ -7,6 +6,8 @@ import {
   FileUpload,
   TypedFetch,
 } from "../typeDefs";
+
+import { BaseResource } from "./BaseResource";
 
 /**
  * Used to manage attachments on cards. Cards can have up to 100 attachments.
