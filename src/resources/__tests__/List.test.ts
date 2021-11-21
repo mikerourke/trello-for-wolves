@@ -58,7 +58,7 @@ describe("the List resource", () => {
       await trello.lists().addList({
         name: "Test",
       });
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/must specify the "idBoard"/);
     }
   });

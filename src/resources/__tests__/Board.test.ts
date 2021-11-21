@@ -88,7 +88,7 @@ describe("the Board resource", () => {
   test("throws an error if getting new billable guests from a non-organization resource", async () => {
     try {
       await trello.boards(TEST_BOARD_ID).getIfHasNewBillableGuests();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(
         /You can only call getIfHasNewBillableGuests/gi,
       );

@@ -42,7 +42,7 @@ describe("the CustomField resource", () => {
         pos: "top",
         type: "number",
       });
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/you can only call addCustomField/gi);
     }
   });
@@ -56,7 +56,7 @@ describe("the CustomField resource", () => {
         pos: "top",
         type: "number",
       });
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(
         /You must pass an ID into the board resource/gi,
       );
@@ -244,7 +244,7 @@ describe("the CustomField resource", () => {
             checked: true,
           },
         });
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/You can only call updateOption/gi);
     }
   });

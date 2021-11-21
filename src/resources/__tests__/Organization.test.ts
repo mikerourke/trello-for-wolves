@@ -102,7 +102,7 @@ describe("the Organization resource", () => {
       await trello
         .organizations(TEST_ORGANIZATION_ID)
         .getIfTransferrableToEnterprise();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/from an enterprise resource/gi);
     }
   });
@@ -243,7 +243,7 @@ describe("the Organization resource", () => {
 
     try {
       await trello.organizations().transferToEnterprise();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/from an enterprise resource/gi);
     }
   });
@@ -256,7 +256,7 @@ describe("the Organization resource", () => {
         .enterprises(TEST_PARENT_ID)
         .organizations()
         .transferToEnterprise();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/you must pass an organization ID/gi);
     }
   });
@@ -312,7 +312,7 @@ describe("the Organization resource", () => {
 
     try {
       await trello.organizations().removeFromEnterprise();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/from an enterprise resource/gi);
     }
   });
