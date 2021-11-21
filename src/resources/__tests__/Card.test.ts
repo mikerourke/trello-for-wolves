@@ -86,7 +86,7 @@ describe("the Card resource", () => {
 
     try {
       await trello.lists().cards().addCard();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/You must pass specify the "idList" param/gi);
     }
   });
@@ -129,7 +129,7 @@ describe("the Card resource", () => {
 
     try {
       await trello.cards(TEST_CARD_ID).labels().associateLabel();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/You must pass a label ID into the label/gi);
     }
   });
@@ -148,7 +148,7 @@ describe("the Card resource", () => {
 
     try {
       await trello.cards(TEST_CARD_ID).members().associateMember();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(
         /You must pass a member ID into the member/gi,
       );
@@ -163,7 +163,7 @@ describe("the Card resource", () => {
         .cards(TEST_CARD_ID)
         .members(TEST_CHILD_ID)
         .associateMember({ email: "test@stuff.com" });
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(
         /No params are allowed when calling associateMember/gi,
       );

@@ -29,7 +29,7 @@ describe("the Member resource", () => {
         .organizations(TEST_PARENT_ID)
         .members()
         .getMembers({ filter: "none" });
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/Only the "fields" param is allowed/gi);
     }
   });
@@ -81,7 +81,7 @@ describe("the Member resource", () => {
         type: "admin",
         fullName: "Suzy Test",
       });
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/You can only call associateMember/gi);
     }
   });
@@ -94,7 +94,7 @@ describe("the Member resource", () => {
         type: "admin",
         fullName: "Suzy Test",
       });
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/You must specify the "email" param/gi);
     }
   });
@@ -150,7 +150,7 @@ describe("the Member resource", () => {
         .boards(TEST_PARENT_ID)
         .members(TEST_MEMBER_ID)
         .associateMembers(["test"]);
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/You can only call associateMembers/gi);
     }
   });
@@ -228,7 +228,7 @@ describe("the Member resource", () => {
 
     try {
       await trello.members(TEST_MEMBER_ID).makeAdminForEnterprise();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/You can only call makeAdminForEnterprise/gi);
     }
   });
@@ -241,7 +241,7 @@ describe("the Member resource", () => {
         .boards(TEST_PARENT_ID)
         .members(TEST_MEMBER_ID)
         .updateDeactivatedStatus(true);
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(
         /You can only call updateDeactivatedStatus/gi,
       );
@@ -270,7 +270,7 @@ describe("the Member resource", () => {
         .enterprises(TEST_PARENT_ID)
         .members(TEST_MEMBER_ID)
         .updateMemberType("admin");
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/You can only call updateMemberType/gi);
     }
   });
@@ -338,7 +338,7 @@ describe("the Member resource", () => {
 
     try {
       await trello.members(TEST_MEMBER_ID).dissociateMember();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/You can only call dissociateMember/gi);
     }
   });
@@ -348,7 +348,7 @@ describe("the Member resource", () => {
 
     try {
       await trello.cards(TEST_PARENT_ID).members().dissociateMember();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(
         /You must pass a member ID into the members/gi,
       );
@@ -399,7 +399,7 @@ describe("the Member resource", () => {
 
     try {
       await trello.members(TEST_MEMBER_ID).removeAdminForEnterprise();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(
         /You can only call removeAdminForEnterprise/gi,
       );

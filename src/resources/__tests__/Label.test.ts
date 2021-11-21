@@ -38,7 +38,7 @@ describe("the Label resource", () => {
         name: "Test",
         color: "black",
       });
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/must specify the "idBoard"/);
     }
   });
@@ -77,7 +77,7 @@ describe("the Label resource", () => {
 
     try {
       await trello.labels().associateLabel();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/You can only call associateLabel/gi);
     }
   });
@@ -126,7 +126,7 @@ describe("the Label resource", () => {
 
     try {
       await trello.labels().dissociateLabel();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/You can only call dissociateLabel/gi);
     }
   });
@@ -136,7 +136,7 @@ describe("the Label resource", () => {
 
     try {
       await trello.cards(TEST_PARENT_ID).labels().dissociateLabel();
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/You must pass a label ID into the labels/gi);
     }
   });

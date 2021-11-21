@@ -18,7 +18,7 @@ describe("the fetchFromApi method", () => {
         trelloConfig: { token: "TEST" } as any,
         paramsByName: { filter: "all" },
       });
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/You must provide a "key" to the/gi);
     }
   });
@@ -32,7 +32,7 @@ describe("the fetchFromApi method", () => {
         trelloConfig: { key: "TEST" } as any,
         paramsByName: { filter: "all" },
       });
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/You must provide a "token" to the/gi);
     }
   });

@@ -90,7 +90,7 @@ describe("the CheckItem resource", () => {
         .updateCheckItem({
           name: "Test",
         });
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/must specify the "idChecklist"/);
     }
   });
@@ -124,7 +124,7 @@ describe("the CheckItem resource", () => {
         .updateCheckItem({
           name: "Test",
         });
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/must specify the "idChecklist"/);
     }
   });

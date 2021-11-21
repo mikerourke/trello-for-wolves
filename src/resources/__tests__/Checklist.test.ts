@@ -56,7 +56,7 @@ describe("the Checklist resource", () => {
       await trello.checklists().addChecklist({
         name: "Test",
       });
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toMatch(/must specify the "idCard"/);
     }
   });
