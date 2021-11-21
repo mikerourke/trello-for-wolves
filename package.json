@@ -24,7 +24,7 @@
   "homepage": "https://github.com/mikerourke/trello-for-wolves#readme",
   "scripts": {
     "prebuild:umd": "rimraf ./umd",
-    "build:umd": "parcel build src/index.ts --target browser -d umd --no-cache --global TrelloForWolves --no-content-hash --out-file trello-for-wolves.min.js",
+    "build:umd": "parcel build src/index.ts --target browser -d umd --no-cache --no-source-maps --global TrelloForWolves --out-file trello-for-wolves.min.js",
     "prebuild:node": "rimraf ./lib",
     "build:node": "tsc -p tsconfig.build.json",
     "build:all": "npm run build:umd && npm run build:node",
