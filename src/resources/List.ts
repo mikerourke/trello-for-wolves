@@ -2,7 +2,6 @@ import { TrelloForWolvesError } from "../TrelloForWolvesError";
 
 import {
   AllOrFieldOrListOf,
-  LabelRecord,
   ListField,
   ListFilter,
   ListRecord,
@@ -35,7 +34,7 @@ export class List extends BaseResource {
       filter?: ListFilter;
       fields?: AllOrFieldOrListOf<ListField>;
     } & NestedCardsParams,
-  ): TypedFetch<LabelRecord[]> {
+  ): TypedFetch<ListRecord[]> {
     return this.apiGet("/", params as Record<string, unknown>);
   }
 
