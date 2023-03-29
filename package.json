@@ -28,6 +28,7 @@
     "prebuild:node": "rimraf ./lib",
     "build:node": "tsc -p tsconfig.build.json",
     "build:all": "npm run build:umd && npm run build:node",
+    "prepublishOnly": "npm run build:all",
     "lint": "eslint --ext \".js,.ts,.tsx\" \"{scripts,src}/**/*.{js,mjs,ts}\"",
     "prettier": "prettier --write \"{scripts,src,docs}/**/*.{js,ts,md}\"",
     "test": "jest --config jest.config.json",
