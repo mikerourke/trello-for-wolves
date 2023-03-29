@@ -1,6 +1,6 @@
 {
   "name": "trello-for-wolves",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "Node.js wrapper for Trello API...for wolves.",
   "engines": {
     "node": ">=14"
